@@ -193,8 +193,8 @@ namespace CurePlease
         public Form1()
         {
             InitializeComponent();
-            //Process[] pol = Process.GetProcessesByName("pol");
-            Process[] pol = Process.GetProcessesByName("ffxi-boot");
+            Process[] pol = Process.GetProcessesByName("pol");
+            //Process[] pol = Process.GetProcessesByName("ffxi-boot");
 
             if (pol.Length < 1)
             {

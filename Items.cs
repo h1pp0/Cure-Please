@@ -60,8 +60,7 @@ namespace CurePlease
                 GetTempItems();
 
                 // Usage: 
-                //Items tempitemps = new Items();
-                //bool sometshit = tempitemps.HasTempItem(Items.TempUsableItems.DustyElixir);
+                
             }
 
             private List<int> GetTempItems ()
@@ -76,40 +75,19 @@ namespace CurePlease
                             TempItemListIDs.Add(_FFACEPL.Item.GetTempItemIDByIndex(i));
                         }
                     }
-                    //FFACE.ParseResources.GetItemName((int)Enum.Parse(typeof(TempUsableItems), item.ToString()))
+                    
                 }
                 return TempItemListIDs;
             }
 
             private bool HasTempItem (TempUsableItems tempitemname)
-            {
-                //GetTempItems();
+            {                
                 if (_FFACEPL.Item.GetTempItemCount((ushort)Enum.Parse(typeof(TempUsableItems), tempitemname.ToString())) > 0)
                 {
                     return true;
-                }
-                //foreach (var tempItemListId in Enum.GetNames(typeof(TempUsableItems)))
-                //{
-                //    if (tempItemListId == Enum.Parse(typeof(TempUsableItems), tempitemname.ToString()))
-                //    {
-                //        return true;
-                //    }
-                //}
-                return false;
-                //FFACE.ParseResources.getitem
-            }
-
-            //public string HastTempItem (TempUsableItems tempitemname)
-            //{
-            //    foreach (var tempItemListId in Enum.GetNames(typeof(TempUsableItems)))
-            //    {
-            //        if (tempItemListId == Enum.Parse(typeof(TempUsableItems), tempitemname.ToString()))
-            //        {
-            //            return tempitemname.ToString();
-            //        }
-            //    }
-            //    return string.Empty;
-            //}
+                }                
+                return false;                
+            }           
 
             public void TempItemUsageDetermination ()
             {
@@ -127,9 +105,7 @@ namespace CurePlease
                 int mpmax = _FFACEPL.Player.MPMax;
                 int mppcurrent = _FFACEPL.Player.MPPCurrent;
 
-
-                // Rules: make sure you are below the MP for use item.
-                // If you are below the threshold, find out how much MPP you have and then calculate which one to use.
+                
                 if (mpcurrent + 1000 < mpmax)
                 {
                     if (HasTempItem(TempUsableItems.LucidEtherIII))

@@ -30,6 +30,7 @@ namespace CurePlease
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -52,16 +53,31 @@ namespace CurePlease
             this.curePercentageLabel = new System.Windows.Forms.Label();
             this.cure2amount = new System.Windows.Forms.NumericUpDown();
             this.cure1amount = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.AutoCastEngageCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.autoRegenVMinutes = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.autoRefreshIIMinutes = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.autoShell_VMinutes = new System.Windows.Forms.NumericUpDown();
+            this.autoShell_IVMinutes = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.autoProtect_VMinutes = new System.Windows.Forms.NumericUpDown();
+            this.autoProtect_IVMinutes = new System.Windows.Forms.NumericUpDown();
+            this.autoRefreshLabel = new System.Windows.Forms.Label();
+            this.autoRefreshMinutes = new System.Windows.Forms.NumericUpDown();
             this.autoRegenIVMinutes = new System.Windows.Forms.NumericUpDown();
             this.autoPhalanxIIMinutes = new System.Windows.Forms.NumericUpDown();
             this.autoRegenIVLabel = new System.Windows.Forms.Label();
             this.autoHasteMinutes = new System.Windows.Forms.NumericUpDown();
             this.autoPhalanxIILabel = new System.Windows.Forms.Label();
             this.autoHasteLabel = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.plBuffGroup = new System.Windows.Forms.GroupBox();
             this.plProtectralevel = new System.Windows.Forms.NumericUpDown();
             this.plShellralevel = new System.Windows.Forms.NumericUpDown();
@@ -79,7 +95,6 @@ namespace CurePlease
             this.plStoneskin = new System.Windows.Forms.CheckBox();
             this.plRefresh = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button3 = new System.Windows.Forms.Button();
             this.rdmJAgroup = new System.Windows.Forms.GroupBox();
             this.composure = new System.Windows.Forms.CheckBox();
             this.convert = new System.Windows.Forms.CheckBox();
@@ -94,6 +109,7 @@ namespace CurePlease
             this.addWhite = new System.Windows.Forms.CheckBox();
             this.lightArts = new System.Windows.Forms.CheckBox();
             this.whmJAgroup = new System.Windows.Forms.GroupBox();
+            this.divineSealBox = new System.Windows.Forms.CheckBox();
             this.afflatusMisery = new System.Windows.Forms.CheckBox();
             this.afflatusSolace = new System.Windows.Forms.CheckBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -111,7 +127,6 @@ namespace CurePlease
             this.naBlindness = new System.Windows.Forms.CheckBox();
             this.plDoomEnabled = new System.Windows.Forms.CheckBox();
             this.plDoomitem = new System.Windows.Forms.ComboBox();
-            this.saveSettings = new System.Windows.Forms.Button();
             this.wakeSleepSpell = new System.Windows.Forms.ComboBox();
             this.plSilenceItem = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -215,13 +230,14 @@ namespace CurePlease
             this.plDebuffEnabled = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.mpMintempitemusage = new System.Windows.Forms.NumericUpDown();
             this.lowMPuseitem = new System.Windows.Forms.CheckBox();
             this.lowMPcheckBox = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.mpMinCastValue = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
-            this.mpMintempitemusage = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -234,7 +250,15 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRegenVMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshIIMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoShell_VMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoShell_IVMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_VMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_IVMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoRegenIVMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoPhalanxIIMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoHasteMinutes)).BeginInit();
@@ -256,8 +280,8 @@ namespace CurePlease
             this.plDebuffPanel.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -276,7 +300,6 @@ namespace CurePlease
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBox2);
-            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -284,7 +307,6 @@ namespace CurePlease
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Healing Magic";
             this.tabPage1.UseVisualStyleBackColor = true;
-            this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
             // groupBox2
             // 
@@ -353,6 +375,7 @@ namespace CurePlease
             this.cure6amount.Name = "cure6amount";
             this.cure6amount.Size = new System.Drawing.Size(71, 20);
             this.cure6amount.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.cure6amount, "Cast \"Cure VI\" with this amont of HP loss");
             // 
             // cure5enabled
             // 
@@ -404,6 +427,7 @@ namespace CurePlease
             this.cure5amount.Name = "cure5amount";
             this.cure5amount.Size = new System.Drawing.Size(71, 20);
             this.cure5amount.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.cure5amount, "Cast \"Cure V\" with this amont of HP loss");
             // 
             // curePercentage
             // 
@@ -436,6 +460,7 @@ namespace CurePlease
             this.cure4amount.Name = "cure4amount";
             this.cure4amount.Size = new System.Drawing.Size(71, 20);
             this.cure4amount.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.cure4amount, "Cast \"Cure IV\" with this amont of HP loss");
             // 
             // cure1enabled
             // 
@@ -467,6 +492,7 @@ namespace CurePlease
             this.cure3amount.Name = "cure3amount";
             this.cure3amount.Size = new System.Drawing.Size(71, 20);
             this.cure3amount.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.cure3amount, "Cast \"Cure III\" with this amont of HP loss");
             // 
             // curePercentageLabel
             // 
@@ -488,6 +514,7 @@ namespace CurePlease
             this.cure2amount.Name = "cure2amount";
             this.cure2amount.Size = new System.Drawing.Size(71, 20);
             this.cure2amount.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.cure2amount, "Cast \"Cure II\" with this amont of HP loss");
             // 
             // cure1amount
             // 
@@ -500,21 +527,12 @@ namespace CurePlease
             this.cure1amount.Name = "cure1amount";
             this.cure1amount.Size = new System.Drawing.Size(71, 20);
             this.cure1amount.TabIndex = 5;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(572, 202);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(92, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Save Settings";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.toolTip1.SetToolTip(this.cure1amount, "Cast \"Cure\" with this amont of HP loss");
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox1);
-            this.tabPage2.Controls.Add(this.button2);
             this.tabPage2.Controls.Add(this.plBuffGroup);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -524,8 +542,46 @@ namespace CurePlease
             this.tabPage2.Text = "Enhancing Magic";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.AutoCastEngageCheckBox);
+            this.groupBox3.Location = new System.Drawing.Point(6, 184);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(200, 39);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Auto Casting Spells: Monitored Player";
+            // 
+            // AutoCastEngageCheckBox
+            // 
+            this.AutoCastEngageCheckBox.AutoSize = true;
+            this.AutoCastEngageCheckBox.Location = new System.Drawing.Point(7, 16);
+            this.AutoCastEngageCheckBox.Name = "AutoCastEngageCheckBox";
+            this.AutoCastEngageCheckBox.Size = new System.Drawing.Size(182, 17);
+            this.AutoCastEngageCheckBox.TabIndex = 0;
+            this.AutoCastEngageCheckBox.Text = "Auto Casts Spells when engaged";
+            this.toolTip1.SetToolTip(this.AutoCastEngageCheckBox, "Auto Casts Protect IV & V, Shell IV & V, Regen IV & V, Haste on Monitored Player " +
+        "while engaged");
+            this.AutoCastEngageCheckBox.UseVisualStyleBackColor = true;
+            this.AutoCastEngageCheckBox.CheckedChanged += new System.EventHandler(this.AutoCastEngageCheckBox_CheckedChanged);
+            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.autoRegenVMinutes);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.autoRefreshIIMinutes);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.autoShell_VMinutes);
+            this.groupBox1.Controls.Add(this.autoShell_IVMinutes);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.autoProtect_VMinutes);
+            this.groupBox1.Controls.Add(this.autoProtect_IVMinutes);
+            this.groupBox1.Controls.Add(this.autoRefreshLabel);
+            this.groupBox1.Controls.Add(this.autoRefreshMinutes);
             this.groupBox1.Controls.Add(this.autoRegenIVMinutes);
             this.groupBox1.Controls.Add(this.autoPhalanxIIMinutes);
             this.groupBox1.Controls.Add(this.autoRegenIVLabel);
@@ -534,13 +590,260 @@ namespace CurePlease
             this.groupBox1.Controls.Add(this.autoHasteLabel);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(462, 97);
+            this.groupBox1.Size = new System.Drawing.Size(462, 177);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Auto Casting Spells";
             // 
+            // label12
+            // 
+            this.label12.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label12.Location = new System.Drawing.Point(232, 61);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(1, 111);
+            this.label12.TabIndex = 27;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(285, 69);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(176, 13);
+            this.label11.TabIndex = 26;
+            this.label11.Text = "Cast Auto Regen V every X minutes";
+            this.toolTip1.SetToolTip(this.label11, "Regen V Default Duration 1 minute");
+            // 
+            // autoRegenVMinutes
+            // 
+            this.autoRegenVMinutes.DecimalPlaces = 1;
+            this.autoRegenVMinutes.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.autoRegenVMinutes.Location = new System.Drawing.Point(239, 67);
+            this.autoRegenVMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoRegenVMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.autoRegenVMinutes.Name = "autoRegenVMinutes";
+            this.autoRegenVMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoRegenVMinutes.TabIndex = 25;
+            this.autoRegenVMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(285, 95);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(180, 13);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "Cast Auto Refresh II every X minutes";
+            this.toolTip1.SetToolTip(this.label10, "Refresh II Default Duration 2:30");
+            // 
+            // autoRefreshIIMinutes
+            // 
+            this.autoRefreshIIMinutes.DecimalPlaces = 1;
+            this.autoRefreshIIMinutes.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.autoRefreshIIMinutes.Location = new System.Drawing.Point(239, 94);
+            this.autoRefreshIIMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoRefreshIIMinutes.Name = "autoRefreshIIMinutes";
+            this.autoRefreshIIMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoRefreshIIMinutes.TabIndex = 23;
+            this.toolTip1.SetToolTip(this.autoRefreshIIMinutes, "Refresh II Default Duration 2:30");
+            this.autoRefreshIIMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(285, 147);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(167, 13);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "Cast Auto Shell V every X minutes";
+            this.toolTip1.SetToolTip(this.label9, "Shell V Default Duration 30 minutes");
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(52, 147);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(170, 13);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "Cast Auto Shell IV every X minutes";
+            this.toolTip1.SetToolTip(this.label8, "Shell IV Default Duration 30 minutes");
+            // 
+            // autoShell_VMinutes
+            // 
+            this.autoShell_VMinutes.Location = new System.Drawing.Point(239, 145);
+            this.autoShell_VMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoShell_VMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.autoShell_VMinutes.Name = "autoShell_VMinutes";
+            this.autoShell_VMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoShell_VMinutes.TabIndex = 20;
+            this.autoShell_VMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // autoShell_IVMinutes
+            // 
+            this.autoShell_IVMinutes.Location = new System.Drawing.Point(6, 145);
+            this.autoShell_IVMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoShell_IVMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.autoShell_IVMinutes.Name = "autoShell_IVMinutes";
+            this.autoShell_IVMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoShell_IVMinutes.TabIndex = 19;
+            this.autoShell_IVMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(285, 121);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(178, 13);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "Cast Auto Protect V every X minutes";
+            this.toolTip1.SetToolTip(this.label7, "Protect V Default Duration 30 minutes");
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(52, 121);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(181, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Cast Auto Protect IV every X minutes";
+            this.toolTip1.SetToolTip(this.label6, "Protect IV Default Duration 30 minutes");
+            // 
+            // autoProtect_VMinutes
+            // 
+            this.autoProtect_VMinutes.Location = new System.Drawing.Point(239, 119);
+            this.autoProtect_VMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoProtect_VMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.autoProtect_VMinutes.Name = "autoProtect_VMinutes";
+            this.autoProtect_VMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoProtect_VMinutes.TabIndex = 16;
+            this.autoProtect_VMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // autoProtect_IVMinutes
+            // 
+            this.autoProtect_IVMinutes.Location = new System.Drawing.Point(6, 119);
+            this.autoProtect_IVMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoProtect_IVMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.autoProtect_IVMinutes.Name = "autoProtect_IVMinutes";
+            this.autoProtect_IVMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoProtect_IVMinutes.TabIndex = 15;
+            this.autoProtect_IVMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // autoRefreshLabel
+            // 
+            this.autoRefreshLabel.AutoSize = true;
+            this.autoRefreshLabel.Location = new System.Drawing.Point(52, 96);
+            this.autoRefreshLabel.Name = "autoRefreshLabel";
+            this.autoRefreshLabel.Size = new System.Drawing.Size(174, 13);
+            this.autoRefreshLabel.TabIndex = 14;
+            this.autoRefreshLabel.Text = "Cast Auto Refresh every X minutes ";
+            this.toolTip1.SetToolTip(this.autoRefreshLabel, "Refresh Default Duration 2:30");
+            // 
+            // autoRefreshMinutes
+            // 
+            this.autoRefreshMinutes.DecimalPlaces = 1;
+            this.autoRefreshMinutes.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.autoRefreshMinutes.Location = new System.Drawing.Point(6, 93);
+            this.autoRefreshMinutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoRefreshMinutes.Name = "autoRefreshMinutes";
+            this.autoRefreshMinutes.Size = new System.Drawing.Size(40, 20);
+            this.autoRefreshMinutes.TabIndex = 13;
+            this.autoRefreshMinutes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // autoRegenIVMinutes
             // 
+            this.autoRegenIVMinutes.DecimalPlaces = 1;
+            this.autoRegenIVMinutes.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.autoRegenIVMinutes.Location = new System.Drawing.Point(6, 67);
             this.autoRegenIVMinutes.Maximum = new decimal(new int[] {
             99,
@@ -588,9 +891,10 @@ namespace CurePlease
             this.autoRegenIVLabel.AutoSize = true;
             this.autoRegenIVLabel.Location = new System.Drawing.Point(52, 69);
             this.autoRegenIVLabel.Name = "autoRegenIVLabel";
-            this.autoRegenIVLabel.Size = new System.Drawing.Size(309, 13);
+            this.autoRegenIVLabel.Size = new System.Drawing.Size(179, 13);
             this.autoRegenIVLabel.TabIndex = 11;
-            this.autoRegenIVLabel.Text = "Cast Auto Regen IV every X minutes: Default Duration: 1 Minute";
+            this.autoRegenIVLabel.Text = "Cast Auto Regen IV every X minutes";
+            this.toolTip1.SetToolTip(this.autoRegenIVLabel, "Regen IV Default Duration 1 minute");
             // 
             // autoHasteMinutes
             // 
@@ -632,16 +936,6 @@ namespace CurePlease
             this.autoHasteLabel.Size = new System.Drawing.Size(296, 13);
             this.autoHasteLabel.TabIndex = 1;
             this.autoHasteLabel.Text = "Cast Auto Haste every X minutes: Default Duration: 3 minutes";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(572, 202);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(92, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Save Settings";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // plBuffGroup
             // 
@@ -822,7 +1116,6 @@ namespace CurePlease
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.button3);
             this.tabPage3.Controls.Add(this.rdmJAgroup);
             this.tabPage3.Controls.Add(this.schJAgroup);
             this.tabPage3.Controls.Add(this.whmJAgroup);
@@ -832,16 +1125,6 @@ namespace CurePlease
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Job Abilities";
             this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(572, 202);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(92, 23);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "Save Settings";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // rdmJAgroup
             // 
@@ -867,12 +1150,13 @@ namespace CurePlease
             // convert
             // 
             this.convert.AutoSize = true;
-            this.convert.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.convert.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.convert.Location = new System.Drawing.Point(6, 42);
             this.convert.Name = "convert";
             this.convert.Size = new System.Drawing.Size(63, 17);
             this.convert.TabIndex = 0;
             this.convert.Text = "Convert";
+            this.toolTip1.SetToolTip(this.convert, "Convert at 10% MP");
             this.convert.UseVisualStyleBackColor = true;
             // 
             // schJAgroup
@@ -906,67 +1190,79 @@ namespace CurePlease
             // perpetuance
             // 
             this.perpetuance.AutoSize = true;
+            this.perpetuance.Enabled = false;
             this.perpetuance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.perpetuance.Location = new System.Drawing.Point(6, 180);
             this.perpetuance.Name = "perpetuance";
             this.perpetuance.Size = new System.Drawing.Size(149, 17);
             this.perpetuance.TabIndex = 0;
             this.perpetuance.Text = "XPurpetuance (+Duration)";
+            this.toolTip1.SetToolTip(this.perpetuance, "\"Not Implemented\"");
             this.perpetuance.UseVisualStyleBackColor = true;
             // 
             // tranquility
             // 
             this.tranquility.AutoSize = true;
+            this.tranquility.Enabled = false;
             this.tranquility.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tranquility.Location = new System.Drawing.Point(6, 157);
             this.tranquility.Name = "tranquility";
             this.tranquility.Size = new System.Drawing.Size(124, 17);
             this.tranquility.TabIndex = 0;
             this.tranquility.Text = "XTranquility (-Enmity)";
+            this.toolTip1.SetToolTip(this.tranquility, "\"Not Implemented\"");
             this.tranquility.UseVisualStyleBackColor = true;
             // 
             // rapture
             // 
             this.rapture.AutoSize = true;
+            this.rapture.Enabled = false;
             this.rapture.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rapture.Location = new System.Drawing.Point(6, 134);
             this.rapture.Name = "rapture";
             this.rapture.Size = new System.Drawing.Size(153, 17);
             this.rapture.TabIndex = 0;
             this.rapture.Text = "XRapture (Added Potency)";
+            this.toolTip1.SetToolTip(this.rapture, "\"Not Implemented\"");
             this.rapture.UseVisualStyleBackColor = true;
             // 
             // accession
             // 
             this.accession.AutoSize = true;
+            this.accession.Enabled = false;
             this.accession.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accession.Location = new System.Drawing.Point(6, 111);
             this.accession.Name = "accession";
             this.accession.Size = new System.Drawing.Size(113, 17);
             this.accession.TabIndex = 0;
             this.accession.Text = "XAccession (AOE)";
+            this.toolTip1.SetToolTip(this.accession, "\"Not Implemented\"");
             this.accession.UseVisualStyleBackColor = true;
             // 
             // celerity
             // 
             this.celerity.AutoSize = true;
+            this.celerity.Enabled = false;
             this.celerity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.celerity.Location = new System.Drawing.Point(6, 88);
             this.celerity.Name = "celerity";
             this.celerity.Size = new System.Drawing.Size(155, 17);
             this.celerity.TabIndex = 0;
             this.celerity.Text = "XCelerity (Lower Cast Time)";
+            this.toolTip1.SetToolTip(this.celerity, "\"Not Implemented\"");
             this.celerity.UseVisualStyleBackColor = true;
             // 
             // penury
             // 
             this.penury.AutoSize = true;
+            this.penury.Enabled = false;
             this.penury.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.penury.Location = new System.Drawing.Point(6, 203);
             this.penury.Name = "penury";
             this.penury.Size = new System.Drawing.Size(138, 17);
             this.penury.TabIndex = 0;
             this.penury.Text = "XPenury (50% MP Cost)";
+            this.toolTip1.SetToolTip(this.penury, "\"Not Implemented\"");
             this.penury.UseVisualStyleBackColor = true;
             // 
             // addWhite
@@ -991,14 +1287,26 @@ namespace CurePlease
             // 
             // whmJAgroup
             // 
+            this.whmJAgroup.Controls.Add(this.divineSealBox);
             this.whmJAgroup.Controls.Add(this.afflatusMisery);
             this.whmJAgroup.Controls.Add(this.afflatusSolace);
             this.whmJAgroup.Location = new System.Drawing.Point(177, 3);
             this.whmJAgroup.Name = "whmJAgroup";
-            this.whmJAgroup.Size = new System.Drawing.Size(147, 69);
+            this.whmJAgroup.Size = new System.Drawing.Size(147, 91);
             this.whmJAgroup.TabIndex = 0;
             this.whmJAgroup.TabStop = false;
             this.whmJAgroup.Text = "White Mage";
+            // 
+            // divineSealBox
+            // 
+            this.divineSealBox.AutoSize = true;
+            this.divineSealBox.Location = new System.Drawing.Point(6, 65);
+            this.divineSealBox.Name = "divineSealBox";
+            this.divineSealBox.Size = new System.Drawing.Size(80, 17);
+            this.divineSealBox.TabIndex = 2;
+            this.divineSealBox.Text = "Divine Seal";
+            this.toolTip1.SetToolTip(this.divineSealBox, "Typically used with Convert (Triggers at 10% MP)");
+            this.divineSealBox.UseVisualStyleBackColor = true;
             // 
             // afflatusMisery
             // 
@@ -1027,7 +1335,6 @@ namespace CurePlease
             this.tabPage4.Controls.Add(this.panel5);
             this.tabPage4.Controls.Add(this.plDoomEnabled);
             this.tabPage4.Controls.Add(this.plDoomitem);
-            this.tabPage4.Controls.Add(this.saveSettings);
             this.tabPage4.Controls.Add(this.wakeSleepSpell);
             this.tabPage4.Controls.Add(this.plSilenceItem);
             this.tabPage4.Controls.Add(this.label2);
@@ -1048,11 +1355,13 @@ namespace CurePlease
             // naSpellsenable
             // 
             this.naSpellsenable.AutoSize = true;
+            this.naSpellsenable.Enabled = false;
             this.naSpellsenable.Location = new System.Drawing.Point(3, 40);
             this.naSpellsenable.Name = "naSpellsenable";
             this.naSpellsenable.Size = new System.Drawing.Size(146, 17);
             this.naSpellsenable.TabIndex = 9;
             this.naSpellsenable.Text = "Enable party - na removal";
+            this.toolTip1.SetToolTip(this.naSpellsenable, "\"Not Implemented\"");
             this.naSpellsenable.UseVisualStyleBackColor = true;
             // 
             // label3
@@ -1063,6 +1372,7 @@ namespace CurePlease
             this.label3.Size = new System.Drawing.Size(59, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "- na Spells:";
+            this.toolTip1.SetToolTip(this.label3, "\"Not Implemented\"");
             // 
             // panel5
             // 
@@ -1088,6 +1398,7 @@ namespace CurePlease
             this.partydebuffpanel.Name = "partydebuffpanel";
             this.partydebuffpanel.Size = new System.Drawing.Size(94, 153);
             this.partydebuffpanel.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.partydebuffpanel, "\"Not Implemented\"");
             // 
             // naDisease
             // 
@@ -1206,16 +1517,6 @@ namespace CurePlease
             this.plDoomitem.Name = "plDoomitem";
             this.plDoomitem.Size = new System.Drawing.Size(183, 21);
             this.plDoomitem.TabIndex = 5;
-            // 
-            // saveSettings
-            // 
-            this.saveSettings.Location = new System.Drawing.Point(572, 202);
-            this.saveSettings.Name = "saveSettings";
-            this.saveSettings.Size = new System.Drawing.Size(92, 23);
-            this.saveSettings.TabIndex = 1;
-            this.saveSettings.Text = "Save Settings";
-            this.saveSettings.UseVisualStyleBackColor = true;
-            this.saveSettings.Click += new System.EventHandler(this.saveSettings_Click);
             // 
             // wakeSleepSpell
             // 
@@ -2524,6 +2825,30 @@ namespace CurePlease
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "MP Options";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(73, 42);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(217, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Minimum MP required before using temp item";
+            this.toolTip1.SetToolTip(this.label5, "\"Not Implemented\"");
+            // 
+            // mpMintempitemusage
+            // 
+            this.mpMintempitemusage.Enabled = false;
+            this.mpMintempitemusage.Location = new System.Drawing.Point(6, 42);
+            this.mpMintempitemusage.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.mpMintempitemusage.Name = "mpMintempitemusage";
+            this.mpMintempitemusage.Size = new System.Drawing.Size(61, 20);
+            this.mpMintempitemusage.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.mpMintempitemusage, "\"Not Implemented\"");
+            // 
             // lowMPuseitem
             // 
             this.lowMPuseitem.AutoSize = true;
@@ -2533,6 +2858,7 @@ namespace CurePlease
             this.lowMPuseitem.Size = new System.Drawing.Size(196, 17);
             this.lowMPuseitem.TabIndex = 9;
             this.lowMPuseitem.Text = "Use temp items when below min MP";
+            this.toolTip1.SetToolTip(this.lowMPuseitem, "\"Not Implemented\"");
             this.lowMPuseitem.UseVisualStyleBackColor = true;
             // 
             // lowMPcheckBox
@@ -2568,46 +2894,32 @@ namespace CurePlease
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(297, 291);
+            this.button4.Location = new System.Drawing.Point(569, 273);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 23);
             this.button4.TabIndex = 2;
             this.button4.Text = "Save All Settings";
+            this.toolTip1.SetToolTip(this.button4, "Click here or Close to Save Settings!");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // mpMintempitemusage
-            // 
-            this.mpMintempitemusage.Location = new System.Drawing.Point(6, 42);
-            this.mpMintempitemusage.Name = "mpMintempitemusage";
-            this.mpMintempitemusage.Size = new System.Drawing.Size(61, 20);
-            this.mpMintempitemusage.TabIndex = 10;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(73, 42);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(217, 13);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Minimum MP required before using temp item";
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.ClientSize = new System.Drawing.Size(702, 344);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ClientSize = new System.Drawing.Size(702, 301);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(718, 378);
-            this.MinimumSize = new System.Drawing.Size(718, 378);
+            this.MaximumSize = new System.Drawing.Size(718, 335);
+            this.MinimumSize = new System.Drawing.Size(718, 335);
             this.Name = "Form2";
-            this.Text = "Cure Please Settings";
+            this.Text = " ";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -2621,8 +2933,17 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRegenVMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshIIMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoShell_VMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoShell_IVMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_VMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_IVMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoRegenIVMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoPhalanxIIMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoHasteMinutes)).EndInit();
@@ -2655,8 +2976,8 @@ namespace CurePlease
             this.tabPage5.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2674,7 +2995,6 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox cure3enabled;
         private System.Windows.Forms.CheckBox cure2enabled;
         private System.Windows.Forms.CheckBox cure1enabled;
-        private System.Windows.Forms.Button saveSettings;
         private System.Windows.Forms.NumericUpDown cure6amount;
         private System.Windows.Forms.NumericUpDown cure5amount;
         private System.Windows.Forms.NumericUpDown cure4amount;
@@ -2816,9 +3136,6 @@ namespace CurePlease
         private System.Windows.Forms.RadioButton plRefreshLevel2;
         private System.Windows.Forms.RadioButton plRefreshLevel1;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.NumericUpDown autoPhalanxIIMinutes;
         private System.Windows.Forms.Label autoPhalanxIILabel;
@@ -2854,5 +3171,24 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox lowMPuseitem;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown mpMintempitemusage;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label autoRefreshLabel;
+        private System.Windows.Forms.NumericUpDown autoRefreshMinutes;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown autoProtect_VMinutes;
+        private System.Windows.Forms.NumericUpDown autoProtect_IVMinutes;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown autoShell_VMinutes;
+        private System.Windows.Forms.NumericUpDown autoShell_IVMinutes;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown autoRegenVMinutes;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown autoRefreshIIMinutes;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox divineSealBox;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox AutoCastEngageCheckBox;
     }
 }

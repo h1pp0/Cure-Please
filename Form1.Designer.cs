@@ -71,6 +71,8 @@ namespace CurePlease
             this.player0 = new System.Windows.Forms.Label();
             this.player0HP = new CurePlease.NewProgressBar();
             this.playerOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.followToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.hasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sneakToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.invisibleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,6 +103,12 @@ namespace CurePlease
             this.shellVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.autoHasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoShellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoShellIVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoShellVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoProtectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoProtectIVToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoProtectVToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.setinstance = new System.Windows.Forms.Button();
             this.POLID = new System.Windows.Forms.ComboBox();
             this.plLabel = new System.Windows.Forms.Label();
@@ -137,16 +145,10 @@ namespace CurePlease
             this.player12HP = new CurePlease.NewProgressBar();
             this.partyMembersUpdate = new System.Windows.Forms.Timer(this.components);
             this.actionTimer = new System.Windows.Forms.Timer(this.components);
-            this.player6HP = new CurePlease.NewProgressBar();
             this.player6 = new System.Windows.Forms.Label();
-            this.player7HP = new CurePlease.NewProgressBar();
-            this.player8HP = new CurePlease.NewProgressBar();
             this.player7 = new System.Windows.Forms.Label();
-            this.player9HP = new CurePlease.NewProgressBar();
             this.player8 = new System.Windows.Forms.Label();
-            this.player10HP = new CurePlease.NewProgressBar();
             this.player9 = new System.Windows.Forms.Label();
-            this.player11HP = new CurePlease.NewProgressBar();
             this.player10 = new System.Windows.Forms.Label();
             this.player11 = new System.Windows.Forms.Label();
             this.player6enabled = new System.Windows.Forms.CheckBox();
@@ -168,6 +170,12 @@ namespace CurePlease
             this.player8priority = new System.Windows.Forms.CheckBox();
             this.player7priority = new System.Windows.Forms.CheckBox();
             this.player6priority = new System.Windows.Forms.CheckBox();
+            this.player11HP = new CurePlease.NewProgressBar();
+            this.player10HP = new CurePlease.NewProgressBar();
+            this.player9HP = new CurePlease.NewProgressBar();
+            this.player8HP = new CurePlease.NewProgressBar();
+            this.player7HP = new CurePlease.NewProgressBar();
+            this.player6HP = new CurePlease.NewProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -182,7 +190,6 @@ namespace CurePlease
             this.pauseButton = new System.Windows.Forms.Button();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.castingLockTimer = new System.Windows.Forms.Timer(this.components);
@@ -191,22 +198,27 @@ namespace CurePlease
             this.castingLockLabel = new System.Windows.Forms.Label();
             this.castingUnlockTimer = new System.Windows.Forms.Timer(this.components);
             this.actionUnlockTimer = new System.Windows.Forms.Timer(this.components);
-            this.proshellOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.autoOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.autoHasteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.autoPhalanxIIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.autoRegenIVToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoHasteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoRegenVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoRefreshToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoRefreshIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.charselect = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.autoHasteIIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.party0.SuspendLayout();
             this.playerOptions.SuspendLayout();
             this.party2.SuspendLayout();
             this.party1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            this.proshellOptions.SuspendLayout();
+            this.autoOptions.SuspendLayout();
             this.charselect.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -714,6 +726,8 @@ namespace CurePlease
             // playerOptions
             // 
             this.playerOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.followToolStripMenuItem,
+            this.toolStripSeparator2,
             this.hasteToolStripMenuItem,
             this.sneakToolStripMenuItem,
             this.invisibleToolStripMenuItem,
@@ -739,155 +753,169 @@ namespace CurePlease
             this.protectToolStripMenuItem,
             this.shellToolStripMenuItem,
             this.toolStripMenuItem1,
-            this.autoHasteToolStripMenuItem});
+            this.autoHasteToolStripMenuItem,
+            this.autoShellToolStripMenuItem,
+            this.autoProtectToolStripMenuItem});
             this.playerOptions.Name = "player0rightclick";
-            this.playerOptions.Size = new System.Drawing.Size(134, 496);
+            this.playerOptions.Size = new System.Drawing.Size(142, 568);
+            // 
+            // followToolStripMenuItem
+            // 
+            this.followToolStripMenuItem.Name = "followToolStripMenuItem";
+            this.followToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.followToolStripMenuItem.Text = "/follow";
+            this.followToolStripMenuItem.Click += new System.EventHandler(this.followToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
             // 
             // hasteToolStripMenuItem
             // 
             this.hasteToolStripMenuItem.Name = "hasteToolStripMenuItem";
-            this.hasteToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.hasteToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.hasteToolStripMenuItem.Text = "Haste";
             this.hasteToolStripMenuItem.Click += new System.EventHandler(this.hasteToolStripMenuItem_Click);
             // 
             // sneakToolStripMenuItem
             // 
             this.sneakToolStripMenuItem.Name = "sneakToolStripMenuItem";
-            this.sneakToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.sneakToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.sneakToolStripMenuItem.Text = "Sneak";
             this.sneakToolStripMenuItem.Click += new System.EventHandler(this.sneakToolStripMenuItem_Click);
             // 
             // invisibleToolStripMenuItem
             // 
             this.invisibleToolStripMenuItem.Name = "invisibleToolStripMenuItem";
-            this.invisibleToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.invisibleToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.invisibleToolStripMenuItem.Text = "Invisible";
             this.invisibleToolStripMenuItem.Click += new System.EventHandler(this.invisibleToolStripMenuItem_Click);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.refreshToolStripMenuItem.Text = "Refresh";
             this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // refreshIIToolStripMenuItem
             // 
             this.refreshIIToolStripMenuItem.Name = "refreshIIToolStripMenuItem";
-            this.refreshIIToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.refreshIIToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.refreshIIToolStripMenuItem.Text = "Refresh II";
             this.refreshIIToolStripMenuItem.Click += new System.EventHandler(this.refreshIIToolStripMenuItem_Click);
             // 
             // phalanxIIToolStripMenuItem
             // 
             this.phalanxIIToolStripMenuItem.Name = "phalanxIIToolStripMenuItem";
-            this.phalanxIIToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.phalanxIIToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.phalanxIIToolStripMenuItem.Text = "Phalanx II";
             this.phalanxIIToolStripMenuItem.Click += new System.EventHandler(this.phalanxIIToolStripMenuItem_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(130, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(138, 6);
             // 
             // regenIIToolStripMenuItem
             // 
             this.regenIIToolStripMenuItem.Name = "regenIIToolStripMenuItem";
-            this.regenIIToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.regenIIToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.regenIIToolStripMenuItem.Text = "Regen II";
             this.regenIIToolStripMenuItem.Click += new System.EventHandler(this.regenIIToolStripMenuItem_Click);
             // 
             // regenIIIToolStripMenuItem
             // 
             this.regenIIIToolStripMenuItem.Name = "regenIIIToolStripMenuItem";
-            this.regenIIIToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.regenIIIToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.regenIIIToolStripMenuItem.Text = "Regen III";
             this.regenIIIToolStripMenuItem.Click += new System.EventHandler(this.regenIIIToolStripMenuItem_Click);
             // 
             // regenIVToolStripMenuItem
             // 
             this.regenIVToolStripMenuItem.Name = "regenIVToolStripMenuItem";
-            this.regenIVToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.regenIVToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.regenIVToolStripMenuItem.Text = "Regen IV";
             this.regenIVToolStripMenuItem.Click += new System.EventHandler(this.regenIVToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(130, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(138, 6);
             // 
             // eraseToolStripMenuItem
             // 
             this.eraseToolStripMenuItem.Name = "eraseToolStripMenuItem";
-            this.eraseToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.eraseToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.eraseToolStripMenuItem.Text = "Erase";
             this.eraseToolStripMenuItem.Click += new System.EventHandler(this.eraseToolStripMenuItem_Click);
             // 
             // sacrificeToolStripMenuItem
             // 
             this.sacrificeToolStripMenuItem.Name = "sacrificeToolStripMenuItem";
-            this.sacrificeToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.sacrificeToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.sacrificeToolStripMenuItem.Text = "Sacrifice";
             this.sacrificeToolStripMenuItem.Click += new System.EventHandler(this.sacrificeToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(130, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(138, 6);
             // 
             // blindnaToolStripMenuItem
             // 
             this.blindnaToolStripMenuItem.Name = "blindnaToolStripMenuItem";
-            this.blindnaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.blindnaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.blindnaToolStripMenuItem.Text = "Blindna";
             this.blindnaToolStripMenuItem.Click += new System.EventHandler(this.blindnaToolStripMenuItem_Click);
             // 
             // cursnaToolStripMenuItem
             // 
             this.cursnaToolStripMenuItem.Name = "cursnaToolStripMenuItem";
-            this.cursnaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.cursnaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.cursnaToolStripMenuItem.Text = "Cursna";
             this.cursnaToolStripMenuItem.Click += new System.EventHandler(this.cursnaToolStripMenuItem_Click);
             // 
             // paralynaToolStripMenuItem
             // 
             this.paralynaToolStripMenuItem.Name = "paralynaToolStripMenuItem";
-            this.paralynaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.paralynaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.paralynaToolStripMenuItem.Text = "Paralyna";
             this.paralynaToolStripMenuItem.Click += new System.EventHandler(this.paralynaToolStripMenuItem_Click);
             // 
             // poisonaToolStripMenuItem
             // 
             this.poisonaToolStripMenuItem.Name = "poisonaToolStripMenuItem";
-            this.poisonaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.poisonaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.poisonaToolStripMenuItem.Text = "Poisona";
             this.poisonaToolStripMenuItem.Click += new System.EventHandler(this.poisonaToolStripMenuItem_Click);
             // 
             // stonaToolStripMenuItem
             // 
             this.stonaToolStripMenuItem.Name = "stonaToolStripMenuItem";
-            this.stonaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.stonaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.stonaToolStripMenuItem.Text = "Stona";
             this.stonaToolStripMenuItem.Click += new System.EventHandler(this.stonaToolStripMenuItem_Click);
             // 
             // silenaToolStripMenuItem
             // 
             this.silenaToolStripMenuItem.Name = "silenaToolStripMenuItem";
-            this.silenaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.silenaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.silenaToolStripMenuItem.Text = "Silena";
             this.silenaToolStripMenuItem.Click += new System.EventHandler(this.silenaToolStripMenuItem_Click);
             // 
             // virunaToolStripMenuItem
             // 
             this.virunaToolStripMenuItem.Name = "virunaToolStripMenuItem";
-            this.virunaToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.virunaToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.virunaToolStripMenuItem.Text = "Viruna";
             this.virunaToolStripMenuItem.Click += new System.EventHandler(this.virunaToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(130, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(138, 6);
             // 
             // protectToolStripMenuItem
             // 
@@ -895,7 +923,7 @@ namespace CurePlease
             this.protectIVToolStripMenuItem,
             this.protectVToolStripMenuItem});
             this.protectToolStripMenuItem.Name = "protectToolStripMenuItem";
-            this.protectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.protectToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.protectToolStripMenuItem.Text = "Protect ";
             // 
             // protectIVToolStripMenuItem
@@ -918,7 +946,7 @@ namespace CurePlease
             this.shellIVToolStripMenuItem,
             this.shellVToolStripMenuItem});
             this.shellToolStripMenuItem.Name = "shellToolStripMenuItem";
-            this.shellToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.shellToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.shellToolStripMenuItem.Text = "Shell";
             // 
             // shellIVToolStripMenuItem
@@ -938,14 +966,60 @@ namespace CurePlease
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(130, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
             // 
             // autoHasteToolStripMenuItem
             // 
             this.autoHasteToolStripMenuItem.Name = "autoHasteToolStripMenuItem";
-            this.autoHasteToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.autoHasteToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.autoHasteToolStripMenuItem.Text = "Auto Haste";
             this.autoHasteToolStripMenuItem.Click += new System.EventHandler(this.autoHasteToolStripMenuItem_Click);
+            // 
+            // autoShellToolStripMenuItem
+            // 
+            this.autoShellToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoShellIVToolStripMenuItem,
+            this.autoShellVToolStripMenuItem});
+            this.autoShellToolStripMenuItem.Name = "autoShellToolStripMenuItem";
+            this.autoShellToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.autoShellToolStripMenuItem.Text = "Auto Shell";
+            // 
+            // autoShellIVToolStripMenuItem
+            // 
+            this.autoShellIVToolStripMenuItem.Name = "autoShellIVToolStripMenuItem";
+            this.autoShellIVToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.autoShellIVToolStripMenuItem.Text = "Auto Shell IV";
+            this.autoShellIVToolStripMenuItem.Click += new System.EventHandler(this.autoShellIVToolStripMenuItem_Click);
+            // 
+            // autoShellVToolStripMenuItem
+            // 
+            this.autoShellVToolStripMenuItem.Name = "autoShellVToolStripMenuItem";
+            this.autoShellVToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.autoShellVToolStripMenuItem.Text = "Auto Shell V";
+            this.autoShellVToolStripMenuItem.Click += new System.EventHandler(this.autoShellVToolStripMenuItem_Click);
+            // 
+            // autoProtectToolStripMenuItem
+            // 
+            this.autoProtectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoProtectIVToolStripMenuItem1,
+            this.autoProtectVToolStripMenuItem1});
+            this.autoProtectToolStripMenuItem.Name = "autoProtectToolStripMenuItem";
+            this.autoProtectToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.autoProtectToolStripMenuItem.Text = "Auto Protect";
+            // 
+            // autoProtectIVToolStripMenuItem1
+            // 
+            this.autoProtectIVToolStripMenuItem1.Name = "autoProtectIVToolStripMenuItem1";
+            this.autoProtectIVToolStripMenuItem1.Size = new System.Drawing.Size(154, 22);
+            this.autoProtectIVToolStripMenuItem1.Text = "Auto Protect IV";
+            this.autoProtectIVToolStripMenuItem1.Click += new System.EventHandler(this.autoProtectIVToolStripMenuItem1_Click);
+            // 
+            // autoProtectVToolStripMenuItem1
+            // 
+            this.autoProtectVToolStripMenuItem1.Name = "autoProtectVToolStripMenuItem1";
+            this.autoProtectVToolStripMenuItem1.Size = new System.Drawing.Size(154, 22);
+            this.autoProtectVToolStripMenuItem1.Text = "Auto Protect V";
+            this.autoProtectVToolStripMenuItem1.Click += new System.EventHandler(this.autoProtectVToolStripMenuItem1_Click);
             // 
             // setinstance
             // 
@@ -964,7 +1038,7 @@ namespace CurePlease
             // 
             this.POLID.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.POLID.FormattingEnabled = true;
-            this.POLID.Location = new System.Drawing.Point(180, 12);
+            this.POLID.Location = new System.Drawing.Point(178, 12);
             this.POLID.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.POLID.Name = "POLID";
             this.POLID.Size = new System.Drawing.Size(117, 21);
@@ -1381,15 +1455,6 @@ namespace CurePlease
             this.actionTimer.Interval = 500;
             this.actionTimer.Tick += new System.EventHandler(this.actionTimer_Tick);
             // 
-            // player6HP
-            // 
-            this.player6HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player6HP.Location = new System.Drawing.Point(7, 31);
-            this.player6HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player6HP.Name = "player6HP";
-            this.player6HP.Size = new System.Drawing.Size(185, 9);
-            this.player6HP.TabIndex = 0;
-            // 
             // player6
             // 
             this.player6.AutoSize = true;
@@ -1401,24 +1466,6 @@ namespace CurePlease
             this.player6.Size = new System.Drawing.Size(45, 13);
             this.player6.TabIndex = 1;
             this.player6.Text = "Inactive";
-            // 
-            // player7HP
-            // 
-            this.player7HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player7HP.Location = new System.Drawing.Point(7, 66);
-            this.player7HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player7HP.Name = "player7HP";
-            this.player7HP.Size = new System.Drawing.Size(185, 9);
-            this.player7HP.TabIndex = 0;
-            // 
-            // player8HP
-            // 
-            this.player8HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player8HP.Location = new System.Drawing.Point(8, 102);
-            this.player8HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player8HP.Name = "player8HP";
-            this.player8HP.Size = new System.Drawing.Size(185, 9);
-            this.player8HP.TabIndex = 0;
             // 
             // player7
             // 
@@ -1432,15 +1479,6 @@ namespace CurePlease
             this.player7.TabIndex = 1;
             this.player7.Text = "Inactive";
             // 
-            // player9HP
-            // 
-            this.player9HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player9HP.Location = new System.Drawing.Point(7, 138);
-            this.player9HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player9HP.Name = "player9HP";
-            this.player9HP.Size = new System.Drawing.Size(185, 9);
-            this.player9HP.TabIndex = 0;
-            // 
             // player8
             // 
             this.player8.AutoSize = true;
@@ -1453,15 +1491,6 @@ namespace CurePlease
             this.player8.TabIndex = 1;
             this.player8.Text = "Inactive";
             // 
-            // player10HP
-            // 
-            this.player10HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player10HP.Location = new System.Drawing.Point(7, 174);
-            this.player10HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player10HP.Name = "player10HP";
-            this.player10HP.Size = new System.Drawing.Size(185, 9);
-            this.player10HP.TabIndex = 0;
-            // 
             // player9
             // 
             this.player9.AutoSize = true;
@@ -1473,15 +1502,6 @@ namespace CurePlease
             this.player9.Size = new System.Drawing.Size(45, 13);
             this.player9.TabIndex = 1;
             this.player9.Text = "Inactive";
-            // 
-            // player11HP
-            // 
-            this.player11HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player11HP.Location = new System.Drawing.Point(7, 210);
-            this.player11HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player11HP.Name = "player11HP";
-            this.player11HP.Size = new System.Drawing.Size(185, 9);
-            this.player11HP.TabIndex = 0;
             // 
             // player10
             // 
@@ -1771,6 +1791,60 @@ namespace CurePlease
             this.toolTips.SetToolTip(this.player6priority, "Check to Enable Player Priority");
             this.player6priority.UseVisualStyleBackColor = true;
             // 
+            // player11HP
+            // 
+            this.player11HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player11HP.Location = new System.Drawing.Point(7, 210);
+            this.player11HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player11HP.Name = "player11HP";
+            this.player11HP.Size = new System.Drawing.Size(185, 9);
+            this.player11HP.TabIndex = 0;
+            // 
+            // player10HP
+            // 
+            this.player10HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player10HP.Location = new System.Drawing.Point(7, 174);
+            this.player10HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player10HP.Name = "player10HP";
+            this.player10HP.Size = new System.Drawing.Size(185, 9);
+            this.player10HP.TabIndex = 0;
+            // 
+            // player9HP
+            // 
+            this.player9HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player9HP.Location = new System.Drawing.Point(7, 138);
+            this.player9HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player9HP.Name = "player9HP";
+            this.player9HP.Size = new System.Drawing.Size(185, 9);
+            this.player9HP.TabIndex = 0;
+            // 
+            // player8HP
+            // 
+            this.player8HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player8HP.Location = new System.Drawing.Point(8, 102);
+            this.player8HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player8HP.Name = "player8HP";
+            this.player8HP.Size = new System.Drawing.Size(185, 9);
+            this.player8HP.TabIndex = 0;
+            // 
+            // player7HP
+            // 
+            this.player7HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player7HP.Location = new System.Drawing.Point(7, 66);
+            this.player7HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player7HP.Name = "player7HP";
+            this.player7HP.Size = new System.Drawing.Size(185, 9);
+            this.player7HP.TabIndex = 0;
+            // 
+            // player6HP
+            // 
+            this.player6HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player6HP.Location = new System.Drawing.Point(7, 31);
+            this.player6HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player6HP.Name = "player6HP";
+            this.player6HP.Size = new System.Drawing.Size(185, 9);
+            this.player6HP.TabIndex = 0;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1823,7 +1897,7 @@ namespace CurePlease
             // 
             this.POLID2.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.POLID2.FormattingEnabled = true;
-            this.POLID2.Location = new System.Drawing.Point(180, 36);
+            this.POLID2.Location = new System.Drawing.Point(178, 36);
             this.POLID2.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.POLID2.Name = "POLID2";
             this.POLID2.Size = new System.Drawing.Size(117, 21);
@@ -1866,9 +1940,9 @@ namespace CurePlease
             // pauseButton
             // 
             this.pauseButton.Enabled = false;
-            this.pauseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
+            this.pauseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.25F, System.Drawing.FontStyle.Bold);
             this.pauseButton.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.pauseButton.Location = new System.Drawing.Point(484, 35);
+            this.pauseButton.Location = new System.Drawing.Point(446, 33);
             this.pauseButton.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.pauseButton.Name = "pauseButton";
             this.pauseButton.Size = new System.Drawing.Size(107, 46);
@@ -1882,29 +1956,14 @@ namespace CurePlease
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.checkBox1.Location = new System.Drawing.Point(71, 13);
+            this.checkBox1.Location = new System.Drawing.Point(11, 13);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(45, 17);
+            this.checkBox1.Size = new System.Drawing.Size(96, 17);
             this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = "Top";
+            this.checkBox1.Text = "Always on Top";
             this.toolTips.SetToolTip(this.checkBox1, "Always on Top");
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.checkBox2.Location = new System.Drawing.Point(6, 13);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(65, 17);
-            this.checkBox2.TabIndex = 15;
-            this.checkBox2.Text = "Taskbar";
-            this.toolTips.SetToolTip(this.checkBox2, "Show in Taskbar");
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // label1
             // 
@@ -1919,11 +1978,13 @@ namespace CurePlease
             // 
             // trackBar1
             // 
+            this.trackBar1.AutoSize = false;
+            this.trackBar1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.trackBar1.Location = new System.Drawing.Point(8, 13);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Minimum = 12;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(93, 45);
+            this.trackBar1.Size = new System.Drawing.Size(93, 17);
             this.trackBar1.TabIndex = 19;
             this.toolTips.SetToolTip(this.trackBar1, "Cure Please Transparency");
             this.trackBar1.Value = 100;
@@ -1937,10 +1998,10 @@ namespace CurePlease
             // button1
             // 
             this.button1.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.button1.Location = new System.Drawing.Point(122, 352);
+            this.button1.Location = new System.Drawing.Point(246, 322);
             this.button1.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 22);
+            this.button1.Size = new System.Drawing.Size(196, 26);
             this.button1.TabIndex = 11;
             this.button1.Text = "Player (debug)";
             this.button1.UseVisualStyleBackColor = true;
@@ -1972,20 +2033,31 @@ namespace CurePlease
             this.actionUnlockTimer.Interval = 3000;
             this.actionUnlockTimer.Tick += new System.EventHandler(this.actionUnlockTimer_Tick);
             // 
-            // proshellOptions
+            // autoOptions
             // 
-            this.proshellOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator1,
+            this.autoHasteToolStripMenuItem1,
+            this.autoHasteIIToolStripMenuItem1,
             this.autoPhalanxIIToolStripMenuItem1,
             this.autoRegenIVToolStripMenuItem1,
-            this.autoHasteToolStripMenuItem1});
-            this.proshellOptions.Name = "proshellOptions";
-            this.proshellOptions.Size = new System.Drawing.Size(154, 76);
+            this.autoRegenVToolStripMenuItem,
+            this.autoRefreshToolStripMenuItem1,
+            this.autoRefreshIIToolStripMenuItem});
+            this.autoOptions.Name = "proshellOptions";
+            this.autoOptions.Size = new System.Drawing.Size(154, 186);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(150, 6);
+            // 
+            // autoHasteToolStripMenuItem1
+            // 
+            this.autoHasteToolStripMenuItem1.Name = "autoHasteToolStripMenuItem1";
+            this.autoHasteToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.autoHasteToolStripMenuItem1.Text = "Auto Haste";
+            this.autoHasteToolStripMenuItem1.Click += new System.EventHandler(this.autoHasteToolStripMenuItem1_Click);
             // 
             // autoPhalanxIIToolStripMenuItem1
             // 
@@ -2001,12 +2073,26 @@ namespace CurePlease
             this.autoRegenIVToolStripMenuItem1.Text = "Auto Regen IV";
             this.autoRegenIVToolStripMenuItem1.Click += new System.EventHandler(this.autoRegenIVToolStripMenuItem1_Click);
             // 
-            // autoHasteToolStripMenuItem1
+            // autoRegenVToolStripMenuItem
             // 
-            this.autoHasteToolStripMenuItem1.Name = "autoHasteToolStripMenuItem1";
-            this.autoHasteToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
-            this.autoHasteToolStripMenuItem1.Text = "Auto Haste";
-            this.autoHasteToolStripMenuItem1.Click += new System.EventHandler(this.autoHasteToolStripMenuItem1_Click);
+            this.autoRegenVToolStripMenuItem.Name = "autoRegenVToolStripMenuItem";
+            this.autoRegenVToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.autoRegenVToolStripMenuItem.Text = "Auto Regen V";
+            this.autoRegenVToolStripMenuItem.Click += new System.EventHandler(this.autoRegenVToolStripMenuItem_Click);
+            // 
+            // autoRefreshToolStripMenuItem1
+            // 
+            this.autoRefreshToolStripMenuItem1.Name = "autoRefreshToolStripMenuItem1";
+            this.autoRefreshToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.autoRefreshToolStripMenuItem1.Text = "Auto Refresh";
+            this.autoRefreshToolStripMenuItem1.Click += new System.EventHandler(this.autoRefreshToolStripMenuItem1_Click);
+            // 
+            // autoRefreshIIToolStripMenuItem
+            // 
+            this.autoRefreshIIToolStripMenuItem.Name = "autoRefreshIIToolStripMenuItem";
+            this.autoRefreshIIToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.autoRefreshIIToolStripMenuItem.Text = "Auto Refresh II";
+            this.autoRefreshIIToolStripMenuItem.Click += new System.EventHandler(this.autoRefreshIIToolStripMenuItem_Click);
             // 
             // charselect
             // 
@@ -2026,7 +2112,6 @@ namespace CurePlease
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox2);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox1.Location = new System.Drawing.Point(124, 316);
@@ -2040,9 +2125,9 @@ namespace CurePlease
             // 
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.groupBox2.Location = new System.Drawing.Point(458, 326);
+            this.groupBox2.Location = new System.Drawing.Point(446, 316);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(172, 32);
+            this.groupBox2.Size = new System.Drawing.Size(196, 32);
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Item ID";
@@ -2053,18 +2138,32 @@ namespace CurePlease
             this.groupBox3.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox3.Location = new System.Drawing.Point(12, 316);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(109, 59);
+            this.groupBox3.Size = new System.Drawing.Size(109, 31);
             this.groupBox3.TabIndex = 21;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Transparency";
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "Cure Please 1.0.2.0";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClickTray);
+            // 
+            // autoHasteIIToolStripMenuItem1
+            // 
+            this.autoHasteIIToolStripMenuItem1.Name = "autoHasteIIToolStripMenuItem1";
+            this.autoHasteIIToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.autoHasteIIToolStripMenuItem1.Text = "Auto Haste II";
+            this.autoHasteIIToolStripMenuItem1.Click += new System.EventHandler(this.autoHasteIIToolStripMenuItem1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.LightGray;
-            this.ClientSize = new System.Drawing.Size(654, 379);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ClientSize = new System.Drawing.Size(654, 359);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -2083,7 +2182,7 @@ namespace CurePlease
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(670, 417);
+            this.MaximumSize = new System.Drawing.Size(670, 397);
             this.MinimumSize = new System.Drawing.Size(16, 38);
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -2099,7 +2198,7 @@ namespace CurePlease
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            this.proshellOptions.ResumeLayout(false);
+            this.autoOptions.ResumeLayout(false);
             this.charselect.ResumeLayout(false);
             this.charselect.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -2107,7 +2206,6 @@ namespace CurePlease
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2253,11 +2351,10 @@ namespace CurePlease
         private System.Windows.Forms.Timer actionUnlockTimer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem regenIVToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip proshellOptions;
+        private System.Windows.Forms.ContextMenuStrip autoOptions;
         private System.Windows.Forms.Button player5buffsButton;
         private System.Windows.Forms.Button player4buffsButton;
         private System.Windows.Forms.Button player3buffsButton;
@@ -2285,6 +2382,19 @@ namespace CurePlease
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ToolStripMenuItem regenIIIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoRefreshToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem autoProtectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoProtectIVToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem autoProtectVToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem autoShellToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoShellIVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoShellVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoRegenVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoRefreshIIToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripMenuItem followToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem autoHasteIIToolStripMenuItem1;
 
         
     }

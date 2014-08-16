@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace CurePlease
 {
+        #region "== Form2"
     public partial class Form2 : Form
     {
 
@@ -30,11 +32,20 @@ namespace CurePlease
             afflatusMisery.Checked = Properties.Settings.Default.afflatusMisery;
             lightArts.Checked = Properties.Settings.Default.lightArts;
             composure.Checked = Properties.Settings.Default.Composure;
+            convert.Checked = Properties.Settings.Default.Convert;
+            divineSealBox.Checked = Properties.Settings.Default.divineSealBox;
             addWhite.Checked = Properties.Settings.Default.addWhite;
             sublimation.Checked = Properties.Settings.Default.sublimation;
             autoHasteMinutes.Value = Properties.Settings.Default.autoHasteMinutes;
+            autoProtect_IVMinutes.Value = Properties.Settings.Default.autoProtect_IVMinutes;
+            autoProtect_VMinutes.Value = Properties.Settings.Default.autoProtect_VMinutes;
+            autoShell_IVMinutes.Value = Properties.Settings.Default.autoShell_IVMinutes;
+            autoShell_VMinutes.Value = Properties.Settings.Default.autoShell_VMinutes;
             autoPhalanxIIMinutes.Value = Properties.Settings.Default.autoPhalanxIIMinutes;
             autoRegenIVMinutes.Value = Properties.Settings.Default.autoRegenIVMinutes;
+            autoRegenVMinutes.Value = Properties.Settings.Default.autoRegenVMinutes;
+            autoRefreshMinutes.Value = Properties.Settings.Default.autoRefreshMinutes;
+            autoRefreshIIMinutes.Value = Properties.Settings.Default.autoRefreshIIMinutes;
             plSilenceItemEnabled.Checked = Properties.Settings.Default.plSilenceItemEnabled;
             plSilenceItem.SelectedIndex = Properties.Settings.Default.plSilenceItemIndex;
             wakeSleepEnabled.Checked = Properties.Settings.Default.wakeSleepEnabled;
@@ -109,6 +120,7 @@ namespace CurePlease
             plThrenody.Checked = Properties.Settings.Default.plThrenody;
             plVitDown.Checked = Properties.Settings.Default.plVitDown;
             plWeight.Checked = Properties.Settings.Default.plWeight;
+            AutoCastEngageCheckBox.Checked = Properties.Settings.Default.AutoCastEngageCheckBox;
 
             // New UI Elements
             plDoomEnabled.Checked = Properties.Settings.Default.plDoomEnabled;
@@ -190,215 +202,9 @@ namespace CurePlease
         {
             priorityCurePercentageValueLabel.Text = priorityCurePercentage.Value.ToString();
         }
+        #endregion        
 
-        private void saveSettings_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.plSilenceItemEnabled = plSilenceItemEnabled.Checked;
-            Properties.Settings.Default.plSilenceItemIndex = plSilenceItem.SelectedIndex;
-            Properties.Settings.Default.wakeSleepEnabled = wakeSleepEnabled.Checked;
-            Properties.Settings.Default.wakeSleepSpellIndex = wakeSleepSpell.SelectedIndex;
-            Properties.Settings.Default.wakeSleepSpellString= wakeSleepSpell.Items[wakeSleepSpell.SelectedIndex].ToString();
-            Properties.Settings.Default.plDebuffEnabled = plDebuffEnabled.Checked;
-            Properties.Settings.Default.monitoredDebuffEnabled = monitoredDebuffEnabled.Checked;
-            Properties.Settings.Default.plSilenceItemString = plSilenceItem.Items[plSilenceItem.SelectedIndex].ToString();
-            
-
-            Properties.Settings.Default.plAgiDown = plAgiDown.Checked;
-            Properties.Settings.Default.plAccuracyDown = plAccuracyDown.Checked;
-            Properties.Settings.Default.plAddle = plAddle.Checked;
-            Properties.Settings.Default.plAttackDown = plAttackDown.Checked;
-            Properties.Settings.Default.plBane = plBane.Checked;
-            Properties.Settings.Default.plBind = plBind.Checked;
-            Properties.Settings.Default.plBio = plBio.Checked;
-            Properties.Settings.Default.plBlindness = plBlindness.Checked;
-            Properties.Settings.Default.plBurn = plBurn.Checked;
-            Properties.Settings.Default.plChrDown = plChrDown.Checked;
-            Properties.Settings.Default.plChoke = plChoke.Checked;
-            Properties.Settings.Default.plCurse = plCurse.Checked;
-            Properties.Settings.Default.plCurse2 = plCurse2.Checked;
-            Properties.Settings.Default.plDexDown = plDexDown.Checked;
-            Properties.Settings.Default.plDefenseDown = plDefenseDown.Checked;
-            Properties.Settings.Default.plDia = plDia.Checked;
-            Properties.Settings.Default.plDisease = plDisease.Checked;
-            Properties.Settings.Default.plDoom = plDoom.Checked;
-            Properties.Settings.Default.plDrown = plDrown.Checked;
-            Properties.Settings.Default.plElegy = plElegy.Checked;
-            Properties.Settings.Default.plEvasionDown = plEvasionDown.Checked;
-            Properties.Settings.Default.plFlash = plFlash.Checked;
-            Properties.Settings.Default.plFrost = plFrost.Checked;
-            Properties.Settings.Default.plHelix = plHelix.Checked;
-            Properties.Settings.Default.plIntDown = plIntDown.Checked;
-            Properties.Settings.Default.plMndDown = plMndDown.Checked;
-            Properties.Settings.Default.plMagicAccDown = plMagicAccDown.Checked;
-            Properties.Settings.Default.plMagicAtkDown = plMagicAtkDown.Checked;
-            Properties.Settings.Default.plMaxHpDown = plMaxHpDown.Checked;
-            Properties.Settings.Default.plMaxMpDown = plMaxMpDown.Checked;
-            Properties.Settings.Default.plMaxTpDown = plMaxTpDown.Checked;
-            Properties.Settings.Default.plParalysis = plParalysis.Checked;
-            Properties.Settings.Default.plPlague = plPlague.Checked;
-            Properties.Settings.Default.plPoison = plPoison.Checked;
-            Properties.Settings.Default.plRasp = plRasp.Checked;
-            Properties.Settings.Default.plRequiem = plRequiem.Checked;
-            Properties.Settings.Default.plStrDown = plStrDown.Checked;
-            Properties.Settings.Default.plShock = plShock.Checked;
-            Properties.Settings.Default.plSilence = plSilence.Checked;
-            Properties.Settings.Default.plSlow = plSlow.Checked;
-            Properties.Settings.Default.plThrenody = plThrenody.Checked;
-            Properties.Settings.Default.plVitDown = plVitDown.Checked;
-            Properties.Settings.Default.plWeight = plWeight.Checked;
-            Properties.Settings.Default.mpMinCastValue = mpMinCastValue.Value;
-            // New UI Elements
-            Properties.Settings.Default.plDoomEnabled = plDoomEnabled.Checked;
-            Properties.Settings.Default.plDoomindex = plDoomitem.SelectedIndex;
-            Properties.Settings.Default.PLDoomitem = plDoomitem.Items[plDoomitem.SelectedIndex].ToString();
-            Properties.Settings.Default.lowMPcheckBox = lowMPcheckBox.Checked;
-            Properties.Settings.Default.mpMintempitemusage = mpMintempitemusage.Value;
-            Properties.Settings.Default.naSpellsenable = naSpellsenable.Checked;
-            Properties.Settings.Default.naBlindness = naBlindness.Checked;
-            Properties.Settings.Default.naCurse = naCurse.Checked;
-            Properties.Settings.Default.naDisease = naDisease.Checked;
-            Properties.Settings.Default.naParalysis = naParalysis.Checked;
-            Properties.Settings.Default.naPetrification = naPetrification.Checked;
-            Properties.Settings.Default.naPlague = naPlague.Checked;
-            Properties.Settings.Default.naPoison = naPoison.Checked;
-            Properties.Settings.Default.naSilence = naSilence.Checked;
-            Properties.Settings.Default.plShellra = plShellra.Checked;
-            Properties.Settings.Default.plProtectra = plProtectra.Checked;
-            Properties.Settings.Default.plProtectralevel = plProtectralevel.Value;
-            Properties.Settings.Default.plShellralevel = plShellralevel.Value;
-            Properties.Settings.Default.lowMPuseitem = lowMPuseitem.Checked;
-
-            Properties.Settings.Default.monitoredAgiDown = monitoredAgiDown.Checked;
-            Properties.Settings.Default.monitoredAccuracyDown = monitoredAccuracyDown.Checked;
-            Properties.Settings.Default.monitoredAddle = monitoredAddle.Checked;
-            Properties.Settings.Default.monitoredAttackDown = monitoredAttackDown.Checked;
-            Properties.Settings.Default.monitoredBane = monitoredBane.Checked;
-            Properties.Settings.Default.monitoredBind = monitoredBind.Checked;
-            Properties.Settings.Default.monitoredBio = monitoredBio.Checked;
-            Properties.Settings.Default.monitoredBlindness = monitoredBlindness.Checked;
-            Properties.Settings.Default.monitoredBurn = monitoredBurn.Checked;
-            Properties.Settings.Default.monitoredChrDown = monitoredChrDown.Checked;
-            Properties.Settings.Default.monitoredChoke = monitoredChoke.Checked;
-            Properties.Settings.Default.monitoredCurse = monitoredCurse.Checked;
-            Properties.Settings.Default.monitoredCurse2 = monitoredCurse2.Checked;
-            Properties.Settings.Default.monitoredDexDown = monitoredDexDown.Checked;
-            Properties.Settings.Default.monitoredDefenseDown = monitoredDefenseDown.Checked;
-            Properties.Settings.Default.monitoredDia = monitoredDia.Checked;
-            Properties.Settings.Default.monitoredDisease = monitoredDisease.Checked;
-            Properties.Settings.Default.monitoredDoom = monitoredDoom.Checked;
-            Properties.Settings.Default.monitoredDrown = monitoredDrown.Checked;
-            Properties.Settings.Default.monitoredElegy = monitoredElegy.Checked;
-            Properties.Settings.Default.monitoredEvasionDown = monitoredEvasionDown.Checked;
-            Properties.Settings.Default.monitoredFlash = monitoredFlash.Checked;
-            Properties.Settings.Default.monitoredFrost = monitoredFrost.Checked;
-            Properties.Settings.Default.monitoredHelix = monitoredHelix.Checked;
-            Properties.Settings.Default.monitoredIntDown = monitoredIntDown.Checked;
-            Properties.Settings.Default.monitoredMndDown = monitoredMndDown.Checked;
-            Properties.Settings.Default.monitoredMagicAccDown = monitoredMagicAccDown.Checked;
-            Properties.Settings.Default.monitoredMagicAtkDown = monitoredMagicAtkDown.Checked;
-            Properties.Settings.Default.monitoredMaxHpDown = monitoredMaxHpDown.Checked;
-            Properties.Settings.Default.monitoredMaxMpDown = monitoredMaxMpDown.Checked;
-            Properties.Settings.Default.monitoredMaxTpDown = monitoredMaxTpDown.Checked;
-            Properties.Settings.Default.monitoredParalysis = monitoredParalysis.Checked;
-            Properties.Settings.Default.monitoredPetrification = monitoredPetrification.Checked;
-            Properties.Settings.Default.monitoredPlague = monitoredPlague.Checked;
-            Properties.Settings.Default.monitoredPoison = monitoredPoison.Checked;
-            Properties.Settings.Default.monitoredRasp = monitoredRasp.Checked;
-            Properties.Settings.Default.monitoredRequiem = monitoredRequiem.Checked;
-            Properties.Settings.Default.monitoredStrDown = monitoredStrDown.Checked;
-            Properties.Settings.Default.monitoredShock = monitoredShock.Checked;
-            Properties.Settings.Default.monitoredSilence = monitoredSilence.Checked;
-            Properties.Settings.Default.monitoredSleep = monitoredSleep.Checked;
-            Properties.Settings.Default.monitoredSleep2 = monitoredSleep2.Checked;
-            Properties.Settings.Default.monitoredSlow = monitoredSlow.Checked;
-            Properties.Settings.Default.monitoredThrenody = monitoredThrenody.Checked;
-            Properties.Settings.Default.monitoredVitDown = monitoredVitDown.Checked;
-            Properties.Settings.Default.monitoredWeight = monitoredWeight.Checked;
-
-            Properties.Settings.Default.Save();
-            MessageBox.Show("Settings saved!", "Buff Removal");
-
-        }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            {
-            Properties.Settings.Default.cure1enabled = cure1enabled.Checked;
-            Properties.Settings.Default.cure2enabled = cure2enabled.Checked;
-            Properties.Settings.Default.cure3enabled = cure3enabled.Checked;
-            Properties.Settings.Default.cure4enabled = cure4enabled.Checked;
-            Properties.Settings.Default.cure5enabled = cure5enabled.Checked;
-            Properties.Settings.Default.cure6enabled = cure6enabled.Checked;
-            Properties.Settings.Default.cure1amount = Convert.ToInt32(cure1amount.Value);
-            Properties.Settings.Default.cure2amount = Convert.ToInt32(cure2amount.Value);
-            Properties.Settings.Default.cure3amount = Convert.ToInt32(cure3amount.Value);
-            Properties.Settings.Default.cure4amount = Convert.ToInt32(cure4amount.Value);
-            Properties.Settings.Default.cure5amount = Convert.ToInt32(cure5amount.Value);
-            Properties.Settings.Default.cure6amount = Convert.ToInt32(cure6amount.Value);
-            Properties.Settings.Default.curePercentage = curePercentage.Value;
-            Properties.Settings.Default.priorityCurePercentage = priorityCurePercentage.Value;
-            Properties.Settings.Default.Save();
-            MessageBox.Show("Settings saved!", "Healing Magic");
-
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.plBlink = plBlink.Checked;
-            Properties.Settings.Default.autoHasteMinutes = autoHasteMinutes.Value;
-            Properties.Settings.Default.autoPhalanxIIMinutes = autoPhalanxIIMinutes.Value;
-            Properties.Settings.Default.autoRegenIVMinutes = autoRegenIVMinutes.Value;
-            Properties.Settings.Default.plReraise = plReraise.Checked;
-            if (plReraiseLevel1.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 1;
-            }
-            else if (plReraiseLevel2.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 2;
-            }
-            else if (plReraiseLevel3.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 3;
-            }
-            Properties.Settings.Default.plRefresh = plRefresh.Checked;
-            if (plRefreshLevel1.Checked)
-            {
-                Properties.Settings.Default.plRefreshLevel = 1;
-            }
-            else if (plRefreshLevel2.Checked)
-            {
-                Properties.Settings.Default.plRefreshLevel = 2;
-            }
-            Properties.Settings.Default.plStoneskin = plStoneskin.Checked;
-            Properties.Settings.Default.plShellra = plShellra.Checked;
-            Properties.Settings.Default.plProtectra = plProtectra.Checked;
-            Properties.Settings.Default.plProtectralevel = plProtectralevel.Value;
-            Properties.Settings.Default.plShellralevel = plShellralevel.Value;
-            Properties.Settings.Default.Save();
-            MessageBox.Show("Settings saved!", "Enhancing Magic");
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.afflatusSolice = afflatusSolace.Checked;
-            Properties.Settings.Default.afflatusMisery = afflatusMisery.Checked;
-            Properties.Settings.Default.lightArts = lightArts.Checked;
-            Properties.Settings.Default.Composure = composure.Checked;
-            Properties.Settings.Default.addWhite = addWhite.Checked;
-            Properties.Settings.Default.sublimation = sublimation.Checked;
-            Properties.Settings.Default.Save();
-            MessageBox.Show("Settings saved!", "Job Abilities");
-        }
-
-
-                
+        #region "== All Settings Saved"
         private void button4_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.cure1enabled = cure1enabled.Checked;
@@ -419,11 +225,20 @@ namespace CurePlease
             Properties.Settings.Default.afflatusMisery = afflatusMisery.Checked;
             Properties.Settings.Default.lightArts = lightArts.Checked;
             Properties.Settings.Default.Composure = composure.Checked;
+            Properties.Settings.Default.Convert = convert.Checked;
+            Properties.Settings.Default.divineSealBox = divineSealBox.Checked;
             Properties.Settings.Default.addWhite = addWhite.Checked;
             Properties.Settings.Default.sublimation = sublimation.Checked;
             Properties.Settings.Default.autoHasteMinutes = autoHasteMinutes.Value;
+            Properties.Settings.Default.autoProtect_IVMinutes = autoProtect_IVMinutes.Value;
+            Properties.Settings.Default.autoProtect_VMinutes = autoProtect_VMinutes.Value;
+            Properties.Settings.Default.autoShell_IVMinutes = autoShell_IVMinutes.Value;
+            Properties.Settings.Default.autoShell_VMinutes = autoShell_VMinutes.Value;
             Properties.Settings.Default.autoPhalanxIIMinutes = autoPhalanxIIMinutes.Value;
             Properties.Settings.Default.autoRegenIVMinutes = autoRegenIVMinutes.Value;
+            Properties.Settings.Default.autoRegenVMinutes = autoRegenVMinutes.Value;
+            Properties.Settings.Default.autoRefreshMinutes = autoRefreshMinutes.Value;
+            Properties.Settings.Default.autoRefreshIIMinutes = autoRefreshIIMinutes.Value;
             Properties.Settings.Default.plSilenceItemEnabled = plSilenceItemEnabled.Checked;
             Properties.Settings.Default.plSilenceItemIndex = plSilenceItem.SelectedIndex;
             Properties.Settings.Default.wakeSleepEnabled = wakeSleepEnabled.Checked;
@@ -568,12 +383,15 @@ namespace CurePlease
             Properties.Settings.Default.monitoredThrenody = monitoredThrenody.Checked;
             Properties.Settings.Default.monitoredVitDown = monitoredVitDown.Checked;
             Properties.Settings.Default.monitoredWeight = monitoredWeight.Checked;
+            Properties.Settings.Default.AutoCastEngageCheckBox = AutoCastEngageCheckBox.Checked;
 
-            Properties.Settings.Default.Save();
-            MessageBox.Show("Saved!", "All Settings");
-        
+            Properties.Settings.Default.Save();            
+            this.Close();
+            //MessageBox.Show("Saved!", "All Settings");        
         }
+        #endregion
 
+        #region "== PL Debuff Check Boxes"
         private void plDebuffEnabled_CheckedChanged(object sender, EventArgs e)
         {
             if (plDebuffEnabled.Checked)
@@ -669,7 +487,9 @@ namespace CurePlease
                 plWeight.Checked = false; plWeight.Enabled = false;
             }
         }
+            #endregion
 
+        #region "== Monitored Player Debuff Check Boxes"
         private void monitoredDebuffEnabled_CheckedChanged(object sender, EventArgs e)
         {
             if (monitoredDebuffEnabled.Checked)
@@ -769,15 +589,198 @@ namespace CurePlease
                 monitoredThrenody.Checked = false; monitoredThrenody.Enabled = false;
                 monitoredVitDown.Checked = false; monitoredVitDown.Enabled = false;
                 monitoredWeight.Checked = false; monitoredWeight.Enabled = false;
+            }        
+        }
+        #endregion
+
+        #region "== Form Closing Settings"
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.cure1enabled = cure1enabled.Checked;
+            Properties.Settings.Default.cure2enabled = cure2enabled.Checked;
+            Properties.Settings.Default.cure3enabled = cure3enabled.Checked;
+            Properties.Settings.Default.cure4enabled = cure4enabled.Checked;
+            Properties.Settings.Default.cure5enabled = cure5enabled.Checked;
+            Properties.Settings.Default.cure6enabled = cure6enabled.Checked;
+            Properties.Settings.Default.cure1amount = Convert.ToInt32(cure1amount.Value);
+            Properties.Settings.Default.cure2amount = Convert.ToInt32(cure2amount.Value);
+            Properties.Settings.Default.cure3amount = Convert.ToInt32(cure3amount.Value);
+            Properties.Settings.Default.cure4amount = Convert.ToInt32(cure4amount.Value);
+            Properties.Settings.Default.cure5amount = Convert.ToInt32(cure5amount.Value);
+            Properties.Settings.Default.cure6amount = Convert.ToInt32(cure6amount.Value);
+            Properties.Settings.Default.curePercentage = curePercentage.Value;
+            Properties.Settings.Default.priorityCurePercentage = priorityCurePercentage.Value;
+            Properties.Settings.Default.afflatusSolice = afflatusSolace.Checked;
+            Properties.Settings.Default.afflatusMisery = afflatusMisery.Checked;
+            Properties.Settings.Default.lightArts = lightArts.Checked;
+            Properties.Settings.Default.Composure = composure.Checked;
+            Properties.Settings.Default.Convert = convert.Checked;
+            Properties.Settings.Default.divineSealBox = divineSealBox.Checked;
+            Properties.Settings.Default.addWhite = addWhite.Checked;
+            Properties.Settings.Default.sublimation = sublimation.Checked;
+            Properties.Settings.Default.autoHasteMinutes = autoHasteMinutes.Value;
+            Properties.Settings.Default.autoProtect_IVMinutes = autoProtect_IVMinutes.Value;
+            Properties.Settings.Default.autoProtect_VMinutes = autoProtect_VMinutes.Value;
+            Properties.Settings.Default.autoShell_IVMinutes = autoShell_IVMinutes.Value;
+            Properties.Settings.Default.autoShell_VMinutes = autoShell_VMinutes.Value;
+            Properties.Settings.Default.autoPhalanxIIMinutes = autoPhalanxIIMinutes.Value;
+            Properties.Settings.Default.autoRegenIVMinutes = autoRegenIVMinutes.Value;
+            Properties.Settings.Default.autoRegenVMinutes = autoRegenVMinutes.Value;
+            Properties.Settings.Default.autoRefreshMinutes = autoRefreshMinutes.Value;
+            Properties.Settings.Default.autoRefreshIIMinutes = autoRefreshIIMinutes.Value;
+            Properties.Settings.Default.plSilenceItemEnabled = plSilenceItemEnabled.Checked;
+            Properties.Settings.Default.plSilenceItemIndex = plSilenceItem.SelectedIndex;
+            Properties.Settings.Default.wakeSleepEnabled = wakeSleepEnabled.Checked;
+            Properties.Settings.Default.wakeSleepSpellIndex = wakeSleepSpell.SelectedIndex;
+            Properties.Settings.Default.wakeSleepSpellString = wakeSleepSpell.Items[wakeSleepSpell.SelectedIndex].ToString();
+            Properties.Settings.Default.plDebuffEnabled = plDebuffEnabled.Checked;
+            Properties.Settings.Default.monitoredDebuffEnabled = monitoredDebuffEnabled.Checked;
+            Properties.Settings.Default.plSilenceItemString = plSilenceItem.Items[plSilenceItem.SelectedIndex].ToString();
+            Properties.Settings.Default.plBlink = plBlink.Checked;
+            Properties.Settings.Default.plReraise = plReraise.Checked;
+            if (plReraiseLevel1.Checked)
+            {
+                Properties.Settings.Default.plReraiseLevel = 1;
             }
+            else if (plReraiseLevel2.Checked)
+            {
+                Properties.Settings.Default.plReraiseLevel = 2;
+            }
+            else if (plReraiseLevel3.Checked)
+            {
+                Properties.Settings.Default.plReraiseLevel = 3;
+            }
+            Properties.Settings.Default.plRefresh = plRefresh.Checked;
+            if (plRefreshLevel1.Checked)
+            {
+                Properties.Settings.Default.plRefreshLevel = 1;
+            }
+            else if (plRefreshLevel2.Checked)
+            {
+                Properties.Settings.Default.plRefreshLevel = 2;
+            }
+            Properties.Settings.Default.plStoneskin = plStoneskin.Checked;
+            Properties.Settings.Default.plShellra = plShellra.Checked;
+            Properties.Settings.Default.plProtectra = plProtectra.Checked;
+            Properties.Settings.Default.plProtectralevel = plProtectralevel.Value;
+            Properties.Settings.Default.plShellralevel = plShellralevel.Value;
+
+            Properties.Settings.Default.plAgiDown = plAgiDown.Checked;
+            Properties.Settings.Default.plAccuracyDown = plAccuracyDown.Checked;
+            Properties.Settings.Default.plAddle = plAddle.Checked;
+            Properties.Settings.Default.plAttackDown = plAttackDown.Checked;
+            Properties.Settings.Default.plBane = plBane.Checked;
+            Properties.Settings.Default.plBind = plBind.Checked;
+            Properties.Settings.Default.plBio = plBio.Checked;
+            Properties.Settings.Default.plBlindness = plBlindness.Checked;
+            Properties.Settings.Default.plBurn = plBurn.Checked;
+            Properties.Settings.Default.plChrDown = plChrDown.Checked;
+            Properties.Settings.Default.plChoke = plChoke.Checked;
+            Properties.Settings.Default.plCurse = plCurse.Checked;
+            Properties.Settings.Default.plCurse2 = plCurse2.Checked;
+            Properties.Settings.Default.plDexDown = plDexDown.Checked;
+            Properties.Settings.Default.plDefenseDown = plDefenseDown.Checked;
+            Properties.Settings.Default.plDia = plDia.Checked;
+            Properties.Settings.Default.plDisease = plDisease.Checked;
+            Properties.Settings.Default.plDoom = plDoom.Checked;
+            Properties.Settings.Default.plDrown = plDrown.Checked;
+            Properties.Settings.Default.plElegy = plElegy.Checked;
+            Properties.Settings.Default.plEvasionDown = plEvasionDown.Checked;
+            Properties.Settings.Default.plFlash = plFlash.Checked;
+            Properties.Settings.Default.plFrost = plFrost.Checked;
+            Properties.Settings.Default.plHelix = plHelix.Checked;
+            Properties.Settings.Default.plIntDown = plIntDown.Checked;
+            Properties.Settings.Default.plMndDown = plMndDown.Checked;
+            Properties.Settings.Default.plMagicAccDown = plMagicAccDown.Checked;
+            Properties.Settings.Default.plMagicAtkDown = plMagicAtkDown.Checked;
+            Properties.Settings.Default.plMaxHpDown = plMaxHpDown.Checked;
+            Properties.Settings.Default.plMaxMpDown = plMaxMpDown.Checked;
+            Properties.Settings.Default.plMaxTpDown = plMaxTpDown.Checked;
+            Properties.Settings.Default.plParalysis = plParalysis.Checked;
+            Properties.Settings.Default.plPlague = plPlague.Checked;
+            Properties.Settings.Default.plPoison = plPoison.Checked;
+            Properties.Settings.Default.plRasp = plRasp.Checked;
+            Properties.Settings.Default.plRequiem = plRequiem.Checked;
+            Properties.Settings.Default.plStrDown = plStrDown.Checked;
+            Properties.Settings.Default.plShock = plShock.Checked;
+            Properties.Settings.Default.plSilence = plSilence.Checked;
+            Properties.Settings.Default.plSlow = plSlow.Checked;
+            Properties.Settings.Default.plThrenody = plThrenody.Checked;
+            Properties.Settings.Default.plVitDown = plVitDown.Checked;
+            Properties.Settings.Default.plWeight = plWeight.Checked;
+            // New UI Elements
+            Properties.Settings.Default.plDoomEnabled = plDoomEnabled.Checked;
+            Properties.Settings.Default.plDoomindex = plDoomitem.SelectedIndex;
+            Properties.Settings.Default.PLDoomitem = plDoomitem.Items[Properties.Settings.Default.plDoomindex].ToString();
+            Properties.Settings.Default.lowMPcheckBox = lowMPcheckBox.Checked;
+            Properties.Settings.Default.mpMinCastValue = mpMinCastValue.Value;
+            Properties.Settings.Default.naSpellsenable = naSpellsenable.Checked;
+            Properties.Settings.Default.naBlindness = naBlindness.Checked;
+            Properties.Settings.Default.naCurse = naCurse.Checked;
+            Properties.Settings.Default.naDisease = naDisease.Checked;
+            Properties.Settings.Default.naParalysis = naParalysis.Checked;
+            Properties.Settings.Default.naPetrification = naPetrification.Checked;
+            Properties.Settings.Default.naPlague = naPlague.Checked;
+            Properties.Settings.Default.naPoison = naPoison.Checked;
+            Properties.Settings.Default.naSilence = naSilence.Checked;
+            Properties.Settings.Default.lowMPuseitem = lowMPuseitem.Checked;
+            Properties.Settings.Default.mpMintempitemusage = mpMintempitemusage.Value;
+
+            Properties.Settings.Default.monitoredAgiDown = monitoredAgiDown.Checked;
+            Properties.Settings.Default.monitoredAccuracyDown = monitoredAccuracyDown.Checked;
+            Properties.Settings.Default.monitoredAddle = monitoredAddle.Checked;
+            Properties.Settings.Default.monitoredAttackDown = monitoredAttackDown.Checked;
+            Properties.Settings.Default.monitoredBane = monitoredBane.Checked;
+            Properties.Settings.Default.monitoredBind = monitoredBind.Checked;
+            Properties.Settings.Default.monitoredBio = monitoredBio.Checked;
+            Properties.Settings.Default.monitoredBlindness = monitoredBlindness.Checked;
+            Properties.Settings.Default.monitoredBurn = monitoredBurn.Checked;
+            Properties.Settings.Default.monitoredChrDown = monitoredChrDown.Checked;
+            Properties.Settings.Default.monitoredChoke = monitoredChoke.Checked;
+            Properties.Settings.Default.monitoredCurse = monitoredCurse.Checked;
+            Properties.Settings.Default.monitoredCurse2 = monitoredCurse2.Checked;
+            Properties.Settings.Default.monitoredDexDown = monitoredDexDown.Checked;
+            Properties.Settings.Default.monitoredDefenseDown = monitoredDefenseDown.Checked;
+            Properties.Settings.Default.monitoredDia = monitoredDia.Checked;
+            Properties.Settings.Default.monitoredDisease = monitoredDisease.Checked;
+            Properties.Settings.Default.monitoredDoom = monitoredDoom.Checked;
+            Properties.Settings.Default.monitoredDrown = monitoredDrown.Checked;
+            Properties.Settings.Default.monitoredElegy = monitoredElegy.Checked;
+            Properties.Settings.Default.monitoredEvasionDown = monitoredEvasionDown.Checked;
+            Properties.Settings.Default.monitoredFlash = monitoredFlash.Checked;
+            Properties.Settings.Default.monitoredFrost = monitoredFrost.Checked;
+            Properties.Settings.Default.monitoredHelix = monitoredHelix.Checked;
+            Properties.Settings.Default.monitoredIntDown = monitoredIntDown.Checked;
+            Properties.Settings.Default.monitoredMndDown = monitoredMndDown.Checked;
+            Properties.Settings.Default.monitoredMagicAccDown = monitoredMagicAccDown.Checked;
+            Properties.Settings.Default.monitoredMagicAtkDown = monitoredMagicAtkDown.Checked;
+            Properties.Settings.Default.monitoredMaxHpDown = monitoredMaxHpDown.Checked;
+            Properties.Settings.Default.monitoredMaxMpDown = monitoredMaxMpDown.Checked;
+            Properties.Settings.Default.monitoredMaxTpDown = monitoredMaxTpDown.Checked;
+            Properties.Settings.Default.monitoredParalysis = monitoredParalysis.Checked;
+            Properties.Settings.Default.monitoredPetrification = monitoredPetrification.Checked;
+            Properties.Settings.Default.monitoredPlague = monitoredPlague.Checked;
+            Properties.Settings.Default.monitoredPoison = monitoredPoison.Checked;
+            Properties.Settings.Default.monitoredRasp = monitoredRasp.Checked;
+            Properties.Settings.Default.monitoredRequiem = monitoredRequiem.Checked;
+            Properties.Settings.Default.monitoredStrDown = monitoredStrDown.Checked;
+            Properties.Settings.Default.monitoredShock = monitoredShock.Checked;
+            Properties.Settings.Default.monitoredSilence = monitoredSilence.Checked;
+            Properties.Settings.Default.monitoredSleep = monitoredSleep.Checked;
+            Properties.Settings.Default.monitoredSleep2 = monitoredSleep2.Checked;
+            Properties.Settings.Default.monitoredSlow = monitoredSlow.Checked;
+            Properties.Settings.Default.monitoredThrenody = monitoredThrenody.Checked;
+            Properties.Settings.Default.monitoredVitDown = monitoredVitDown.Checked;
+            Properties.Settings.Default.monitoredWeight = monitoredWeight.Checked;
+            Properties.Settings.Default.AutoCastEngageCheckBox = AutoCastEngageCheckBox.Checked;
+
+            Properties.Settings.Default.Save();
         }
 
+        private void AutoCastEngageCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
 
-
-
-        
-
-        
-
+        }
     }
+        #endregion
 }

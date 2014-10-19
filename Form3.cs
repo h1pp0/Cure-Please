@@ -24,7 +24,7 @@ namespace CurePlease
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://svn.ffevo.net/ffacetools/Binary/FFACETools.dll");
+            System.Diagnostics.Process.Start("https://github.com/h1pp0/FFACETools_ffevo.net/blob/master/Binary/FFACETools.dll");
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

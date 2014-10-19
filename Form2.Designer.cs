@@ -560,8 +560,8 @@ namespace CurePlease
             this.AutoCastEngageCheckBox.Size = new System.Drawing.Size(182, 17);
             this.AutoCastEngageCheckBox.TabIndex = 0;
             this.AutoCastEngageCheckBox.Text = "Auto Casts Spells when engaged";
-            this.toolTip1.SetToolTip(this.AutoCastEngageCheckBox, "Auto Casts Protect IV & V, Shell IV & V, Regen IV & V, Haste on Monitored Player " +
-        "while engaged");
+            this.toolTip1.SetToolTip(this.AutoCastEngageCheckBox, "Auto Casts Protect IV & V, Shell IV & V, Regen IV & V, Haste, Flurry on Monitored" +
+        " Player while engaged");
             this.AutoCastEngageCheckBox.UseVisualStyleBackColor = true;
             this.AutoCastEngageCheckBox.CheckedChanged += new System.EventHandler(this.AutoCastEngageCheckBox_CheckedChanged);
             // 
@@ -933,9 +933,10 @@ namespace CurePlease
             this.autoHasteLabel.AutoSize = true;
             this.autoHasteLabel.Location = new System.Drawing.Point(52, 19);
             this.autoHasteLabel.Name = "autoHasteLabel";
-            this.autoHasteLabel.Size = new System.Drawing.Size(296, 13);
+            this.autoHasteLabel.Size = new System.Drawing.Size(404, 13);
             this.autoHasteLabel.TabIndex = 1;
-            this.autoHasteLabel.Text = "Cast Auto Haste every X minutes: Default Duration: 3 minutes";
+            this.autoHasteLabel.Text = "Cast Auto Haste,Haste II,Flurry,Flurry II  every X minutes: Default Duration: 3 m" +
+    "inutes";
             // 
             // plBuffGroup
             // 

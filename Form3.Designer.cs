@@ -77,7 +77,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Version 1.0.2.0";
+            this.label2.Text = "Version 1.0.2.1";
             // 
             // label3
             // 
@@ -184,10 +184,10 @@
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Location = new System.Drawing.Point(12, 242);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(262, 13);
+            this.linkLabel2.Size = new System.Drawing.Size(242, 13);
             this.linkLabel2.TabIndex = 14;
             this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "http://svn.ffevo.net/ffacetools/Binary/FFACETools.dll";
+            this.linkLabel2.Text = "https://github.com/h1pp0/FFACETools_ffevo.net";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // linkLabel3

@@ -2390,7 +2390,7 @@ namespace CurePlease
         #region "== CastingPossible (Distance)"
         private bool castingPossible(byte partyMemberId)
         {
-            if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID).Distance > 0) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP > 0) || (_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP > 0))
+            if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].TargetIndex).Distance > 0) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP > 0) || (_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP > 0))
             {
                 return true;
             }
@@ -3059,7 +3059,7 @@ namespace CurePlease
 
                 #region "== Monitored Player Debuff Removal"
                 // Next, we check monitored player
-                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).ID).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).ID).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0))
+                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0))
                 {
                     foreach (StatusEffect monitoredEffect in this._ELITEAPIMonitored.Player.Buffs)
                     {

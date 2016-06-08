@@ -1,41 +1,1151 @@
-﻿using System;
+﻿using CurePlease.Properties;
+using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.Threading;
-using System.Collections.Generic;
-using CurePlease.Properties;
+using System.Windows.Forms;
+
+// ReSharper disable InconsistentNaming
 
 namespace CurePlease
 {
+    using EliteMMO.API;
 
-    using FFACETools;
     public partial class Form1 : Form
     {
-        
-        public static FFACE _FFACEPL;
-        public FFACE _FFACEMonitored;        
+        #region "FFACE Tools Enumerations"
+        public enum LoginStatus
+        {
+            CharacterLoginScreen = 0,
+            Loading = 1,
+            LoggedIn = 2
+        }
+
+        /// <summary>
+        /// Player Statuses
+        /// </summary>
+        public enum Status : byte
+        {
+            Standing = 0,
+            Fighting = 1,
+            Dead1 = 2,
+            Dead2 = 3,
+            Event = 4,
+            Chocobo = 5,
+            Healing = 33,
+            Synthing = 44,
+            Sitting = 47,
+            Fishing = 56,
+            FishBite = 57,
+            Obtained = 58,
+            RodBreak = 59,
+            LineBreak = 60,
+            CatchMonster = 61,
+            LostCatch = 62,
+            Unknown
+
+        } // @ public enum Status : byte
+
+        /// <summary>
+        /// Ability List
+        /// </summary>
+        public enum AbilityList : byte
+        {
+            Two_Hour = 0,
+            Berserk = 1,
+            Warcry = 2,
+            Defender = 3,
+            Aggressor = 4,
+            Provoke = 5,
+            Enrage = 6,
+            Tomahawk = 7,
+            Retaliation = 8,
+            Restraint = 9,
+            Rune_Enhancement_Elemental = 10,
+            Blood_Rage = 11,
+            Focus = 13,
+            Dodge = 14,
+            Chakra = 15,
+            Boost = 16,
+            Counterstance = 17,
+            Chi_Blast = 18,
+            Mantra = 19,
+            Formless_Strikes = 20,
+            Footwork = 21,
+            Perfect_Counter = 22,
+            Vallation = 23,
+            Swordplay = 24,
+            Lunge = 25,
+            Divine_Seal = 26,
+            Martyr = 27,
+            Devotion = 28,
+            Afflatus_Solace = 29,
+            Afflatus_Misery = 30,
+            Impetus = 31,
+            Divine_Caress = 32,
+            Sacrosanctity = 33,
+            Enmity_Douse = 34,
+            Manawell = 35,
+            Saboteur = 36,
+            Spontaneity = 37,
+            Elemental_Seal = 38,
+            Mana_Wall = 39,
+            Conspirator = 40,
+            Sepulcher = 41,
+            Palisade = 42,
+            Arcane_Crest = 43,
+            Scarlet_Delirium = 44,
+            Spur = 45,
+            Run_Wild = 46,
+            Tenuto = 47,
+            Marcato = 48,
+            Convert = 49,
+            Composure = 50,
+            Bounty_Shot = 51,
+            Decoy_Shot = 52,
+            Hamanoha = 53,
+            Hagakure = 54,
+            Issekigan = 57,
+            Dragon_Breaker = 58,
+            Pflug = 59,
+            Steal = 60,
+            Despoil = 61,
+            Flee = 62,
+            Hide = 63,
+            Sneak_Attack = 64,
+            Mug = 65,
+            Trick_Attack = 66,
+            Assassins_Charge = 67,
+            Feint = 68,
+            Accomplice = 69,
+            Steady_Wing = 70,
+            Mana_Cede = 71,
+            Embolden = 72,
+            Shield_Bash = 73,
+            Holy_Circle = 74,
+            Sentinel = 75,
+            Cover = 76,
+            Rampart = 77,
+            Fealty = 78,
+            Chivalry = 79,
+            Divine_Emblem = 80,
+            Unbridled_Learning = 81,
+            Triple_Shot = 84,
+            Souleater = 85,
+            Arcane_Circle = 86,
+            Last_Resort = 87,
+            Weapon_Bash = 88,
+            Dark_Seal = 89,
+            Diabolic_Eye = 90,
+            Nether_Void = 91,
+            Rune_Enchantment = 92,
+            Charm = 97,
+            Gauge = 98,
+            Tame = 99,
+            Fight = 100,
+            Heel = 101,
+            Sic = 102,
+            Reward = 103,
+            Call_Beast = 104,
+            Feral_Howl = 105,
+            Killer_Instinct = 106,
+            Snarl = 107,
+            Nightingale = 109,
+            Troubadour = 110,
+            Pianissimo = 112,
+            Valiance = 113,
+            Cooldown = 114,
+            Deus_Ex_Automata = 115,
+            Gambit = 116,
+            Liement = 117,
+            One_for_All = 118,
+            Rayke = 119,
+            Battuta = 120,
+            Scavenge = 121,
+            Shadowbind = 122,
+            Camouflage = 123,
+            Sharpshot = 124,
+            Barrage = 125,
+            Unlimited_Shot = 126,
+            Stealth_Shot = 127,
+            Flashy_Shot = 128,
+            Velocity_Shot = 129,
+            Widened_Compass = 130,
+            Odyllic_Subterfuge = 131,
+            Konzen_ittai = 132,
+            Third_Eye = 133,
+            Meditate = 134,
+            Warding_Circle = 135,
+            Shikikoyo = 136,
+            Blade_Bash = 137,
+            Hasso = 138,
+            Seigan = 139,
+            Sekkanoki = 140,
+            Sengikori = 141,
+            Ward = 142,
+            Effusion = 143,
+            Sange = 145,
+            Yonin = 146,
+            Innin = 147,
+            Futae = 148,
+            Ancient_Circle = 157,
+            Jump = 158,
+            High_Jump = 159,
+            Super_Jump = 160,
+            Dismiss = 161,
+            Spirit_Link = 162,
+            Call_Wyvern = 163,
+            Deep_Breathing = 164,
+            Angon = 165,
+            Assault = 170,
+            Retreat = 171,
+            Release = 172,
+            Blood_Pact_Rage = 173,
+            Blood_Pact_Ward = 174,
+            Elemental_Siphon = 175,
+            Avatars_Favor = 176,
+            Chain_Affinity = 181,
+            Burst_Affinity = 182,
+            Convergence = 183,
+            Diffusion = 184,
+            Efflux = 185,
+            COR_Roll = 193,
+            Double_Up = 194,
+            Elemental_Shot = 195,
+            Random_Deal = 196,
+            Snake_Eye = 197,
+            Fold = 198,
+            Quick_Draw = 199,
+            Activate = 205,
+            Repair = 206,
+            Deploy = 207,
+            Deactivate = 208,
+            Retrieve = 209,
+            Fire_Maneuver = 210,
+            Role_Reversal = 211,
+            Ventriloquy = 212,
+            Tactical_Switch = 213,
+            Maintenance = 214,
+            Healing_Waltz = 215,
+            Sambas = 216,
+            Curing_Waltz = 217,
+            Spectral_Jig = 218,
+            Saber_Dance = 219,
+            Steps = 220,
+            Flourishes_I = 221,
+            Reverse_Flourish = 222,
+            No_Foot_Rise = 223,
+            Fan_Dance = 224,
+            Divine_Waltz = 225,
+            Flourishes_III = 226,
+            Waltzes = 227,
+            Light_Arts = 228,
+            Modus_Veritas = 230,
+            Penury = 231,
+            Dark_Arts = 232,
+            Stratagems = 233,
+            Sublimation = 234,
+            Enlightenment = 235,
+            Presto = 236,
+            Libra = 237,
+            Smiting_Breath = 238,
+            Restoring_Breath = 239,
+            Bully = 240,
+            Swipe = 241,
+            Vivacious_Pulse = 242,
+            Full_Circle = 243,
+            Lasting_Emanation = 244,
+            Collimated_Fervor = 245,
+            Life_Cycle = 246,
+            Blaze_Glory = 247,
+            Dematerialize = 248,
+            Theurgic_Focus = 249,
+            Concentric_Pulse = 250,
+            Mending_Halation = 251,
+            Radial_Arcana = 252,
+            Relinquish = 253,
+            SP_II = 254,
+            Pet_commands = 255
+
+        } // @ public enum AbilityList : byte
+
+        /// <summary>
+        /// Spell List
+        /// </summary>
+        public enum SpellList : short
+        {
+            Unknown = 0,
+            Cure = 2,
+            Cure_II = 4,
+            Cure_III = 6,
+            Cure_IV = 8,
+            Cure_V = 10,
+            Cure_VI = 12,
+            Curaga = 14,
+            Curaga_II = 16,
+            Curaga_III = 18,
+            Curaga_IV = 20,
+            Curaga_V = 22,
+            Raise = 24,
+            Raise_II = 26,
+            Poisona = 28,
+            Paralyna = 30,
+            Blindna = 32,
+            Silena = 34,
+            Stona = 36,
+            Viruna = 38,
+            Cursna = 40,
+            Holy = 42,
+            Holy_II = 44,
+            Dia = 46,
+            Dia_II = 48,
+            Dia_III = 50,
+            Dia_IV = 52,
+            Dia_V = 54,
+            Banish = 56,
+            Banish_II = 58,
+            Banish_III = 60,
+            Banish_IV = 62,
+            Banish_V = 64,
+            Diaga = 66,
+            Diaga_II = 68,
+            Diaga_III = 70,
+            Diaga_IV = 72,
+            Diaga_V = 74,
+            Banishga = 76,
+            Banishga_II = 78,
+            Banishga_III = 80,
+            Banishga_IV = 82,
+            Banishga_V = 84,
+            Protect = 86,
+            Protect_II = 88,
+            Protect_III = 90,
+            Protect_IV = 92,
+            Protect_V = 94,
+            Shell = 96,
+            Shell_II = 98,
+            Shell_III = 100,
+            Shell_IV = 102,
+            Shell_V = 104,
+            Blink = 106,
+            Stoneskin = 108,
+            Aquaveil = 110,
+            Slow = 112,
+            Haste = 114,
+            Paralyze = 116,
+            Silence = 118,
+            Barfire = 120,
+            Barblizzard = 122,
+            Baraero = 124,
+            Barstone = 126,
+            Barthunder = 128,
+            Barwater = 130,
+            Barfira = 132,
+            Barblizzara = 134,
+            Baraera = 136,
+            Barstonra = 138,
+            Barthundra = 140,
+            Barwatera = 142,
+            Barsleep = 144,
+            Barpoison = 146,
+            Barparalyze = 148,
+            Barblind = 150,
+            Barsilence = 152,
+            Barpetrify = 154,
+            Barvirus = 156,
+            Slow_II = 158,
+            Paralyze_II = 160,
+            Recall_Jugner = 162,
+            Recall_Pashh = 164,
+            Recall_Meriph = 166,
+            Baramnesia = 168,
+            Baramnesra = 170,
+            Barsleepra = 172,
+            Barpoisonra = 174,
+            Barparalyzra = 176,
+            Barblindra = 178,
+            Barsilencera = 180,
+            Barpetra = 182,
+            Barvira = 184,
+            Cura = 186,
+            Sacrifice = 188,
+            Esuna = 190,
+            Auspice = 192,
+            Reprisal = 194,
+            Repose = 196,
+            Sandstorm = 198,
+            Enfire = 200,
+            Enblizzard = 202,
+            Enaero = 204,
+            Enstone = 206,
+            Enthunder = 208,
+            Enwater = 210,
+            Phalanx = 212,
+            Phalanx_II = 214,
+            Regen = 216,
+            Refresh = 218,
+            Regen_II = 220,
+            Regen_III = 222,
+            Flash = 224,
+            Rainstorm = 226,
+            Windstorm = 228,
+            Firestorm = 230,
+            Hailstorm = 232,
+            Thunderstorm = 234,
+            Voidstorm = 236,
+            Aurorastorm = 238,
+            Teleport_Yhoat = 240,
+            Teleport_Altep = 242,
+            Teleport_Holla = 244,
+            Teleport_Dem = 246,
+            Teleport_Mea = 248,
+            Protectra = 250,
+            Protectra_II = 252,
+            Protectra_III = 254,
+            Protectra_IV = 256,
+            Protectra_V = 258,
+            Shellra = 260,
+            Shellra_II = 262,
+            Shellra_III = 264,
+            Shellra_IV = 266,
+            Shellra_V = 268,
+            Reraise = 270,
+            Invisible = 272,
+            Sneak = 274,
+            Deodorize = 276,
+            Teleport_Vahzl = 278,
+            Raise_III = 280,
+            Reraise_II = 282,
+            Reraise_III = 284,
+            Erase = 286,
+            Fire = 288,
+            Fire_II = 290,
+            Fire_III = 292,
+            Fire_IV = 294,
+            Fire_V = 296,
+            Blizzard = 298,
+            Blizzard_II = 300,
+            Blizzard_III = 302,
+            Blizzard_IV = 304,
+            Blizzard_V = 306,
+            Aero = 308,
+            Aero_II = 310,
+            Aero_III = 312,
+            Aero_IV = 314,
+            Aero_V = 316,
+            Stone = 318,
+            Stone_II = 320,
+            Stone_III = 322,
+            Stone_IV = 324,
+            Stone_V = 326,
+            Thunder = 328,
+            Thunder_II = 330,
+            Thunder_III = 332,
+            Thunder_IV = 334,
+            Thunder_V = 336,
+            Water = 338,
+            Water_II = 340,
+            Water_III = 342,
+            Water_IV = 344,
+            Water_V = 346,
+            Firaga = 348,
+            Firaga_II = 350,
+            Firaga_III = 352,
+            Firaga_IV = 354,
+            Firaga_V = 356,
+            Blizzaga = 358,
+            Blizzaga_II = 360,
+            Blizzaga_III = 362,
+            Blizzaga_IV = 364,
+            Blizzaga_V = 366,
+            Aeroga = 368,
+            Aeroga_II = 370,
+            Aeroga_III = 372,
+            Aeroga_IV = 374,
+            Aeroga_V = 376,
+            Stonega = 378,
+            Stonega_II = 380,
+            Stonega_III = 382,
+            Stonega_IV = 384,
+            Stonega_V = 386,
+            Thundaga = 388,
+            Thundaga_II = 390,
+            Thundaga_III = 392,
+            Thundaga_IV = 394,
+            Thundaga_V = 396,
+            Waterga = 398,
+            Waterga_II = 400,
+            Waterga_III = 402,
+            Waterga_IV = 404,
+            Waterga_V = 406,
+            Flare = 408,
+            Flare_II = 410,
+            Freeze = 412,
+            Freeze_II = 414,
+            Tornado = 416,
+            Tornado_II = 418,
+            Quake = 420,
+            Quake_II = 422,
+            Burst = 424,
+            Burst_II = 426,
+            Flood = 428,
+            Flood_II = 430,
+            Gravity = 432,
+            Gravity_II = 434,
+            Meteor = 436,
+            Comet = 438,
+            Poison = 440,
+            Poison_II = 442,
+            Poison_III = 444,
+            Poison_IV = 446,
+            Poison_V = 448,
+            Poisonga = 450,
+            Poisonga_II = 452,
+            Poisonga_III = 454,
+            Poisonga_IV = 456,
+            Poisonga_V = 458,
+            Bio = 460,
+            Bio_II = 462,
+            Bio_III = 464,
+            Bio_IV = 466,
+            Bio_V = 468,
+            Burn = 470,
+            Frost = 472,
+            Choke = 474,
+            Rasp = 476,
+            Shock = 478,
+            Drown = 480,
+            Retrace = 482,
+            Absorb_ACC = 484,
+            Absorb_Attri = 486,
+            Meteor_II = 488,
+            Drain = 490,
+            Drain_II = 492,
+            Aspir = 494,
+            Aspir_II = 496,
+            Blaze_Spikes = 498,
+            Ice_Spikes = 500,
+            Shock_Spikes = 502,
+            Stun = 504,
+            Sleep = 506,
+            Blind = 508,
+            Break = 510,
+            Virus = 512,
+            Curse = 514,
+            Bind = 516,
+            Sleep_II = 518,
+            Dispel = 520,
+            Warp = 522,
+            Warp_II = 524,
+            Escape = 526,
+            Tractor = 528,
+            Tractor_II = 530,
+            Absorb_STR = 532,
+            Absorb_DEX = 534,
+            Absorb_VIT = 536,
+            Absorb_AGI = 538,
+            Absorb_INT = 540,
+            Absorb_MND = 542,
+            Absorb_CHR = 544,
+            Sleepga_DRK = 546,
+            Sleepga_II_DRK = 548,
+            Absorb_TP = 550,
+            Blind_II_DRK = 552,
+            Dread_Spikes = 554,
+            Geohelix = 556,
+            Hydrohelix = 558,
+            Anemohelix = 560,
+            Pyrohelix = 562,
+            Cryohelix = 564,
+            Ionohelix = 566,
+            Noctohelix = 568,
+            Luminohelix = 570,
+            Addle = 572,
+            Klimaform = 574,
+            Fire_Spirit = 576,
+            Ice_Spirit = 578,
+            Air_Spirit = 580,
+            Earth_Spirit = 582,
+            Thunder_Spirit = 584,
+            Water_Spirit = 586,
+            Light_Spirit = 588,
+            Dark_Spirit = 590,
+            Carbuncle = 592,
+            Fenrir = 594,
+            Ifrit = 596,
+            Titan = 598,
+            Leviathan = 600,
+            Garuda = 602,
+            Shiva = 604,
+            Ramuh = 606,
+            Diabolos = 608,
+            Odin = 610,
+            Alexander = 612,
+            Cait_Sith = 614,
+            Animus_Augeo = 616,
+            Animus_Minuo = 618,
+            Enlight = 620,
+            Endark = 622,
+            Enfire_II = 624,
+            Enblizzard_II = 626,
+            Enaero_II = 628,
+            Enstone_II = 630,
+            Enthunder_II = 632,
+            Enwater_II = 634,
+            Monomi_Ichi = 636,
+            Aisha_Ichi = 638,
+            Katon_Ichi = 640,
+            Katon_Ni = 642,
+            Katon_San = 644,
+            Hyoton_Ichi = 646,
+            Hyoton_Ni = 648,
+            Hyoton_San = 650,
+            Huton_Ichi = 652,
+            Huton_Ni = 654,
+            Huton_San = 656,
+            Doton_Ichi = 658,
+            Doton_Ni = 660,
+            Doton_San = 662,
+            Raiton_Ichi = 664,
+            Raiton_Ni = 666,
+            Raiton_San = 668,
+            Suiton_Ichi = 670,
+            Suiton_Ni = 672,
+            Suiton_San = 674,
+            Utsusemi_Ichi = 676,
+            Utsusemi_Ni = 678,
+            Utsusemi_San = 680,
+            Jubaku_Ichi = 682,
+            Jubaku_Ni = 684,
+            Jubaku_San = 686,
+            Hojo_Ichi = 688,
+            Hojo_Ni = 690,
+            Hojo_San = 692,
+            Kurayami_Ichi = 694,
+            Kurayami_Ni = 696,
+            Kurayami_San = 698,
+            Dokumori_Ichi = 700,
+            Dokumori_Ni = 702,
+            Dokumori_San = 704,
+            Tonko_Ichi = 706,
+            Tonko_Ni = 708,
+            Tonko_San = 710,
+            Paralyga = 712,
+            Slowga = 714,
+            Hastega = 716,
+            Silencega = 718,
+            Dispelga = 720,
+            Blindga = 722,
+            Bindga = 724,
+            Sleepga = 726,
+            Sleepga_II = 728,
+            Breakga = 730,
+            Graviga = 732,
+            Death = 734,
+            Foe_Requiem = 736,
+            Foe_Requiem_II = 738,
+            Foe_Requiem_III = 740,
+            Foe_Requiem_IV = 742,
+            Foe_Requiem_V = 744,
+            Foe_Requiem_VI = 746,
+            Foe_Requiem_VII = 748,
+            Foe_Requiem_VIII = 750,
+            Horde_Lullaby = 752,
+            Horde_Lullaby_II = 754,
+            Armys_Paeon = 756,
+            Armys_Paeon_II = 758,
+            Armys_Paeon_III = 760,
+            Armys_Paeon_IV = 762,
+            Armys_Paeon_V = 764,
+            Armys_Paeon_VI = 766,
+            Armys_Paeon_VII = 768,
+            Armys_Paeon_VIII = 770,
+            Mages_Ballad = 772,
+            Mages_Ballad_II = 774,
+            Mages_Ballad_III = 776,
+            Knights_Minne = 778,
+            Knights_Minne_II = 780,
+            Knights_Minne_III = 782,
+            Knights_Minne_IV = 784,
+            Knights_Minne_V = 786,
+            Valor_Minuet = 788,
+            Valor_Minuet_II = 790,
+            Valor_Minuet_III = 792,
+            Valor_Minuet_IV = 794,
+            Valor_Minuet_V = 796,
+            Sword_Madrigal = 798,
+            Blade_Madrigal = 800,
+            Hunters_Prelude = 802,
+            Archers_Prelude = 804,
+            Sheepfoe_Mambo = 806,
+            Dragonfoe_Mambo = 808,
+            Fowl_Aubade = 810,
+            Herb_Pastoral = 812,
+            Chocobo_Hum = 814,
+            Shining_Fantasia = 816,
+            Scops_Operetta = 818,
+            Puppets_Operetta = 820,
+            Jesters_Operetta = 822,
+            Gold_Capriccio = 824,
+            Devotee_Serenade = 826,
+            Warding_Round = 828,
+            Goblin_Gavotte = 830,
+            Cactuar_Fugue = 832,
+            Moogle_Rhapsody = 834,
+            Protected_Aria = 836,
+            Advancing_March = 838,
+            Victory_March = 840,
+            Battlefield_Elegy = 842,
+            Carnage_Elegy = 844,
+            Massacre_Elegy = 846,
+            Sinewy_Etude = 848,
+            Dextrous_Etude = 850,
+            Vivacious_Etude = 852,
+            Quick_Etude = 854,
+            Learned_Etude = 856,
+            Spirited_Etude = 858,
+            Enchanting_Etude = 860,
+            Herculean_Etude = 862,
+            Uncanny_Etude = 864,
+            Vital_Etude = 866,
+            Swift_Etude = 868,
+            Sage_Etude = 870,
+            Logical_Etude = 872,
+            Bewitching_Etude = 874,
+            Fire_Carol = 876,
+            Ice_Carol = 878,
+            Wind_Carol = 880,
+            Earth_Carol = 882,
+            Lightning_Carol = 884,
+            Water_Carol = 886,
+            Light_Carol = 888,
+            Dark_Carol = 890,
+            Fire_Carol_II = 892,
+            Ice_Carol_II = 894,
+            Wind_Carol_II = 896,
+            Earth_Carol_II = 898,
+            Lightning_Carol_II = 900,
+            Water_Carol_II = 902,
+            Light_Carol_II = 904,
+            Dark_Carol_II = 906,
+            Fire_Threnody = 908,
+            Ice_Threnody = 910,
+            Wind_Threnody = 912,
+            Earth_Threnody = 914,
+            Lightning_Threnody = 916,
+            Water_Threnody = 918,
+            Light_Threnody = 920,
+            Dark_Threnody = 922,
+            Magic_Finale = 924,
+            Foe_Lullaby = 926,
+            Goddesss_Hymnus = 928,
+            Chocobo_Mazurka = 930,
+            Maidens_Virelai = 932,
+            Raptor_Mazurka = 934,
+            Foe_Sirvente = 936,
+            Adventurers_Dirge = 938,
+            Sentinels_Scherzo = 940,
+            Foe_Lullaby_II = 942,
+            Pining_Nocturne = 944,
+            Refresh_II = 946,
+            Cura_II = 948,
+            Cura_III = 950,
+            Crusade = 952,
+            Regen_IV = 954,
+            Embrava = 956,
+            Boost_STR = 958,
+            Boost_DEX = 960,
+            Boost_VIT = 962,
+            Boost_AGI = 964,
+            Boost_INT = 966,
+            Boost_MND = 968,
+            Boost_CHR = 970,
+            Gain_STR = 972,
+            Gain_DEX = 974,
+            Gain_VIT = 976,
+            Gain_AGI = 978,
+            Gain_INT = 980,
+            Gain_MND = 982,
+            Gain_CHR = 984,
+            Temper = 986,
+            Arise = 988,
+            Adloquium = 990,
+            Firaja = 992,
+            Blizzaja = 994,
+            Aeroja = 996,
+            Stoneja = 998,
+            Thundaja = 1000,
+            Waterja = 1002,
+            Kaustra = 1004,
+            Impact = 1006,
+            Regen_V = 1008,
+            Gekka_Ichi = 1010,
+            Yain_Ichi = 1012,
+            Myoshu_Ichi = 1014,
+            Yurin_Ichi = 1016,
+            Kakka_Ichi = 1018,
+            Migawari_Ichi = 1020,
+            Haste_II = 1022,
+            Venom_Shell = 1026,
+            Maelstrom = 1030,
+            Metallic_Body = 1034,
+            Screwdriver = 1038,
+            MP_Drainkiss = 1042,
+            Death_Ray = 1044,
+            Sandspin = 1048,
+            Smite_of_Rage = 1054,
+            Bludgeon = 1058,
+            Refueling = 1060,
+            Ice_Break = 1062,
+            Blitzstrahl = 1064,
+            Self_Destruct = 1066,
+            Mysterious_Light = 1068,
+            Cold_Wave = 1070,
+            Poison_Breath = 1072,
+            Stinking_Gas = 1074,
+            Memento_Mori = 1076,
+            Terror_Touch = 1078,
+            Spinal_Cleave = 1080,
+            Blood_Saber = 1082,
+            Digest = 1084,
+            Mandibular_Bite = 1086,
+            Cursed_Sphere = 1088,
+            Sickle_Slash = 1090,
+            Cocoon = 1094,
+            Filamented_Hold = 1096,
+            Pollen = 1098,
+            Power_Attack = 1102,
+            Death_Scissors = 1108,
+            Magnetite_Cloud = 1110,
+            Eyes_On_Me = 1114,
+            Frenetic_Rip = 1120,
+            Frightful_Roar = 1122,
+            Hecatomb_Wave = 1126,
+            Body_Slam = 1128,
+            Radiant_Breath = 1130,
+            Helldive = 1134,
+            Jet_Stream = 1138,
+            Blood_Drain = 1140,
+            Sound_Blast = 1144,
+            Feather_Tickle = 1146,
+            Feather_Barrier = 1148,
+            Jettatura = 1150,
+            Yawn = 1152,
+            Foot_Kick = 1154,
+            Wild_Carrot = 1156,
+            Voracious_Trunk = 1158,
+            Healing_Breeze = 1162,
+            Chaotic_Eye = 1164,
+            Sheep_Song = 1168,
+            Ram_Charge = 1170,
+            Claw_Cyclone = 1174,
+            Lowing = 1176,
+            Dimensional_Death = 1178,
+            Heat_Breath = 1182,
+            Blank_Gaze = 1184,
+            Magic_Fruit = 1186,
+            Uppercut = 1188,
+            Thousand_Needles = 1190,
+            Pinecone_Bomb = 1192,
+            Sprout_Smack = 1194,
+            Soporific = 1196,
+            Queasyshroom = 1198,
+            Wild_Oats = 1206,
+            Bad_Breath = 1208,
+            Geist_Wall = 1210,
+            Awful_Eye = 1212,
+            Frost_Breath = 1216,
+            Infrasonics = 1220,
+            Disseverment = 1222,
+            Actinic_Burst = 1224,
+            Reactor_Cool = 1226,
+            Saline_Coat = 1228,
+            Plasma_Charge = 1230,
+            Temporal_Shift = 1232,
+            Vertical_Cleave = 1234,
+            Blastbomb = 1236,
+            Battle_Dance = 1240,
+            Sandspray = 1242,
+            Grand_Slam = 1244,
+            Head_Butt = 1246,
+            Bomb_Toss = 1252,
+            Frypan = 1256,
+            Flying_Hip_Press = 1258,
+            Hydro_Shot = 1262,
+            Diamondhide = 1264,
+            Enervation = 1266,
+            Light_of_Penance = 1268,
+            Warm_Up = 1272,
+            Firespit = 1274,
+            Feather_Storm = 1276,
+            Tail_Slap = 1280,
+            Hysteric_Barrage = 1282,
+            Amplification = 1284,
+            Cannonball = 1286,
+            Mind_Blast = 1288,
+            Exuviation = 1290,
+            Magic_Hammer = 1292,
+            Zephyr_Mantle = 1294,
+            Regurgitation = 1296,
+            Seedspray = 1300,
+            Corrosive_Ooze = 1302,
+            Spiral_Spin = 1304,
+            Asuran_Claws = 1306,
+            Sub_zero_Smash = 1308,
+            Triumphant_Roar = 1310,
+            Acrid_Stream = 1312,
+            Blazing_Bound = 1314,
+            Plenilune_Embrace = 1316,
+            Demoralizing_Roar = 1318,
+            Cimicine_Discharge = 1320,
+            Animating_Wail = 1322,
+            Battery_Charge = 1324,
+            Leafstorm = 1326,
+            Regeneration = 1328,
+            Final_Sting = 1330,
+            Goblin_Rush = 1332,
+            Vanity_Dive = 1334,
+            Magic_Barrier = 1336,
+            Whirl_of_Rage = 1338,
+            Benthic_Typhoon = 1340,
+            Auroral_Drape = 1342,
+            Osmosis = 1344,
+            Quad_Continuum = 1346,
+            Fantod = 1348,
+            Thermal_Pulse = 1350,
+            Empty_Thrash = 1354,
+            Dream_Flower = 1356,
+            Occultation = 1358,
+            Charged_Whisker = 1360,
+            Winds_Promyvion = 1362,
+            Delta_Thrust = 1364,
+            Everyones_Grudge = 1366,
+            Reaving_Wind = 1368,
+            Barrier_Tusk = 1370,
+            Mortal_Ray = 1372,
+            Water_Bomb = 1374,
+            Heavy_Strike = 1376,
+            Dark_Orb = 1378,
+            White_Wind = 1380,
+            Sudden_Lunge = 1384,
+            Quadrastrike = 1386,
+            Vapor_Spray = 1388,
+            Thunder_Breath = 1390,
+            O_Counterstance = 1392,
+            Amorphic_Spikes = 1394,
+            Wind_Breath = 1396,
+            Barbed_Crescent = 1398,
+            Nat_Meditation = 1400,
+            Tem_Upheaval = 1402,
+            Rending_Deluge = 1404,
+            Embalming_Earth = 1406,
+            Paralyzing_Triad = 1408,
+            Foul_Waters = 1410,
+            Glutinous_Dart = 1412,
+            Retinal_Glare = 1414,
+            Subduction = 1416,
+            Thrashing_Assault = 1418,
+            Erratic_Flutter = 1420,
+            Thunderbolt = 1472,
+            Harden_Shell = 1474,
+            Absolute_Terror = 1476,
+            Gates_of_Hades = 1478,
+            Tourbillion = 1480,
+            Pyric_Bulwark = 1482,
+            Bilgestorm = 1484,
+            Bloodrake = 1486,
+            Droning_Whirlwind = 1488,
+            Carcharian_Verve = 1490,
+            Blistering_Roar = 1492,
+            Indi_Regen = 1536,
+            Indi_Poison = 1538,
+            Indi_Refresh = 1540,
+            Indi_Haste = 1542,
+            Indi_STR = 1544,
+            Indi_DEX = 1546,
+            Indi_VIT = 1548,
+            Indi_AGI = 1550,
+            Indi_INT = 1552,
+            Indi_MND = 1554,
+            Indi_CHR = 1556,
+            Indi_Fury = 1558,
+            Indi_Barrier = 1560,
+            Indi_Acumen = 1562,
+            Indi_Fend = 1564,
+            Indi_Precision = 1566,
+            Indi_Voidance = 1568,
+            Indi_Focus = 1570,
+            Indi_Attunement = 1572,
+            Indi_Wilt = 1574,
+            Indi_Frailty = 1576,
+            Indi_Fade = 1578,
+            Indi_Malaise = 1580,
+            Indi_Slip = 1582,
+            Indi_Torpor = 1584,
+            Indi_Vex = 1586,
+            Indi_Languor = 1588,
+            Indi_Slow = 1590,
+            Indi_Paralysis = 1592,
+            Indi_Gravity = 1594,
+            Geo_Regen = 1596,
+            Geo_Poison = 1598,
+            Geo_Refresh = 1600,
+            Geo_Haste = 1602,
+            Geo_STR = 1604,
+            Geo_DEX = 1606,
+            Geo_VIT = 1608,
+            Geo_AGI = 1610,
+            Geo_INT = 1612,
+            Geo_MND = 1614,
+            Geo_CHR = 1616,
+            Geo_Fury = 1618,
+            Geo_Barrier = 1620,
+            Geo_Acumen = 1622,
+            Geo_Fend = 1624,
+            Geo_Precision = 1626,
+            Geo_Voidance = 1628,
+            Geo_Focus = 1630,
+            Geo_Attunement = 1632,
+            Geo_Wilt = 1634,
+            Geo_Frailty = 1636,
+            Geo_Fade = 1638,
+            Geo_Malaise = 1640,
+            Geo_Slip = 1642,
+            Geo_Torpor = 1644,
+            Geo_Vex = 1646,
+            Geo_Languor = 1648,
+            Geo_Slow = 1650,
+            Geo_Paralysis = 1652,
+            Geo_Gravity = 1654,
+            Fira = 1656,
+            Fira_II = 1658,
+            Blizzara = 1660,
+            Blizzara_II = 1662,
+            Aerora = 1664,
+            Aerora_II = 1666,
+            Stonera = 1668,
+            Stonera_II = 1670,
+            Thundara = 1672,
+            Thundara_II = 1674,
+            Watera = 1676,
+            Watera_II = 1678,
+            Foil = 1680,
+            Distract = 1682,
+            Distract_II = 1684,
+            Frazzle = 1686,
+            Frazzle_II = 1688,
+            Flurry = 1690,
+            Flurry_II = 1692,
+            Shantotto = 1792,
+            Naji = 1794,
+            Kupipi = 1796,
+            Excenmille = 1798,
+            Ayame = 1800,
+            Nanaa_Mihgo = 1802,
+            Curilla = 1804,
+            Volker = 1806,
+            Ajido_Marujido = 1808,
+            Trion = 1810,
+            Zeid = 1812,
+            Lion = 1814,
+            Tenzen = 1816,
+            Mihli_Aliapoh = 1818,
+            Valaineral = 1820,
+            Joachim = 1822,
+            Naja_Salaheem = 1824,
+            Prishe = 1826,
+            Ulmia = 1828,
+            Cherukiki = 1832,
+            Iron_Eater = 1834,
+            Gessho = 1836,
+            Gadalar = 1838,
+            Rainemard = 1840,
+            Ingrid = 1842,
+            Lehko_Habhoka = 1844,
+            Nashmeira = 1846,
+            Zazarg = 1848,
+            Ovjang = 1850,
+            Mnejing = 1852,
+            Sakura = 1854,
+            Luzaf = 1856,
+            Najelith = 1858,
+            Aldo = 1860,
+            Moogle = 1862,
+            Fablinix = 1864,
+            Maat = 1866,
+            D_Shantotto = 1868,
+            Star_Sibyl = 1870,
+            Elivira = 1882,
+            Noillurie = 1884,
+            Lhu_Mhakaracca = 1886,
+            Ferreous_Coffin = 1888,
+            Mumor = 1892,
+            Uka_Totlihn = 1894,
+            Klara = 1896,
+            Romaa_Mihgo = 1898,
+            Excenmille__S = 2008
+
+        } // @ public enum SpellList : short
+
+        #endregion
+
+
+        private int GetInventoryItemCount(EliteAPI api, ushort itemid)
+        {
+            var count = 0;
+            for (var x = 0; x <= 80; x++)
+            {
+                var item = api.Inventory.GetContainerItem(0, x);
+                if (item != null && item.Id == itemid)
+                    count += (int)item.Count;
+            }
+
+            return count;
+        }
+        private int GetTempItemCount(EliteAPI api, ushort itemid)
+        {
+            var count = 0;
+            for (var x = 0; x <= 80; x++)
+            {
+                var item = api.Inventory.GetContainerItem(3, x);
+                if (item != null && item.Id == itemid)
+                    count += (int)item.Count;
+            }
+
+            return count;
+        }
+        private ushort GetItemId(string name)
+        {
+            var item = _ELITEAPIPL.Resources.GetItem(name, 0);
+            return item != null ? (ushort)item.ItemID : (ushort)0;
+        }
+
+
+
+
+        public static EliteAPI _ELITEAPIPL;
+        public EliteAPI _ELITEAPIMonitored;
         public ListBox processids = new ListBox();
         // Stores the previously-colored button, if any        
-        
+
         float plX;
         float plY;
         float plZ;
 
         byte playerOptionsSelected;
         byte autoOptionsSelected;
-        
 
-        bool castingLock = false;
-        bool pauseActions = false;
+
+        bool castingLock;
+        bool pauseActions;
         int castingSafetyPercentage = 100;
-        private bool islowmp = false;
+        private bool islowmp;
         //private Dictionary<int, string> PTMemberList;
 
         #region "== Auto Casting bool"
-        bool[] autoHasteEnabled = new bool[]         
+        bool[] autoHasteEnabled = new bool[]
         {
             false,
             false,
@@ -57,7 +1167,7 @@ namespace CurePlease
             false
         };
 
-        bool[] autoHaste_IIEnabled = new bool[]         
+        bool[] autoHaste_IIEnabled = new bool[]
         {
             false,
             false,
@@ -79,7 +1189,7 @@ namespace CurePlease
             false
         };
 
-        bool[] autoFlurryEnabled = new bool[]         
+        bool[] autoFlurryEnabled = new bool[]
         {
             false,
             false,
@@ -101,7 +1211,7 @@ namespace CurePlease
             false
         };
 
-        bool[] autoFlurry_IIEnabled = new bool[]         
+        bool[] autoFlurry_IIEnabled = new bool[]
         {
             false,
             false,
@@ -123,8 +1233,8 @@ namespace CurePlease
             false
         };
 
-       bool[] autoPhalanx_IIEnabled = new bool[]
-        {
+        bool[] autoPhalanx_IIEnabled = new bool[]
+         {
             false,
             false,
             false,
@@ -142,8 +1252,8 @@ namespace CurePlease
             false,
             false,
             false,
-            false                        
-        };
+            false
+         };
 
         bool[] autoRegen_IVEnabled = new bool[]
         {
@@ -164,7 +1274,7 @@ namespace CurePlease
             false,
             false,
             false,
-            false            
+            false
         };
 
         bool[] autoRegen_VEnabled = new bool[]
@@ -186,7 +1296,7 @@ namespace CurePlease
             false,
             false,
             false,
-            false            
+            false
         };
 
         bool[] autoShell_IVEnabled = new bool[]
@@ -277,7 +1387,7 @@ namespace CurePlease
             false
         };
 
-        
+
 
         bool[] autoRefreshEnabled = new bool[]
         {
@@ -298,7 +1408,7 @@ namespace CurePlease
             false,
             false,
             false,
-            false                        
+            false
         };
 
         bool[] autoRefresh_IIEnabled = new bool[]
@@ -320,7 +1430,7 @@ namespace CurePlease
             false,
             false,
             false,
-            false                        
+            false
         };
         #endregion
 
@@ -501,7 +1611,7 @@ namespace CurePlease
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0)
         };
-                
+
         DateTime[] playerPhalanx_II = new DateTime[]
         {
             new DateTime(1970, 1, 1, 0, 0, 0),
@@ -509,18 +1619,18 @@ namespace CurePlease
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
-            new DateTime(1970, 1, 1, 0, 0, 0)                      
+            new DateTime(1970, 1, 1, 0, 0, 0)
         };
 
-       DateTime[] playerRegen_IV = new DateTime[]
-        {
+        DateTime[] playerRegen_IV = new DateTime[]
+         {
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
-            new DateTime(1970, 1, 1, 0, 0, 0)                        
-        };
+            new DateTime(1970, 1, 1, 0, 0, 0)
+         };
 
         DateTime[] playerRegen_V = new DateTime[]
         {
@@ -529,7 +1639,7 @@ namespace CurePlease
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
-            new DateTime(1970, 1, 1, 0, 0, 0)                        
+            new DateTime(1970, 1, 1, 0, 0, 0)
         };
 
         DateTime[] playerRefresh = new DateTime[]
@@ -539,7 +1649,7 @@ namespace CurePlease
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
-            new DateTime(1970, 1, 1, 0, 0, 0)                        
+            new DateTime(1970, 1, 1, 0, 0, 0)
         };
 
         DateTime[] playerRefresh_II = new DateTime[]
@@ -549,7 +1659,7 @@ namespace CurePlease
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
-            new DateTime(1970, 1, 1, 0, 0, 0)                        
+            new DateTime(1970, 1, 1, 0, 0, 0)
         };
         #endregion
 
@@ -729,7 +1839,7 @@ namespace CurePlease
             new TimeSpan(),
             new TimeSpan()
         };
-                        
+
         TimeSpan[] playerPhalanx_IISpan = new TimeSpan[]
         {
             new TimeSpan(),
@@ -737,7 +1847,7 @@ namespace CurePlease
             new TimeSpan(),
             new TimeSpan(),
             new TimeSpan(),
-            new TimeSpan()                       
+            new TimeSpan()
         };
 
         TimeSpan[] playerRegen_IVSpan = new TimeSpan[]
@@ -747,7 +1857,7 @@ namespace CurePlease
             new TimeSpan(),
             new TimeSpan(),
             new TimeSpan(),
-            new TimeSpan()                       
+            new TimeSpan()
         };
 
         TimeSpan[] playerRegen_VSpan = new TimeSpan[]
@@ -757,7 +1867,7 @@ namespace CurePlease
             new TimeSpan(),
             new TimeSpan(),
             new TimeSpan(),
-            new TimeSpan()                       
+            new TimeSpan()
         };
 
         TimeSpan[] playerRefreshSpan = new TimeSpan[]
@@ -767,7 +1877,7 @@ namespace CurePlease
             new TimeSpan(),
             new TimeSpan(),
             new TimeSpan(),
-            new TimeSpan()                       
+            new TimeSpan()
         };
 
         TimeSpan[] playerRefresh_IISpan = new TimeSpan[]
@@ -777,7 +1887,7 @@ namespace CurePlease
             new TimeSpan(),
             new TimeSpan(),
             new TimeSpan(),
-            new TimeSpan()                       
+            new TimeSpan()
         };
         #endregion
 
@@ -785,68 +1895,68 @@ namespace CurePlease
         //FFXI Process      
         public Form1()
         {
-            InitializeComponent();
-            Process[] pol = Process.GetProcessesByName("pol");            
+            this.InitializeComponent();
+            var pol = Process.GetProcessesByName("pol");
 
             if (pol.Length < 1)
             {
-                MessageBox.Show("FFXI not found");                
+                MessageBox.Show("FFXI not found");
             }
             else
             {
-                for (int i = 0; i < pol.Length; i++)
+                for (var i = 0; i < pol.Length; i++)
                 {
-                    POLID.Items.Add(pol[i].MainWindowTitle);
-                    POLID2.Items.Add(pol[i].MainWindowTitle);
-                    processids.Items.Add(pol[i].Id);
+                    this.POLID.Items.Add(pol[i].MainWindowTitle);
+                    this.POLID2.Items.Add(pol[i].MainWindowTitle);
+                    this.processids.Items.Add(pol[i].Id);
                 }
-                POLID.SelectedIndex = 0;
-                POLID2.SelectedIndex = 0;
-                processids.SelectedIndex = 0;
-            }            
+                this.POLID.SelectedIndex = 0;
+                this.POLID2.SelectedIndex = 0;
+                this.processids.SelectedIndex = 0;
+            }
         }
 
         private void setinstance_Click(object sender, EventArgs e)
         {
-            if (!CheckForDLLFiles())
+            if (!this.CheckForDLLFiles())
             {
                 MessageBox.Show(
-                    "Unable to locate FFACE.dll or FFACETools.dll\nMake sure both files are in the same directory as the application",
+                    "Unable to locate EliteAPI.dll or EliteMMO.API.dll\nMake sure both files are in the same directory as the application",
                     "Error");
                 return;
             }
-            processids.SelectedIndex = POLID.SelectedIndex;
-            _FFACEPL = new FFACE((int)processids.SelectedItem);
-            plLabel.Text = "Currently selected PL: " + _FFACEPL.Player.Name;
-            plLabel.ForeColor = Color.Green;
-            POLID.BackColor = Color.White;
-            plPosition.Enabled = true;
-            setinstance2.Enabled = true;
+            this.processids.SelectedIndex = this.POLID.SelectedIndex;
+            _ELITEAPIPL = new EliteAPI((int)this.processids.SelectedItem);
+            this.plLabel.Text = "Currently selected PL: " + _ELITEAPIPL.Player.Name;
+            this.plLabel.ForeColor = Color.Green;
+            this.POLID.BackColor = Color.White;
+            this.plPosition.Enabled = true;
+            this.setinstance2.Enabled = true;
         }
 
         private void setinstance2_Click(object sender, EventArgs e)
         {
-            if (!CheckForDLLFiles())
+            if (!this.CheckForDLLFiles())
             {
                 MessageBox.Show(
-                    "Unable to locate FFACE.dll or FFACETools.dll\nMake sure both files are in the same directory as the application",
+                    "Unable to locate EliteAPI.dll or EliteMMO.API.dll\nMake sure both files are in the same directory as the application",
                     "Error");
                 return;
             }
-            processids.SelectedIndex = POLID2.SelectedIndex;
-            _FFACEMonitored = new FFACE((int)processids.SelectedItem);
-            monitoredLabel.Text = "Currently monitoring: " + _FFACEMonitored.Player.Name;
-            monitoredLabel.ForeColor = Color.Green;
-            POLID2.BackColor = Color.White;
-            partyMembersUpdate.Enabled = true;
-            actionTimer.Enabled = true;
-            pauseButton.Enabled = true;
-            hpUpdates.Enabled = true;
+            this.processids.SelectedIndex = this.POLID2.SelectedIndex;
+            this._ELITEAPIMonitored = new EliteAPI((int)this.processids.SelectedItem);
+            this.monitoredLabel.Text = "Currently monitoring: " + this._ELITEAPIMonitored.Player.Name;
+            this.monitoredLabel.ForeColor = Color.Green;
+            this.POLID2.BackColor = Color.White;
+            this.partyMembersUpdate.Enabled = true;
+            this.actionTimer.Enabled = true;
+            this.pauseButton.Enabled = true;
+            this.hpUpdates.Enabled = true;
         }
 
         private bool CheckForDLLFiles()
         {
-            if (!File.Exists("fface.dll") || !File.Exists("ffacetools.dll"))
+            if (!File.Exists("eliteapi.dll") || !File.Exists("elitemmo.api.dll"))
             {
                 return false;
             }
@@ -857,348 +1967,347 @@ namespace CurePlease
         #region "== partyMemberUpdate"
         private bool partyMemberUpdateMethod(byte partyMemberId)
         {
-            if (_FFACEMonitored.PartyMember[partyMemberId].Active)
+            if (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Active >= 1)
             {
-                if (_FFACEPL.Player.Zone == _FFACEMonitored.PartyMember[partyMemberId].Zone)
+                if (_ELITEAPIPL.Player.ZoneId == this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Zone)
                     return true;
                 return false;
             }
             return false;
         }
-        
+
         private void partyMembersUpdate_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus == LoginStatus.Loading || _FFACEMonitored.Player.GetLoginStatus == LoginStatus.Loading)                
+            if (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.Loading || this._ELITEAPIMonitored.Player.LoginStatus == (int)LoginStatus.Loading)
             {
                 // We zoned out so wait 15 seconds before continuing any type of action
-                Thread.Sleep(15000);                 
+                Thread.Sleep(15000);
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
-            {
-                return;
-            }            
-            if (partyMemberUpdateMethod(0))
-            {
-                player0.Text = _FFACEMonitored.PartyMember[0].Name;
-                player0.Enabled = true;
-                player0optionsButton.Enabled = true;
-                player0buffsButton.Enabled = true;                
-            }
-            else
-            {
-                player0.Text = "Inactive or out of zone";
-                player0.Enabled = false;
-                player0HP.Value = 0;
-                player0optionsButton.Enabled = false;
-                player0buffsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(1))
-            {
-                player1.Text = _FFACEMonitored.PartyMember[1].Name;
-                player1.Enabled = true;
-                player1optionsButton.Enabled = true;
-                player1buffsButton.Enabled = true;
-            }
-            else
-            {
-                player1.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player1.Enabled = false;
-                player1HP.Value = 0;
-                player1optionsButton.Enabled = false;
-                player1buffsButton.Enabled = false;
-            }
-
-            if (partyMemberUpdateMethod(2))
-            {
-                player2.Text = _FFACEMonitored.PartyMember[2].Name;
-                player2.Enabled = true;
-                player2optionsButton.Enabled = true;
-                player2buffsButton.Enabled = true;
-            }
-            else
-            {
-                player2.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player2.Enabled = false;
-                player2HP.Value = 0;
-                player2optionsButton.Enabled = false;
-                player2buffsButton.Enabled = false;
-            }
-
-            if (partyMemberUpdateMethod(3))
-            {
-                player3.Text = _FFACEMonitored.PartyMember[3].Name;
-                player3.Enabled = true;
-                player3optionsButton.Enabled = true;
-                player3buffsButton.Enabled = true;
-            }
-            else
-            {
-                player3.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player3.Enabled = false;
-                player3HP.Value = 0;
-                player3optionsButton.Enabled = false;
-                player3buffsButton.Enabled = false;
-            }
-
-            if (partyMemberUpdateMethod(4))
-            {
-                player4.Text = _FFACEMonitored.PartyMember[4].Name;
-                player4.Enabled = true;
-                player4optionsButton.Enabled = true;
-                player4buffsButton.Enabled = true;
-            }
-            else
-            {
-                player4.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player4.Enabled = false;
-                player4HP.Value = 0;
-                player4optionsButton.Enabled = false;
-                player4buffsButton.Enabled = false;
-            }
-
-            if (partyMemberUpdateMethod(5))
-            {
-                player5.Text = _FFACEMonitored.PartyMember[5].Name;
-                player5.Enabled = true;
-                player5optionsButton.Enabled = true;
-                player5buffsButton.Enabled = true;
-            }
-            else
-            {
-                player5.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player5.Enabled = false;
-                player5HP.Value = 0;
-                player5optionsButton.Enabled = false;
-                player5buffsButton.Enabled = false;
-            }
-            if (partyMemberUpdateMethod(6))
-            {
-                player6.Text = _FFACEMonitored.PartyMember[6].Name;
-                player6.Enabled = true;
-                player6optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player6.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player6.Enabled = false;
-                player6HP.Value = 0;
-                player6optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(7))
-            {
-                player7.Text = _FFACEMonitored.PartyMember[7].Name;
-                player7.Enabled = true;
-                player7optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player7.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player7.Enabled = false;
-                player7HP.Value = 0;
-                player7optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(8))
-            {
-                player8.Text = _FFACEMonitored.PartyMember[8].Name;
-                player8.Enabled = true;
-                player8optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player8.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player8.Enabled = false;
-                player8HP.Value = 0;
-                player8optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(9))
-            {
-                player9.Text = _FFACEMonitored.PartyMember[9].Name;
-                player9.Enabled = true;
-                player9optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player9.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player9.Enabled = false;
-                player9HP.Value = 0;
-                player9optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(10))
-            {
-                player10.Text = _FFACEMonitored.PartyMember[10].Name;
-                player10.Enabled = true;
-                player10optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player10.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player10.Enabled = false;
-                player10HP.Value = 0;
-                player10optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(11))
-            {
-                player11.Text = _FFACEMonitored.PartyMember[11].Name;
-                player11.Enabled = true;
-                player11optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player11.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player11.Enabled = false;
-                player11HP.Value = 0;
-                player11optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(12))
-            {
-                player12.Text = _FFACEMonitored.PartyMember[12].Name;
-                player12.Enabled = true;
-                player12optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player12.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player12.Enabled = false;
-                player12HP.Value = 0;
-                player12optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(13))
-            {
-                player13.Text = _FFACEMonitored.PartyMember[13].Name;
-                player13.Enabled = true;
-                player13optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player13.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player13.Enabled = false;
-                player13HP.Value = 0;
-                player13optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(14))
-            {
-                player14.Text = _FFACEMonitored.PartyMember[14].Name;
-                player14.Enabled = true;
-                player14optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player14.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player14.Enabled = false;
-                player14HP.Value = 0;
-                player14optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(15))
-            {
-                player15.Text = _FFACEMonitored.PartyMember[15].Name;
-                player15.Enabled = true;
-                player15optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player15.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player15.Enabled = false;
-                player15HP.Value = 0;
-                player15optionsButton.Enabled = false;                
-            }
-
-            if (partyMemberUpdateMethod(16))
-            {
-                player16.Text = _FFACEMonitored.PartyMember[16].Name;
-                player16.Enabled = true;
-                player16optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player16.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player16.Enabled = false;
-                player16HP.Value = 0;
-                player16optionsButton.Enabled = false;               
-            }
-
-            if (partyMemberUpdateMethod(17))
-            {
-                player17.Text = _FFACEMonitored.PartyMember[17].Name;
-                player17.Enabled = true;
-                player17optionsButton.Enabled = true;                
-            }
-            else
-            {
-                player17.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
-                player17.Enabled = false;
-                player17HP.Value = 0;
-                player17optionsButton.Enabled = false;                
-            }
-            
-
-        }
-            #endregion
-
-        #region "== hpUpdates"
-        private void hpUpdates_Tick(object sender, EventArgs e)
-        {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
-
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (this.partyMemberUpdateMethod(0))
             {
-                return;
+                this.player0.Text = this._ELITEAPIMonitored.Party.GetPartyMember(0).Name;
+                this.player0.Enabled = true;
+                this.player0optionsButton.Enabled = true;
+                this.player0buffsButton.Enabled = true;
+            }
+            else
+            {
+                this.player0.Text = "Inactive or out of zone";
+                this.player0.Enabled = false;
+                this.player0HP.Value = 0;
+                this.player0optionsButton.Enabled = false;
+                this.player0buffsButton.Enabled = false;
             }
 
-            if (player0.Enabled) UpdateHPProgressBar(player0HP, _FFACEMonitored.PartyMember[0].HPPCurrent);
-            if (player0.Enabled) UpdateHPProgressBar(player0HP, _FFACEMonitored.PartyMember[0].HPPCurrent);
-            if (player1.Enabled) UpdateHPProgressBar(player1HP, _FFACEMonitored.PartyMember[1].HPPCurrent);
-            if (player2.Enabled) UpdateHPProgressBar(player2HP, _FFACEMonitored.PartyMember[2].HPPCurrent);
-            if (player3.Enabled) UpdateHPProgressBar(player3HP, _FFACEMonitored.PartyMember[3].HPPCurrent);
-            if (player4.Enabled) UpdateHPProgressBar(player4HP, _FFACEMonitored.PartyMember[4].HPPCurrent);
-            if (player5.Enabled) UpdateHPProgressBar(player5HP, _FFACEMonitored.PartyMember[5].HPPCurrent);
-            if (player6.Enabled) UpdateHPProgressBar(player6HP, _FFACEMonitored.PartyMember[6].HPPCurrent);
-            if (player7.Enabled) UpdateHPProgressBar(player7HP, _FFACEMonitored.PartyMember[7].HPPCurrent);
-            if (player8.Enabled) UpdateHPProgressBar(player8HP, _FFACEMonitored.PartyMember[8].HPPCurrent);
-            if (player9.Enabled) UpdateHPProgressBar(player9HP, _FFACEMonitored.PartyMember[9].HPPCurrent);
-            if (player10.Enabled) UpdateHPProgressBar(player10HP, _FFACEMonitored.PartyMember[10].HPPCurrent);
-            if (player11.Enabled) UpdateHPProgressBar(player11HP, _FFACEMonitored.PartyMember[11].HPPCurrent);
-            if (player12.Enabled) UpdateHPProgressBar(player12HP, _FFACEMonitored.PartyMember[12].HPPCurrent);
-            if (player13.Enabled) UpdateHPProgressBar(player13HP, _FFACEMonitored.PartyMember[13].HPPCurrent);
-            if (player14.Enabled) UpdateHPProgressBar(player14HP, _FFACEMonitored.PartyMember[14].HPPCurrent);
-            if (player15.Enabled) UpdateHPProgressBar(player15HP, _FFACEMonitored.PartyMember[15].HPPCurrent);
-            if (player16.Enabled) UpdateHPProgressBar(player16HP, _FFACEMonitored.PartyMember[16].HPPCurrent);
-            if (player17.Enabled) UpdateHPProgressBar(player17HP, _FFACEMonitored.PartyMember[17].HPPCurrent);
+            if (this.partyMemberUpdateMethod(1))
+            {
+                this.player1.Text = this._ELITEAPIMonitored.Party.GetPartyMember(1).Name;
+                this.player1.Enabled = true;
+                this.player1optionsButton.Enabled = true;
+                this.player1buffsButton.Enabled = true;
+            }
+            else
+            {
+                this.player1.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player1.Enabled = false;
+                this.player1HP.Value = 0;
+                this.player1optionsButton.Enabled = false;
+                this.player1buffsButton.Enabled = false;
+            }
 
-            label1.Text = _FFACEPL.Item.SelectedItemID.ToString() + ": " + _FFACEPL.Item.SelectedItemName;
+            if (this.partyMemberUpdateMethod(2))
+            {
+                this.player2.Text = this._ELITEAPIMonitored.Party.GetPartyMember(2).Name;
+                this.player2.Enabled = true;
+                this.player2optionsButton.Enabled = true;
+                this.player2buffsButton.Enabled = true;
+            }
+            else
+            {
+                this.player2.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player2.Enabled = false;
+                this.player2HP.Value = 0;
+                this.player2optionsButton.Enabled = false;
+                this.player2buffsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(3))
+            {
+                this.player3.Text = this._ELITEAPIMonitored.Party.GetPartyMember(3).Name;
+                this.player3.Enabled = true;
+                this.player3optionsButton.Enabled = true;
+                this.player3buffsButton.Enabled = true;
+            }
+            else
+            {
+                this.player3.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player3.Enabled = false;
+                this.player3HP.Value = 0;
+                this.player3optionsButton.Enabled = false;
+                this.player3buffsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(4))
+            {
+                this.player4.Text = this._ELITEAPIMonitored.Party.GetPartyMember(4).Name;
+                this.player4.Enabled = true;
+                this.player4optionsButton.Enabled = true;
+                this.player4buffsButton.Enabled = true;
+            }
+            else
+            {
+                this.player4.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player4.Enabled = false;
+                this.player4HP.Value = 0;
+                this.player4optionsButton.Enabled = false;
+                this.player4buffsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(5))
+            {
+                this.player5.Text = this._ELITEAPIMonitored.Party.GetPartyMember(5).Name;
+                this.player5.Enabled = true;
+                this.player5optionsButton.Enabled = true;
+                this.player5buffsButton.Enabled = true;
+            }
+            else
+            {
+                this.player5.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player5.Enabled = false;
+                this.player5HP.Value = 0;
+                this.player5optionsButton.Enabled = false;
+                this.player5buffsButton.Enabled = false;
+            }
+            if (this.partyMemberUpdateMethod(6))
+            {
+                this.player6.Text = this._ELITEAPIMonitored.Party.GetPartyMember(6).Name;
+                this.player6.Enabled = true;
+                this.player6optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player6.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player6.Enabled = false;
+                this.player6HP.Value = 0;
+                this.player6optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(7))
+            {
+                this.player7.Text = this._ELITEAPIMonitored.Party.GetPartyMember(7).Name;
+                this.player7.Enabled = true;
+                this.player7optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player7.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player7.Enabled = false;
+                this.player7HP.Value = 0;
+                this.player7optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(8))
+            {
+                this.player8.Text = this._ELITEAPIMonitored.Party.GetPartyMember(8).Name;
+                this.player8.Enabled = true;
+                this.player8optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player8.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player8.Enabled = false;
+                this.player8HP.Value = 0;
+                this.player8optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(9))
+            {
+                this.player9.Text = this._ELITEAPIMonitored.Party.GetPartyMember(9).Name;
+                this.player9.Enabled = true;
+                this.player9optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player9.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player9.Enabled = false;
+                this.player9HP.Value = 0;
+                this.player9optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(10))
+            {
+                this.player10.Text = this._ELITEAPIMonitored.Party.GetPartyMember(10).Name;
+                this.player10.Enabled = true;
+                this.player10optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player10.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player10.Enabled = false;
+                this.player10HP.Value = 0;
+                this.player10optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(11))
+            {
+                this.player11.Text = this._ELITEAPIMonitored.Party.GetPartyMember(11).Name;
+                this.player11.Enabled = true;
+                this.player11optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player11.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player11.Enabled = false;
+                this.player11HP.Value = 0;
+                this.player11optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(12))
+            {
+                this.player12.Text = this._ELITEAPIMonitored.Party.GetPartyMember(12).Name;
+                this.player12.Enabled = true;
+                this.player12optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player12.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player12.Enabled = false;
+                this.player12HP.Value = 0;
+                this.player12optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(13))
+            {
+                this.player13.Text = this._ELITEAPIMonitored.Party.GetPartyMember(13).Name;
+                this.player13.Enabled = true;
+                this.player13optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player13.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player13.Enabled = false;
+                this.player13HP.Value = 0;
+                this.player13optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(14))
+            {
+                this.player14.Text = this._ELITEAPIMonitored.Party.GetPartyMember(14).Name;
+                this.player14.Enabled = true;
+                this.player14optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player14.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player14.Enabled = false;
+                this.player14HP.Value = 0;
+                this.player14optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(15))
+            {
+                this.player15.Text = this._ELITEAPIMonitored.Party.GetPartyMember(15).Name;
+                this.player15.Enabled = true;
+                this.player15optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player15.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player15.Enabled = false;
+                this.player15HP.Value = 0;
+                this.player15optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(16))
+            {
+                this.player16.Text = this._ELITEAPIMonitored.Party.GetPartyMember(16).Name;
+                this.player16.Enabled = true;
+                this.player16optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player16.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player16.Enabled = false;
+                this.player16HP.Value = 0;
+                this.player16optionsButton.Enabled = false;
+            }
+
+            if (this.partyMemberUpdateMethod(17))
+            {
+                this.player17.Text = this._ELITEAPIMonitored.Party.GetPartyMember(17).Name;
+                this.player17.Enabled = true;
+                this.player17optionsButton.Enabled = true;
+            }
+            else
+            {
+                this.player17.Text = Resources.Form1_partyMembersUpdate_Tick_Inactive;
+                this.player17.Enabled = false;
+                this.player17HP.Value = 0;
+                this.player17optionsButton.Enabled = false;
+            }
+
 
         }
         #endregion
 
-        #region "== UpdateHPProgressBar"
-        private void UpdateHPProgressBar(NewProgressBar playerHP, int hppCurrent)
+        #region "== hpUpdates"
+        private void hpUpdates_Tick(object sender, EventArgs e)
         {
-            playerHP.Value = hppCurrent;
-            if (hppCurrent >= 75)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
+            {
+                return;
+            }
+
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
+            {
+                return;
+            }
+
+            if (this.player0.Enabled) this.UpdateHPProgressBar(this.player0HP, this._ELITEAPIMonitored.Party.GetPartyMember(0).CurrentHPP);
+            if (this.player0.Enabled) this.UpdateHPProgressBar(this.player0HP, this._ELITEAPIMonitored.Party.GetPartyMember(0).CurrentHPP);
+            if (this.player1.Enabled) this.UpdateHPProgressBar(this.player1HP, this._ELITEAPIMonitored.Party.GetPartyMember(1).CurrentHPP);
+            if (this.player2.Enabled) this.UpdateHPProgressBar(this.player2HP, this._ELITEAPIMonitored.Party.GetPartyMember(2).CurrentHPP);
+            if (this.player3.Enabled) this.UpdateHPProgressBar(this.player3HP, this._ELITEAPIMonitored.Party.GetPartyMember(3).CurrentHPP);
+            if (this.player4.Enabled) this.UpdateHPProgressBar(this.player4HP, this._ELITEAPIMonitored.Party.GetPartyMember(4).CurrentHPP);
+            if (this.player5.Enabled) this.UpdateHPProgressBar(this.player5HP, this._ELITEAPIMonitored.Party.GetPartyMember(5).CurrentHPP);
+            if (this.player6.Enabled) this.UpdateHPProgressBar(this.player6HP, this._ELITEAPIMonitored.Party.GetPartyMember(6).CurrentHPP);
+            if (this.player7.Enabled) this.UpdateHPProgressBar(this.player7HP, this._ELITEAPIMonitored.Party.GetPartyMember(7).CurrentHPP);
+            if (this.player8.Enabled) this.UpdateHPProgressBar(this.player8HP, this._ELITEAPIMonitored.Party.GetPartyMember(8).CurrentHPP);
+            if (this.player9.Enabled) this.UpdateHPProgressBar(this.player9HP, this._ELITEAPIMonitored.Party.GetPartyMember(9).CurrentHPP);
+            if (this.player10.Enabled) this.UpdateHPProgressBar(this.player10HP, this._ELITEAPIMonitored.Party.GetPartyMember(10).CurrentHPP);
+            if (this.player11.Enabled) this.UpdateHPProgressBar(this.player11HP, this._ELITEAPIMonitored.Party.GetPartyMember(11).CurrentHPP);
+            if (this.player12.Enabled) this.UpdateHPProgressBar(this.player12HP, this._ELITEAPIMonitored.Party.GetPartyMember(12).CurrentHPP);
+            if (this.player13.Enabled) this.UpdateHPProgressBar(this.player13HP, this._ELITEAPIMonitored.Party.GetPartyMember(13).CurrentHPP);
+            if (this.player14.Enabled) this.UpdateHPProgressBar(this.player14HP, this._ELITEAPIMonitored.Party.GetPartyMember(14).CurrentHPP);
+            if (this.player15.Enabled) this.UpdateHPProgressBar(this.player15HP, this._ELITEAPIMonitored.Party.GetPartyMember(15).CurrentHPP);
+            if (this.player16.Enabled) this.UpdateHPProgressBar(this.player16HP, this._ELITEAPIMonitored.Party.GetPartyMember(16).CurrentHPP);
+            if (this.player17.Enabled) this.UpdateHPProgressBar(this.player17HP, this._ELITEAPIMonitored.Party.GetPartyMember(17).CurrentHPP);
+
+            this.label1.Text = _ELITEAPIPL.Inventory.SelectedItemId + ": " + _ELITEAPIPL.Inventory.SelectedItemName;
+        }
+        #endregion
+
+        #region "== UpdateHPProgressBar"
+        private void UpdateHPProgressBar(NewProgressBar playerHP, int CurrentHPP)
+        {
+            playerHP.Value = CurrentHPP;
+            if (CurrentHPP >= 75)
                 playerHP.ForeColor = Color.Green;
-            else if (hppCurrent > 50 && hppCurrent < 75)
+            else if (CurrentHPP > 50 && CurrentHPP < 75)
                 playerHP.ForeColor = Color.Yellow;
-            else if (hppCurrent > 25 && hppCurrent < 50)
+            else if (CurrentHPP > 25 && CurrentHPP < 50)
                 playerHP.ForeColor = Color.Orange;
-            else if (hppCurrent < 25)
+            else if (CurrentHPP < 25)
                 playerHP.ForeColor = Color.Red;
         }
         #endregion
@@ -1206,74 +2315,74 @@ namespace CurePlease
         #region "== plPosition (Power Levelers Position)"
         private void plPosition_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
 
-            plX = _FFACEPL.Player.PosX;
-            plY = _FFACEPL.Player.PosY;
-            plZ = _FFACEPL.Player.PosZ;
+            this.plX = _ELITEAPIPL.Player.X;
+            this.plY = _ELITEAPIPL.Player.Y;
+            this.plZ = _ELITEAPIPL.Player.Z;
         }
         #endregion
 
         #region "== CastLock"
         private void CastLockMethod()
         {
-            castingLock = true;
-            castingLockLabel.Text = "Casting is LOCKED";
-            castingLockTimer.Enabled = true;
-            actionTimer.Enabled = false;
+            this.castingLock = true;
+            this.castingLockLabel.Text = "Casting is LOCKED";
+            this.castingLockTimer.Enabled = true;
+            this.actionTimer.Enabled = false;
         }
         #endregion
 
         #region "== ActionLock"
         private void ActionLockMethod()
         {
-            castingLock = true;
-            castingLockLabel.Text = "Casting is LOCKED";
-            actionUnlockTimer.Enabled = true;
-            actionTimer.Enabled = false;
+            this.castingLock = true;
+            this.castingLockLabel.Text = "Casting is LOCKED";
+            this.actionUnlockTimer.Enabled = true;
+            this.actionTimer.Enabled = false;
         }
         #endregion
 
         #region "== CureCalculator"
         private void CureCalculator(byte partyMemberId)
         {
-            if ((Settings.Default.cure6enabled) && ((((_FFACEMonitored.PartyMember[partyMemberId].HPCurrent * 100) / _FFACEMonitored.PartyMember[partyMemberId].HPPCurrent) - _FFACEMonitored.PartyMember[partyMemberId].HPCurrent) >= Settings.Default.cure6amount) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cure_VI) == 0) && (_FFACEPL.Player.MPCurrent > 227))
+            if ((Settings.Default.cure6enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.cure6amount) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cure_VI) == 0) && (_ELITEAPIPL.Player.MP > 227))
             {
-                _FFACEPL.Windower.SendString("/ma \"Cure VI\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-                CastLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure VI\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+                this.CastLockMethod();
             }
-            else if ((Settings.Default.cure5enabled) && ((((_FFACEMonitored.PartyMember[partyMemberId].HPCurrent * 100) / _FFACEMonitored.PartyMember[partyMemberId].HPPCurrent) - _FFACEMonitored.PartyMember[partyMemberId].HPCurrent) >= Settings.Default.cure5amount) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cure_V) == 0) && (_FFACEPL.Player.MPCurrent > 125))
+            else if ((Settings.Default.cure5enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.cure5amount) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cure_V) == 0) && (_ELITEAPIPL.Player.MP > 125))
             {
-                _FFACEPL.Windower.SendString("/ma \"Cure V\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-                CastLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure V\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+                this.CastLockMethod();
             }
-            else if ((Settings.Default.cure4enabled) && ((((_FFACEMonitored.PartyMember[partyMemberId].HPCurrent * 100) / _FFACEMonitored.PartyMember[partyMemberId].HPPCurrent) - _FFACEMonitored.PartyMember[partyMemberId].HPCurrent) >= Settings.Default.cure4amount) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cure_IV) == 0) && (_FFACEPL.Player.MPCurrent > 88))
+            else if ((Settings.Default.cure4enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.cure4amount) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cure_IV) == 0) && (_ELITEAPIPL.Player.MP > 88))
             {
-                _FFACEPL.Windower.SendString("/ma \"Cure IV\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-                CastLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+                this.CastLockMethod();
             }
-            else if ((Settings.Default.cure3enabled) && ((((_FFACEMonitored.PartyMember[partyMemberId].HPCurrent * 100) / _FFACEMonitored.PartyMember[partyMemberId].HPPCurrent) - _FFACEMonitored.PartyMember[partyMemberId].HPCurrent) >= Settings.Default.cure3amount) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cure_III) == 0) && (_FFACEPL.Player.MPCurrent > 46))
+            else if ((Settings.Default.cure3enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.cure3amount) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cure_III) == 0) && (_ELITEAPIPL.Player.MP > 46))
             {
-                _FFACEPL.Windower.SendString("/ma \"Cure III\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-                CastLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure III\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+                this.CastLockMethod();
             }
-            else if ((Settings.Default.cure2enabled) && ((((_FFACEMonitored.PartyMember[partyMemberId].HPCurrent * 100) / _FFACEMonitored.PartyMember[partyMemberId].HPPCurrent) - _FFACEMonitored.PartyMember[partyMemberId].HPCurrent) >= Settings.Default.cure2amount) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cure_II) == 0) && (_FFACEPL.Player.MPCurrent > 24))
+            else if ((Settings.Default.cure2enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.cure2amount) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cure_II) == 0) && (_ELITEAPIPL.Player.MP > 24))
             {
-                _FFACEPL.Windower.SendString("/ma \"Cure II\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-                CastLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+                this.CastLockMethod();
             }
-            else if ((Settings.Default.cure1enabled) && ((((_FFACEMonitored.PartyMember[partyMemberId].HPCurrent * 100) / _FFACEMonitored.PartyMember[partyMemberId].HPPCurrent) - _FFACEMonitored.PartyMember[partyMemberId].HPCurrent) >= Settings.Default.cure1amount) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cure) == 0) && (_FFACEPL.Player.MPCurrent > 8))
+            else if ((Settings.Default.cure1enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.cure1amount) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cure) == 0) && (_ELITEAPIPL.Player.MP > 8))
             {
-                _FFACEPL.Windower.SendString("/ma \"Cure\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-                CastLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+                this.CastLockMethod();
             }
         }
         #endregion
@@ -1281,7 +2390,7 @@ namespace CurePlease
         #region "== CastingPossible (Distance)"
         private bool castingPossible(byte partyMemberId)
         {
-            if ((_FFACEPL.NPC.Distance(_FFACEMonitored.PartyMember[partyMemberId].ID) < 21) && (_FFACEPL.NPC.Distance(_FFACEMonitored.PartyMember[partyMemberId].ID) > 0) && (_FFACEMonitored.PartyMember[partyMemberId].HPCurrent > 0) || (_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[partyMemberId].ID) && (_FFACEMonitored.PartyMember[partyMemberId].HPCurrent > 0))
+            if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID).Distance > 0) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP > 0) || (_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].ID) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP > 0))
             {
                 return true;
             }
@@ -1292,26 +2401,20 @@ namespace CurePlease
         #region "== PL and Monitored StatusCheck"
         private bool plStatusCheck(StatusEffect requestedStatus)
         {
-            bool statusFound = false;
-            foreach (StatusEffect status in _FFACEPL.Player.StatusEffects)
+            var statusFound = false;
+            foreach (StatusEffect status in _ELITEAPIPL.Player.Buffs.Cast<StatusEffect>().Where(status => requestedStatus == status))
             {
-                if (requestedStatus == status)
-                {
-                    statusFound = true;
-                }
+                statusFound = true;
             }
             return statusFound;
         }
 
         private bool monitoredStatusCheck(StatusEffect requestedStatus)
         {
-            bool statusFound = false;
-            foreach (StatusEffect status in _FFACEMonitored.Player.StatusEffects)
+            var statusFound = false;
+            foreach (var status in this._ELITEAPIMonitored.Player.Buffs.Cast<StatusEffect>().Where(status => requestedStatus == status))
             {
-                if (requestedStatus == status)
-                {
-                    statusFound = true;
-                }
+                statusFound = true;
             }
             return statusFound;
         }
@@ -1320,423 +2423,423 @@ namespace CurePlease
         #region "== partyMember Spell Casting (Auto Spells)
         private void castSpell(string partyMemberName, string spellName)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"" + spellName + "\" " + partyMemberName);
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"" + spellName + "\" " + partyMemberName);
         }
 
         private void hastePlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Haste\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerHaste[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Haste\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerHaste[partyMemberId] = DateTime.Now;
         }
 
         private void haste_IIPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Haste II\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerHaste_II[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Haste II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerHaste_II[partyMemberId] = DateTime.Now;
         }
 
         private void FlurryPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Flurry\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerFlurry[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Flurry\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerFlurry[partyMemberId] = DateTime.Now;
         }
 
         private void Flurry_IIPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Flurry II\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerFlurry_II[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Flurry II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerFlurry_II[partyMemberId] = DateTime.Now;
         }
 
         private void Phalanx_IIPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Phalanx II\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerPhalanx_II[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Phalanx II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerPhalanx_II[partyMemberId] = DateTime.Now;
         }
 
         private void Regen_IVPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Regen IV\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerRegen_IV[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Regen IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerRegen_IV[partyMemberId] = DateTime.Now;
         }
 
         private void Regen_VPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Regen V\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerRegen_V[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Regen V\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerRegen_V[partyMemberId] = DateTime.Now;
         }
 
         private void RefreshPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Refresh\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerRefresh[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Refresh\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerRefresh[partyMemberId] = DateTime.Now;
         }
 
         private void Refresh_IIPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Refresh II\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerRefresh_II[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Refresh II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerRefresh_II[partyMemberId] = DateTime.Now;
         }
 
         private void protect_IVPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Protect IV\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerProtect_IV[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Protect IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerProtect_IV[partyMemberId] = DateTime.Now;
         }
 
 
         private void protect_VPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Protect V\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerProtect_V[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Protect V\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerProtect_V[partyMemberId] = DateTime.Now;
         }
 
         private void shell_IVPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Shell IV\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerShell_IV[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Shell IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerShell_IV[partyMemberId] = DateTime.Now;
         }
 
         private void shell_VPlayer(byte partyMemberId)
         {
-            CastLockMethod();
-            _FFACEPL.Windower.SendString("/ma \"Shell V\" " + _FFACEMonitored.PartyMember[partyMemberId].Name);
-            playerShell_V[partyMemberId] = DateTime.Now;
+            this.CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Shell V\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
+            this.playerShell_V[partyMemberId] = DateTime.Now;
         }
         #endregion
-       
+
         #region "== actionTimer (LoginStatus)"
         private void actionTimer_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus == LoginStatus.Loading || _FFACEMonitored.Player.GetLoginStatus == LoginStatus.Loading)
+            if (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.Loading || this._ELITEAPIMonitored.Player.LoginStatus == (int)LoginStatus.Loading)
             {
                 // We zoned out so wait 15 seconds before continuing any type of action                
                 Thread.Sleep(15000);
             }
-        #endregion
+            #endregion
 
-        // Grab current time for calculations below
-        #region "== Calculate time since an Auto Spell was cast on particular player"
-            currentTime = DateTime.Now;
+            // Grab current time for calculations below
+            #region "== Calculate time since an Auto Spell was cast on particular player"
+
+            this.currentTime = DateTime.Now;
             // Calculate time since haste was cast on particular player
-            playerHasteSpan[0] = currentTime.Subtract(playerHaste[0]);
-            playerHasteSpan[1] = currentTime.Subtract(playerHaste[1]);
-            playerHasteSpan[2] = currentTime.Subtract(playerHaste[2]);
-            playerHasteSpan[3] = currentTime.Subtract(playerHaste[3]);
-            playerHasteSpan[4] = currentTime.Subtract(playerHaste[4]);
-            playerHasteSpan[5] = currentTime.Subtract(playerHaste[5]);
-            playerHasteSpan[6] = currentTime.Subtract(playerHaste[6]);
-            playerHasteSpan[7] = currentTime.Subtract(playerHaste[7]);
-            playerHasteSpan[8] = currentTime.Subtract(playerHaste[8]);
-            playerHasteSpan[9] = currentTime.Subtract(playerHaste[9]);
-            playerHasteSpan[10] = currentTime.Subtract(playerHaste[10]);
-            playerHasteSpan[11] = currentTime.Subtract(playerHaste[11]);
-            playerHasteSpan[12] = currentTime.Subtract(playerHaste[12]);
-            playerHasteSpan[13] = currentTime.Subtract(playerHaste[13]);
-            playerHasteSpan[14] = currentTime.Subtract(playerHaste[14]);
-            playerHasteSpan[15] = currentTime.Subtract(playerHaste[15]);
-            playerHasteSpan[16] = currentTime.Subtract(playerHaste[16]);
-            playerHasteSpan[17] = currentTime.Subtract(playerHaste[17]);
+            this.playerHasteSpan[0] = this.currentTime.Subtract(this.playerHaste[0]);
+            this.playerHasteSpan[1] = this.currentTime.Subtract(this.playerHaste[1]);
+            this.playerHasteSpan[2] = this.currentTime.Subtract(this.playerHaste[2]);
+            this.playerHasteSpan[3] = this.currentTime.Subtract(this.playerHaste[3]);
+            this.playerHasteSpan[4] = this.currentTime.Subtract(this.playerHaste[4]);
+            this.playerHasteSpan[5] = this.currentTime.Subtract(this.playerHaste[5]);
+            this.playerHasteSpan[6] = this.currentTime.Subtract(this.playerHaste[6]);
+            this.playerHasteSpan[7] = this.currentTime.Subtract(this.playerHaste[7]);
+            this.playerHasteSpan[8] = this.currentTime.Subtract(this.playerHaste[8]);
+            this.playerHasteSpan[9] = this.currentTime.Subtract(this.playerHaste[9]);
+            this.playerHasteSpan[10] = this.currentTime.Subtract(this.playerHaste[10]);
+            this.playerHasteSpan[11] = this.currentTime.Subtract(this.playerHaste[11]);
+            this.playerHasteSpan[12] = this.currentTime.Subtract(this.playerHaste[12]);
+            this.playerHasteSpan[13] = this.currentTime.Subtract(this.playerHaste[13]);
+            this.playerHasteSpan[14] = this.currentTime.Subtract(this.playerHaste[14]);
+            this.playerHasteSpan[15] = this.currentTime.Subtract(this.playerHaste[15]);
+            this.playerHasteSpan[16] = this.currentTime.Subtract(this.playerHaste[16]);
+            this.playerHasteSpan[17] = this.currentTime.Subtract(this.playerHaste[17]);
 
-            playerHaste_IISpan[0] = currentTime.Subtract(playerHaste_II[0]);
-            playerHaste_IISpan[1] = currentTime.Subtract(playerHaste_II[1]);
-            playerHaste_IISpan[2] = currentTime.Subtract(playerHaste_II[2]);
-            playerHaste_IISpan[3] = currentTime.Subtract(playerHaste_II[3]);
-            playerHaste_IISpan[4] = currentTime.Subtract(playerHaste_II[4]);
-            playerHaste_IISpan[5] = currentTime.Subtract(playerHaste_II[5]);
-            playerHaste_IISpan[6] = currentTime.Subtract(playerHaste_II[6]);
-            playerHaste_IISpan[7] = currentTime.Subtract(playerHaste_II[7]);
-            playerHaste_IISpan[8] = currentTime.Subtract(playerHaste_II[8]);
-            playerHaste_IISpan[9] = currentTime.Subtract(playerHaste_II[9]);
-            playerHaste_IISpan[10] = currentTime.Subtract(playerHaste_II[10]);
-            playerHaste_IISpan[11] = currentTime.Subtract(playerHaste_II[11]);
-            playerHaste_IISpan[12] = currentTime.Subtract(playerHaste_II[12]);
-            playerHaste_IISpan[13] = currentTime.Subtract(playerHaste_II[13]);
-            playerHaste_IISpan[14] = currentTime.Subtract(playerHaste_II[14]);
-            playerHaste_IISpan[15] = currentTime.Subtract(playerHaste_II[15]);
-            playerHaste_IISpan[16] = currentTime.Subtract(playerHaste_II[16]);
-            playerHaste_IISpan[17] = currentTime.Subtract(playerHaste_II[17]);
+            this.playerHaste_IISpan[0] = this.currentTime.Subtract(this.playerHaste_II[0]);
+            this.playerHaste_IISpan[1] = this.currentTime.Subtract(this.playerHaste_II[1]);
+            this.playerHaste_IISpan[2] = this.currentTime.Subtract(this.playerHaste_II[2]);
+            this.playerHaste_IISpan[3] = this.currentTime.Subtract(this.playerHaste_II[3]);
+            this.playerHaste_IISpan[4] = this.currentTime.Subtract(this.playerHaste_II[4]);
+            this.playerHaste_IISpan[5] = this.currentTime.Subtract(this.playerHaste_II[5]);
+            this.playerHaste_IISpan[6] = this.currentTime.Subtract(this.playerHaste_II[6]);
+            this.playerHaste_IISpan[7] = this.currentTime.Subtract(this.playerHaste_II[7]);
+            this.playerHaste_IISpan[8] = this.currentTime.Subtract(this.playerHaste_II[8]);
+            this.playerHaste_IISpan[9] = this.currentTime.Subtract(this.playerHaste_II[9]);
+            this.playerHaste_IISpan[10] = this.currentTime.Subtract(this.playerHaste_II[10]);
+            this.playerHaste_IISpan[11] = this.currentTime.Subtract(this.playerHaste_II[11]);
+            this.playerHaste_IISpan[12] = this.currentTime.Subtract(this.playerHaste_II[12]);
+            this.playerHaste_IISpan[13] = this.currentTime.Subtract(this.playerHaste_II[13]);
+            this.playerHaste_IISpan[14] = this.currentTime.Subtract(this.playerHaste_II[14]);
+            this.playerHaste_IISpan[15] = this.currentTime.Subtract(this.playerHaste_II[15]);
+            this.playerHaste_IISpan[16] = this.currentTime.Subtract(this.playerHaste_II[16]);
+            this.playerHaste_IISpan[17] = this.currentTime.Subtract(this.playerHaste_II[17]);
 
-            playerFlurrySpan[0] = currentTime.Subtract(playerFlurry[0]);
-            playerFlurrySpan[1] = currentTime.Subtract(playerFlurry[1]);
-            playerFlurrySpan[2] = currentTime.Subtract(playerFlurry[2]);
-            playerFlurrySpan[3] = currentTime.Subtract(playerFlurry[3]);
-            playerFlurrySpan[4] = currentTime.Subtract(playerFlurry[4]);
-            playerFlurrySpan[5] = currentTime.Subtract(playerFlurry[5]);
-            playerFlurrySpan[6] = currentTime.Subtract(playerFlurry[6]);
-            playerFlurrySpan[7] = currentTime.Subtract(playerFlurry[7]);
-            playerFlurrySpan[8] = currentTime.Subtract(playerFlurry[8]);
-            playerFlurrySpan[9] = currentTime.Subtract(playerFlurry[9]);
-            playerFlurrySpan[10] = currentTime.Subtract(playerFlurry[10]);
-            playerFlurrySpan[11] = currentTime.Subtract(playerFlurry[11]);
-            playerFlurrySpan[12] = currentTime.Subtract(playerFlurry[12]);
-            playerFlurrySpan[13] = currentTime.Subtract(playerFlurry[13]);
-            playerFlurrySpan[14] = currentTime.Subtract(playerFlurry[14]);
-            playerFlurrySpan[15] = currentTime.Subtract(playerFlurry[15]);
-            playerFlurrySpan[16] = currentTime.Subtract(playerFlurry[16]);
-            playerFlurrySpan[17] = currentTime.Subtract(playerFlurry[17]);
+            this.playerFlurrySpan[0] = this.currentTime.Subtract(this.playerFlurry[0]);
+            this.playerFlurrySpan[1] = this.currentTime.Subtract(this.playerFlurry[1]);
+            this.playerFlurrySpan[2] = this.currentTime.Subtract(this.playerFlurry[2]);
+            this.playerFlurrySpan[3] = this.currentTime.Subtract(this.playerFlurry[3]);
+            this.playerFlurrySpan[4] = this.currentTime.Subtract(this.playerFlurry[4]);
+            this.playerFlurrySpan[5] = this.currentTime.Subtract(this.playerFlurry[5]);
+            this.playerFlurrySpan[6] = this.currentTime.Subtract(this.playerFlurry[6]);
+            this.playerFlurrySpan[7] = this.currentTime.Subtract(this.playerFlurry[7]);
+            this.playerFlurrySpan[8] = this.currentTime.Subtract(this.playerFlurry[8]);
+            this.playerFlurrySpan[9] = this.currentTime.Subtract(this.playerFlurry[9]);
+            this.playerFlurrySpan[10] = this.currentTime.Subtract(this.playerFlurry[10]);
+            this.playerFlurrySpan[11] = this.currentTime.Subtract(this.playerFlurry[11]);
+            this.playerFlurrySpan[12] = this.currentTime.Subtract(this.playerFlurry[12]);
+            this.playerFlurrySpan[13] = this.currentTime.Subtract(this.playerFlurry[13]);
+            this.playerFlurrySpan[14] = this.currentTime.Subtract(this.playerFlurry[14]);
+            this.playerFlurrySpan[15] = this.currentTime.Subtract(this.playerFlurry[15]);
+            this.playerFlurrySpan[16] = this.currentTime.Subtract(this.playerFlurry[16]);
+            this.playerFlurrySpan[17] = this.currentTime.Subtract(this.playerFlurry[17]);
 
-            playerFlurry_IISpan[0] = currentTime.Subtract(playerFlurry_II[0]);
-            playerFlurry_IISpan[1] = currentTime.Subtract(playerFlurry_II[1]);
-            playerFlurry_IISpan[2] = currentTime.Subtract(playerFlurry_II[2]);
-            playerFlurry_IISpan[3] = currentTime.Subtract(playerFlurry_II[3]);
-            playerFlurry_IISpan[4] = currentTime.Subtract(playerFlurry_II[4]);
-            playerFlurry_IISpan[5] = currentTime.Subtract(playerFlurry_II[5]);
-            playerFlurry_IISpan[6] = currentTime.Subtract(playerFlurry_II[6]);
-            playerFlurry_IISpan[7] = currentTime.Subtract(playerFlurry_II[7]);
-            playerFlurry_IISpan[8] = currentTime.Subtract(playerFlurry_II[8]);
-            playerFlurry_IISpan[9] = currentTime.Subtract(playerFlurry_II[9]);
-            playerFlurry_IISpan[10] = currentTime.Subtract(playerFlurry_II[10]);
-            playerFlurry_IISpan[11] = currentTime.Subtract(playerFlurry_II[11]);
-            playerFlurry_IISpan[12] = currentTime.Subtract(playerFlurry_II[12]);
-            playerFlurry_IISpan[13] = currentTime.Subtract(playerFlurry_II[13]);
-            playerFlurry_IISpan[14] = currentTime.Subtract(playerFlurry_II[14]);
-            playerFlurry_IISpan[15] = currentTime.Subtract(playerFlurry_II[15]);
-            playerFlurry_IISpan[16] = currentTime.Subtract(playerFlurry_II[16]);
-            playerFlurry_IISpan[17] = currentTime.Subtract(playerFlurry_II[17]);
+            this.playerFlurry_IISpan[0] = this.currentTime.Subtract(this.playerFlurry_II[0]);
+            this.playerFlurry_IISpan[1] = this.currentTime.Subtract(this.playerFlurry_II[1]);
+            this.playerFlurry_IISpan[2] = this.currentTime.Subtract(this.playerFlurry_II[2]);
+            this.playerFlurry_IISpan[3] = this.currentTime.Subtract(this.playerFlurry_II[3]);
+            this.playerFlurry_IISpan[4] = this.currentTime.Subtract(this.playerFlurry_II[4]);
+            this.playerFlurry_IISpan[5] = this.currentTime.Subtract(this.playerFlurry_II[5]);
+            this.playerFlurry_IISpan[6] = this.currentTime.Subtract(this.playerFlurry_II[6]);
+            this.playerFlurry_IISpan[7] = this.currentTime.Subtract(this.playerFlurry_II[7]);
+            this.playerFlurry_IISpan[8] = this.currentTime.Subtract(this.playerFlurry_II[8]);
+            this.playerFlurry_IISpan[9] = this.currentTime.Subtract(this.playerFlurry_II[9]);
+            this.playerFlurry_IISpan[10] = this.currentTime.Subtract(this.playerFlurry_II[10]);
+            this.playerFlurry_IISpan[11] = this.currentTime.Subtract(this.playerFlurry_II[11]);
+            this.playerFlurry_IISpan[12] = this.currentTime.Subtract(this.playerFlurry_II[12]);
+            this.playerFlurry_IISpan[13] = this.currentTime.Subtract(this.playerFlurry_II[13]);
+            this.playerFlurry_IISpan[14] = this.currentTime.Subtract(this.playerFlurry_II[14]);
+            this.playerFlurry_IISpan[15] = this.currentTime.Subtract(this.playerFlurry_II[15]);
+            this.playerFlurry_IISpan[16] = this.currentTime.Subtract(this.playerFlurry_II[16]);
+            this.playerFlurry_IISpan[17] = this.currentTime.Subtract(this.playerFlurry_II[17]);
 
             // Calculate time since protect IV was cast on particular player
-            playerProtect_IVSpan[0] = currentTime.Subtract(playerProtect_IV[0]);
-            playerProtect_IVSpan[1] = currentTime.Subtract(playerProtect_IV[1]);
-            playerProtect_IVSpan[2] = currentTime.Subtract(playerProtect_IV[2]);
-            playerProtect_IVSpan[3] = currentTime.Subtract(playerProtect_IV[3]);
-            playerProtect_IVSpan[4] = currentTime.Subtract(playerProtect_IV[4]);
-            playerProtect_IVSpan[5] = currentTime.Subtract(playerProtect_IV[5]);
-            playerProtect_IVSpan[6] = currentTime.Subtract(playerProtect_IV[6]);
-            playerProtect_IVSpan[7] = currentTime.Subtract(playerProtect_IV[7]);
-            playerProtect_IVSpan[8] = currentTime.Subtract(playerProtect_IV[8]);
-            playerProtect_IVSpan[9] = currentTime.Subtract(playerProtect_IV[9]);
-            playerProtect_IVSpan[10] = currentTime.Subtract(playerProtect_IV[10]);
-            playerProtect_IVSpan[11] = currentTime.Subtract(playerProtect_IV[11]);
-            playerProtect_IVSpan[12] = currentTime.Subtract(playerProtect_IV[12]);
-            playerProtect_IVSpan[13] = currentTime.Subtract(playerProtect_IV[13]);
-            playerProtect_IVSpan[14] = currentTime.Subtract(playerProtect_IV[14]);
-            playerProtect_IVSpan[15] = currentTime.Subtract(playerProtect_IV[15]);
-            playerProtect_IVSpan[16] = currentTime.Subtract(playerProtect_IV[16]);
-            playerProtect_IVSpan[17] = currentTime.Subtract(playerProtect_IV[17]);
+            this.playerProtect_IVSpan[0] = this.currentTime.Subtract(this.playerProtect_IV[0]);
+            this.playerProtect_IVSpan[1] = this.currentTime.Subtract(this.playerProtect_IV[1]);
+            this.playerProtect_IVSpan[2] = this.currentTime.Subtract(this.playerProtect_IV[2]);
+            this.playerProtect_IVSpan[3] = this.currentTime.Subtract(this.playerProtect_IV[3]);
+            this.playerProtect_IVSpan[4] = this.currentTime.Subtract(this.playerProtect_IV[4]);
+            this.playerProtect_IVSpan[5] = this.currentTime.Subtract(this.playerProtect_IV[5]);
+            this.playerProtect_IVSpan[6] = this.currentTime.Subtract(this.playerProtect_IV[6]);
+            this.playerProtect_IVSpan[7] = this.currentTime.Subtract(this.playerProtect_IV[7]);
+            this.playerProtect_IVSpan[8] = this.currentTime.Subtract(this.playerProtect_IV[8]);
+            this.playerProtect_IVSpan[9] = this.currentTime.Subtract(this.playerProtect_IV[9]);
+            this.playerProtect_IVSpan[10] = this.currentTime.Subtract(this.playerProtect_IV[10]);
+            this.playerProtect_IVSpan[11] = this.currentTime.Subtract(this.playerProtect_IV[11]);
+            this.playerProtect_IVSpan[12] = this.currentTime.Subtract(this.playerProtect_IV[12]);
+            this.playerProtect_IVSpan[13] = this.currentTime.Subtract(this.playerProtect_IV[13]);
+            this.playerProtect_IVSpan[14] = this.currentTime.Subtract(this.playerProtect_IV[14]);
+            this.playerProtect_IVSpan[15] = this.currentTime.Subtract(this.playerProtect_IV[15]);
+            this.playerProtect_IVSpan[16] = this.currentTime.Subtract(this.playerProtect_IV[16]);
+            this.playerProtect_IVSpan[17] = this.currentTime.Subtract(this.playerProtect_IV[17]);
 
 
             // Calculate time since protect V was cast on particular player
-            playerProtect_VSpan[0] = currentTime.Subtract(playerProtect_V[0]);
-            playerProtect_VSpan[1] = currentTime.Subtract(playerProtect_V[1]);
-            playerProtect_VSpan[2] = currentTime.Subtract(playerProtect_V[2]);
-            playerProtect_VSpan[3] = currentTime.Subtract(playerProtect_V[3]);
-            playerProtect_VSpan[4] = currentTime.Subtract(playerProtect_V[4]);
-            playerProtect_VSpan[5] = currentTime.Subtract(playerProtect_V[5]);
-            playerProtect_VSpan[6] = currentTime.Subtract(playerProtect_V[6]);
-            playerProtect_VSpan[7] = currentTime.Subtract(playerProtect_V[7]);
-            playerProtect_VSpan[8] = currentTime.Subtract(playerProtect_V[8]);
-            playerProtect_VSpan[9] = currentTime.Subtract(playerProtect_V[9]);
-            playerProtect_VSpan[10] = currentTime.Subtract(playerProtect_V[10]);
-            playerProtect_VSpan[11] = currentTime.Subtract(playerProtect_V[11]);
-            playerProtect_VSpan[12] = currentTime.Subtract(playerProtect_V[12]);
-            playerProtect_VSpan[13] = currentTime.Subtract(playerProtect_V[13]);
-            playerProtect_VSpan[14] = currentTime.Subtract(playerProtect_V[14]);
-            playerProtect_VSpan[15] = currentTime.Subtract(playerProtect_V[15]);
-            playerProtect_VSpan[16] = currentTime.Subtract(playerProtect_V[16]);
-            playerProtect_VSpan[17] = currentTime.Subtract(playerProtect_V[17]);
+            this.playerProtect_VSpan[0] = this.currentTime.Subtract(this.playerProtect_V[0]);
+            this.playerProtect_VSpan[1] = this.currentTime.Subtract(this.playerProtect_V[1]);
+            this.playerProtect_VSpan[2] = this.currentTime.Subtract(this.playerProtect_V[2]);
+            this.playerProtect_VSpan[3] = this.currentTime.Subtract(this.playerProtect_V[3]);
+            this.playerProtect_VSpan[4] = this.currentTime.Subtract(this.playerProtect_V[4]);
+            this.playerProtect_VSpan[5] = this.currentTime.Subtract(this.playerProtect_V[5]);
+            this.playerProtect_VSpan[6] = this.currentTime.Subtract(this.playerProtect_V[6]);
+            this.playerProtect_VSpan[7] = this.currentTime.Subtract(this.playerProtect_V[7]);
+            this.playerProtect_VSpan[8] = this.currentTime.Subtract(this.playerProtect_V[8]);
+            this.playerProtect_VSpan[9] = this.currentTime.Subtract(this.playerProtect_V[9]);
+            this.playerProtect_VSpan[10] = this.currentTime.Subtract(this.playerProtect_V[10]);
+            this.playerProtect_VSpan[11] = this.currentTime.Subtract(this.playerProtect_V[11]);
+            this.playerProtect_VSpan[12] = this.currentTime.Subtract(this.playerProtect_V[12]);
+            this.playerProtect_VSpan[13] = this.currentTime.Subtract(this.playerProtect_V[13]);
+            this.playerProtect_VSpan[14] = this.currentTime.Subtract(this.playerProtect_V[14]);
+            this.playerProtect_VSpan[15] = this.currentTime.Subtract(this.playerProtect_V[15]);
+            this.playerProtect_VSpan[16] = this.currentTime.Subtract(this.playerProtect_V[16]);
+            this.playerProtect_VSpan[17] = this.currentTime.Subtract(this.playerProtect_V[17]);
 
             // Calculate time since shell IV was cast on particular player
-            playerShell_IVSpan[0] = currentTime.Subtract(playerShell_IV[0]);
-            playerShell_IVSpan[1] = currentTime.Subtract(playerShell_IV[1]);
-            playerShell_IVSpan[2] = currentTime.Subtract(playerShell_IV[2]);
-            playerShell_IVSpan[3] = currentTime.Subtract(playerShell_IV[3]);
-            playerShell_IVSpan[4] = currentTime.Subtract(playerShell_IV[4]);
-            playerShell_IVSpan[5] = currentTime.Subtract(playerShell_IV[5]);
-            playerShell_IVSpan[6] = currentTime.Subtract(playerShell_IV[6]);
-            playerShell_IVSpan[7] = currentTime.Subtract(playerShell_IV[7]);
-            playerShell_IVSpan[8] = currentTime.Subtract(playerShell_IV[8]);
-            playerShell_IVSpan[9] = currentTime.Subtract(playerShell_IV[9]);
-            playerShell_IVSpan[10] = currentTime.Subtract(playerShell_IV[10]);
-            playerShell_IVSpan[11] = currentTime.Subtract(playerShell_IV[11]);
-            playerShell_IVSpan[12] = currentTime.Subtract(playerShell_IV[12]);
-            playerShell_IVSpan[13] = currentTime.Subtract(playerShell_IV[13]);
-            playerShell_IVSpan[14] = currentTime.Subtract(playerShell_IV[14]);
-            playerShell_IVSpan[15] = currentTime.Subtract(playerShell_IV[15]);
-            playerShell_IVSpan[16] = currentTime.Subtract(playerShell_IV[16]);
-            playerShell_IVSpan[17] = currentTime.Subtract(playerShell_IV[17]);
+            this.playerShell_IVSpan[0] = this.currentTime.Subtract(this.playerShell_IV[0]);
+            this.playerShell_IVSpan[1] = this.currentTime.Subtract(this.playerShell_IV[1]);
+            this.playerShell_IVSpan[2] = this.currentTime.Subtract(this.playerShell_IV[2]);
+            this.playerShell_IVSpan[3] = this.currentTime.Subtract(this.playerShell_IV[3]);
+            this.playerShell_IVSpan[4] = this.currentTime.Subtract(this.playerShell_IV[4]);
+            this.playerShell_IVSpan[5] = this.currentTime.Subtract(this.playerShell_IV[5]);
+            this.playerShell_IVSpan[6] = this.currentTime.Subtract(this.playerShell_IV[6]);
+            this.playerShell_IVSpan[7] = this.currentTime.Subtract(this.playerShell_IV[7]);
+            this.playerShell_IVSpan[8] = this.currentTime.Subtract(this.playerShell_IV[8]);
+            this.playerShell_IVSpan[9] = this.currentTime.Subtract(this.playerShell_IV[9]);
+            this.playerShell_IVSpan[10] = this.currentTime.Subtract(this.playerShell_IV[10]);
+            this.playerShell_IVSpan[11] = this.currentTime.Subtract(this.playerShell_IV[11]);
+            this.playerShell_IVSpan[12] = this.currentTime.Subtract(this.playerShell_IV[12]);
+            this.playerShell_IVSpan[13] = this.currentTime.Subtract(this.playerShell_IV[13]);
+            this.playerShell_IVSpan[14] = this.currentTime.Subtract(this.playerShell_IV[14]);
+            this.playerShell_IVSpan[15] = this.currentTime.Subtract(this.playerShell_IV[15]);
+            this.playerShell_IVSpan[16] = this.currentTime.Subtract(this.playerShell_IV[16]);
+            this.playerShell_IVSpan[17] = this.currentTime.Subtract(this.playerShell_IV[17]);
 
 
             // Calculate time since shell V was cast on particular player
-            playerShell_VSpan[0] = currentTime.Subtract(playerShell_V[0]);
-            playerShell_VSpan[1] = currentTime.Subtract(playerShell_V[1]);
-            playerShell_VSpan[2] = currentTime.Subtract(playerShell_V[2]);
-            playerShell_VSpan[3] = currentTime.Subtract(playerShell_V[3]);
-            playerShell_VSpan[4] = currentTime.Subtract(playerShell_V[4]);
-            playerShell_VSpan[5] = currentTime.Subtract(playerShell_V[5]);
-            playerShell_VSpan[6] = currentTime.Subtract(playerShell_V[6]);
-            playerShell_VSpan[7] = currentTime.Subtract(playerShell_V[7]);
-            playerShell_VSpan[8] = currentTime.Subtract(playerShell_V[8]);
-            playerShell_VSpan[9] = currentTime.Subtract(playerShell_V[9]);
-            playerShell_VSpan[10] = currentTime.Subtract(playerShell_V[10]);
-            playerShell_VSpan[11] = currentTime.Subtract(playerShell_V[11]);
-            playerShell_VSpan[12] = currentTime.Subtract(playerShell_V[12]);
-            playerShell_VSpan[13] = currentTime.Subtract(playerShell_V[13]);
-            playerShell_VSpan[14] = currentTime.Subtract(playerShell_V[14]);
-            playerShell_VSpan[15] = currentTime.Subtract(playerShell_V[15]);
-            playerShell_VSpan[16] = currentTime.Subtract(playerShell_V[16]);
-            playerShell_VSpan[17] = currentTime.Subtract(playerShell_V[17]);
+            this.playerShell_VSpan[0] = this.currentTime.Subtract(this.playerShell_V[0]);
+            this.playerShell_VSpan[1] = this.currentTime.Subtract(this.playerShell_V[1]);
+            this.playerShell_VSpan[2] = this.currentTime.Subtract(this.playerShell_V[2]);
+            this.playerShell_VSpan[3] = this.currentTime.Subtract(this.playerShell_V[3]);
+            this.playerShell_VSpan[4] = this.currentTime.Subtract(this.playerShell_V[4]);
+            this.playerShell_VSpan[5] = this.currentTime.Subtract(this.playerShell_V[5]);
+            this.playerShell_VSpan[6] = this.currentTime.Subtract(this.playerShell_V[6]);
+            this.playerShell_VSpan[7] = this.currentTime.Subtract(this.playerShell_V[7]);
+            this.playerShell_VSpan[8] = this.currentTime.Subtract(this.playerShell_V[8]);
+            this.playerShell_VSpan[9] = this.currentTime.Subtract(this.playerShell_V[9]);
+            this.playerShell_VSpan[10] = this.currentTime.Subtract(this.playerShell_V[10]);
+            this.playerShell_VSpan[11] = this.currentTime.Subtract(this.playerShell_V[11]);
+            this.playerShell_VSpan[12] = this.currentTime.Subtract(this.playerShell_V[12]);
+            this.playerShell_VSpan[13] = this.currentTime.Subtract(this.playerShell_V[13]);
+            this.playerShell_VSpan[14] = this.currentTime.Subtract(this.playerShell_V[14]);
+            this.playerShell_VSpan[15] = this.currentTime.Subtract(this.playerShell_V[15]);
+            this.playerShell_VSpan[16] = this.currentTime.Subtract(this.playerShell_V[16]);
+            this.playerShell_VSpan[17] = this.currentTime.Subtract(this.playerShell_V[17]);
 
             // Calculate time since phalanx II was cast on particular player
-            playerPhalanx_IISpan[0] = currentTime.Subtract(playerPhalanx_II[0]);
-            playerPhalanx_IISpan[1] = currentTime.Subtract(playerPhalanx_II[1]);
-            playerPhalanx_IISpan[2] = currentTime.Subtract(playerPhalanx_II[2]);
-            playerPhalanx_IISpan[3] = currentTime.Subtract(playerPhalanx_II[3]);
-            playerPhalanx_IISpan[4] = currentTime.Subtract(playerPhalanx_II[4]);
-            playerPhalanx_IISpan[5] = currentTime.Subtract(playerPhalanx_II[5]);
+            this.playerPhalanx_IISpan[0] = this.currentTime.Subtract(this.playerPhalanx_II[0]);
+            this.playerPhalanx_IISpan[1] = this.currentTime.Subtract(this.playerPhalanx_II[1]);
+            this.playerPhalanx_IISpan[2] = this.currentTime.Subtract(this.playerPhalanx_II[2]);
+            this.playerPhalanx_IISpan[3] = this.currentTime.Subtract(this.playerPhalanx_II[3]);
+            this.playerPhalanx_IISpan[4] = this.currentTime.Subtract(this.playerPhalanx_II[4]);
+            this.playerPhalanx_IISpan[5] = this.currentTime.Subtract(this.playerPhalanx_II[5]);
 
             // Calculate time since regen IV was cast on particular player
-            playerRegen_IVSpan[0] = currentTime.Subtract(playerRegen_IV[0]);
-            playerRegen_IVSpan[1] = currentTime.Subtract(playerRegen_IV[1]);
-            playerRegen_IVSpan[2] = currentTime.Subtract(playerRegen_IV[2]);
-            playerRegen_IVSpan[3] = currentTime.Subtract(playerRegen_IV[3]);
-            playerRegen_IVSpan[4] = currentTime.Subtract(playerRegen_IV[4]);
-            playerRegen_IVSpan[5] = currentTime.Subtract(playerRegen_IV[5]);
+            this.playerRegen_IVSpan[0] = this.currentTime.Subtract(this.playerRegen_IV[0]);
+            this.playerRegen_IVSpan[1] = this.currentTime.Subtract(this.playerRegen_IV[1]);
+            this.playerRegen_IVSpan[2] = this.currentTime.Subtract(this.playerRegen_IV[2]);
+            this.playerRegen_IVSpan[3] = this.currentTime.Subtract(this.playerRegen_IV[3]);
+            this.playerRegen_IVSpan[4] = this.currentTime.Subtract(this.playerRegen_IV[4]);
+            this.playerRegen_IVSpan[5] = this.currentTime.Subtract(this.playerRegen_IV[5]);
 
             // Calculate time since regen V was cast on particular player
-            playerRegen_VSpan[0] = currentTime.Subtract(playerRegen_V[0]);
-            playerRegen_VSpan[1] = currentTime.Subtract(playerRegen_V[1]);
-            playerRegen_VSpan[2] = currentTime.Subtract(playerRegen_V[2]);
-            playerRegen_VSpan[3] = currentTime.Subtract(playerRegen_V[3]);
-            playerRegen_VSpan[4] = currentTime.Subtract(playerRegen_V[4]);
-            playerRegen_VSpan[5] = currentTime.Subtract(playerRegen_V[5]);
+            this.playerRegen_VSpan[0] = this.currentTime.Subtract(this.playerRegen_V[0]);
+            this.playerRegen_VSpan[1] = this.currentTime.Subtract(this.playerRegen_V[1]);
+            this.playerRegen_VSpan[2] = this.currentTime.Subtract(this.playerRegen_V[2]);
+            this.playerRegen_VSpan[3] = this.currentTime.Subtract(this.playerRegen_V[3]);
+            this.playerRegen_VSpan[4] = this.currentTime.Subtract(this.playerRegen_V[4]);
+            this.playerRegen_VSpan[5] = this.currentTime.Subtract(this.playerRegen_V[5]);
 
             // Calculate time since Refresh was cast on particular player
-            playerRefreshSpan[0] = currentTime.Subtract(playerRefresh[0]);
-            playerRefreshSpan[1] = currentTime.Subtract(playerRefresh[1]);
-            playerRefreshSpan[2] = currentTime.Subtract(playerRefresh[2]);
-            playerRefreshSpan[3] = currentTime.Subtract(playerRefresh[3]);
-            playerRefreshSpan[4] = currentTime.Subtract(playerRefresh[4]);
-            playerRefreshSpan[5] = currentTime.Subtract(playerRefresh[5]);
+            this.playerRefreshSpan[0] = this.currentTime.Subtract(this.playerRefresh[0]);
+            this.playerRefreshSpan[1] = this.currentTime.Subtract(this.playerRefresh[1]);
+            this.playerRefreshSpan[2] = this.currentTime.Subtract(this.playerRefresh[2]);
+            this.playerRefreshSpan[3] = this.currentTime.Subtract(this.playerRefresh[3]);
+            this.playerRefreshSpan[4] = this.currentTime.Subtract(this.playerRefresh[4]);
+            this.playerRefreshSpan[5] = this.currentTime.Subtract(this.playerRefresh[5]);
 
             // Calculate time since Refresh II was cast on particular player
-            playerRefresh_IISpan[0] = currentTime.Subtract(playerRefresh_II[0]);
-            playerRefresh_IISpan[1] = currentTime.Subtract(playerRefresh_II[1]);
-            playerRefresh_IISpan[2] = currentTime.Subtract(playerRefresh_II[2]);
-            playerRefresh_IISpan[3] = currentTime.Subtract(playerRefresh_II[3]);
-            playerRefresh_IISpan[4] = currentTime.Subtract(playerRefresh_II[4]);
-            playerRefresh_IISpan[5] = currentTime.Subtract(playerRefresh_II[5]);
+            this.playerRefresh_IISpan[0] = this.currentTime.Subtract(this.playerRefresh_II[0]);
+            this.playerRefresh_IISpan[1] = this.currentTime.Subtract(this.playerRefresh_II[1]);
+            this.playerRefresh_IISpan[2] = this.currentTime.Subtract(this.playerRefresh_II[2]);
+            this.playerRefresh_IISpan[3] = this.currentTime.Subtract(this.playerRefresh_II[3]);
+            this.playerRefresh_IISpan[4] = this.currentTime.Subtract(this.playerRefresh_II[4]);
+            this.playerRefresh_IISpan[5] = this.currentTime.Subtract(this.playerRefresh_II[5]);
             #endregion
 
-        #region "== Set array values for GUI (Enabled) Checkboxes"
+            #region "== Set array values for GUI (Enabled) Checkboxes"
             // Set array values for GUI "Enabled" checkboxes
-            CheckBox[] enabledBoxes = new CheckBox[18];
-            enabledBoxes[0] = player0enabled;
-            enabledBoxes[1] = player1enabled;
-            enabledBoxes[2] = player2enabled;
-            enabledBoxes[3] = player3enabled;
-            enabledBoxes[4] = player4enabled;
-            enabledBoxes[5] = player5enabled;
-            enabledBoxes[6] = player6enabled;
-            enabledBoxes[7] = player7enabled;
-            enabledBoxes[8] = player8enabled;
-            enabledBoxes[9] = player9enabled;
-            enabledBoxes[10] = player10enabled;
-            enabledBoxes[11] = player11enabled;
-            enabledBoxes[12] = player12enabled;
-            enabledBoxes[13] = player13enabled;
-            enabledBoxes[14] = player14enabled;
-            enabledBoxes[15] = player15enabled;
-            enabledBoxes[16] = player16enabled;
-            enabledBoxes[17] = player17enabled;
+            var enabledBoxes = new CheckBox[18];
+            enabledBoxes[0] = this.player0enabled;
+            enabledBoxes[1] = this.player1enabled;
+            enabledBoxes[2] = this.player2enabled;
+            enabledBoxes[3] = this.player3enabled;
+            enabledBoxes[4] = this.player4enabled;
+            enabledBoxes[5] = this.player5enabled;
+            enabledBoxes[6] = this.player6enabled;
+            enabledBoxes[7] = this.player7enabled;
+            enabledBoxes[8] = this.player8enabled;
+            enabledBoxes[9] = this.player9enabled;
+            enabledBoxes[10] = this.player10enabled;
+            enabledBoxes[11] = this.player11enabled;
+            enabledBoxes[12] = this.player12enabled;
+            enabledBoxes[13] = this.player13enabled;
+            enabledBoxes[14] = this.player14enabled;
+            enabledBoxes[15] = this.player15enabled;
+            enabledBoxes[16] = this.player16enabled;
+            enabledBoxes[17] = this.player17enabled;
             #endregion
 
-        #region "== Set array values for GUI (High Priority) Checkboxes"
+            #region "== Set array values for GUI (High Priority) Checkboxes"
             // Set array values for GUI "High Priority" checkboxes
-            CheckBox[] highPriorityBoxes = new CheckBox[18];
-            highPriorityBoxes[0] = player0priority;
-            highPriorityBoxes[1] = player1priority;
-            highPriorityBoxes[2] = player2priority;
-            highPriorityBoxes[3] = player3priority;
-            highPriorityBoxes[4] = player4priority;
-            highPriorityBoxes[5] = player5priority;
-            highPriorityBoxes[6] = player6priority;
-            highPriorityBoxes[7] = player7priority;
-            highPriorityBoxes[8] = player8priority;
-            highPriorityBoxes[9] = player9priority;
-            highPriorityBoxes[10] = player10priority;
-            highPriorityBoxes[11] = player11priority;
-            highPriorityBoxes[12] = player12priority;
-            highPriorityBoxes[13] = player13priority;
-            highPriorityBoxes[14] = player14priority;
-            highPriorityBoxes[15] = player15priority;
-            highPriorityBoxes[16] = player16priority;
-            highPriorityBoxes[17] = player17priority;
+            var highPriorityBoxes = new CheckBox[18];
+            highPriorityBoxes[0] = this.player0priority;
+            highPriorityBoxes[1] = this.player1priority;
+            highPriorityBoxes[2] = this.player2priority;
+            highPriorityBoxes[3] = this.player3priority;
+            highPriorityBoxes[4] = this.player4priority;
+            highPriorityBoxes[5] = this.player5priority;
+            highPriorityBoxes[6] = this.player6priority;
+            highPriorityBoxes[7] = this.player7priority;
+            highPriorityBoxes[8] = this.player8priority;
+            highPriorityBoxes[9] = this.player9priority;
+            highPriorityBoxes[10] = this.player10priority;
+            highPriorityBoxes[11] = this.player11priority;
+            highPriorityBoxes[12] = this.player12priority;
+            highPriorityBoxes[13] = this.player13priority;
+            highPriorityBoxes[14] = this.player14priority;
+            highPriorityBoxes[15] = this.player15priority;
+            highPriorityBoxes[16] = this.player16priority;
+            highPriorityBoxes[17] = this.player17priority;
             #endregion
 
-        #region "== Job ability Divine Seal and Convert"
+            #region "== Job ability Divine Seal and Convert"
             if (Settings.Default.divineSealBox
-                            && _FFACEPL.Player.MPPCurrent <= 11 // 
-                            && _FFACEPL.Timer.GetAbilityRecast(AbilityList.Divine_Seal) == 0
-                            && !_FFACEPL.Player.StatusEffects.Contains(StatusEffect.Weakness))
+                            && _ELITEAPIPL.Player.MPP <= 11 // 
+                            && _ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Divine_Seal) == 0
+                            && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(3000);
-                _FFACEPL.Windower.SendString("/ja \"Divine Seal\" <me>");
-                ActionLockMethod();
+                _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Seal\" <me>");
+                this.ActionLockMethod();
             }
 
             else if (Settings.Default.Convert
-                            && _FFACEPL.Player.MPPCurrent <= 10 // 
-                            && _FFACEPL.Timer.GetAbilityRecast(AbilityList.Convert) == 0
-                            && !_FFACEPL.Player.StatusEffects.Contains(StatusEffect.Weakness))
+                            && _ELITEAPIPL.Player.MPP <= 10 // 
+                            && _ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Convert) == 0
+                            && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(1000);
-                _FFACEPL.Windower.SendString("/ja \"Convert\" <me>");
+                _ELITEAPIPL.ThirdParty.SendString("/ja \"Convert\" <me>");
                 return;
                 //ActionLockMethod();
             }
             #endregion
 
-        #region "== Low MP Tell / MP OK Tell"
-            if (_FFACEPL.Player.MPCurrent <= (int)Settings.Default.mpMinCastValue && _FFACEPL.Player.MPCurrent != 0)
+            #region "== Low MP Tell / MP OK Tell"
+            if (_ELITEAPIPL.Player.MP <= (int)Settings.Default.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
             {
-                if (Settings.Default.lowMPcheckBox && !islowmp)
+                if (Settings.Default.lowMPcheckBox && !this.islowmp)
                 {
-                    _FFACEPL.Windower.SendString("/tell " + _FFACEMonitored.Player.Name + " MP is low!");
-                    islowmp = true;
+                    _ELITEAPIPL.ThirdParty.SendString("/tell " + this._ELITEAPIMonitored.Player.Name + " MP is low!");
+                    this.islowmp = true;
                     return;
                 }
-                islowmp = true;
+                this.islowmp = true;
                 return;
             }
-            if (_FFACEPL.Player.MPCurrent > (int)Settings.Default.mpMinCastValue && _FFACEPL.Player.MPCurrent != 0)
+            if (_ELITEAPIPL.Player.MP > (int)Settings.Default.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
             {
-                if (Settings.Default.lowMPcheckBox && islowmp)
+                if (Settings.Default.lowMPcheckBox && this.islowmp)
                 {
-                    _FFACEPL.Windower.SendString("/tell " + _FFACEMonitored.Player.Name + " MP OK!");
-                    islowmp = false;
+                    _ELITEAPIPL.ThirdParty.SendString("/tell " + this._ELITEAPIMonitored.Player.Name + " MP OK!");
+                    this.islowmp = false;
                 }
             }
             #endregion
 
-        #region "== PL stationary for Cures (Casting Possible)"
+            #region "== PL stationary for Cures (Casting Possible)"
             // Only perform actions if PL is stationary
-            if ((_FFACEPL.Player.PosX == plX) && (_FFACEPL.Player.PosY == plY) && (_FFACEPL.Player.PosZ == plZ) && (_FFACEPL.Player.GetLoginStatus == LoginStatus.LoggedIn) && (!pauseActions) && ((_FFACEPL.Player.Status == Status.Standing) || (_FFACEPL.Player.Status == Status.Fighting)))
+            if ((_ELITEAPIPL.Player.X == this.plX) && (_ELITEAPIPL.Player.Y == this.plY) && (_ELITEAPIPL.Player.Z == this.plZ) && (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn) && (!this.pauseActions) && ((_ELITEAPIPL.Player.Status == (uint)Status.Standing) || (_ELITEAPIPL.Player.Status == (uint)Status.Fighting)))
             {
-
-                var playerHpOrder = _FFACEMonitored.PartyMember.Keys.OrderBy(k => _FFACEMonitored.PartyMember[k].HPPCurrent);
+                var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
 
                 // Loop through keys in order of lowest HP to highest HP
                 foreach (byte id in playerHpOrder)
@@ -1744,672 +2847,936 @@ namespace CurePlease
 
                     // Cures
                     // First, is casting possible, and enabled?
-                    if (castingPossible(id) && (_FFACEMonitored.PartyMember[id].Active) && (enabledBoxes[id].Checked) && (_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (!castingLock))
+                    if (this.castingPossible(id) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Active >= 1) && (enabledBoxes[id].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (!this.castingLock))
                     {
-                        if ((highPriorityBoxes[id].Checked) && (_FFACEMonitored.PartyMember[id].HPPCurrent <= Settings.Default.priorityCurePercentage))
+                        if ((highPriorityBoxes[id].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Settings.Default.priorityCurePercentage))
                         {
-                            CureCalculator(id);
+                            this.CureCalculator(id);
                             break;
                         }
-                        if ((_FFACEMonitored.PartyMember[id].HPPCurrent <= Settings.Default.curePercentage) && (castingPossible(id)))
+                        if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Settings.Default.curePercentage) && (this.castingPossible(id)))
                         {
-                            CureCalculator(id);
+                            this.CureCalculator(id);
                             break;
                         }
                     }
                 }
-            #endregion
+                #endregion
 
-        #region "== PL Debuff Removal with Spells or Items"
+                #region "== PL Debuff Removal with Spells or Items"
                 // PL and Monitored Player Debuff Removal
                 // Starting with PL
-                foreach (StatusEffect plEffect in _FFACEPL.Player.StatusEffects)
+                foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
                 {
                     if ((plEffect == StatusEffect.Silence) && (Settings.Default.plSilenceItemEnabled))
                     {
                         // Check to make sure we have echo drops
-                        if (_FFACEPL.Item.GetInventoryItemCount((ushort)FFACE.ParseResources.GetItemId(Settings.Default.plSilenceItemString)) > 0 || _FFACEPL.Item.GetTempItemCount((ushort)FFACE.ParseResources.GetItemId(Settings.Default.plSilenceItemString)) > 0)
+                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(Settings.Default.plSilenceItemString)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(Settings.Default.plSilenceItemString)) > 0)
                         {
-                            _FFACEPL.Windower.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.plSilenceItemString));
+                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.plSilenceItemString));
                             Thread.Sleep(2000);
                         }
                     }
                     if ((plEffect == StatusEffect.Doom && Settings.Default.plDoomEnabled) /* Add more options from UI HERE*/)
                     {
                         // Check to make sure we have holy water
-                        if (_FFACEPL.Item.GetInventoryItemCount((ushort)FFACE.ParseResources.GetItemId(Settings.Default.PLDoomitem)) > 0 || _FFACEPL.Item.GetTempItemCount((ushort)FFACE.ParseResources.GetItemId(Settings.Default.PLDoomitem)) > 0)
+                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(Settings.Default.PLDoomitem)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(Settings.Default.PLDoomitem)) > 0)
                         {
-                            _FFACEPL.Windower.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.PLDoomitem));
+                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.PLDoomitem));
                             Thread.Sleep(2000);
                         }
                     }
-                    else if ((plEffect == StatusEffect.Doom) && (Settings.Default.plDoom) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEPL.Player.Name, "Cursna"); }
-                    else if ((plEffect == StatusEffect.Paralysis) && (Settings.Default.plParalysis) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Paralyna) == 0)) { castSpell(_FFACEPL.Player.Name, "Paralyna"); }
-                    else if ((plEffect == StatusEffect.Poison) && (Settings.Default.plPoison) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Poisona) == 0)) { castSpell(_FFACEPL.Player.Name, "Poisona"); }
-                    else if ((plEffect == StatusEffect.Attack_Down) && (Settings.Default.plAttackDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Blindness) && (Settings.Default.plBlindness) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Blindna) == 0)) { castSpell(_FFACEPL.Player.Name, "Blindna"); }
-                    else if ((plEffect == StatusEffect.Bind) && (Settings.Default.plBind) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Weight) && (Settings.Default.plWeight) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Slow) && (Settings.Default.plSlow) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Curse) && (Settings.Default.plCurse) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEPL.Player.Name, "Cursna"); }
-                    else if ((plEffect == StatusEffect.Curse2) && (Settings.Default.plCurse2) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEPL.Player.Name, "Cursna"); }
-                    else if ((plEffect == StatusEffect.Addle) && (Settings.Default.plAddle) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Bane) && (Settings.Default.plBane) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEPL.Player.Name, "Cursna"); }
-                    else if ((plEffect == StatusEffect.Plague) && (Settings.Default.plPlague) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Viruna) == 0)) { castSpell(_FFACEPL.Player.Name, "Viruna"); }
-                    else if ((plEffect == StatusEffect.Disease) && (Settings.Default.plDisease) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Viruna) == 0)) { castSpell(_FFACEPL.Player.Name, "Viruna"); }
-                    else if ((plEffect == StatusEffect.Burn) && (Settings.Default.plBurn) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Frost) && (Settings.Default.plFrost) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Choke) && (Settings.Default.plChoke) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Rasp) && (Settings.Default.plRasp) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Shock) && (Settings.Default.plShock) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Drown) && (Settings.Default.plDrown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Dia) && (Settings.Default.plDia) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Bio) && (Settings.Default.plBio) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.STR_Down) && (Settings.Default.plStrDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.DEX_Down) && (Settings.Default.plDexDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.VIT_Down) && (Settings.Default.plVitDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.AGI_Down) && (Settings.Default.plAgiDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.INT_Down) && (Settings.Default.plIntDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.MND_Down) && (Settings.Default.plMndDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.CHR_Down) && (Settings.Default.plChrDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Max_HP_Down) && (Settings.Default.plMaxHpDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Max_MP_Down) && (Settings.Default.plMaxMpDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Accuracy_Down) && (Settings.Default.plAccuracyDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Evasion_Down) && (Settings.Default.plEvasionDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Defense_Down) && (Settings.Default.plDefenseDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Flash) && (Settings.Default.plFlash) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Magic_Acc_Down) && (Settings.Default.plMagicAccDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Magic_Atk_Down) && (Settings.Default.plMagicAtkDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Helix) && (Settings.Default.plHelix) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Max_TP_Down) && (Settings.Default.plMaxTpDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Requiem) && (Settings.Default.plRequiem) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Elegy) && (Settings.Default.plElegy) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
-                    else if ((plEffect == StatusEffect.Threnody) && (Settings.Default.plThrenody) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEPL.Player.Name, "Erase"); }
+                    else if ((plEffect == StatusEffect.Doom) && (Settings.Default.plDoom) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Paralysis) && (Settings.Default.plParalysis) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Paralyna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Paralyna");
+                    }
+                    else if ((plEffect == StatusEffect.Poison) && (Settings.Default.plPoison) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Poisona) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Poisona");
+                    }
+                    else if ((plEffect == StatusEffect.Attack_Down) && (Settings.Default.plAttackDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Blindness) && (Settings.Default.plBlindness) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Blindna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Blindna");
+                    }
+                    else if ((plEffect == StatusEffect.Bind) && (Settings.Default.plBind) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Weight) && (Settings.Default.plWeight) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Slow) && (Settings.Default.plSlow) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Curse) && (Settings.Default.plCurse) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Curse2) && (Settings.Default.plCurse2) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Addle) && (Settings.Default.plAddle) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Bane) && (Settings.Default.plBane) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Plague) && (Settings.Default.plPlague) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Viruna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Viruna");
+                    }
+                    else if ((plEffect == StatusEffect.Disease) && (Settings.Default.plDisease) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Viruna) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Viruna");
+                    }
+                    else if ((plEffect == StatusEffect.Burn) && (Settings.Default.plBurn) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Frost) && (Settings.Default.plFrost) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Choke) && (Settings.Default.plChoke) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Rasp) && (Settings.Default.plRasp) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Shock) && (Settings.Default.plShock) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Drown) && (Settings.Default.plDrown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Dia) && (Settings.Default.plDia) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Bio) && (Settings.Default.plBio) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.STR_Down) && (Settings.Default.plStrDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.DEX_Down) && (Settings.Default.plDexDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.VIT_Down) && (Settings.Default.plVitDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.AGI_Down) && (Settings.Default.plAgiDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.INT_Down) && (Settings.Default.plIntDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.MND_Down) && (Settings.Default.plMndDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.CHR_Down) && (Settings.Default.plChrDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Max_HP_Down) && (Settings.Default.plMaxHpDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Max_MP_Down) && (Settings.Default.plMaxMpDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Accuracy_Down) && (Settings.Default.plAccuracyDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Evasion_Down) && (Settings.Default.plEvasionDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Defense_Down) && (Settings.Default.plDefenseDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Flash) && (Settings.Default.plFlash) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Magic_Acc_Down) && (Settings.Default.plMagicAccDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Magic_Atk_Down) && (Settings.Default.plMagicAtkDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Helix) && (Settings.Default.plHelix) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Max_TP_Down) && (Settings.Default.plMaxTpDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Requiem) && (Settings.Default.plRequiem) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Elegy) && (Settings.Default.plElegy) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Threnody) && (Settings.Default.plThrenody) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                    {
+                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
                 }
                 #endregion
 
-        #region "== Monitored Player Debuff Removal"
+                #region "== Monitored Player Debuff Removal"
                 // Next, we check monitored player
-                if ((_FFACEPL.NPC.Distance(_FFACEMonitored.Player.ID) < 21) && (_FFACEPL.NPC.Distance(_FFACEMonitored.Player.ID) > 0) && (_FFACEMonitored.Player.HPCurrent > 0))
+                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).ID).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).ID).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0))
                 {
-                    foreach (StatusEffect monitoredEffect in _FFACEMonitored.Player.StatusEffects)
+                    foreach (StatusEffect monitoredEffect in this._ELITEAPIMonitored.Player.Buffs)
                     {
-                        if ((monitoredEffect == StatusEffect.Doom) && (Settings.Default.monitoredDoom) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Cursna"); }
-                        else if ((monitoredEffect == StatusEffect.Sleep) && (Settings.Default.monitoredSleep) && (Settings.Default.wakeSleepEnabled)) { castSpell(_FFACEMonitored.Player.Name, Settings.Default.wakeSleepSpellString); }
-                        else if ((monitoredEffect == StatusEffect.Sleep2) && (Settings.Default.monitoredSleep2) && (Settings.Default.wakeSleepEnabled)) { castSpell(_FFACEMonitored.Player.Name, Settings.Default.wakeSleepSpellString); }
-                        else if ((monitoredEffect == StatusEffect.Silence) && (Settings.Default.monitoredSilence) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Silena) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Silena"); }
-                        else if ((monitoredEffect == StatusEffect.Petrification) && (Settings.Default.monitoredPetrification) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Stona) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Stona"); }
-                        else if ((monitoredEffect == StatusEffect.Paralysis) && (Settings.Default.monitoredParalysis) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Paralyna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Paralyna"); }
-                        else if ((monitoredEffect == StatusEffect.Poison) && (Settings.Default.monitoredPoison) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Poisona) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Poisona"); }
-                        else if ((monitoredEffect == StatusEffect.Attack_Down) && (Settings.Default.monitoredAttackDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Blindness) && (Settings.Default.monitoredBlindness && (_FFACEPL.Timer.GetSpellRecast(SpellList.Blindna) == 0))) { castSpell(_FFACEMonitored.Player.Name, "Blindna"); }
-                        else if ((monitoredEffect == StatusEffect.Bind) && (Settings.Default.monitoredBind) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Weight) && (Settings.Default.monitoredWeight) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Slow) && (Settings.Default.monitoredSlow) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Curse) && (Settings.Default.monitoredCurse) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Cursna"); }
-                        else if ((monitoredEffect == StatusEffect.Curse2) && (Settings.Default.monitoredCurse2) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Cursna"); }
-                        else if ((monitoredEffect == StatusEffect.Addle) && (Settings.Default.monitoredAddle) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Bane) && (Settings.Default.monitoredBane) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Cursna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Cursna"); }
-                        else if ((monitoredEffect == StatusEffect.Plague) && (Settings.Default.monitoredPlague) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Viruna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Viruna"); }
-                        else if ((monitoredEffect == StatusEffect.Disease) && (Settings.Default.monitoredDisease) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Viruna) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Viruna"); }
-                        else if ((monitoredEffect == StatusEffect.Burn) && (Settings.Default.monitoredBurn) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Frost) && (Settings.Default.monitoredFrost) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Choke) && (Settings.Default.monitoredChoke) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Rasp) && (Settings.Default.monitoredRasp) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Shock) && (Settings.Default.monitoredShock) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Drown) && (Settings.Default.monitoredDrown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Dia) && (Settings.Default.monitoredDia) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Bio) && (Settings.Default.monitoredBio) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.STR_Down) && (Settings.Default.monitoredStrDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.DEX_Down) && (Settings.Default.monitoredDexDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.VIT_Down) && (Settings.Default.monitoredVitDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.AGI_Down) && (Settings.Default.monitoredAgiDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.INT_Down) && (Settings.Default.monitoredIntDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.MND_Down) && (Settings.Default.monitoredMndDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.CHR_Down) && (Settings.Default.monitoredChrDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Max_HP_Down) && (Settings.Default.monitoredMaxHpDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Max_MP_Down) && (Settings.Default.monitoredMaxMpDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Accuracy_Down) && (Settings.Default.monitoredAccuracyDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Evasion_Down) && (Settings.Default.monitoredEvasionDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Defense_Down) && (Settings.Default.monitoredDefenseDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Flash) && (Settings.Default.monitoredFlash) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Magic_Acc_Down) && (Settings.Default.monitoredMagicAccDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Magic_Atk_Down) && (Settings.Default.monitoredMagicAtkDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Helix) && (Settings.Default.monitoredHelix) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Max_TP_Down) && (Settings.Default.monitoredMaxTpDown) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Requiem) && (Settings.Default.monitoredRequiem) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Elegy) && (Settings.Default.monitoredElegy) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
-                        else if ((monitoredEffect == StatusEffect.Threnody) && (Settings.Default.monitoredThrenody) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Erase) == 0)) { castSpell(_FFACEMonitored.Player.Name, "Erase"); }
+                        if ((monitoredEffect == StatusEffect.Doom) && (Settings.Default.monitoredDoom) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Cursna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Sleep) && (Settings.Default.monitoredSleep) && (Settings.Default.wakeSleepEnabled))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, Settings.Default.wakeSleepSpellString);
+                        }
+                        else if ((monitoredEffect == StatusEffect.Sleep2) && (Settings.Default.monitoredSleep2) && (Settings.Default.wakeSleepEnabled))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, Settings.Default.wakeSleepSpellString);
+                        }
+                        else if ((monitoredEffect == StatusEffect.Silence) && (Settings.Default.monitoredSilence) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Silena) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Silena");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Petrification) && (Settings.Default.monitoredPetrification) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Stona) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Stona");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Paralysis) && (Settings.Default.monitoredParalysis) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Paralyna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Paralyna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Poison) && (Settings.Default.monitoredPoison) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Poisona) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Poisona");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Attack_Down) && (Settings.Default.monitoredAttackDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Blindness) && (Settings.Default.monitoredBlindness && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Blindna) == 0)))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Blindna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Bind) && (Settings.Default.monitoredBind) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Weight) && (Settings.Default.monitoredWeight) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Slow) && (Settings.Default.monitoredSlow) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Curse) && (Settings.Default.monitoredCurse) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Cursna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Curse2) && (Settings.Default.monitoredCurse2) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Cursna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Addle) && (Settings.Default.monitoredAddle) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Bane) && (Settings.Default.monitoredBane) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Cursna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Cursna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Plague) && (Settings.Default.monitoredPlague) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Viruna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Viruna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Disease) && (Settings.Default.monitoredDisease) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Viruna) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Viruna");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Burn) && (Settings.Default.monitoredBurn) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Frost) && (Settings.Default.monitoredFrost) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Choke) && (Settings.Default.monitoredChoke) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Rasp) && (Settings.Default.monitoredRasp) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Shock) && (Settings.Default.monitoredShock) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Drown) && (Settings.Default.monitoredDrown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Dia) && (Settings.Default.monitoredDia) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Bio) && (Settings.Default.monitoredBio) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.STR_Down) && (Settings.Default.monitoredStrDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.DEX_Down) && (Settings.Default.monitoredDexDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.VIT_Down) && (Settings.Default.monitoredVitDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.AGI_Down) && (Settings.Default.monitoredAgiDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.INT_Down) && (Settings.Default.monitoredIntDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.MND_Down) && (Settings.Default.monitoredMndDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.CHR_Down) && (Settings.Default.monitoredChrDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Max_HP_Down) && (Settings.Default.monitoredMaxHpDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Max_MP_Down) && (Settings.Default.monitoredMaxMpDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Accuracy_Down) && (Settings.Default.monitoredAccuracyDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Evasion_Down) && (Settings.Default.monitoredEvasionDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Defense_Down) && (Settings.Default.monitoredDefenseDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Flash) && (Settings.Default.monitoredFlash) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Magic_Acc_Down) && (Settings.Default.monitoredMagicAccDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Magic_Atk_Down) && (Settings.Default.monitoredMagicAtkDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Helix) && (Settings.Default.monitoredHelix) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Max_TP_Down) && (Settings.Default.monitoredMaxTpDown) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Requiem) && (Settings.Default.monitoredRequiem) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Elegy) && (Settings.Default.monitoredElegy) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
+                        else if ((monitoredEffect == StatusEffect.Threnody) && (Settings.Default.monitoredThrenody) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Erase) == 0))
+                        {
+                            this.castSpell(this._ELITEAPIMonitored.Player.Name, "Erase");
+                        }
 
                     }
                 }
                 // End Debuff Removal
                 #endregion
 
-        #region "== PL Auto Buffs"
+                #region "== PL Auto Buffs"
                 // PL Auto Buffs
-                if (!castingLock && _FFACEPL.Player.GetLoginStatus == LoginStatus.LoggedIn)
+                if (!this.castingLock && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
                 {
-                    if ((Settings.Default.plBlink) && (!plStatusCheck(StatusEffect.Blink)) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Blink) == 0))
+                    if ((Settings.Default.plBlink) && (!this.plStatusCheck(StatusEffect.Blink)) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Blink) == 0))
                     {
-                        castSpell("<me>", "Blink");
+                        this.castSpell("<me>", "Blink");
                     }
-                    else if ((Settings.Default.plReraise) && (!plStatusCheck(StatusEffect.Reraise)))
+                    else if ((Settings.Default.plReraise) && (!this.plStatusCheck(StatusEffect.Reraise)))
                     {
-                        if ((Settings.Default.plReraiseLevel == 1) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Reraise) == 0) && _FFACEPL.Player.MPCurrent > 150)
+                        if ((Settings.Default.plReraiseLevel == 1) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Reraise) == 0) && _ELITEAPIPL.Player.MP > 150)
                         {
-                            castSpell("<me>", "Reraise");
+                            this.castSpell("<me>", "Reraise");
                         }
-                        else if ((Settings.Default.plReraiseLevel == 2) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Reraise_II) == 0) && _FFACEPL.Player.MPCurrent > 150)
+                        else if ((Settings.Default.plReraiseLevel == 2) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Reraise_II) == 0) && _ELITEAPIPL.Player.MP > 150)
                         {
-                            castSpell("<me>", "Reraise II");
+                            this.castSpell("<me>", "Reraise II");
                         }
-                        else if ((Settings.Default.plReraiseLevel == 3) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Reraise_III) == 0) && _FFACEPL.Player.MPCurrent > 150)
+                        else if ((Settings.Default.plReraiseLevel == 3) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Reraise_III) == 0) && _ELITEAPIPL.Player.MP > 150)
                         {
-                            castSpell("<me>", "Reraise III");
-                        }
-                    }
-                    else if ((Settings.Default.plRefresh) && (!plStatusCheck(StatusEffect.Refresh)))
-                    {
-                        if ((Settings.Default.plRefreshLevel == 1) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Refresh) == 0))
-                        {
-                            castSpell("<me>", "Refresh");
-                        }
-                        else if ((Settings.Default.plRefreshLevel == 2) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Refresh_II) == 0))
-                        {
-                            castSpell("<me>", "Refresh II");
+                            this.castSpell("<me>", "Reraise III");
                         }
                     }
-                    else if ((Settings.Default.plStoneskin) && (!plStatusCheck(StatusEffect.Stoneskin)) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Stoneskin) == 0))
+                    else if ((Settings.Default.plRefresh) && (!this.plStatusCheck(StatusEffect.Refresh)))
                     {
-                        castSpell("<me>", "Stoneskin");
+                        if ((Settings.Default.plRefreshLevel == 1) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Refresh) == 0))
+                        {
+                            this.castSpell("<me>", "Refresh");
+                        }
+                        else if ((Settings.Default.plRefreshLevel == 2) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Refresh_II) == 0))
+                        {
+                            this.castSpell("<me>", "Refresh II");
+                        }
                     }
-                    else if ((Settings.Default.plShellra) && (!plStatusCheck(StatusEffect.Shell)) && CheckShellraLevelRecast())
+                    else if ((Settings.Default.plStoneskin) && (!this.plStatusCheck(StatusEffect.Stoneskin)) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Stoneskin) == 0))
                     {
-                        castSpell("<me>", GetShellraLevel(Settings.Default.plShellralevel));
+                        this.castSpell("<me>", "Stoneskin");
+                    }
+                    else if ((Settings.Default.plShellra) && (!this.plStatusCheck(StatusEffect.Shell)) && this.CheckShellraLevelRecast())
+                    {
+                        this.castSpell("<me>", this.GetShellraLevel(Settings.Default.plShellralevel));
 
                     }
-                    else if ((Settings.Default.plProtectra) && (!plStatusCheck(StatusEffect.Protect)) && CheckProtectraLevelRecast())
+                    else if ((Settings.Default.plProtectra) && (!this.plStatusCheck(StatusEffect.Protect)) && this.CheckProtectraLevelRecast())
                     {
-                        castSpell("<me>", GetProtectraLevel(Settings.Default.plProtectralevel));
+                        this.castSpell("<me>", this.GetProtectraLevel(Settings.Default.plProtectralevel));
                     }
                 }
                 // End PL Auto Buffs
                 #endregion
 
-        // Auto Casting
-        #region "== Auto Haste"
+                // Auto Casting
+                #region "== Auto Haste"
                 foreach (byte id in playerHpOrder)
                 {
-                    if ((autoHasteEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Haste) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                    if ((this.autoHasteEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Haste) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                     {
-                        if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                         {
-                            if (!plStatusCheck(StatusEffect.Haste))
+                            if (!this.plStatusCheck(StatusEffect.Haste))
                             {
-                                hastePlayer(id);
+                                this.hastePlayer(id);
                             }
                         }
-                        else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                        else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                         {
-                            if (!monitoredStatusCheck(StatusEffect.Haste))
+                            if (!this.monitoredStatusCheck(StatusEffect.Haste))
                             {
                                 // Check if we are hasting only if fighting
                                 if (Settings.Default.AutoCastEngageCheckBox)
                                 {
                                     // if we are, check to make sure we are fighting before hasting
-                                    if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                    if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                     {
                                         // Haste player
-                                        hastePlayer(id);
+                                        this.hastePlayer(id);
                                     }
                                 }
                                 // If we are not hasting only during fighting, cast haste
                                 else
                                 {
-                                    hastePlayer(id);
+                                    this.hastePlayer(id);
                                 }
                             }
                         }
-                        else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerHasteSpan[id].Minutes >= Settings.Default.autoHasteMinutes))
+                        else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerHasteSpan[id].Minutes >= Settings.Default.autoHasteMinutes))
                         {
-                            hastePlayer(id);
+                            this.hastePlayer(id);
                         }
                     }
-                #endregion
+                    #endregion
 
-        #region "== Auto Haste II"
+                    #region "== Auto Haste II"
 
                     {
-                        if ((autoHaste_IIEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Haste_II) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                        if ((this.autoHaste_IIEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Haste_II) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                         {
-                            if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                            if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                             {
-                                if (!plStatusCheck(StatusEffect.Haste))
+                                if (!this.plStatusCheck(StatusEffect.Haste))
                                 {
-                                    haste_IIPlayer(id);
+                                    this.haste_IIPlayer(id);
                                 }
                             }
-                            else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                            else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                             {
-                                if (!monitoredStatusCheck(StatusEffect.Haste))
+                                if (!this.monitoredStatusCheck(StatusEffect.Haste))
                                 {
                                     // Check if we are hasting only if fighting
                                     if (Settings.Default.AutoCastEngageCheckBox)
                                     {
                                         // if we are, check to make sure we are fighting before hasting
-                                        if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                        if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                         {
                                             // Haste II player
-                                            haste_IIPlayer(id);
+                                            this.haste_IIPlayer(id);
                                         }
                                     }
                                     // If we are not hasting only during fighting, cast haste
                                     else
                                     {
-                                        haste_IIPlayer(id);
+                                        this.haste_IIPlayer(id);
                                     }
                                 }
                             }
-                            else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerHaste_IISpan[id].Minutes >= Settings.Default.autoHasteMinutes))
+                            else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerHaste_IISpan[id].Minutes >= Settings.Default.autoHasteMinutes))
                             {
-                                haste_IIPlayer(id);
+                                this.haste_IIPlayer(id);
                             }
                         }
-                    #endregion
+                        #endregion
 
-        #region "== Auto Flurry "
+                        #region "== Auto Flurry "
 
                         {
-                            if ((autoFlurryEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Flurry) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                            if ((this.autoFlurryEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Flurry) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                             {
-                                if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                 {
-                                    if (!plStatusCheck((StatusEffect)581))
+                                    if (!this.plStatusCheck((StatusEffect)581))
                                     {
-                                        FlurryPlayer(id);
+                                        this.FlurryPlayer(id);
                                     }
                                 }
-                                else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                                else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                 {
-                                    if (!monitoredStatusCheck((StatusEffect)581))
+                                    if (!this.monitoredStatusCheck((StatusEffect)581))
                                     {
                                         // Check if we are flurring only if fighting
                                         if (Settings.Default.AutoCastEngageCheckBox)
                                         {
                                             // if we are, check to make sure we are fighting before flurring
-                                            if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                            if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                             {
                                                 // Flurry player
-                                                FlurryPlayer(id);
+                                                this.FlurryPlayer(id);
                                             }
                                         }
                                         // If we are not flurring only during fighting, cast flurry
                                         else
                                         {
-                                            FlurryPlayer(id);
+                                            this.FlurryPlayer(id);
                                         }
                                     }
                                 }
-                                else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerFlurrySpan[id].Minutes >= Settings.Default.autoHasteMinutes))
+                                else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerFlurrySpan[id].Minutes >= Settings.Default.autoHasteMinutes))
                                 {
-                                    FlurryPlayer(id);
+                                    this.FlurryPlayer(id);
                                 }
                             }
-                        #endregion
+                            #endregion
 
-        #region "== Auto Flurry II"
+                            #region "== Auto Flurry II"
 
                             {
-                                if ((autoFlurry_IIEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Flurry_II) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                if ((this.autoFlurry_IIEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Flurry_II) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck((StatusEffect)581))
+                                        if (!this.plStatusCheck((StatusEffect)581))
                                         {
-                                            Flurry_IIPlayer(id);
+                                            this.Flurry_IIPlayer(id);
                                         }
                                     }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
-                                        if (!monitoredStatusCheck((StatusEffect)581))
+                                        if (!this.monitoredStatusCheck((StatusEffect)581))
                                         {
                                             // Check if we are flurring only if fighting
                                             if (Settings.Default.AutoCastEngageCheckBox)
                                             {
                                                 // if we are, check to make sure we are fighting before flurring
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                                 {
                                                     // Flurry II player
-                                                    Flurry_IIPlayer(id);
+                                                    this.Flurry_IIPlayer(id);
                                                 }
                                             }
                                             // If we are not flurring only during fighting, cast flurry
                                             else
                                             {
-                                                Flurry_IIPlayer(id);
+                                                this.Flurry_IIPlayer(id);
                                             }
                                         }
                                     }
-                                    else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerFlurry_IISpan[id].Minutes >= Settings.Default.autoHasteMinutes))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerFlurry_IISpan[id].Minutes >= Settings.Default.autoHasteMinutes))
                                     {
-                                        Flurry_IIPlayer(id);
-                                    }
-                                }
-                            #endregion
-
-        #region "== Auto Shell IV & V"
-                                if ((autoShell_IVEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Shell_IV) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
-                                {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Shell))
-                                        {
-                                            shell_IVPlayer(id);
-                                        }
-                                    }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
-                                    {
-                                        if (!monitoredStatusCheck(StatusEffect.Shell))
-                                        {
-                                            if (Settings.Default.AutoCastEngageCheckBox)
-                                            {
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
-                                                {
-                                                    shell_IVPlayer(id);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                shell_IVPlayer(id);
-                                            }
-                                        }
-                                    }
-                                    else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerShell_IVSpan[id].Minutes >= Settings.Default.autoShell_IVMinutes))
-                                    {
-                                        shell_IVPlayer(id);
-                                    }
-                                }
-                                if ((autoShell_VEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Shell_V) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
-                                {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Shell))
-                                        {
-                                            shell_VPlayer(id);
-                                        }
-                                    }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
-                                    {
-                                        if (!monitoredStatusCheck(StatusEffect.Shell))
-                                        {
-                                            if (Settings.Default.AutoCastEngageCheckBox)
-                                            {
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
-                                                {
-                                                    shell_VPlayer(id);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                shell_VPlayer(id);
-                                            }
-                                        }
-                                    }
-                                    else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerShell_VSpan[id].Minutes >= Settings.Default.autoShell_VMinutes))
-                                    {
-                                        shell_VPlayer(id);
+                                        this.Flurry_IIPlayer(id);
                                     }
                                 }
                                 #endregion
 
-        #region "== Auto Protect IV & V"
-                                if ((autoProtect_IVEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Protect_IV) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                #region "== Auto Shell IV & V"
+                                if ((this.autoShell_IVEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shell_IV) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck(StatusEffect.Protect))
+                                        if (!this.plStatusCheck(StatusEffect.Shell))
                                         {
-                                            protect_IVPlayer(id);
+                                            this.shell_IVPlayer(id);
                                         }
                                     }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Protect))
+                                        if (!this.monitoredStatusCheck(StatusEffect.Shell))
                                         {
                                             if (Settings.Default.AutoCastEngageCheckBox)
                                             {
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                                 {
-                                                    protect_IVPlayer(id);
+                                                    this.shell_IVPlayer(id);
                                                 }
                                             }
                                             else
                                             {
-                                                protect_IVPlayer(id);
+                                                this.shell_IVPlayer(id);
                                             }
                                         }
                                     }
-                                    else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerProtect_IVSpan[id].Minutes >= Settings.Default.autoProtect_IVMinutes))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerShell_IVSpan[id].Minutes >= Settings.Default.autoShell_IVMinutes))
                                     {
-                                        protect_IVPlayer(id);
+                                        this.shell_IVPlayer(id);
                                     }
                                 }
-                                if ((autoProtect_VEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Protect_V) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                if ((this.autoShell_VEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shell_V) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck(StatusEffect.Protect))
+                                        if (!this.plStatusCheck(StatusEffect.Shell))
                                         {
-                                            protect_VPlayer(id);
+                                            this.shell_VPlayer(id);
                                         }
                                     }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Protect))
+                                        if (!this.monitoredStatusCheck(StatusEffect.Shell))
                                         {
                                             if (Settings.Default.AutoCastEngageCheckBox)
                                             {
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                                 {
-                                                    protect_VPlayer(id);
+                                                    this.shell_VPlayer(id);
                                                 }
                                             }
                                             else
                                             {
-                                                protect_VPlayer(id);
+                                                this.shell_VPlayer(id);
                                             }
                                         }
                                     }
-                                    else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerProtect_VSpan[id].Minutes >= Settings.Default.autoProtect_VMinutes))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerShell_VSpan[id].Minutes >= Settings.Default.autoShell_VMinutes))
                                     {
-                                        protect_VPlayer(id);
+                                        this.shell_VPlayer(id);
                                     }
                                 }
                                 #endregion
 
-        #region "== Auto Phalanx II"
-                                if ((autoPhalanx_IIEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Phalanx_II) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                #region "== Auto Protect IV & V"
+                                if ((this.autoProtect_IVEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protect_IV) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck(StatusEffect.Phalanx))
+                                        if (!this.plStatusCheck(StatusEffect.Protect))
                                         {
-                                            Phalanx_IIPlayer(id);
+                                            this.protect_IVPlayer(id);
                                         }
                                     }
-                                    else if ((_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Phalanx))
-                                        {
-                                            Phalanx_IIPlayer(id);
-                                        }
-                                    }
-                                    else if ((_FFACEMonitored.PartyMember[id].HPCurrent > 0) && (playerPhalanx_IISpan[id].Minutes >= Settings.Default.autoPhalanxIIMinutes))
-                                    {
-                                        Phalanx_IIPlayer(id);
-                                    }
-                                }
-                                #endregion
-
-        #region "== Auto Regen IV & V"
-                                if ((autoRegen_IVEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Regen_IV) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
-                                {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Regen))
-                                        {
-                                            Regen_IVPlayer(id);
-                                        }
-                                    }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
-                                    {
-                                        if (!monitoredStatusCheck(StatusEffect.Regen))
+                                        if (!this.monitoredStatusCheck(StatusEffect.Protect))
                                         {
                                             if (Settings.Default.AutoCastEngageCheckBox)
                                             {
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                                 {
-                                                    Regen_IVPlayer(id);
+                                                    this.protect_IVPlayer(id);
                                                 }
                                             }
                                             else
                                             {
-                                                Regen_IVPlayer(id);
+                                                this.protect_IVPlayer(id);
                                             }
                                         }
                                     }
-                                    else if (_FFACEMonitored.PartyMember[id].HPCurrent > 0
-                                                    && (playerRegen_IVSpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRegenIVMinutes))
-                                                    || (playerRegen_IVSpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRegenIVMinutes)) == 1)))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerProtect_IVSpan[id].Minutes >= Settings.Default.autoProtect_IVMinutes))
                                     {
-                                        Regen_IVPlayer(id);
+                                        this.protect_IVPlayer(id);
                                     }
                                 }
-                                if ((autoRegen_VEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Regen_V) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                if ((this.autoProtect_VEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protect_V) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck(StatusEffect.Regen))
+                                        if (!this.plStatusCheck(StatusEffect.Protect))
                                         {
-                                            Regen_VPlayer(id);
+                                            this.protect_VPlayer(id);
                                         }
                                     }
-                                    else if (_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID)
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Regen))
+                                        if (!this.monitoredStatusCheck(StatusEffect.Protect))
                                         {
                                             if (Settings.Default.AutoCastEngageCheckBox)
                                             {
-                                                if (_FFACEMonitored.Player.Status == Status.Fighting)
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
                                                 {
-                                                    Regen_VPlayer(id);
+                                                    this.protect_VPlayer(id);
                                                 }
                                             }
                                             else
                                             {
-                                                Regen_VPlayer(id);
+                                                this.protect_VPlayer(id);
                                             }
                                         }
                                     }
-                                    else if (_FFACEMonitored.PartyMember[id].HPCurrent > 0
-                                                    && (playerRegen_VSpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRegenVMinutes))
-                                                    || (playerRegen_VSpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRegenVMinutes)) == 1)))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerProtect_VSpan[id].Minutes >= Settings.Default.autoProtect_VMinutes))
                                     {
-                                        Regen_VPlayer(id);
+                                        this.protect_VPlayer(id);
                                     }
                                 }
                                 #endregion
 
-        #region "== Auto Refresh & II"
-                                if ((autoRefreshEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Refresh) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                #region "== Auto Phalanx II"
+                                if ((this.autoPhalanx_IIEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Phalanx_II) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck(StatusEffect.Refresh))
+                                        if (!this.plStatusCheck(StatusEffect.Phalanx))
                                         {
-                                            RefreshPlayer(id);
+                                            this.Phalanx_IIPlayer(id);
                                         }
                                     }
-                                    else if ((_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Refresh))
+                                        if (!this.monitoredStatusCheck(StatusEffect.Phalanx))
                                         {
-                                            RefreshPlayer(id);
+                                            this.Phalanx_IIPlayer(id);
                                         }
                                     }
-                                    else if (_FFACEMonitored.PartyMember[id].HPCurrent > 0
-                                             && (playerRefreshSpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshMinutes))
-                                                 || (playerRefreshSpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshMinutes)) == 1)))
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (this.playerPhalanx_IISpan[id].Minutes >= Settings.Default.autoPhalanxIIMinutes))
                                     {
-                                        RefreshPlayer(id);
+                                        this.Phalanx_IIPlayer(id);
                                     }
                                 }
-                                if ((autoRefresh_IIEnabled[id]) && (_FFACEPL.Timer.GetSpellRecast(SpellList.Refresh_II) == 0) && (_FFACEPL.Player.MPCurrent > Settings.Default.mpMinCastValue) && (!castingLock) && (castingPossible(id)))
+                                #endregion
+
+                                #region "== Auto Regen IV & V"
+                                if ((this.autoRegen_IVEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Regen_IV) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
                                 {
-                                    if ((_FFACEPL.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
-                                        if (!plStatusCheck(StatusEffect.Refresh))
+                                        if (!this.plStatusCheck(StatusEffect.Regen))
                                         {
-                                            Refresh_IIPlayer(id);
+                                            this.Regen_IVPlayer(id);
                                         }
                                     }
-                                    else if ((_FFACEMonitored.Player.ID == _FFACEMonitored.PartyMember[id].ID))
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Refresh))
+                                        if (!this.monitoredStatusCheck(StatusEffect.Regen))
                                         {
-                                            Refresh_IIPlayer(id);
+                                            if (Settings.Default.AutoCastEngageCheckBox)
+                                            {
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
+                                                {
+                                                    this.Regen_IVPlayer(id);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.Regen_IVPlayer(id);
+                                            }
                                         }
                                     }
-                                    else if (_FFACEMonitored.PartyMember[id].HPCurrent > 0
-                                             && (playerRefresh_IISpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshIIMinutes))
-                                                 || (playerRefresh_IISpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshIIMinutes)) == 1)))
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
+                                                    && (this.playerRegen_IVSpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRegenIVMinutes))
+                                                    || (this.playerRegen_IVSpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRegenIVMinutes)) == 1)))
                                     {
-                                        Refresh_IIPlayer(id);
+                                        this.Regen_IVPlayer(id);
+                                    }
+                                }
+                                if ((this.autoRegen_VEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Regen_V) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                {
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                    {
+                                        if (!this.plStatusCheck(StatusEffect.Regen))
+                                        {
+                                            this.Regen_VPlayer(id);
+                                        }
+                                    }
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+                                    {
+                                        if (!this.monitoredStatusCheck(StatusEffect.Regen))
+                                        {
+                                            if (Settings.Default.AutoCastEngageCheckBox)
+                                            {
+                                                if (this._ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
+                                                {
+                                                    this.Regen_VPlayer(id);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.Regen_VPlayer(id);
+                                            }
+                                        }
+                                    }
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
+                                                    && (this.playerRegen_VSpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRegenVMinutes))
+                                                    || (this.playerRegen_VSpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRegenVMinutes)) == 1)))
+                                    {
+                                        this.Regen_VPlayer(id);
+                                    }
+                                }
+                                #endregion
+
+                                #region "== Auto Refresh & II"
+                                if ((this.autoRefreshEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Refresh) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                {
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                    {
+                                        if (!this.plStatusCheck(StatusEffect.Refresh))
+                                        {
+                                            this.RefreshPlayer(id);
+                                        }
+                                    }
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                    {
+                                        if (!this.monitoredStatusCheck(StatusEffect.Refresh))
+                                        {
+                                            this.RefreshPlayer(id);
+                                        }
+                                    }
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
+                                             && (this.playerRefreshSpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshMinutes))
+                                                 || (this.playerRefreshSpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshMinutes)) == 1)))
+                                    {
+                                        this.RefreshPlayer(id);
+                                    }
+                                }
+                                if ((this.autoRefresh_IIEnabled[id]) && (_ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Refresh_II) == 0) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                {
+                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                    {
+                                        if (!this.plStatusCheck(StatusEffect.Refresh))
+                                        {
+                                            this.Refresh_IIPlayer(id);
+                                        }
+                                    }
+                                    else if ((this._ELITEAPIMonitored.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                    {
+                                        if (!this.monitoredStatusCheck(StatusEffect.Refresh))
+                                        {
+                                            this.Refresh_IIPlayer(id);
+                                        }
+                                    }
+                                    else if (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
+                                             && (this.playerRefresh_IISpan[id].Equals(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshIIMinutes))
+                                                 || (this.playerRefresh_IISpan[id].CompareTo(TimeSpan.FromMinutes((double)Settings.Default.autoRefreshIIMinutes)) == 1)))
+                                    {
+                                        this.Refresh_IIPlayer(id);
                                     }
                                 }
                             }
-                                #endregion
+                            #endregion
 
-        
-        // so PL job abilities are in order
-        #region "== All other Job Abilities"
-                            if (!castingLock && !plStatusCheck(StatusEffect.Amnesia))
+
+                            // so PL job abilities are in order
+                            #region "== All other Job Abilities"
+                            if (!this.castingLock && !this.plStatusCheck(StatusEffect.Amnesia))
                             {
-                                if ((Settings.Default.afflatusSolice) && (!plStatusCheck(StatusEffect.Afflatus_Solace)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Afflatus_Solace) == 0))
+                                if ((Settings.Default.afflatusSolice) && (!this.plStatusCheck(StatusEffect.Afflatus_Solace)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Afflatus_Solace) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Afflatus Solace\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Afflatus Solace\" <me>");
+                                    this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.afflatusMisery) && (!plStatusCheck(StatusEffect.Afflatus_Misery)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Afflatus_Misery) == 0))
+                                else if ((Settings.Default.afflatusMisery) && (!this.plStatusCheck(StatusEffect.Afflatus_Misery)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Afflatus_Misery) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Afflatus Misery\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Afflatus Misery\" <me>");
+                                    this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.Composure) && (!plStatusCheck(StatusEffect.Composure)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Composure) == 0))
+                                else if ((Settings.Default.Composure) && (!this.plStatusCheck(StatusEffect.Composure)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Composure) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Composure\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
+                                    this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.lightArts) && (!plStatusCheck(StatusEffect.Light_Arts)) && (!plStatusCheck(StatusEffect.Addendum_White)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Light_Arts) == 0))
+                                else if ((Settings.Default.lightArts) && (!this.plStatusCheck(StatusEffect.Light_Arts)) && (!this.plStatusCheck(StatusEffect.Addendum_White)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Light_Arts) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Light Arts\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Light Arts\" <me>");
+                                    this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.addWhite) && (!plStatusCheck(StatusEffect.Addendum_White)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Stratagems) == 0))
+                                else if ((Settings.Default.addWhite) && (!this.plStatusCheck(StatusEffect.Addendum_White)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Stratagems) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Addendum: White\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
+                                    this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.sublimation) && (!plStatusCheck(StatusEffect.Sublimation_Activated)) && (!plStatusCheck(StatusEffect.Sublimation_Complete)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Sublimation) == 0))
+                                else if ((Settings.Default.sublimation) && (!this.plStatusCheck(StatusEffect.Sublimation_Activated)) && (!this.plStatusCheck(StatusEffect.Sublimation_Complete)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Sublimation) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Sublimation\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
+                                    this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.sublimation) && ((_FFACEPL.Player.MPMax - _FFACEPL.Player.MPCurrent) > (_FFACEPL.Player.HPMax * .4)) && (plStatusCheck(StatusEffect.Sublimation_Complete)) && (_FFACEPL.Timer.GetAbilityRecast(AbilityList.Sublimation) == 0))
+                                else if ((Settings.Default.sublimation) && ((_ELITEAPIPL.Player.MPMax - _ELITEAPIPL.Player.MP) > (_ELITEAPIPL.Player.HPMax * .4)) && (this.plStatusCheck(StatusEffect.Sublimation_Complete)) && (_ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Sublimation) == 0))
                                 {
-                                    _FFACEPL.Windower.SendString("/ja \"Sublimation\" <me>");
-                                    ActionLockMethod();
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
+                                    this.ActionLockMethod();
                                 }
                             }
                         }
@@ -2417,10 +3784,10 @@ namespace CurePlease
                 }
             }
         }
-                #endregion
+        #endregion
 
         #region "== Get Shellra & Protectra level"
-        private string GetShellraLevel (decimal p)
+        private string GetShellraLevel(decimal p)
         {
             switch ((int)p)
             {
@@ -2439,7 +3806,7 @@ namespace CurePlease
             }
         }
 
-        private string GetProtectraLevel (decimal p)
+        private string GetProtectraLevel(decimal p)
         {
             switch ((int)p)
             {
@@ -2462,7 +3829,7 @@ namespace CurePlease
         #region "== settingsToolStripMenuItem (settings Tab)"
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 settings = new Form2();
+            var settings = new Form2();
             settings.Show();
         }
         #endregion
@@ -2470,701 +3837,701 @@ namespace CurePlease
         #region "== playerOptionsButtons (MENU Button)"
         private void player0optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 0;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[0];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[0];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[0];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[0];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[0];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[0];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[0];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[0];
-            playerOptions.Show(party0, new Point(0, 0));
+            this.playerOptionsSelected = 0;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[0];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[0];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[0];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[0];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[0];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[0];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[0];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[0];
+            this.playerOptions.Show(this.party0, new Point(0, 0));
         }
-                        
+
         private void player1optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 1;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[1];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[1];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[1];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[1];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[1];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[1];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[1];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[1];
-            playerOptions.Show(party0, new Point(0, 0));
+            this.playerOptionsSelected = 1;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[1];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[1];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[1];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[1];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[1];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[1];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[1];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[1];
+            this.playerOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player2optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 2;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[2];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[2];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[2];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[2];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[2];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[2];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[2];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[2];
-            playerOptions.Show(party0, new Point(0, 0));
+            this.playerOptionsSelected = 2;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[2];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[2];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[2];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[2];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[2];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[2];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[2];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[2];
+            this.playerOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player3optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 3;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[3];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[3];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[3];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[3];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[3];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[3];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[3];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[3];
-            playerOptions.Show(party0, new Point(0, 0));
+            this.playerOptionsSelected = 3;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[3];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[3];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[3];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[3];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[3];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[3];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[3];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[3];
+            this.playerOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player4optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 4;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[4];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[4];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[4];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[4];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[4];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[4];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[4];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[4];
-            playerOptions.Show(party0, new Point(0, 0));
+            this.playerOptionsSelected = 4;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[4];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[4];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[4];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[4];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[4];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[4];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[4];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[4];
+            this.playerOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player5optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 5;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[5];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[5];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[5];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[5];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[5];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[5];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[5];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[5];
-            playerOptions.Show(party0, new Point(0, 0));
+            this.playerOptionsSelected = 5;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[5];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[5];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[5];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[5];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[5];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[5];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[5];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[5];
+            this.playerOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player6optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 6;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[6];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[6];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[6];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[6];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[6];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[6];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[6];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[6];
-            playerOptions.Show(party1, new Point(0, 0));
+            this.playerOptionsSelected = 6;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[6];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[6];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[6];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[6];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[6];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[6];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[6];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[6];
+            this.playerOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player7optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 7;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[7];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[7];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[7];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[7];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[7];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[7];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[7];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[7];
-            playerOptions.Show(party1, new Point(0, 0));
+            this.playerOptionsSelected = 7;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[7];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[7];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[7];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[7];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[7];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[7];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[7];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[7];
+            this.playerOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player8optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 8;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[8];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[8];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[8];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[8];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[8];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[8];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[8];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[8];
-            playerOptions.Show(party1, new Point(0, 0));
+            this.playerOptionsSelected = 8;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[8];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[8];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[8];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[8];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[8];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[8];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[8];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[8];
+            this.playerOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player9optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 9;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[9];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[9];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[9];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[9];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[9];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[9];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[9];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[9];
-            playerOptions.Show(party1, new Point(0, 0));
+            this.playerOptionsSelected = 9;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[9];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[9];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[9];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[9];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[9];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[9];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[9];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[9];
+            this.playerOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player10optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 10;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[10];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[10];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[10];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[10];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[10];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[10];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[10];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[10];
-            playerOptions.Show(party1, new Point(0, 0));
+            this.playerOptionsSelected = 10;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[10];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[10];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[10];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[10];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[10];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[10];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[10];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[10];
+            this.playerOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player11optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 11;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[11];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[11];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[11];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[11];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[11];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[11];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[11];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[11];
-            playerOptions.Show(party1, new Point(0, 0));
+            this.playerOptionsSelected = 11;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[11];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[11];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[11];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[11];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[11];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[11];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[11];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[11];
+            this.playerOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player12optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 12;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[12];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[12];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[12];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[12];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[12];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[12];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[12];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[12];
-            playerOptions.Show(party2, new Point(0, 0));
+            this.playerOptionsSelected = 12;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[12];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[12];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[12];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[12];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[12];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[12];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[12];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[12];
+            this.playerOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player13optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 13;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[13];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[13];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[13];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[13];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[13];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[13];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[13];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[13];
-            playerOptions.Show(party2, new Point(0, 0));
+            this.playerOptionsSelected = 13;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[13];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[13];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[13];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[13];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[13];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[13];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[13];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[13];
+            this.playerOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player14optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 14;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[14];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[14];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[14];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[14];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[14];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[14];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[14];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[14];
-            playerOptions.Show(party2, new Point(0, 0));
+            this.playerOptionsSelected = 14;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[14];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[14];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[14];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[14];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[14];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[14];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[14];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[14];
+            this.playerOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player15optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 15;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[15];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[15];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[15];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[15];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[15];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[15];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[15];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[15];
-            playerOptions.Show(party2, new Point(0, 0));
+            this.playerOptionsSelected = 15;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[15];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[15];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[15];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[15];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[15];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[15];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[15];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[15];
+            this.playerOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player16optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 16;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[16];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[16];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[16];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[16];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[16];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[16];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[16];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[16];
-            playerOptions.Show(party2, new Point(0, 0));
+            this.playerOptionsSelected = 16;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[16];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[16];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[16];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[16];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[16];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[16];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[16];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[16];
+            this.playerOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player17optionsButton_Click(object sender, EventArgs e)
         {
-            playerOptionsSelected = 17;
-            autoHasteToolStripMenuItem.Checked = autoHasteEnabled[17];
-            autoHasteIIToolStripMenuItem.Checked = autoHaste_IIEnabled[17];
-            autoFlurryToolStripMenuItem.Checked = autoFlurryEnabled[17];
-            autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[17];
-            autoProtectIVToolStripMenuItem1.Checked = autoProtect_IVEnabled[17];
-            autoProtectVToolStripMenuItem1.Checked = autoProtect_VEnabled[17];
-            autoShellIVToolStripMenuItem.Checked = autoShell_IVEnabled[17];
-            autoShellVToolStripMenuItem.Checked = autoShell_VEnabled[17];
-            playerOptions.Show(party2, new Point(0, 0));
+            this.playerOptionsSelected = 17;
+            this.autoHasteToolStripMenuItem.Checked = this.autoHasteEnabled[17];
+            this.autoHasteIIToolStripMenuItem.Checked = this.autoHaste_IIEnabled[17];
+            this.autoFlurryToolStripMenuItem.Checked = this.autoFlurryEnabled[17];
+            this.autoFlurryIIToolStripMenuItem.Checked = this.autoFlurry_IIEnabled[17];
+            this.autoProtectIVToolStripMenuItem1.Checked = this.autoProtect_IVEnabled[17];
+            this.autoProtectVToolStripMenuItem1.Checked = this.autoProtect_VEnabled[17];
+            this.autoShellIVToolStripMenuItem.Checked = this.autoShell_IVEnabled[17];
+            this.autoShellVToolStripMenuItem.Checked = this.autoShell_VEnabled[17];
+            this.playerOptions.Show(this.party2, new Point(0, 0));
         }
         #endregion
 
         #region "== autoOptions (Auto Button)"
         private void player0buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 0;
-            autoPhalanxIIToolStripMenuItem1.Checked = autoPhalanx_IIEnabled[0];
-            autoRegenIVToolStripMenuItem1.Checked = autoRegen_IVEnabled[0];
-            autoRefreshToolStripMenuItem1.Checked = autoRefreshEnabled[0];
-            autoRegenVToolStripMenuItem.Checked = autoRegen_VEnabled[0];
-            autoRefreshIIToolStripMenuItem.Checked = autoRefresh_IIEnabled[0];
-            autoOptions.Show(party0, new Point(0, 0));
+            this.autoOptionsSelected = 0;
+            this.autoPhalanxIIToolStripMenuItem1.Checked = this.autoPhalanx_IIEnabled[0];
+            this.autoRegenIVToolStripMenuItem1.Checked = this.autoRegen_IVEnabled[0];
+            this.autoRefreshToolStripMenuItem1.Checked = this.autoRefreshEnabled[0];
+            this.autoRegenVToolStripMenuItem.Checked = this.autoRegen_VEnabled[0];
+            this.autoRefreshIIToolStripMenuItem.Checked = this.autoRefresh_IIEnabled[0];
+            this.autoOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player1buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 1;
-            autoPhalanxIIToolStripMenuItem1.Checked = autoPhalanx_IIEnabled[1];
-            autoRegenIVToolStripMenuItem1.Checked = autoRegen_IVEnabled[1];            
-            autoRefreshToolStripMenuItem1.Checked = autoRefreshEnabled[1];
-            autoRegenVToolStripMenuItem.Checked = autoRegen_VEnabled[1];
-            autoRefreshIIToolStripMenuItem.Checked = autoRefresh_IIEnabled[1];
-            autoOptions.Show(party0, new Point(0, 0));
+            this.autoOptionsSelected = 1;
+            this.autoPhalanxIIToolStripMenuItem1.Checked = this.autoPhalanx_IIEnabled[1];
+            this.autoRegenIVToolStripMenuItem1.Checked = this.autoRegen_IVEnabled[1];
+            this.autoRefreshToolStripMenuItem1.Checked = this.autoRefreshEnabled[1];
+            this.autoRegenVToolStripMenuItem.Checked = this.autoRegen_VEnabled[1];
+            this.autoRefreshIIToolStripMenuItem.Checked = this.autoRefresh_IIEnabled[1];
+            this.autoOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player2buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 2;
-            autoPhalanxIIToolStripMenuItem1.Checked = autoPhalanx_IIEnabled[2];
-            autoRegenIVToolStripMenuItem1.Checked = autoRegen_IVEnabled[2];            
-            autoRefreshToolStripMenuItem1.Checked = autoRefreshEnabled[2];
-            autoRegenVToolStripMenuItem.Checked = autoRegen_VEnabled[2];
-            autoRefreshIIToolStripMenuItem.Checked = autoRefresh_IIEnabled[2];
-            autoOptions.Show(party0, new Point(0, 0));
+            this.autoOptionsSelected = 2;
+            this.autoPhalanxIIToolStripMenuItem1.Checked = this.autoPhalanx_IIEnabled[2];
+            this.autoRegenIVToolStripMenuItem1.Checked = this.autoRegen_IVEnabled[2];
+            this.autoRefreshToolStripMenuItem1.Checked = this.autoRefreshEnabled[2];
+            this.autoRegenVToolStripMenuItem.Checked = this.autoRegen_VEnabled[2];
+            this.autoRefreshIIToolStripMenuItem.Checked = this.autoRefresh_IIEnabled[2];
+            this.autoOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player3buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 3;
-            autoPhalanxIIToolStripMenuItem1.Checked = autoPhalanx_IIEnabled[3];
-            autoRegenIVToolStripMenuItem1.Checked = autoRegen_IVEnabled[3];            
-            autoRefreshToolStripMenuItem1.Checked = autoRefreshEnabled[3];
-            autoRegenVToolStripMenuItem.Checked = autoRegen_VEnabled[3];
-            autoRefreshIIToolStripMenuItem.Checked = autoRefresh_IIEnabled[3];
-            autoOptions.Show(party0, new Point(0, 0));
+            this.autoOptionsSelected = 3;
+            this.autoPhalanxIIToolStripMenuItem1.Checked = this.autoPhalanx_IIEnabled[3];
+            this.autoRegenIVToolStripMenuItem1.Checked = this.autoRegen_IVEnabled[3];
+            this.autoRefreshToolStripMenuItem1.Checked = this.autoRefreshEnabled[3];
+            this.autoRegenVToolStripMenuItem.Checked = this.autoRegen_VEnabled[3];
+            this.autoRefreshIIToolStripMenuItem.Checked = this.autoRefresh_IIEnabled[3];
+            this.autoOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player4buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 4;
-            autoPhalanxIIToolStripMenuItem1.Checked = autoPhalanx_IIEnabled[4];
-            autoRegenIVToolStripMenuItem1.Checked = autoRegen_IVEnabled[4];            
-            autoRefreshToolStripMenuItem1.Checked = autoRefreshEnabled[4];
-            autoRegenVToolStripMenuItem.Checked = autoRegen_VEnabled[4];
-            autoRefreshIIToolStripMenuItem.Checked = autoRefresh_IIEnabled[4];
-            autoOptions.Show(party0, new Point(0, 0));
+            this.autoOptionsSelected = 4;
+            this.autoPhalanxIIToolStripMenuItem1.Checked = this.autoPhalanx_IIEnabled[4];
+            this.autoRegenIVToolStripMenuItem1.Checked = this.autoRegen_IVEnabled[4];
+            this.autoRefreshToolStripMenuItem1.Checked = this.autoRefreshEnabled[4];
+            this.autoRegenVToolStripMenuItem.Checked = this.autoRegen_VEnabled[4];
+            this.autoRefreshIIToolStripMenuItem.Checked = this.autoRefresh_IIEnabled[4];
+            this.autoOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player5buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 5;
-            autoPhalanxIIToolStripMenuItem1.Checked = autoPhalanx_IIEnabled[5];
-            autoRegenIVToolStripMenuItem1.Checked = autoRegen_IVEnabled[5];            
-            autoRefreshToolStripMenuItem1.Checked = autoRefreshEnabled[5];
-            autoRegenVToolStripMenuItem.Checked = autoRegen_VEnabled[5];
-            autoRefreshIIToolStripMenuItem.Checked = autoRefresh_IIEnabled[5];
-            autoOptions.Show(party0, new Point(0, 0));
+            this.autoOptionsSelected = 5;
+            this.autoPhalanxIIToolStripMenuItem1.Checked = this.autoPhalanx_IIEnabled[5];
+            this.autoRegenIVToolStripMenuItem1.Checked = this.autoRegen_IVEnabled[5];
+            this.autoRefreshToolStripMenuItem1.Checked = this.autoRefreshEnabled[5];
+            this.autoRegenVToolStripMenuItem.Checked = this.autoRegen_VEnabled[5];
+            this.autoRefreshIIToolStripMenuItem.Checked = this.autoRefresh_IIEnabled[5];
+            this.autoOptions.Show(this.party0, new Point(0, 0));
         }
 
         private void player6buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 6;
-            autoOptions.Show(party1, new Point(0, 0));
+            this.autoOptionsSelected = 6;
+            this.autoOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player7buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 7;
-            autoOptions.Show(party1, new Point(0, 0));
+            this.autoOptionsSelected = 7;
+            this.autoOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player8buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 8;
-            autoOptions.Show(party1, new Point(0, 0));
+            this.autoOptionsSelected = 8;
+            this.autoOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player9buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 9;
-            autoOptions.Show(party1, new Point(0, 0));
+            this.autoOptionsSelected = 9;
+            this.autoOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player10buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 10;
-            autoOptions.Show(party1, new Point(0, 0));
+            this.autoOptionsSelected = 10;
+            this.autoOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player11buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 11;
-            autoOptions.Show(party1, new Point(0, 0));
+            this.autoOptionsSelected = 11;
+            this.autoOptions.Show(this.party1, new Point(0, 0));
         }
 
         private void player12buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 12;
-            autoOptions.Show(party2, new Point(0, 0));
+            this.autoOptionsSelected = 12;
+            this.autoOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player13buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 13;
-            autoOptions.Show(party2, new Point(0, 0));
+            this.autoOptionsSelected = 13;
+            this.autoOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player14buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 14;
-            autoOptions.Show(party2, new Point(0, 0));
+            this.autoOptionsSelected = 14;
+            this.autoOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player15buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 15;
-            autoOptions.Show(party2, new Point(0, 0));
+            this.autoOptionsSelected = 15;
+            this.autoOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player16buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 16;
-            autoOptions.Show(party2, new Point(0, 0));
+            this.autoOptionsSelected = 16;
+            this.autoOptions.Show(this.party2, new Point(0, 0));
         }
 
         private void player17buffsButton_Click(object sender, EventArgs e)
         {
-            autoOptionsSelected = 17;
-            autoOptions.Show(party2, new Point(0, 0));
+            this.autoOptionsSelected = 17;
+            this.autoOptions.Show(this.party2, new Point(0, 0));
         }
         #endregion
 
         #region "== castingLockTimer"
         private void castingLockTimer_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
 
-            castingLockTimer.Enabled = false;
-            castingStatusCheck.Enabled = true;
+            this.castingLockTimer.Enabled = false;
+            this.castingStatusCheck.Enabled = true;
         }
 
         private void castingStatusCheck_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.CastPercentEx >= 75)
+            if (_ELITEAPIPL.CastBar.Percent * 100.0f >= 75)
             {
-                castingLockLabel.Text = "Casting is soon to be UNLOCKED!";
-                castingStatusCheck.Enabled = false;
-                castingUnlockTimer.Enabled = true;
+                this.castingLockLabel.Text = "Casting is soon to be UNLOCKED!";
+                this.castingStatusCheck.Enabled = false;
+                this.castingUnlockTimer.Enabled = true;
             }
-            else if (castingSafetyPercentage == _FFACEPL.Player.CastPercentEx)
+            else if (this.castingSafetyPercentage == _ELITEAPIPL.CastBar.Percent * 100.0f)
             {
-                castingLockLabel.Text = "Casting is INTERRUPTED!";
-                castingStatusCheck.Enabled = false;
-                castingUnlockTimer.Enabled = true;
+                this.castingLockLabel.Text = "Casting is INTERRUPTED!";
+                this.castingStatusCheck.Enabled = false;
+                this.castingUnlockTimer.Enabled = true;
             }
 
-            castingSafetyPercentage = _FFACEPL.Player.CastPercentEx;
+            this.castingSafetyPercentage = (int)(_ELITEAPIPL.CastBar.Percent * 100.0f);
         }
 
         private void castingUnlockTimer_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
-            
-            castingLockLabel.Text = "Casting is UNLOCKED!";
-            castingLock = false;
-            actionTimer.Enabled = true;
-            castingUnlockTimer.Enabled = false;
+
+            this.castingLockLabel.Text = "Casting is UNLOCKED!";
+            this.castingLock = false;
+            this.actionTimer.Enabled = true;
+            this.castingUnlockTimer.Enabled = false;
         }
 
         private void actionUnlockTimer_Tick(object sender, EventArgs e)
         {
-            if (_FFACEPL == null || _FFACEMonitored == null)
+            if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
             {
                 return;
             }
 
-            if (_FFACEPL.Player.GetLoginStatus != LoginStatus.LoggedIn || _FFACEMonitored.Player.GetLoginStatus != LoginStatus.LoggedIn)
+            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || this._ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
             {
                 return;
             }
 
-            castingLockLabel.Text = "Casting is UNLOCKED!";
-            castingLock = false;
-            actionUnlockTimer.Enabled = false;
-            actionTimer.Enabled = true;
+            this.castingLockLabel.Text = "Casting is UNLOCKED!";
+            this.castingLock = false;
+            this.actionUnlockTimer.Enabled = false;
+            this.actionTimer.Enabled = true;
         }
         #endregion
 
         #region "== auto spells ToolStripItem_Click"
         private void autoHasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoHasteEnabled[playerOptionsSelected] = !autoHasteEnabled[playerOptionsSelected];
+            this.autoHasteEnabled[this.playerOptionsSelected] = !this.autoHasteEnabled[this.playerOptionsSelected];
         }
 
         private void autoHasteIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoHaste_IIEnabled[playerOptionsSelected] = !autoHaste_IIEnabled[playerOptionsSelected];
+            this.autoHaste_IIEnabled[this.playerOptionsSelected] = !this.autoHaste_IIEnabled[this.playerOptionsSelected];
         }
 
         private void autoFlurryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoFlurryEnabled[playerOptionsSelected] = !autoFlurryEnabled[playerOptionsSelected];
+            this.autoFlurryEnabled[this.playerOptionsSelected] = !this.autoFlurryEnabled[this.playerOptionsSelected];
         }
 
         private void autoFlurryIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoFlurry_IIEnabled[playerOptionsSelected] = !autoFlurry_IIEnabled[playerOptionsSelected];
+            this.autoFlurry_IIEnabled[this.playerOptionsSelected] = !this.autoFlurry_IIEnabled[this.playerOptionsSelected];
         }
 
         private void autoProtectIVToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            autoProtect_IVEnabled[playerOptionsSelected] = !autoProtect_IVEnabled[playerOptionsSelected];
+            this.autoProtect_IVEnabled[this.playerOptionsSelected] = !this.autoProtect_IVEnabled[this.playerOptionsSelected];
         }
 
         private void autoProtectVToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            autoProtect_VEnabled[playerOptionsSelected] = !autoProtect_VEnabled[playerOptionsSelected];
+            this.autoProtect_VEnabled[this.playerOptionsSelected] = !this.autoProtect_VEnabled[this.playerOptionsSelected];
         }
 
         private void autoShellIVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoShell_IVEnabled[playerOptionsSelected] = !autoShell_IVEnabled[playerOptionsSelected];
+            this.autoShell_IVEnabled[this.playerOptionsSelected] = !this.autoShell_IVEnabled[this.playerOptionsSelected];
         }
 
         private void autoShellVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoShell_VEnabled[playerOptionsSelected] = !autoShell_VEnabled[playerOptionsSelected];
+            this.autoShell_VEnabled[this.playerOptionsSelected] = !this.autoShell_VEnabled[this.playerOptionsSelected];
         }
 
         private void autoHasteToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            autoHasteEnabled[autoOptionsSelected] = !autoHasteEnabled[autoOptionsSelected];
+            this.autoHasteEnabled[this.autoOptionsSelected] = !this.autoHasteEnabled[this.autoOptionsSelected];
         }
-        
+
         private void autoPhalanxIIToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            autoPhalanx_IIEnabled[autoOptionsSelected] = !autoPhalanx_IIEnabled[autoOptionsSelected];
+            this.autoPhalanx_IIEnabled[this.autoOptionsSelected] = !this.autoPhalanx_IIEnabled[this.autoOptionsSelected];
         }
-        
+
         private void autoRegenIVToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            autoRegen_IVEnabled[autoOptionsSelected] = !autoRegen_IVEnabled[autoOptionsSelected];
+            this.autoRegen_IVEnabled[this.autoOptionsSelected] = !this.autoRegen_IVEnabled[this.autoOptionsSelected];
         }
 
         private void autoRegenVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoRegen_VEnabled[autoOptionsSelected] = !autoRegen_VEnabled[autoOptionsSelected];
+            this.autoRegen_VEnabled[this.autoOptionsSelected] = !this.autoRegen_VEnabled[this.autoOptionsSelected];
         }
 
         private void autoRefreshToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            autoRefreshEnabled[autoOptionsSelected] = !autoRefreshEnabled[autoOptionsSelected];
+            this.autoRefreshEnabled[this.autoOptionsSelected] = !this.autoRefreshEnabled[this.autoOptionsSelected];
         }
 
         private void autoRefreshIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoRefresh_IIEnabled[autoOptionsSelected] = !autoRefresh_IIEnabled[autoOptionsSelected];
+            this.autoRefresh_IIEnabled[this.autoOptionsSelected] = !this.autoRefresh_IIEnabled[this.autoOptionsSelected];
         }
         #endregion
 
         #region "== spells ToolStripMenuItem_Click"
         private void hasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            hastePlayer(playerOptionsSelected);
+            this.hastePlayer(this.playerOptionsSelected);
         }
         private void followToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/follow " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);            
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/follow " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
         private void phalanxIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Phalanx II\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Phalanx II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
         private void invisibleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Invisible\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Invisible\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Refresh\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Refresh\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void refreshIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Refresh II\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Refresh II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void sneakToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Sneak\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Sneak\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void regenIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Regen II\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
-        }
-        
-        private void regenIIIToolStripMenuItem_Click (object sender, EventArgs e)
-        {
-            _FFACEPL.Windower.SendString("/ma \"Regen III\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Regen II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
-        private void regenIVToolStripMenuItem_Click (object sender, EventArgs e)
+        private void regenIIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Regen IV\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Regen III\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
+        }
+
+        private void regenIVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Regen IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void eraseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Erase\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Erase\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void sacrificeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Sacrifice\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Sacrifice\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void blindnaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Blindna\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Blindna\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void cursnaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Cursna\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Cursna\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void paralynaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Paralyna\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Paralyna\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void poisonaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Poisona\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Poisona\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void stonaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Stona\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Stona\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void silenaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Silena\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Silena\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void virunaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Viruna\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Viruna\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void protectIVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Protect IV\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Protect IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void protectVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Protect V\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Protect V\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void shellIVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Shell IV\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Shell IV\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
         }
 
         private void shellVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _FFACEPL.Windower.SendString("/ma \"Shell V\" " + _FFACEMonitored.PartyMember[playerOptionsSelected].Name);
-            CastLockMethod();
-        }        
+            _ELITEAPIPL.ThirdParty.SendString("/ma \"Shell V\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
+            this.CastLockMethod();
+        }
         #endregion
 
         #region "== Pause Button"
         private void button3_Click(object sender, EventArgs e)
         {
-            pauseActions = !pauseActions;
+            this.pauseActions = !this.pauseActions;
 
-            if (!pauseActions)
+            if (!this.pauseActions)
             {
-                pauseButton.Text = "Pause";
-                pauseButton.ForeColor = Color.Black; 
+                this.pauseButton.Text = "Pause";
+                this.pauseButton.ForeColor = Color.Black;
             }
-            else if (pauseActions) 
-            {                
-                pauseButton.Text = "Paused!";
-                pauseButton.ForeColor = Color.Red;                
+            else if (this.pauseActions)
+            {
+                this.pauseButton.Text = "Paused!";
+                this.pauseButton.ForeColor = Color.Red;
             }
         }
         #endregion
@@ -3172,22 +4539,23 @@ namespace CurePlease
         #region "== Player (debug) Button"
         private void button1_Click(object sender, EventArgs e)
         {
-            if (_FFACEMonitored == null)
+            if (this._ELITEAPIMonitored == null)
             {
-                MessageBox.Show("Attach to process before pressing this button","Error");
+                MessageBox.Show("Attach to process before pressing this button", "Error");
                 return;
             }
-            var items = _FFACEMonitored.PartyMember.Keys.OrderBy(k => _FFACEMonitored.PartyMember[k].HPPCurrent);
+            var items = this._ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
+
 
             /* 
-             * var items = from k in _FFACEMonitored.PartyMember.Keys
-                        orderby _FFACEMonitored.PartyMember[k].HPPCurrent ascending
+             * var items = from k in _ELITEAPIMonitored.PartyMember.Keys
+                        orderby _ELITEAPIMonitored.Party.GetPartyMembers()[k].CurrentHPP ascending
                         select k;
              */
 
             foreach (byte id in items)
             {
-                MessageBox.Show(id.ToString() + ": " + _FFACEMonitored.PartyMember[id].Name + ": " + _FFACEMonitored.PartyMember[id].HPPCurrent.ToString() + ": " + _FFACEMonitored.PartyMember[id].Active.ToString());
+                MessageBox.Show(id.ToString() + ": " + this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Name + ": " + this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP.ToString() + ": " + this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Active.ToString());
             }
         }
         #endregion
@@ -3196,13 +4564,13 @@ namespace CurePlease
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             {
-                if (TopMost)
+                if (this.TopMost)
                 {
-                    TopMost = false;
+                    this.TopMost = false;
                 }
                 else
                 {
-                    TopMost = true;
+                    this.TopMost = true;
                 }
             }
         }
@@ -3227,51 +4595,51 @@ namespace CurePlease
         #region "== About Tab ToolStripMenu Item"
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Form3().Show();            
+            new Form3().Show();
         }
         #endregion
 
         #region "== Transparency (Opacity Value)"
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            Opacity = trackBar1.Value * 0.01; 
+            this.Opacity = this.trackBar1.Value * 0.01;
         }
         #endregion
 
         #region "== Shellra & Protectra Recast Level"
-        private bool CheckShellraLevelRecast ()
+        private bool CheckShellraLevelRecast()
         {
             switch ((int)Settings.Default.plShellralevel)
             {
                 case 1:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Shellra) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shellra) == 0;
                 case 2:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Shellra_II) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shellra_II) == 0;
                 case 3:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Shellra_III) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shellra_III) == 0;
                 case 4:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Shellra_IV) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shellra_IV) == 0;
                 case 5:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Shellra_V) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Shellra_V) == 0;
                 default:
                     return false;
             }
         }
 
-        private bool CheckProtectraLevelRecast ()
+        private bool CheckProtectraLevelRecast()
         {
             switch ((int)Settings.Default.plProtectralevel)
             {
                 case 1:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Protectra) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protectra) == 0;
                 case 2:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Protectra_II) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protectra_II) == 0;
                 case 3:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Protectra_III) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protectra_III) == 0;
                 case 4:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Protectra_IV) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protectra_IV) == 0;
                 case 5:
-                    return _FFACEPL.Timer.GetSpellRecast(SpellList.Protectra_V) == 0;
+                    return _ELITEAPIPL.Recast.GetSpellRecast((int)SpellList.Protectra_V) == 0;
                 default:
                     return false;
             }
@@ -3281,13 +4649,13 @@ namespace CurePlease
         #region "== pl Medicine Check"
         private bool IsMedicated()
         {
-            return plStatusCheck(StatusEffect.Medicine);
+            return this.plStatusCheck(StatusEffect.Medicine);
         }
-        #endregion      
+        #endregion
 
-        
 
-        
+
+
 
     }
 }

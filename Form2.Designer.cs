@@ -31,10 +31,12 @@ namespace CurePlease
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.fullCureenabled = new System.Windows.Forms.CheckBox();
+            this.fullCureamount = new System.Windows.Forms.NumericUpDown();
             this.priorityCurePercentage = new System.Windows.Forms.TrackBar();
             this.priorityCurePercentageLabel = new System.Windows.Forms.Label();
             this.cure6enabled = new System.Windows.Forms.CheckBox();
@@ -57,44 +59,79 @@ namespace CurePlease
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.AutoCastEngageCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.autoRegen = new System.Windows.Forms.ComboBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.autoRegen_Minutes = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.autoProtect = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.autoProtect_Minutes = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.autoShell = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.autoShell_Minutes = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.autoRegenVMinutes = new System.Windows.Forms.NumericUpDown();
+            this.autoRefresh = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.autoRefreshIIMinutes = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.autoShell_VMinutes = new System.Windows.Forms.NumericUpDown();
-            this.autoShell_IVMinutes = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.autoProtect_VMinutes = new System.Windows.Forms.NumericUpDown();
-            this.autoProtect_IVMinutes = new System.Windows.Forms.NumericUpDown();
             this.autoRefreshLabel = new System.Windows.Forms.Label();
-            this.autoRefreshMinutes = new System.Windows.Forms.NumericUpDown();
-            this.autoRegenIVMinutes = new System.Windows.Forms.NumericUpDown();
+            this.autoRefresh_Minutes = new System.Windows.Forms.NumericUpDown();
             this.autoPhalanxIIMinutes = new System.Windows.Forms.NumericUpDown();
-            this.autoRegenIVLabel = new System.Windows.Forms.Label();
             this.autoHasteMinutes = new System.Windows.Forms.NumericUpDown();
             this.autoPhalanxIILabel = new System.Windows.Forms.Label();
             this.autoHasteLabel = new System.Windows.Forms.Label();
             this.plBuffGroup = new System.Windows.Forms.GroupBox();
+            this.plGainBoost_spell = new System.Windows.Forms.ComboBox();
+            this.plGainBoost = new System.Windows.Forms.CheckBox();
+            this.plEnspell_spell = new System.Windows.Forms.ComboBox();
+            this.plEnspell = new System.Windows.Forms.CheckBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.plTemper = new System.Windows.Forms.CheckBox();
+            this.plTemperLevel1 = new System.Windows.Forms.RadioButton();
+            this.plTemperLevel2 = new System.Windows.Forms.RadioButton();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.plRefresh = new System.Windows.Forms.CheckBox();
+            this.plRefreshLevel3 = new System.Windows.Forms.RadioButton();
+            this.plRefreshLevel1 = new System.Windows.Forms.RadioButton();
+            this.plRefreshLevel2 = new System.Windows.Forms.RadioButton();
+            this.plPhalanx = new System.Windows.Forms.CheckBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.plReraise = new System.Windows.Forms.CheckBox();
+            this.plReraiseLevel1 = new System.Windows.Forms.RadioButton();
+            this.plReraiseLevel4 = new System.Windows.Forms.RadioButton();
+            this.plReraiseLevel2 = new System.Windows.Forms.RadioButton();
+            this.plReraiseLevel3 = new System.Windows.Forms.RadioButton();
             this.plProtectralevel = new System.Windows.Forms.NumericUpDown();
             this.plShellralevel = new System.Windows.Forms.NumericUpDown();
             this.plProtectra = new System.Windows.Forms.CheckBox();
             this.plShellra = new System.Windows.Forms.CheckBox();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.plRefreshLevel2 = new System.Windows.Forms.RadioButton();
-            this.plRefreshLevel1 = new System.Windows.Forms.RadioButton();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.plReraiseLevel3 = new System.Windows.Forms.RadioButton();
-            this.plReraiseLevel2 = new System.Windows.Forms.RadioButton();
-            this.plReraiseLevel1 = new System.Windows.Forms.RadioButton();
             this.plBlink = new System.Windows.Forms.CheckBox();
-            this.plReraise = new System.Windows.Forms.CheckBox();
             this.plStoneskin = new System.Windows.Forms.CheckBox();
-            this.plRefresh = new System.Windows.Forms.CheckBox();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.GEO_engaged = new System.Windows.Forms.CheckBox();
+            this.EnableGeoSpells = new System.Windows.Forms.CheckBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.entrustSpell_target = new System.Windows.Forms.TextBox();
+            this.entrustINDISpell = new System.Windows.Forms.ListBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.GEOSpell_target = new System.Windows.Forms.TextBox();
+            this.GEOSpell = new System.Windows.Forms.ListBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.indiRecast = new System.Windows.Forms.NumericUpDown();
+            this.INDISpell = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.DematerializeBox = new System.Windows.Forms.CheckBox();
+            this.EntrustBox = new System.Windows.Forms.CheckBox();
             this.rdmJAgroup = new System.Windows.Forms.GroupBox();
             this.composure = new System.Windows.Forms.CheckBox();
             this.convert = new System.Windows.Forms.CheckBox();
@@ -113,18 +150,18 @@ namespace CurePlease
             this.afflatusMisery = new System.Windows.Forms.CheckBox();
             this.afflatusSolace = new System.Windows.Forms.CheckBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.naSpellsenable = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.partydebuffpanel = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.naBlindness = new System.Windows.Forms.CheckBox();
+            this.naPoison = new System.Windows.Forms.CheckBox();
             this.naDisease = new System.Windows.Forms.CheckBox();
-            this.naPlague = new System.Windows.Forms.CheckBox();
+            this.naParalysis = new System.Windows.Forms.CheckBox();
             this.naPetrification = new System.Windows.Forms.CheckBox();
             this.naSilence = new System.Windows.Forms.CheckBox();
-            this.naPoison = new System.Windows.Forms.CheckBox();
-            this.naParalysis = new System.Windows.Forms.CheckBox();
             this.naCurse = new System.Windows.Forms.CheckBox();
-            this.naBlindness = new System.Windows.Forms.CheckBox();
+            this.naPlague = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.naSpellsenable = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.plDoomEnabled = new System.Windows.Forms.CheckBox();
             this.plDoomitem = new System.Windows.Forms.ComboBox();
             this.wakeSleepSpell = new System.Windows.Forms.ComboBox();
@@ -241,6 +278,7 @@ namespace CurePlease
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fullCureamount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.priorityCurePercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure6amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure5amount)).BeginInit();
@@ -252,28 +290,30 @@ namespace CurePlease
             this.tabPage2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRegenVMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshIIMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoShell_VMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoShell_IVMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_VMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_IVMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshMinutes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRegenIVMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRegen_Minutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_Minutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoShell_Minutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRefresh_Minutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoPhalanxIIMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoHasteMinutes)).BeginInit();
             this.plBuffGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.plProtectralevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.plShellralevel)).BeginInit();
+            this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.plProtectralevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plShellralevel)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.indiRecast)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.rdmJAgroup.SuspendLayout();
             this.schJAgroup.SuspendLayout();
             this.whmJAgroup.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            this.panel5.SuspendLayout();
-            this.partydebuffpanel.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.plDebuffWrapperPanel.SuspendLayout();
@@ -288,13 +328,14 @@ namespace CurePlease
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(678, 255);
+            this.tabControl1.Size = new System.Drawing.Size(745, 408);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -303,13 +344,15 @@ namespace CurePlease
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(670, 229);
+            this.tabPage1.Size = new System.Drawing.Size(737, 382);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Healing Magic";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.fullCureenabled);
+            this.groupBox2.Controls.Add(this.fullCureamount);
             this.groupBox2.Controls.Add(this.priorityCurePercentage);
             this.groupBox2.Controls.Add(this.priorityCurePercentageLabel);
             this.groupBox2.Controls.Add(this.cure6enabled);
@@ -330,10 +373,36 @@ namespace CurePlease
             this.groupBox2.Controls.Add(this.cure1amount);
             this.groupBox2.Location = new System.Drawing.Point(6, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(495, 159);
+            this.groupBox2.Size = new System.Drawing.Size(495, 373);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Healing Options";
+            // 
+            // fullCureenabled
+            // 
+            this.fullCureenabled.AutoSize = true;
+            this.fullCureenabled.Enabled = false;
+            this.fullCureenabled.Location = new System.Drawing.Point(6, 153);
+            this.fullCureenabled.Name = "fullCureenabled";
+            this.fullCureenabled.Size = new System.Drawing.Size(67, 17);
+            this.fullCureenabled.TabIndex = 6;
+            this.fullCureenabled.Text = "Full Cure";
+            this.toolTip1.SetToolTip(this.fullCureenabled, "This will be enabled or removed in a later version");
+            this.fullCureenabled.UseVisualStyleBackColor = true;
+            // 
+            // fullCureamount
+            // 
+            this.fullCureamount.Enabled = false;
+            this.fullCureamount.Location = new System.Drawing.Point(73, 151);
+            this.fullCureamount.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.fullCureamount.Name = "fullCureamount";
+            this.fullCureamount.Size = new System.Drawing.Size(71, 20);
+            this.fullCureamount.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.fullCureamount, "This will be enabled or removed in a later version");
             // 
             // priorityCurePercentage
             // 
@@ -537,7 +606,7 @@ namespace CurePlease
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(670, 229);
+            this.tabPage2.Size = new System.Drawing.Size(737, 382);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Enhancing Magic";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -545,7 +614,7 @@ namespace CurePlease
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.AutoCastEngageCheckBox);
-            this.groupBox3.Location = new System.Drawing.Point(6, 184);
+            this.groupBox3.Location = new System.Drawing.Point(531, 337);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(200, 39);
             this.groupBox3.TabIndex = 11;
@@ -555,7 +624,7 @@ namespace CurePlease
             // AutoCastEngageCheckBox
             // 
             this.AutoCastEngageCheckBox.AutoSize = true;
-            this.AutoCastEngageCheckBox.Location = new System.Drawing.Point(7, 16);
+            this.AutoCastEngageCheckBox.Location = new System.Drawing.Point(6, 16);
             this.AutoCastEngageCheckBox.Name = "AutoCastEngageCheckBox";
             this.AutoCastEngageCheckBox.Size = new System.Drawing.Size(182, 17);
             this.AutoCastEngageCheckBox.TabIndex = 0;
@@ -563,310 +632,325 @@ namespace CurePlease
             this.toolTip1.SetToolTip(this.AutoCastEngageCheckBox, "Auto Casts Protect IV & V, Shell IV & V, Regen IV & V, Haste, Flurry on Monitored" +
         " Player while engaged");
             this.AutoCastEngageCheckBox.UseVisualStyleBackColor = true;
-            this.AutoCastEngageCheckBox.CheckedChanged += new System.EventHandler(this.AutoCastEngageCheckBox_CheckedChanged);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label21);
+            this.groupBox1.Controls.Add(this.autoRegen);
+            this.groupBox1.Controls.Add(this.label22);
+            this.groupBox1.Controls.Add(this.label23);
+            this.groupBox1.Controls.Add(this.autoRegen_Minutes);
+            this.groupBox1.Controls.Add(this.label18);
+            this.groupBox1.Controls.Add(this.autoProtect);
+            this.groupBox1.Controls.Add(this.label19);
+            this.groupBox1.Controls.Add(this.label20);
+            this.groupBox1.Controls.Add(this.autoProtect_Minutes);
+            this.groupBox1.Controls.Add(this.label15);
+            this.groupBox1.Controls.Add(this.autoShell);
+            this.groupBox1.Controls.Add(this.label16);
+            this.groupBox1.Controls.Add(this.label17);
+            this.groupBox1.Controls.Add(this.autoShell_Minutes);
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.label12);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.autoRegenVMinutes);
+            this.groupBox1.Controls.Add(this.autoRefresh);
             this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.autoRefreshIIMinutes);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.autoShell_VMinutes);
-            this.groupBox1.Controls.Add(this.autoShell_IVMinutes);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.autoProtect_VMinutes);
-            this.groupBox1.Controls.Add(this.autoProtect_IVMinutes);
             this.groupBox1.Controls.Add(this.autoRefreshLabel);
-            this.groupBox1.Controls.Add(this.autoRefreshMinutes);
-            this.groupBox1.Controls.Add(this.autoRegenIVMinutes);
+            this.groupBox1.Controls.Add(this.autoRefresh_Minutes);
             this.groupBox1.Controls.Add(this.autoPhalanxIIMinutes);
-            this.groupBox1.Controls.Add(this.autoRegenIVLabel);
             this.groupBox1.Controls.Add(this.autoHasteMinutes);
             this.groupBox1.Controls.Add(this.autoPhalanxIILabel);
             this.groupBox1.Controls.Add(this.autoHasteLabel);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(462, 177);
+            this.groupBox1.Size = new System.Drawing.Size(477, 370);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Auto Casting Spells";
             // 
-            // label12
+            // label21
             // 
-            this.label12.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.label12.Location = new System.Drawing.Point(232, 61);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(1, 111);
-            this.label12.TabIndex = 27;
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(280, 129);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(43, 13);
+            this.label21.TabIndex = 46;
+            this.label21.Text = "minutes";
             // 
-            // label11
+            // autoRegen
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(285, 69);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(176, 13);
-            this.label11.TabIndex = 26;
-            this.label11.Text = "Cast Auto Regen V every X minutes";
-            this.toolTip1.SetToolTip(this.label11, "Regen V Default Duration 1 minute");
+            this.autoRegen.FormattingEnabled = true;
+            this.autoRegen.Items.AddRange(new object[] {
+            "Regen",
+            "Regen II",
+            "Regen III",
+            "Regen IV",
+            "Regen V"});
+            this.autoRegen.Location = new System.Drawing.Point(68, 126);
+            this.autoRegen.Name = "autoRegen";
+            this.autoRegen.Size = new System.Drawing.Size(121, 21);
+            this.autoRegen.TabIndex = 45;
             // 
-            // autoRegenVMinutes
+            // label22
             // 
-            this.autoRegenVMinutes.DecimalPlaces = 1;
-            this.autoRegenVMinutes.Increment = new decimal(new int[] {
-            1,
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(195, 129);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(33, 13);
+            this.label22.TabIndex = 44;
+            this.label22.Text = "every";
+            this.toolTip1.SetToolTip(this.label22, "Refresh Default Duration 2:30");
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(6, 129);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(56, 13);
+            this.label23.TabIndex = 43;
+            this.label23.Text = "Cast Auto ";
+            this.toolTip1.SetToolTip(this.label23, "Refresh Default Duration 2:30");
+            // 
+            // autoRegen_Minutes
+            // 
+            this.autoRegen_Minutes.DecimalPlaces = 1;
+            this.autoRegen_Minutes.Increment = new decimal(new int[] {
+            5,
             0,
             0,
             65536});
-            this.autoRegenVMinutes.Location = new System.Drawing.Point(239, 67);
-            this.autoRegenVMinutes.Maximum = new decimal(new int[] {
+            this.autoRegen_Minutes.Location = new System.Drawing.Point(234, 127);
+            this.autoRegen_Minutes.Maximum = new decimal(new int[] {
             99,
             0,
             0,
             0});
-            this.autoRegenVMinutes.Minimum = new decimal(new int[] {
-            1,
+            this.autoRegen_Minutes.Name = "autoRegen_Minutes";
+            this.autoRegen_Minutes.Size = new System.Drawing.Size(40, 20);
+            this.autoRegen_Minutes.TabIndex = 42;
+            this.autoRegen_Minutes.Value = new decimal(new int[] {
+            2,
             0,
             0,
             0});
-            this.autoRegenVMinutes.Name = "autoRegenVMinutes";
-            this.autoRegenVMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoRegenVMinutes.TabIndex = 25;
-            this.autoRegenVMinutes.Value = new decimal(new int[] {
-            1,
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(280, 154);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(43, 13);
+            this.label18.TabIndex = 41;
+            this.label18.Text = "minutes";
+            // 
+            // autoProtect
+            // 
+            this.autoProtect.FormattingEnabled = true;
+            this.autoProtect.Items.AddRange(new object[] {
+            "Protect",
+            "Protect II",
+            "Protect III",
+            "Protect IV",
+            "Protect V"});
+            this.autoProtect.Location = new System.Drawing.Point(68, 151);
+            this.autoProtect.Name = "autoProtect";
+            this.autoProtect.Size = new System.Drawing.Size(121, 21);
+            this.autoProtect.TabIndex = 40;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(195, 154);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(33, 13);
+            this.label19.TabIndex = 39;
+            this.label19.Text = "every";
+            this.toolTip1.SetToolTip(this.label19, "Refresh Default Duration 2:30");
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(6, 154);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(56, 13);
+            this.label20.TabIndex = 38;
+            this.label20.Text = "Cast Auto ";
+            this.toolTip1.SetToolTip(this.label20, "Refresh Default Duration 2:30");
+            // 
+            // autoProtect_Minutes
+            // 
+            this.autoProtect_Minutes.DecimalPlaces = 1;
+            this.autoProtect_Minutes.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.autoProtect_Minutes.Location = new System.Drawing.Point(234, 152);
+            this.autoProtect_Minutes.Maximum = new decimal(new int[] {
+            99,
             0,
             0,
             0});
+            this.autoProtect_Minutes.Name = "autoProtect_Minutes";
+            this.autoProtect_Minutes.Size = new System.Drawing.Size(40, 20);
+            this.autoProtect_Minutes.TabIndex = 37;
+            this.autoProtect_Minutes.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(280, 181);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(43, 13);
+            this.label15.TabIndex = 36;
+            this.label15.Text = "minutes";
+            // 
+            // autoShell
+            // 
+            this.autoShell.FormattingEnabled = true;
+            this.autoShell.Items.AddRange(new object[] {
+            "Shell",
+            "Shell II",
+            "Shell III",
+            "Shell IV",
+            "Shell V"});
+            this.autoShell.Location = new System.Drawing.Point(68, 178);
+            this.autoShell.Name = "autoShell";
+            this.autoShell.Size = new System.Drawing.Size(121, 21);
+            this.autoShell.TabIndex = 35;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(195, 181);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(33, 13);
+            this.label16.TabIndex = 34;
+            this.label16.Text = "every";
+            this.toolTip1.SetToolTip(this.label16, "Refresh Default Duration 2:30");
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 181);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(56, 13);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "Cast Auto ";
+            this.toolTip1.SetToolTip(this.label17, "Refresh Default Duration 2:30");
+            // 
+            // autoShell_Minutes
+            // 
+            this.autoShell_Minutes.DecimalPlaces = 1;
+            this.autoShell_Minutes.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.autoShell_Minutes.Location = new System.Drawing.Point(234, 179);
+            this.autoShell_Minutes.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.autoShell_Minutes.Name = "autoShell_Minutes";
+            this.autoShell_Minutes.Size = new System.Drawing.Size(40, 20);
+            this.autoShell_Minutes.TabIndex = 32;
+            this.autoShell_Minutes.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(198, 63);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(273, 13);
+            this.label14.TabIndex = 31;
+            this.label14.Text = "minutes: Duration: 2 minutes (up to 4 minutes w/5 merits)";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(279, 23);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(177, 13);
+            this.label13.TabIndex = 30;
+            this.label13.Text = "minutes: Default Duration: 3 minutes";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(280, 102);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(43, 13);
+            this.label12.TabIndex = 29;
+            this.label12.Text = "minutes";
+            // 
+            // autoRefresh
+            // 
+            this.autoRefresh.FormattingEnabled = true;
+            this.autoRefresh.Items.AddRange(new object[] {
+            "Refresh",
+            "Refresh II",
+            "Refresh III"});
+            this.autoRefresh.Location = new System.Drawing.Point(68, 99);
+            this.autoRefresh.Name = "autoRefresh";
+            this.autoRefresh.Size = new System.Drawing.Size(121, 21);
+            this.autoRefresh.TabIndex = 28;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(285, 95);
+            this.label10.Location = new System.Drawing.Point(195, 102);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(180, 13);
-            this.label10.TabIndex = 24;
-            this.label10.Text = "Cast Auto Refresh II every X minutes";
-            this.toolTip1.SetToolTip(this.label10, "Refresh II Default Duration 2:30");
-            // 
-            // autoRefreshIIMinutes
-            // 
-            this.autoRefreshIIMinutes.DecimalPlaces = 1;
-            this.autoRefreshIIMinutes.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.autoRefreshIIMinutes.Location = new System.Drawing.Point(239, 94);
-            this.autoRefreshIIMinutes.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.autoRefreshIIMinutes.Name = "autoRefreshIIMinutes";
-            this.autoRefreshIIMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoRefreshIIMinutes.TabIndex = 23;
-            this.toolTip1.SetToolTip(this.autoRefreshIIMinutes, "Refresh II Default Duration 2:30");
-            this.autoRefreshIIMinutes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(285, 147);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(167, 13);
-            this.label9.TabIndex = 22;
-            this.label9.Text = "Cast Auto Shell V every X minutes";
-            this.toolTip1.SetToolTip(this.label9, "Shell V Default Duration 30 minutes");
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(52, 147);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(170, 13);
-            this.label8.TabIndex = 21;
-            this.label8.Text = "Cast Auto Shell IV every X minutes";
-            this.toolTip1.SetToolTip(this.label8, "Shell IV Default Duration 30 minutes");
-            // 
-            // autoShell_VMinutes
-            // 
-            this.autoShell_VMinutes.Location = new System.Drawing.Point(239, 145);
-            this.autoShell_VMinutes.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.autoShell_VMinutes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.autoShell_VMinutes.Name = "autoShell_VMinutes";
-            this.autoShell_VMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoShell_VMinutes.TabIndex = 20;
-            this.autoShell_VMinutes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // autoShell_IVMinutes
-            // 
-            this.autoShell_IVMinutes.Location = new System.Drawing.Point(6, 145);
-            this.autoShell_IVMinutes.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.autoShell_IVMinutes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.autoShell_IVMinutes.Name = "autoShell_IVMinutes";
-            this.autoShell_IVMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoShell_IVMinutes.TabIndex = 19;
-            this.autoShell_IVMinutes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(285, 121);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(178, 13);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "Cast Auto Protect V every X minutes";
-            this.toolTip1.SetToolTip(this.label7, "Protect V Default Duration 30 minutes");
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(52, 121);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(181, 13);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "Cast Auto Protect IV every X minutes";
-            this.toolTip1.SetToolTip(this.label6, "Protect IV Default Duration 30 minutes");
-            // 
-            // autoProtect_VMinutes
-            // 
-            this.autoProtect_VMinutes.Location = new System.Drawing.Point(239, 119);
-            this.autoProtect_VMinutes.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.autoProtect_VMinutes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.autoProtect_VMinutes.Name = "autoProtect_VMinutes";
-            this.autoProtect_VMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoProtect_VMinutes.TabIndex = 16;
-            this.autoProtect_VMinutes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // autoProtect_IVMinutes
-            // 
-            this.autoProtect_IVMinutes.Location = new System.Drawing.Point(6, 119);
-            this.autoProtect_IVMinutes.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.autoProtect_IVMinutes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.autoProtect_IVMinutes.Name = "autoProtect_IVMinutes";
-            this.autoProtect_IVMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoProtect_IVMinutes.TabIndex = 15;
-            this.autoProtect_IVMinutes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.label10.Size = new System.Drawing.Size(33, 13);
+            this.label10.TabIndex = 27;
+            this.label10.Text = "every";
+            this.toolTip1.SetToolTip(this.label10, "Refresh Default Duration 2:30");
             // 
             // autoRefreshLabel
             // 
             this.autoRefreshLabel.AutoSize = true;
-            this.autoRefreshLabel.Location = new System.Drawing.Point(52, 96);
+            this.autoRefreshLabel.Location = new System.Drawing.Point(6, 102);
             this.autoRefreshLabel.Name = "autoRefreshLabel";
-            this.autoRefreshLabel.Size = new System.Drawing.Size(174, 13);
+            this.autoRefreshLabel.Size = new System.Drawing.Size(56, 13);
             this.autoRefreshLabel.TabIndex = 14;
-            this.autoRefreshLabel.Text = "Cast Auto Refresh every X minutes ";
+            this.autoRefreshLabel.Text = "Cast Auto ";
             this.toolTip1.SetToolTip(this.autoRefreshLabel, "Refresh Default Duration 2:30");
             // 
-            // autoRefreshMinutes
+            // autoRefresh_Minutes
             // 
-            this.autoRefreshMinutes.DecimalPlaces = 1;
-            this.autoRefreshMinutes.Increment = new decimal(new int[] {
+            this.autoRefresh_Minutes.DecimalPlaces = 1;
+            this.autoRefresh_Minutes.Increment = new decimal(new int[] {
             5,
             0,
             0,
             65536});
-            this.autoRefreshMinutes.Location = new System.Drawing.Point(6, 93);
-            this.autoRefreshMinutes.Maximum = new decimal(new int[] {
+            this.autoRefresh_Minutes.Location = new System.Drawing.Point(234, 100);
+            this.autoRefresh_Minutes.Maximum = new decimal(new int[] {
             99,
             0,
             0,
             0});
-            this.autoRefreshMinutes.Name = "autoRefreshMinutes";
-            this.autoRefreshMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoRefreshMinutes.TabIndex = 13;
-            this.autoRefreshMinutes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // autoRegenIVMinutes
-            // 
-            this.autoRegenIVMinutes.DecimalPlaces = 1;
-            this.autoRegenIVMinutes.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.autoRegenIVMinutes.Location = new System.Drawing.Point(6, 67);
-            this.autoRegenIVMinutes.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.autoRegenIVMinutes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.autoRegenIVMinutes.Name = "autoRegenIVMinutes";
-            this.autoRegenIVMinutes.Size = new System.Drawing.Size(40, 20);
-            this.autoRegenIVMinutes.TabIndex = 12;
-            this.autoRegenIVMinutes.Value = new decimal(new int[] {
-            1,
+            this.autoRefresh_Minutes.Name = "autoRefresh_Minutes";
+            this.autoRefresh_Minutes.Size = new System.Drawing.Size(40, 20);
+            this.autoRefresh_Minutes.TabIndex = 13;
+            this.autoRefresh_Minutes.Value = new decimal(new int[] {
+            2,
             0,
             0,
             0});
             // 
             // autoPhalanxIIMinutes
             // 
-            this.autoPhalanxIIMinutes.Location = new System.Drawing.Point(6, 41);
+            this.autoPhalanxIIMinutes.Location = new System.Drawing.Point(152, 61);
             this.autoPhalanxIIMinutes.Maximum = new decimal(new int[] {
             99,
             0,
@@ -886,19 +970,9 @@ namespace CurePlease
             0,
             0});
             // 
-            // autoRegenIVLabel
-            // 
-            this.autoRegenIVLabel.AutoSize = true;
-            this.autoRegenIVLabel.Location = new System.Drawing.Point(52, 69);
-            this.autoRegenIVLabel.Name = "autoRegenIVLabel";
-            this.autoRegenIVLabel.Size = new System.Drawing.Size(179, 13);
-            this.autoRegenIVLabel.TabIndex = 11;
-            this.autoRegenIVLabel.Text = "Cast Auto Regen IV every X minutes";
-            this.toolTip1.SetToolTip(this.autoRegenIVLabel, "Regen IV Default Duration 1 minute");
-            // 
             // autoHasteMinutes
             // 
-            this.autoHasteMinutes.Location = new System.Drawing.Point(6, 15);
+            this.autoHasteMinutes.Location = new System.Drawing.Point(233, 21);
             this.autoHasteMinutes.Maximum = new decimal(new int[] {
             99,
             0,
@@ -921,45 +995,283 @@ namespace CurePlease
             // autoPhalanxIILabel
             // 
             this.autoPhalanxIILabel.AutoSize = true;
-            this.autoPhalanxIILabel.Location = new System.Drawing.Point(52, 45);
+            this.autoPhalanxIILabel.Location = new System.Drawing.Point(11, 63);
             this.autoPhalanxIILabel.Name = "autoPhalanxIILabel";
-            this.autoPhalanxIILabel.Size = new System.Drawing.Size(411, 13);
+            this.autoPhalanxIILabel.Size = new System.Drawing.Size(135, 13);
             this.autoPhalanxIILabel.TabIndex = 8;
-            this.autoPhalanxIILabel.Text = "Cast Auto Phalanx II every X minutes: Duration: 2 minutes (up to 4 minutes w/5 me" +
-    "rits)";
+            this.autoPhalanxIILabel.Text = "Cast Auto Phalanx II every ";
             // 
             // autoHasteLabel
             // 
             this.autoHasteLabel.AutoSize = true;
-            this.autoHasteLabel.Location = new System.Drawing.Point(52, 19);
+            this.autoHasteLabel.Location = new System.Drawing.Point(6, 23);
             this.autoHasteLabel.Name = "autoHasteLabel";
-            this.autoHasteLabel.Size = new System.Drawing.Size(404, 13);
+            this.autoHasteLabel.Size = new System.Drawing.Size(224, 13);
             this.autoHasteLabel.TabIndex = 1;
-            this.autoHasteLabel.Text = "Cast Auto Haste,Haste II,Flurry,Flurry II  every X minutes: Default Duration: 3 m" +
-    "inutes";
+            this.autoHasteLabel.Text = "Cast Auto Haste,Haste II,Flurry,Flurry II  every ";
             // 
             // plBuffGroup
             // 
+            this.plBuffGroup.Controls.Add(this.plGainBoost_spell);
+            this.plBuffGroup.Controls.Add(this.plGainBoost);
+            this.plBuffGroup.Controls.Add(this.plEnspell_spell);
+            this.plBuffGroup.Controls.Add(this.plEnspell);
+            this.plBuffGroup.Controls.Add(this.panel5);
+            this.plBuffGroup.Controls.Add(this.panel4);
+            this.plBuffGroup.Controls.Add(this.plPhalanx);
+            this.plBuffGroup.Controls.Add(this.panel3);
             this.plBuffGroup.Controls.Add(this.plProtectralevel);
             this.plBuffGroup.Controls.Add(this.plShellralevel);
             this.plBuffGroup.Controls.Add(this.plProtectra);
             this.plBuffGroup.Controls.Add(this.plShellra);
-            this.plBuffGroup.Controls.Add(this.panel4);
-            this.plBuffGroup.Controls.Add(this.panel3);
             this.plBuffGroup.Controls.Add(this.plBlink);
-            this.plBuffGroup.Controls.Add(this.plReraise);
             this.plBuffGroup.Controls.Add(this.plStoneskin);
-            this.plBuffGroup.Controls.Add(this.plRefresh);
-            this.plBuffGroup.Location = new System.Drawing.Point(473, 6);
+            this.plBuffGroup.Location = new System.Drawing.Point(489, 6);
             this.plBuffGroup.Name = "plBuffGroup";
-            this.plBuffGroup.Size = new System.Drawing.Size(191, 177);
+            this.plBuffGroup.Size = new System.Drawing.Size(242, 325);
             this.plBuffGroup.TabIndex = 5;
             this.plBuffGroup.TabStop = false;
-            this.plBuffGroup.Text = "PL Auto Buffs";
+            this.plBuffGroup.Text = "   PL Buffs";
+            // 
+            // plGainBoost_spell
+            // 
+            this.plGainBoost_spell.FormattingEnabled = true;
+            this.plGainBoost_spell.Items.AddRange(new object[] {
+            "Gain_STR",
+            "Gain_DEX",
+            "Gain_VIT",
+            "Gain_AGI",
+            "Gain_INT",
+            "Gain_MND",
+            "Gain_CHR",
+            "Boost_STR",
+            "Boost_DEX",
+            "Boost_VIT",
+            "Boost_AGI",
+            "Boost_INT",
+            "Boost_MND",
+            "Boost_CHR"});
+            this.plGainBoost_spell.Location = new System.Drawing.Point(89, 231);
+            this.plGainBoost_spell.Name = "plGainBoost_spell";
+            this.plGainBoost_spell.Size = new System.Drawing.Size(121, 21);
+            this.plGainBoost_spell.TabIndex = 16;
+            // 
+            // plGainBoost
+            // 
+            this.plGainBoost.AutoSize = true;
+            this.plGainBoost.Location = new System.Drawing.Point(5, 235);
+            this.plGainBoost.Name = "plGainBoost";
+            this.plGainBoost.Size = new System.Drawing.Size(86, 17);
+            this.plGainBoost.TabIndex = 15;
+            this.plGainBoost.Text = "Gain/Boost: ";
+            this.plGainBoost.UseVisualStyleBackColor = true;
+            // 
+            // plEnspell_spell
+            // 
+            this.plEnspell_spell.FormattingEnabled = true;
+            this.plEnspell_spell.Items.AddRange(new object[] {
+            "Enfire",
+            "Enstone",
+            "Enwater",
+            "Enaero",
+            "Enblizzard",
+            "Enthunder",
+            "Enfire II",
+            "Enstone II",
+            "Enwater II",
+            "Enaero II",
+            "Enblizzard II",
+            "Enthunder II"});
+            this.plEnspell_spell.Location = new System.Drawing.Point(89, 208);
+            this.plEnspell_spell.Name = "plEnspell_spell";
+            this.plEnspell_spell.Size = new System.Drawing.Size(121, 21);
+            this.plEnspell_spell.TabIndex = 14;
+            // 
+            // plEnspell
+            // 
+            this.plEnspell.AutoSize = true;
+            this.plEnspell.Location = new System.Drawing.Point(5, 212);
+            this.plEnspell.Name = "plEnspell";
+            this.plEnspell.Size = new System.Drawing.Size(63, 17);
+            this.plEnspell.TabIndex = 13;
+            this.plEnspell.Text = "Enspell:";
+            this.plEnspell.UseVisualStyleBackColor = true;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.plTemper);
+            this.panel5.Controls.Add(this.plTemperLevel1);
+            this.panel5.Controls.Add(this.plTemperLevel2);
+            this.panel5.Location = new System.Drawing.Point(5, 183);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(226, 23);
+            this.panel5.TabIndex = 9;
+            // 
+            // plTemper
+            // 
+            this.plTemper.AutoSize = true;
+            this.plTemper.Location = new System.Drawing.Point(2, 3);
+            this.plTemper.Name = "plTemper";
+            this.plTemper.Size = new System.Drawing.Size(62, 17);
+            this.plTemper.TabIndex = 4;
+            this.plTemper.Text = "Temper";
+            this.plTemper.UseVisualStyleBackColor = true;
+            // 
+            // plTemperLevel1
+            // 
+            this.plTemperLevel1.AutoSize = true;
+            this.plTemperLevel1.Location = new System.Drawing.Point(75, 3);
+            this.plTemperLevel1.Name = "plTemperLevel1";
+            this.plTemperLevel1.Size = new System.Drawing.Size(28, 17);
+            this.plTemperLevel1.TabIndex = 6;
+            this.plTemperLevel1.TabStop = true;
+            this.plTemperLevel1.Text = "I";
+            this.plTemperLevel1.UseVisualStyleBackColor = true;
+            // 
+            // plTemperLevel2
+            // 
+            this.plTemperLevel2.AutoSize = true;
+            this.plTemperLevel2.Location = new System.Drawing.Point(109, 3);
+            this.plTemperLevel2.Name = "plTemperLevel2";
+            this.plTemperLevel2.Size = new System.Drawing.Size(31, 17);
+            this.plTemperLevel2.TabIndex = 6;
+            this.plTemperLevel2.TabStop = true;
+            this.plTemperLevel2.Text = "II";
+            this.plTemperLevel2.UseVisualStyleBackColor = true;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.plRefresh);
+            this.panel4.Controls.Add(this.plRefreshLevel3);
+            this.panel4.Controls.Add(this.plRefreshLevel1);
+            this.panel4.Controls.Add(this.plRefreshLevel2);
+            this.panel4.Location = new System.Drawing.Point(5, 42);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(226, 23);
+            this.panel4.TabIndex = 8;
+            // 
+            // plRefresh
+            // 
+            this.plRefresh.AutoSize = true;
+            this.plRefresh.Location = new System.Drawing.Point(3, 3);
+            this.plRefresh.Name = "plRefresh";
+            this.plRefresh.Size = new System.Drawing.Size(66, 17);
+            this.plRefresh.TabIndex = 4;
+            this.plRefresh.Text = "Refresh:";
+            this.plRefresh.UseVisualStyleBackColor = true;
+            // 
+            // plRefreshLevel3
+            // 
+            this.plRefreshLevel3.AutoSize = true;
+            this.plRefreshLevel3.Location = new System.Drawing.Point(146, 3);
+            this.plRefreshLevel3.Name = "plRefreshLevel3";
+            this.plRefreshLevel3.Size = new System.Drawing.Size(34, 17);
+            this.plRefreshLevel3.TabIndex = 7;
+            this.plRefreshLevel3.TabStop = true;
+            this.plRefreshLevel3.Text = "III";
+            this.plRefreshLevel3.UseVisualStyleBackColor = true;
+            // 
+            // plRefreshLevel1
+            // 
+            this.plRefreshLevel1.AutoSize = true;
+            this.plRefreshLevel1.Location = new System.Drawing.Point(75, 3);
+            this.plRefreshLevel1.Name = "plRefreshLevel1";
+            this.plRefreshLevel1.Size = new System.Drawing.Size(28, 17);
+            this.plRefreshLevel1.TabIndex = 6;
+            this.plRefreshLevel1.TabStop = true;
+            this.plRefreshLevel1.Text = "I";
+            this.plRefreshLevel1.UseVisualStyleBackColor = true;
+            // 
+            // plRefreshLevel2
+            // 
+            this.plRefreshLevel2.AutoSize = true;
+            this.plRefreshLevel2.Location = new System.Drawing.Point(109, 3);
+            this.plRefreshLevel2.Name = "plRefreshLevel2";
+            this.plRefreshLevel2.Size = new System.Drawing.Size(31, 17);
+            this.plRefreshLevel2.TabIndex = 6;
+            this.plRefreshLevel2.TabStop = true;
+            this.plRefreshLevel2.Text = "II";
+            this.plRefreshLevel2.UseVisualStyleBackColor = true;
+            // 
+            // plPhalanx
+            // 
+            this.plPhalanx.AutoSize = true;
+            this.plPhalanx.Location = new System.Drawing.Point(7, 91);
+            this.plPhalanx.Name = "plPhalanx";
+            this.plPhalanx.Size = new System.Drawing.Size(64, 17);
+            this.plPhalanx.TabIndex = 11;
+            this.plPhalanx.Text = "Phalanx";
+            this.plPhalanx.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.plReraise);
+            this.panel3.Controls.Add(this.plReraiseLevel1);
+            this.panel3.Controls.Add(this.plReraiseLevel4);
+            this.panel3.Controls.Add(this.plReraiseLevel2);
+            this.panel3.Controls.Add(this.plReraiseLevel3);
+            this.panel3.Location = new System.Drawing.Point(5, 13);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(226, 23);
+            this.panel3.TabIndex = 12;
+            // 
+            // plReraise
+            // 
+            this.plReraise.AutoSize = true;
+            this.plReraise.Location = new System.Drawing.Point(3, 6);
+            this.plReraise.Name = "plReraise";
+            this.plReraise.Size = new System.Drawing.Size(65, 17);
+            this.plReraise.TabIndex = 4;
+            this.plReraise.Text = "Reraise:";
+            this.plReraise.UseVisualStyleBackColor = true;
+            // 
+            // plReraiseLevel1
+            // 
+            this.plReraiseLevel1.AutoSize = true;
+            this.plReraiseLevel1.Location = new System.Drawing.Point(74, 5);
+            this.plReraiseLevel1.Name = "plReraiseLevel1";
+            this.plReraiseLevel1.Size = new System.Drawing.Size(28, 17);
+            this.plReraiseLevel1.TabIndex = 6;
+            this.plReraiseLevel1.TabStop = true;
+            this.plReraiseLevel1.Text = "I";
+            this.plReraiseLevel1.UseVisualStyleBackColor = true;
+            // 
+            // plReraiseLevel4
+            // 
+            this.plReraiseLevel4.AutoSize = true;
+            this.plReraiseLevel4.Location = new System.Drawing.Point(185, 5);
+            this.plReraiseLevel4.Name = "plReraiseLevel4";
+            this.plReraiseLevel4.Size = new System.Drawing.Size(35, 17);
+            this.plReraiseLevel4.TabIndex = 7;
+            this.plReraiseLevel4.TabStop = true;
+            this.plReraiseLevel4.Text = "IV";
+            this.plReraiseLevel4.UseVisualStyleBackColor = true;
+            // 
+            // plReraiseLevel2
+            // 
+            this.plReraiseLevel2.AutoSize = true;
+            this.plReraiseLevel2.Location = new System.Drawing.Point(108, 5);
+            this.plReraiseLevel2.Name = "plReraiseLevel2";
+            this.plReraiseLevel2.Size = new System.Drawing.Size(31, 17);
+            this.plReraiseLevel2.TabIndex = 6;
+            this.plReraiseLevel2.TabStop = true;
+            this.plReraiseLevel2.Text = "II";
+            this.plReraiseLevel2.UseVisualStyleBackColor = true;
+            // 
+            // plReraiseLevel3
+            // 
+            this.plReraiseLevel3.AutoSize = true;
+            this.plReraiseLevel3.Location = new System.Drawing.Point(145, 5);
+            this.plReraiseLevel3.Name = "plReraiseLevel3";
+            this.plReraiseLevel3.Size = new System.Drawing.Size(34, 17);
+            this.plReraiseLevel3.TabIndex = 6;
+            this.plReraiseLevel3.TabStop = true;
+            this.plReraiseLevel3.Text = "III";
+            this.plReraiseLevel3.UseVisualStyleBackColor = true;
             // 
             // plProtectralevel
             // 
-            this.plProtectralevel.Location = new System.Drawing.Point(91, 153);
+            this.plProtectralevel.Location = new System.Drawing.Point(89, 159);
             this.plProtectralevel.Maximum = new decimal(new int[] {
             10,
             0,
@@ -971,7 +1283,7 @@ namespace CurePlease
             // 
             // plShellralevel
             // 
-            this.plShellralevel.Location = new System.Drawing.Point(91, 125);
+            this.plShellralevel.Location = new System.Drawing.Point(89, 134);
             this.plShellralevel.Maximum = new decimal(new int[] {
             10,
             0,
@@ -984,7 +1296,7 @@ namespace CurePlease
             // plProtectra
             // 
             this.plProtectra.AutoSize = true;
-            this.plProtectra.Location = new System.Drawing.Point(6, 156);
+            this.plProtectra.Location = new System.Drawing.Point(7, 160);
             this.plProtectra.Name = "plProtectra";
             this.plProtectra.Size = new System.Drawing.Size(69, 17);
             this.plProtectra.TabIndex = 8;
@@ -994,138 +1306,350 @@ namespace CurePlease
             // plShellra
             // 
             this.plShellra.AutoSize = true;
-            this.plShellra.Location = new System.Drawing.Point(6, 128);
+            this.plShellra.Location = new System.Drawing.Point(7, 137);
             this.plShellra.Name = "plShellra";
             this.plShellra.Size = new System.Drawing.Size(58, 17);
             this.plShellra.TabIndex = 7;
             this.plShellra.Text = "Shellra";
             this.plShellra.UseVisualStyleBackColor = true;
             // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.plRefreshLevel2);
-            this.panel4.Controls.Add(this.plRefreshLevel1);
-            this.panel4.Location = new System.Drawing.Point(66, 40);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(69, 24);
-            this.panel4.TabIndex = 6;
-            // 
-            // plRefreshLevel2
-            // 
-            this.plRefreshLevel2.AutoSize = true;
-            this.plRefreshLevel2.Location = new System.Drawing.Point(37, 3);
-            this.plRefreshLevel2.Name = "plRefreshLevel2";
-            this.plRefreshLevel2.Size = new System.Drawing.Size(31, 17);
-            this.plRefreshLevel2.TabIndex = 6;
-            this.plRefreshLevel2.TabStop = true;
-            this.plRefreshLevel2.Text = "II";
-            this.plRefreshLevel2.UseVisualStyleBackColor = true;
-            // 
-            // plRefreshLevel1
-            // 
-            this.plRefreshLevel1.AutoSize = true;
-            this.plRefreshLevel1.Location = new System.Drawing.Point(3, 3);
-            this.plRefreshLevel1.Name = "plRefreshLevel1";
-            this.plRefreshLevel1.Size = new System.Drawing.Size(28, 17);
-            this.plRefreshLevel1.TabIndex = 6;
-            this.plRefreshLevel1.TabStop = true;
-            this.plRefreshLevel1.Text = "I";
-            this.plRefreshLevel1.UseVisualStyleBackColor = true;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.plReraiseLevel3);
-            this.panel3.Controls.Add(this.plReraiseLevel2);
-            this.panel3.Controls.Add(this.plReraiseLevel1);
-            this.panel3.Location = new System.Drawing.Point(66, 13);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(110, 25);
-            this.panel3.TabIndex = 6;
-            // 
-            // plReraiseLevel3
-            // 
-            this.plReraiseLevel3.AutoSize = true;
-            this.plReraiseLevel3.Location = new System.Drawing.Point(74, 3);
-            this.plReraiseLevel3.Name = "plReraiseLevel3";
-            this.plReraiseLevel3.Size = new System.Drawing.Size(34, 17);
-            this.plReraiseLevel3.TabIndex = 6;
-            this.plReraiseLevel3.TabStop = true;
-            this.plReraiseLevel3.Text = "III";
-            this.plReraiseLevel3.UseVisualStyleBackColor = true;
-            // 
-            // plReraiseLevel2
-            // 
-            this.plReraiseLevel2.AutoSize = true;
-            this.plReraiseLevel2.Location = new System.Drawing.Point(37, 3);
-            this.plReraiseLevel2.Name = "plReraiseLevel2";
-            this.plReraiseLevel2.Size = new System.Drawing.Size(31, 17);
-            this.plReraiseLevel2.TabIndex = 6;
-            this.plReraiseLevel2.TabStop = true;
-            this.plReraiseLevel2.Text = "II";
-            this.plReraiseLevel2.UseVisualStyleBackColor = true;
-            // 
-            // plReraiseLevel1
-            // 
-            this.plReraiseLevel1.AutoSize = true;
-            this.plReraiseLevel1.Location = new System.Drawing.Point(3, 3);
-            this.plReraiseLevel1.Name = "plReraiseLevel1";
-            this.plReraiseLevel1.Size = new System.Drawing.Size(28, 17);
-            this.plReraiseLevel1.TabIndex = 6;
-            this.plReraiseLevel1.TabStop = true;
-            this.plReraiseLevel1.Text = "I";
-            this.plReraiseLevel1.UseVisualStyleBackColor = true;
-            // 
             // plBlink
             // 
             this.plBlink.AutoSize = true;
-            this.plBlink.Location = new System.Drawing.Point(6, 72);
+            this.plBlink.Location = new System.Drawing.Point(7, 68);
             this.plBlink.Name = "plBlink";
             this.plBlink.Size = new System.Drawing.Size(49, 17);
             this.plBlink.TabIndex = 4;
             this.plBlink.Text = "Blink";
             this.plBlink.UseVisualStyleBackColor = true;
             // 
-            // plReraise
-            // 
-            this.plReraise.AutoSize = true;
-            this.plReraise.Location = new System.Drawing.Point(6, 16);
-            this.plReraise.Name = "plReraise";
-            this.plReraise.Size = new System.Drawing.Size(65, 17);
-            this.plReraise.TabIndex = 4;
-            this.plReraise.Text = "Reraise:";
-            this.plReraise.UseVisualStyleBackColor = true;
-            // 
             // plStoneskin
             // 
             this.plStoneskin.AutoSize = true;
-            this.plStoneskin.Location = new System.Drawing.Point(6, 100);
+            this.plStoneskin.Location = new System.Drawing.Point(7, 114);
             this.plStoneskin.Name = "plStoneskin";
             this.plStoneskin.Size = new System.Drawing.Size(73, 17);
             this.plStoneskin.TabIndex = 4;
             this.plStoneskin.Text = "Stoneskin";
             this.plStoneskin.UseVisualStyleBackColor = true;
             // 
-            // plRefresh
+            // tabPage6
             // 
-            this.plRefresh.AutoSize = true;
-            this.plRefresh.Location = new System.Drawing.Point(6, 44);
-            this.plRefresh.Name = "plRefresh";
-            this.plRefresh.Size = new System.Drawing.Size(66, 17);
-            this.plRefresh.TabIndex = 4;
-            this.plRefresh.Text = "Refresh:";
-            this.plRefresh.UseVisualStyleBackColor = true;
+            this.tabPage6.Controls.Add(this.GEO_engaged);
+            this.tabPage6.Controls.Add(this.EnableGeoSpells);
+            this.tabPage6.Controls.Add(this.groupBox7);
+            this.tabPage6.Controls.Add(this.groupBox6);
+            this.tabPage6.Controls.Add(this.groupBox5);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(737, 382);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Geomancy";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // GEO_engaged
+            // 
+            this.GEO_engaged.AutoSize = true;
+            this.GEO_engaged.Location = new System.Drawing.Point(43, 40);
+            this.GEO_engaged.Name = "GEO_engaged";
+            this.GEO_engaged.Size = new System.Drawing.Size(121, 17);
+            this.GEO_engaged.TabIndex = 3;
+            this.GEO_engaged.Text = "Only when engaged";
+            this.toolTip1.SetToolTip(this.GEO_engaged, "Unless the spell is Regen or Refresh only cast when player engaged.");
+            this.GEO_engaged.UseVisualStyleBackColor = true;
+            // 
+            // EnableGeoSpells
+            // 
+            this.EnableGeoSpells.AutoSize = true;
+            this.EnableGeoSpells.Location = new System.Drawing.Point(43, 17);
+            this.EnableGeoSpells.Name = "EnableGeoSpells";
+            this.EnableGeoSpells.Size = new System.Drawing.Size(148, 17);
+            this.EnableGeoSpells.TabIndex = 2;
+            this.EnableGeoSpells.Text = "Enable Geomancer Spells";
+            this.EnableGeoSpells.UseVisualStyleBackColor = true;
+            this.EnableGeoSpells.CheckedChanged += new System.EventHandler(this.EnableGeoSpells_CheckedChanged);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label7);
+            this.groupBox7.Controls.Add(this.entrustSpell_target);
+            this.groupBox7.Controls.Add(this.entrustINDISpell);
+            this.groupBox7.Location = new System.Drawing.Point(502, 8);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(229, 368);
+            this.groupBox7.TabIndex = 1;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Entrust";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 345);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(70, 13);
+            this.label7.TabIndex = 4;
+            this.label7.Text = " Spell Target:";
+            // 
+            // entrustSpell_target
+            // 
+            this.entrustSpell_target.Enabled = false;
+            this.entrustSpell_target.Location = new System.Drawing.Point(97, 340);
+            this.entrustSpell_target.Name = "entrustSpell_target";
+            this.entrustSpell_target.Size = new System.Drawing.Size(126, 20);
+            this.entrustSpell_target.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.entrustSpell_target, "Input the name of the character you want the buff to be cast on, will only be use" +
+        "d in combat.");
+            // 
+            // entrustINDISpell
+            // 
+            this.entrustINDISpell.Enabled = false;
+            this.entrustINDISpell.FormattingEnabled = true;
+            this.entrustINDISpell.Items.AddRange(new object[] {
+            "Indi-Poison",
+            "Indi-Voidance",
+            "Indi-Precision",
+            "Indi-Regen",
+            "Indi-Haste",
+            "Indi-Attunement",
+            "Indi-Focus",
+            "Indi-Barrier",
+            "Indi-Refresh",
+            "Indi-CHR",
+            "Indi-MND",
+            "Indi-Fury",
+            "Indi-INT",
+            "Indi-AGI",
+            "Indi-Fend",
+            "Indi-VIT",
+            "Indi-DEX",
+            "Indi-Acumen",
+            "Indi-STR",
+            "Indi-Slow",
+            "Indi-Torpor",
+            "Indi-Slip",
+            "Indi-Languor",
+            "Indi-Paralysis",
+            "Indi-Vex",
+            "Indi-Frailty",
+            "Indi-Wilt",
+            " Indi-Malaise",
+            "Indi-Gravity",
+            " Indi-Fade"});
+            this.entrustINDISpell.Location = new System.Drawing.Point(6, 19);
+            this.entrustINDISpell.Name = "entrustINDISpell";
+            this.entrustINDISpell.Size = new System.Drawing.Size(217, 316);
+            this.entrustINDISpell.TabIndex = 2;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label6);
+            this.groupBox6.Controls.Add(this.GEOSpell_target);
+            this.groupBox6.Controls.Add(this.GEOSpell);
+            this.groupBox6.Location = new System.Drawing.Point(244, 8);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(252, 368);
+            this.groupBox6.TabIndex = 0;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "GEO Spells";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 344);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 13);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Spell Target:";
+            // 
+            // GEOSpell_target
+            // 
+            this.GEOSpell_target.Enabled = false;
+            this.GEOSpell_target.Location = new System.Drawing.Point(120, 341);
+            this.GEOSpell_target.Name = "GEOSpell_target";
+            this.GEOSpell_target.Size = new System.Drawing.Size(126, 20);
+            this.GEOSpell_target.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.GEOSpell_target, "Input the name of the character you want GEO buffs to target");
+            // 
+            // GEOSpell
+            // 
+            this.GEOSpell.Enabled = false;
+            this.GEOSpell.FormattingEnabled = true;
+            this.GEOSpell.Items.AddRange(new object[] {
+            "Geo-Poison",
+            "Geo-Voidance",
+            "Geo-Precision",
+            "Geo-Regen",
+            "Geo-Haste",
+            "Geo-Attunement",
+            "Geo-Focus",
+            "Geo-Barrier",
+            "Geo-Refresh",
+            "Geo-CHR",
+            "Geo-MND",
+            "Geo-Fury",
+            "Geo-INT",
+            "Geo-AGI",
+            "Geo-Fend",
+            "Geo-VIT",
+            "Geo-DEX",
+            "Geo-Acumen",
+            "Geo-STR",
+            "Geo-Slow",
+            "Geo-Torpor",
+            "Geo-Slip",
+            "Geo-Languor",
+            "Geo-Paralysis",
+            "Geo-Vex",
+            "Geo-Frailty",
+            "Geo-Wilt",
+            "Geo-Malaise",
+            "Geo-Gravity",
+            "Geo-Fade"});
+            this.GEOSpell.Location = new System.Drawing.Point(6, 19);
+            this.GEOSpell.Name = "GEOSpell";
+            this.GEOSpell.Size = new System.Drawing.Size(240, 316);
+            this.GEOSpell.TabIndex = 2;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label9);
+            this.groupBox5.Controls.Add(this.label8);
+            this.groupBox5.Controls.Add(this.indiRecast);
+            this.groupBox5.Controls.Add(this.INDISpell);
+            this.groupBox5.Location = new System.Drawing.Point(6, 70);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(232, 306);
+            this.groupBox5.TabIndex = 0;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "INDI Spells";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(185, 307);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(43, 13);
+            this.label9.TabIndex = 16;
+            this.label9.Text = "minutes";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 307);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(127, 13);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Recast INDI spells every ";
+            // 
+            // indiRecast
+            // 
+            this.indiRecast.DecimalPlaces = 1;
+            this.indiRecast.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.indiRecast.Location = new System.Drawing.Point(136, 303);
+            this.indiRecast.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.indiRecast.Name = "indiRecast";
+            this.indiRecast.Size = new System.Drawing.Size(40, 20);
+            this.indiRecast.TabIndex = 14;
+            this.indiRecast.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // INDISpell
+            // 
+            this.INDISpell.Enabled = false;
+            this.INDISpell.FormattingEnabled = true;
+            this.INDISpell.Items.AddRange(new object[] {
+            "Indi-Poison",
+            "Indi-Voidance",
+            "Indi-Precision",
+            "Indi-Regen",
+            "Indi-Haste",
+            "Indi-Attunement",
+            "Indi-Focus",
+            "Indi-Barrier",
+            "Indi-Refresh",
+            "Indi-CHR",
+            "Indi-MND",
+            "Indi-Fury",
+            "Indi-INT",
+            "Indi-AGI",
+            "Indi-Fend",
+            "Indi-VIT",
+            "Indi-DEX",
+            "Indi-Acumen",
+            "Indi-STR",
+            "Indi-Slow",
+            "Indi-Torpor",
+            "Indi-Slip",
+            "Indi-Languor",
+            "Indi-Paralysis",
+            "Indi-Vex",
+            "Indi-Frailty",
+            "Indi-Wilt",
+            " Indi-Malaise",
+            "Indi-Gravity",
+            " Indi-Fade"});
+            this.INDISpell.Location = new System.Drawing.Point(6, 19);
+            this.INDISpell.Name = "INDISpell";
+            this.INDISpell.Size = new System.Drawing.Size(220, 277);
+            this.INDISpell.TabIndex = 1;
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox8);
             this.tabPage3.Controls.Add(this.rdmJAgroup);
             this.tabPage3.Controls.Add(this.schJAgroup);
             this.tabPage3.Controls.Add(this.whmJAgroup);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(670, 229);
+            this.tabPage3.Size = new System.Drawing.Size(737, 382);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Job Abilities";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.DematerializeBox);
+            this.groupBox8.Controls.Add(this.EntrustBox);
+            this.groupBox8.Location = new System.Drawing.Point(177, 206);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(302, 169);
+            this.groupBox8.TabIndex = 2;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Geomancer";
+            // 
+            // DematerializeBox
+            // 
+            this.DematerializeBox.AutoSize = true;
+            this.DematerializeBox.Location = new System.Drawing.Point(20, 46);
+            this.DematerializeBox.Name = "DematerializeBox";
+            this.DematerializeBox.Size = new System.Drawing.Size(89, 17);
+            this.DematerializeBox.TabIndex = 4;
+            this.DematerializeBox.Text = "Dematerialize";
+            this.toolTip1.SetToolTip(this.DematerializeBox, "Used only when the GEO spell is monster targeted");
+            this.DematerializeBox.UseVisualStyleBackColor = true;
+            // 
+            // EntrustBox
+            // 
+            this.EntrustBox.AutoSize = true;
+            this.EntrustBox.Location = new System.Drawing.Point(20, 23);
+            this.EntrustBox.Name = "EntrustBox";
+            this.EntrustBox.Size = new System.Drawing.Size(59, 17);
+            this.EntrustBox.TabIndex = 3;
+            this.EntrustBox.Text = "Entrust";
+            this.toolTip1.SetToolTip(this.EntrustBox, "Set the spell and target to use on the Geomancy page.");
+            this.EntrustBox.UseVisualStyleBackColor = true;
             // 
             // rdmJAgroup
             // 
@@ -1133,7 +1657,7 @@ namespace CurePlease
             this.rdmJAgroup.Controls.Add(this.convert);
             this.rdmJAgroup.Location = new System.Drawing.Point(330, 3);
             this.rdmJAgroup.Name = "rdmJAgroup";
-            this.rdmJAgroup.Size = new System.Drawing.Size(149, 69);
+            this.rdmJAgroup.Size = new System.Drawing.Size(149, 197);
             this.rdmJAgroup.TabIndex = 1;
             this.rdmJAgroup.TabStop = false;
             this.rdmJAgroup.Text = "Red Mage";
@@ -1173,7 +1697,7 @@ namespace CurePlease
             this.schJAgroup.Controls.Add(this.lightArts);
             this.schJAgroup.Location = new System.Drawing.Point(3, 3);
             this.schJAgroup.Name = "schJAgroup";
-            this.schJAgroup.Size = new System.Drawing.Size(168, 223);
+            this.schJAgroup.Size = new System.Drawing.Size(168, 376);
             this.schJAgroup.TabIndex = 1;
             this.schJAgroup.TabStop = false;
             this.schJAgroup.Text = "Scholar";
@@ -1293,7 +1817,7 @@ namespace CurePlease
             this.whmJAgroup.Controls.Add(this.afflatusSolace);
             this.whmJAgroup.Location = new System.Drawing.Point(177, 3);
             this.whmJAgroup.Name = "whmJAgroup";
-            this.whmJAgroup.Size = new System.Drawing.Size(147, 91);
+            this.whmJAgroup.Size = new System.Drawing.Size(147, 197);
             this.whmJAgroup.TabIndex = 0;
             this.whmJAgroup.TabStop = false;
             this.whmJAgroup.Text = "White Mage";
@@ -1331,9 +1855,10 @@ namespace CurePlease
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.panel6);
+            this.tabPage4.Controls.Add(this.checkBox1);
             this.tabPage4.Controls.Add(this.naSpellsenable);
             this.tabPage4.Controls.Add(this.label3);
-            this.tabPage4.Controls.Add(this.panel5);
             this.tabPage4.Controls.Add(this.plDoomEnabled);
             this.tabPage4.Controls.Add(this.plDoomitem);
             this.tabPage4.Controls.Add(this.wakeSleepSpell);
@@ -1348,64 +1873,59 @@ namespace CurePlease
             this.tabPage4.Controls.Add(this.plDebuffEnabled);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(670, 229);
+            this.tabPage4.Size = new System.Drawing.Size(737, 382);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Debuff Removal";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // naSpellsenable
+            // panel6
             // 
-            this.naSpellsenable.AutoSize = true;
-            this.naSpellsenable.Enabled = false;
-            this.naSpellsenable.Location = new System.Drawing.Point(3, 40);
-            this.naSpellsenable.Name = "naSpellsenable";
-            this.naSpellsenable.Size = new System.Drawing.Size(146, 17);
-            this.naSpellsenable.TabIndex = 9;
-            this.naSpellsenable.Text = "Enable party - na removal";
-            this.toolTip1.SetToolTip(this.naSpellsenable, "\"Not Implemented\"");
-            this.naSpellsenable.UseVisualStyleBackColor = true;
+            this.panel6.AutoScroll = true;
+            this.panel6.AutoSize = true;
+            this.panel6.BackColor = System.Drawing.Color.White;
+            this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Controls.Add(this.naBlindness);
+            this.panel6.Controls.Add(this.naPoison);
+            this.panel6.Controls.Add(this.naDisease);
+            this.panel6.Controls.Add(this.naParalysis);
+            this.panel6.Controls.Add(this.naPetrification);
+            this.panel6.Controls.Add(this.naSilence);
+            this.panel6.Controls.Add(this.naCurse);
+            this.panel6.Controls.Add(this.naPlague);
+            this.panel6.Location = new System.Drawing.Point(273, 38);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(141, 295);
+            this.panel6.TabIndex = 11;
             // 
-            // label3
+            // naBlindness
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(240, 4);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "- na Spells:";
-            this.toolTip1.SetToolTip(this.label3, "\"Not Implemented\"");
+            this.naBlindness.AutoSize = true;
+            this.naBlindness.Enabled = false;
+            this.naBlindness.Location = new System.Drawing.Point(3, 4);
+            this.naBlindness.Margin = new System.Windows.Forms.Padding(1);
+            this.naBlindness.Name = "naBlindness";
+            this.naBlindness.Size = new System.Drawing.Size(71, 17);
+            this.naBlindness.TabIndex = 2;
+            this.naBlindness.Text = "Blindness";
+            this.naBlindness.UseVisualStyleBackColor = true;
             // 
-            // panel5
+            // naPoison
             // 
-            this.panel5.AutoScroll = true;
-            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Controls.Add(this.partydebuffpanel);
-            this.panel5.Location = new System.Drawing.Point(243, 26);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(116, 154);
-            this.panel5.TabIndex = 7;
-            // 
-            // partydebuffpanel
-            // 
-            this.partydebuffpanel.Controls.Add(this.naDisease);
-            this.partydebuffpanel.Controls.Add(this.naPlague);
-            this.partydebuffpanel.Controls.Add(this.naPetrification);
-            this.partydebuffpanel.Controls.Add(this.naSilence);
-            this.partydebuffpanel.Controls.Add(this.naPoison);
-            this.partydebuffpanel.Controls.Add(this.naParalysis);
-            this.partydebuffpanel.Controls.Add(this.naCurse);
-            this.partydebuffpanel.Controls.Add(this.naBlindness);
-            this.partydebuffpanel.Location = new System.Drawing.Point(3, 0);
-            this.partydebuffpanel.Name = "partydebuffpanel";
-            this.partydebuffpanel.Size = new System.Drawing.Size(94, 153);
-            this.partydebuffpanel.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.partydebuffpanel, "\"Not Implemented\"");
+            this.naPoison.AutoSize = true;
+            this.naPoison.Enabled = false;
+            this.naPoison.Location = new System.Drawing.Point(3, 118);
+            this.naPoison.Margin = new System.Windows.Forms.Padding(1);
+            this.naPoison.Name = "naPoison";
+            this.naPoison.Size = new System.Drawing.Size(58, 17);
+            this.naPoison.TabIndex = 5;
+            this.naPoison.Text = "Poison";
+            this.naPoison.UseVisualStyleBackColor = true;
             // 
             // naDisease
             // 
             this.naDisease.AutoSize = true;
             this.naDisease.Enabled = false;
-            this.naDisease.Location = new System.Drawing.Point(4, 41);
+            this.naDisease.Location = new System.Drawing.Point(3, 42);
             this.naDisease.Margin = new System.Windows.Forms.Padding(1);
             this.naDisease.Name = "naDisease";
             this.naDisease.Size = new System.Drawing.Size(64, 17);
@@ -1413,23 +1933,23 @@ namespace CurePlease
             this.naDisease.Text = "Disease";
             this.naDisease.UseVisualStyleBackColor = true;
             // 
-            // naPlague
+            // naParalysis
             // 
-            this.naPlague.AutoSize = true;
-            this.naPlague.Enabled = false;
-            this.naPlague.Location = new System.Drawing.Point(4, 98);
-            this.naPlague.Margin = new System.Windows.Forms.Padding(1);
-            this.naPlague.Name = "naPlague";
-            this.naPlague.Size = new System.Drawing.Size(59, 17);
-            this.naPlague.TabIndex = 8;
-            this.naPlague.Text = "Plague";
-            this.naPlague.UseVisualStyleBackColor = true;
+            this.naParalysis.AutoSize = true;
+            this.naParalysis.Enabled = false;
+            this.naParalysis.Location = new System.Drawing.Point(3, 61);
+            this.naParalysis.Margin = new System.Windows.Forms.Padding(1);
+            this.naParalysis.Name = "naParalysis";
+            this.naParalysis.Size = new System.Drawing.Size(67, 17);
+            this.naParalysis.TabIndex = 4;
+            this.naParalysis.Text = "Paralysis";
+            this.naParalysis.UseVisualStyleBackColor = true;
             // 
             // naPetrification
             // 
             this.naPetrification.AutoSize = true;
             this.naPetrification.Enabled = false;
-            this.naPetrification.Location = new System.Drawing.Point(4, 79);
+            this.naPetrification.Location = new System.Drawing.Point(3, 80);
             this.naPetrification.Margin = new System.Windows.Forms.Padding(1);
             this.naPetrification.Name = "naPetrification";
             this.naPetrification.Size = new System.Drawing.Size(81, 17);
@@ -1441,7 +1961,7 @@ namespace CurePlease
             // 
             this.naSilence.AutoSize = true;
             this.naSilence.Enabled = false;
-            this.naSilence.Location = new System.Drawing.Point(4, 136);
+            this.naSilence.Location = new System.Drawing.Point(3, 137);
             this.naSilence.Margin = new System.Windows.Forms.Padding(1);
             this.naSilence.Name = "naSilence";
             this.naSilence.Size = new System.Drawing.Size(61, 17);
@@ -1449,35 +1969,11 @@ namespace CurePlease
             this.naSilence.Text = "Silence";
             this.naSilence.UseVisualStyleBackColor = true;
             // 
-            // naPoison
-            // 
-            this.naPoison.AutoSize = true;
-            this.naPoison.Enabled = false;
-            this.naPoison.Location = new System.Drawing.Point(4, 117);
-            this.naPoison.Margin = new System.Windows.Forms.Padding(1);
-            this.naPoison.Name = "naPoison";
-            this.naPoison.Size = new System.Drawing.Size(58, 17);
-            this.naPoison.TabIndex = 5;
-            this.naPoison.Text = "Poison";
-            this.naPoison.UseVisualStyleBackColor = true;
-            // 
-            // naParalysis
-            // 
-            this.naParalysis.AutoSize = true;
-            this.naParalysis.Enabled = false;
-            this.naParalysis.Location = new System.Drawing.Point(4, 60);
-            this.naParalysis.Margin = new System.Windows.Forms.Padding(1);
-            this.naParalysis.Name = "naParalysis";
-            this.naParalysis.Size = new System.Drawing.Size(67, 17);
-            this.naParalysis.TabIndex = 4;
-            this.naParalysis.Text = "Paralysis";
-            this.naParalysis.UseVisualStyleBackColor = true;
-            // 
             // naCurse
             // 
             this.naCurse.AutoSize = true;
             this.naCurse.Enabled = false;
-            this.naCurse.Location = new System.Drawing.Point(4, 22);
+            this.naCurse.Location = new System.Drawing.Point(3, 23);
             this.naCurse.Margin = new System.Windows.Forms.Padding(1);
             this.naCurse.Name = "naCurse";
             this.naCurse.Size = new System.Drawing.Size(53, 17);
@@ -1485,22 +1981,59 @@ namespace CurePlease
             this.naCurse.Text = "Curse";
             this.naCurse.UseVisualStyleBackColor = true;
             // 
-            // naBlindness
+            // naPlague
             // 
-            this.naBlindness.AutoSize = true;
-            this.naBlindness.Enabled = false;
-            this.naBlindness.Location = new System.Drawing.Point(4, 3);
-            this.naBlindness.Margin = new System.Windows.Forms.Padding(1);
-            this.naBlindness.Name = "naBlindness";
-            this.naBlindness.Size = new System.Drawing.Size(71, 17);
-            this.naBlindness.TabIndex = 2;
-            this.naBlindness.Text = "Blindness";
-            this.naBlindness.UseVisualStyleBackColor = true;
+            this.naPlague.AutoSize = true;
+            this.naPlague.Enabled = false;
+            this.naPlague.Location = new System.Drawing.Point(3, 99);
+            this.naPlague.Margin = new System.Windows.Forms.Padding(1);
+            this.naPlague.Name = "naPlague";
+            this.naPlague.Size = new System.Drawing.Size(59, 17);
+            this.naPlague.TabIndex = 8;
+            this.naPlague.Text = "Plague";
+            this.naPlague.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Enabled = false;
+            this.checkBox1.Location = new System.Drawing.Point(273, 345);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(1);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(141, 17);
+            this.checkBox1.TabIndex = 10;
+            this.checkBox1.Text = "Debuff removal requests";
+            this.toolTip1.SetToolTip(this.checkBox1, "Will search the party chat log for specific requests such as, Paralyzed, Silenced" +
+        " etc.");
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // naSpellsenable
+            // 
+            this.naSpellsenable.AutoSize = true;
+            this.naSpellsenable.Enabled = false;
+            this.naSpellsenable.Location = new System.Drawing.Point(23, 51);
+            this.naSpellsenable.Name = "naSpellsenable";
+            this.naSpellsenable.Size = new System.Drawing.Size(146, 17);
+            this.naSpellsenable.TabIndex = 9;
+            this.naSpellsenable.Text = "Enable party - na removal";
+            this.toolTip1.SetToolTip(this.naSpellsenable, "\"Not Implemented\"");
+            this.naSpellsenable.UseVisualStyleBackColor = true;
+            this.naSpellsenable.CheckedChanged += new System.EventHandler(this.naSpellsenable_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(256, 15);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "- na Spells:";
+            this.toolTip1.SetToolTip(this.label3, "\"Not Implemented\"");
             // 
             // plDoomEnabled
             // 
             this.plDoomEnabled.AutoSize = true;
-            this.plDoomEnabled.Location = new System.Drawing.Point(3, 125);
+            this.plDoomEnabled.Location = new System.Drawing.Point(23, 262);
             this.plDoomEnabled.Name = "plDoomEnabled";
             this.plDoomEnabled.Size = new System.Drawing.Size(173, 17);
             this.plDoomEnabled.TabIndex = 6;
@@ -1514,7 +2047,7 @@ namespace CurePlease
             this.plDoomitem.Items.AddRange(new object[] {
             "Holy Water",
             "Hallowed Water"});
-            this.plDoomitem.Location = new System.Drawing.Point(3, 145);
+            this.plDoomitem.Location = new System.Drawing.Point(23, 282);
             this.plDoomitem.Name = "plDoomitem";
             this.plDoomitem.Size = new System.Drawing.Size(183, 21);
             this.plDoomitem.TabIndex = 5;
@@ -1527,7 +2060,7 @@ namespace CurePlease
             "Cure",
             "Cura",
             "Curaga"});
-            this.wakeSleepSpell.Location = new System.Drawing.Point(3, 204);
+            this.wakeSleepSpell.Location = new System.Drawing.Point(23, 341);
             this.wakeSleepSpell.Name = "wakeSleepSpell";
             this.wakeSleepSpell.Size = new System.Drawing.Size(183, 21);
             this.wakeSleepSpell.TabIndex = 4;
@@ -1542,7 +2075,7 @@ namespace CurePlease
             "Remedy",
             "Remedy Ointment",
             "Vicar\'s Drink"});
-            this.plSilenceItem.Location = new System.Drawing.Point(3, 84);
+            this.plSilenceItem.Location = new System.Drawing.Point(23, 221);
             this.plSilenceItem.Name = "plSilenceItem";
             this.plSilenceItem.Size = new System.Drawing.Size(183, 21);
             this.plSilenceItem.TabIndex = 4;
@@ -1550,7 +2083,7 @@ namespace CurePlease
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(516, 4);
+            this.label2.Location = new System.Drawing.Point(571, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(129, 13);
             this.label2.TabIndex = 3;
@@ -1559,7 +2092,7 @@ namespace CurePlease
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(362, 4);
+            this.label1.Location = new System.Drawing.Point(399, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 13);
             this.label1.TabIndex = 3;
@@ -1571,9 +2104,9 @@ namespace CurePlease
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.panel2);
-            this.panel1.Location = new System.Drawing.Point(519, 26);
+            this.panel1.Location = new System.Drawing.Point(574, 37);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(148, 154);
+            this.panel1.Size = new System.Drawing.Size(148, 325);
             this.panel1.TabIndex = 2;
             // 
             // panel2
@@ -1626,7 +2159,7 @@ namespace CurePlease
             this.panel2.Controls.Add(this.monitoredAgiDown);
             this.panel2.Location = new System.Drawing.Point(3, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(125, 876);
+            this.panel2.Size = new System.Drawing.Size(125, 894);
             this.panel2.TabIndex = 0;
             // 
             // monitoredDisease
@@ -2184,7 +2717,7 @@ namespace CurePlease
             // wakeSleepEnabled
             // 
             this.wakeSleepEnabled.AutoSize = true;
-            this.wakeSleepEnabled.Location = new System.Drawing.Point(3, 184);
+            this.wakeSleepEnabled.Location = new System.Drawing.Point(23, 321);
             this.wakeSleepEnabled.Name = "wakeSleepEnabled";
             this.wakeSleepEnabled.Size = new System.Drawing.Size(116, 17);
             this.wakeSleepEnabled.TabIndex = 1;
@@ -2197,9 +2730,9 @@ namespace CurePlease
             this.plDebuffWrapperPanel.BackColor = System.Drawing.Color.White;
             this.plDebuffWrapperPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.plDebuffWrapperPanel.Controls.Add(this.plDebuffPanel);
-            this.plDebuffWrapperPanel.Location = new System.Drawing.Point(365, 26);
+            this.plDebuffWrapperPanel.Location = new System.Drawing.Point(420, 37);
             this.plDebuffWrapperPanel.Name = "plDebuffWrapperPanel";
-            this.plDebuffWrapperPanel.Size = new System.Drawing.Size(148, 154);
+            this.plDebuffWrapperPanel.Size = new System.Drawing.Size(148, 325);
             this.plDebuffWrapperPanel.TabIndex = 2;
             // 
             // plDebuffPanel
@@ -2247,7 +2780,7 @@ namespace CurePlease
             this.plDebuffPanel.Controls.Add(this.plAddle);
             this.plDebuffPanel.Controls.Add(this.plAccuracyDown);
             this.plDebuffPanel.Controls.Add(this.plAgiDown);
-            this.plDebuffPanel.Location = new System.Drawing.Point(-1, 0);
+            this.plDebuffPanel.Location = new System.Drawing.Point(-1, -11);
             this.plDebuffPanel.Name = "plDebuffPanel";
             this.plDebuffPanel.Size = new System.Drawing.Size(129, 820);
             this.plDebuffPanel.TabIndex = 0;
@@ -2771,7 +3304,7 @@ namespace CurePlease
             // plSilenceItemEnabled
             // 
             this.plSilenceItemEnabled.AutoSize = true;
-            this.plSilenceItemEnabled.Location = new System.Drawing.Point(3, 64);
+            this.plSilenceItemEnabled.Location = new System.Drawing.Point(23, 201);
             this.plSilenceItemEnabled.Name = "plSilenceItemEnabled";
             this.plSilenceItemEnabled.Size = new System.Drawing.Size(183, 17);
             this.plSilenceItemEnabled.TabIndex = 1;
@@ -2781,7 +3314,7 @@ namespace CurePlease
             // monitoredDebuffEnabled
             // 
             this.monitoredDebuffEnabled.AutoSize = true;
-            this.monitoredDebuffEnabled.Location = new System.Drawing.Point(3, 22);
+            this.monitoredDebuffEnabled.Location = new System.Drawing.Point(23, 33);
             this.monitoredDebuffEnabled.Name = "monitoredDebuffEnabled";
             this.monitoredDebuffEnabled.Size = new System.Drawing.Size(212, 17);
             this.monitoredDebuffEnabled.TabIndex = 1;
@@ -2792,7 +3325,7 @@ namespace CurePlease
             // plDebuffEnabled
             // 
             this.plDebuffEnabled.AutoSize = true;
-            this.plDebuffEnabled.Location = new System.Drawing.Point(3, 4);
+            this.plDebuffEnabled.Location = new System.Drawing.Point(23, 15);
             this.plDebuffEnabled.Name = "plDebuffEnabled";
             this.plDebuffEnabled.Size = new System.Drawing.Size(148, 17);
             this.plDebuffEnabled.TabIndex = 1;
@@ -2806,7 +3339,7 @@ namespace CurePlease
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(670, 229);
+            this.tabPage5.Size = new System.Drawing.Size(737, 382);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "MP Options";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2895,7 +3428,7 @@ namespace CurePlease
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(569, 273);
+            this.button4.Location = new System.Drawing.Point(636, 426);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 23);
             this.button4.TabIndex = 2;
@@ -2909,14 +3442,14 @@ namespace CurePlease
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(702, 301);
+            this.ClientSize = new System.Drawing.Size(764, 461);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(718, 335);
-            this.MinimumSize = new System.Drawing.Size(718, 335);
+            this.MaximumSize = new System.Drawing.Size(780, 500);
+            this.MinimumSize = new System.Drawing.Size(750, 500);
             this.Name = "Form2";
             this.Text = " ";
             this.TopMost = true;
@@ -2925,6 +3458,7 @@ namespace CurePlease
             this.tabPage1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fullCureamount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.priorityCurePercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure6amount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure5amount)).EndInit();
@@ -2938,25 +3472,34 @@ namespace CurePlease
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRegenVMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshIIMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoShell_VMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoShell_IVMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_VMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_IVMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRefreshMinutes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autoRegenIVMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRegen_Minutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoProtect_Minutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoShell_Minutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.autoRefresh_Minutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoPhalanxIIMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoHasteMinutes)).EndInit();
             this.plBuffGroup.ResumeLayout(false);
             this.plBuffGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.plProtectralevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.plShellralevel)).EndInit();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.plProtectralevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plShellralevel)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.indiRecast)).EndInit();
             this.tabPage3.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.rdmJAgroup.ResumeLayout(false);
             this.rdmJAgroup.PerformLayout();
             this.schJAgroup.ResumeLayout(false);
@@ -2965,9 +3508,8 @@ namespace CurePlease
             this.whmJAgroup.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.partydebuffpanel.ResumeLayout(false);
-            this.partydebuffpanel.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -3130,19 +3672,12 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox plStoneskin;
         private System.Windows.Forms.CheckBox plRefresh;
         private System.Windows.Forms.CheckBox plBlink;
-        private System.Windows.Forms.RadioButton plReraiseLevel3;
-        private System.Windows.Forms.RadioButton plReraiseLevel2;
-        private System.Windows.Forms.RadioButton plReraiseLevel1;
-        private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.RadioButton plRefreshLevel2;
         private System.Windows.Forms.RadioButton plRefreshLevel1;
-        private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.NumericUpDown autoPhalanxIIMinutes;
         private System.Windows.Forms.Label autoPhalanxIILabel;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.NumericUpDown autoRegenIVMinutes;
-        private System.Windows.Forms.Label autoRegenIVLabel;
         private System.Windows.Forms.CheckBox monitoredDisease;
         private System.Windows.Forms.CheckBox plDisease;
         private System.Windows.Forms.CheckBox plProtectra;
@@ -3150,8 +3685,6 @@ namespace CurePlease
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox naSpellsenable;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Panel partydebuffpanel;
         private System.Windows.Forms.CheckBox naDisease;
         private System.Windows.Forms.CheckBox naPlague;
         private System.Windows.Forms.CheckBox naPetrification;
@@ -3174,22 +3707,68 @@ namespace CurePlease
         private System.Windows.Forms.NumericUpDown mpMintempitemusage;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label autoRefreshLabel;
-        private System.Windows.Forms.NumericUpDown autoRefreshMinutes;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown autoProtect_VMinutes;
-        private System.Windows.Forms.NumericUpDown autoProtect_IVMinutes;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.NumericUpDown autoShell_VMinutes;
-        private System.Windows.Forms.NumericUpDown autoShell_IVMinutes;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown autoRegenVMinutes;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.NumericUpDown autoRefreshIIMinutes;
-        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.NumericUpDown autoRefresh_Minutes;
         private System.Windows.Forms.CheckBox divineSealBox;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox AutoCastEngageCheckBox;
+        private System.Windows.Forms.RadioButton plRefreshLevel3;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox plPhalanx;
+        private System.Windows.Forms.RadioButton plReraiseLevel4;
+        private System.Windows.Forms.RadioButton plReraiseLevel3;
+        private System.Windows.Forms.RadioButton plReraiseLevel2;
+        private System.Windows.Forms.RadioButton plReraiseLevel1;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.ComboBox autoRefresh;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.TextBox entrustSpell_target;
+        private System.Windows.Forms.ListBox entrustINDISpell;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox GEOSpell_target;
+        private System.Windows.Forms.ListBox GEOSpell;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.ListBox INDISpell;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.ComboBox autoRegen;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown autoRegen_Minutes;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ComboBox autoProtect;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.NumericUpDown autoProtect_Minutes;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox autoShell;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.NumericUpDown autoShell_Minutes;
+        private System.Windows.Forms.CheckBox fullCureenabled;
+        private System.Windows.Forms.NumericUpDown fullCureamount;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox DematerializeBox;
+        private System.Windows.Forms.CheckBox EntrustBox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.CheckBox EnableGeoSpells;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.CheckBox plTemper;
+        private System.Windows.Forms.RadioButton plTemperLevel1;
+        private System.Windows.Forms.RadioButton plTemperLevel2;
+        private System.Windows.Forms.ComboBox plEnspell_spell;
+        private System.Windows.Forms.CheckBox plEnspell;
+        private System.Windows.Forms.ComboBox plGainBoost_spell;
+        private System.Windows.Forms.CheckBox plGainBoost;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown indiRecast;
+        private System.Windows.Forms.CheckBox GEO_engaged;
     }
 }

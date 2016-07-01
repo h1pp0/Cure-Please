@@ -1782,6 +1782,9 @@ namespace CurePlease
                 this.POLID2.SelectedIndex = 0;
                 this.processids.SelectedIndex = 0;
             }
+
+            // Show the current version number..
+            this.Text = this.notifyIcon1.Text = "Cure Please v" + Application.ProductVersion;
         }
 
 

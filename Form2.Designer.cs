@@ -1527,7 +1527,7 @@ namespace CurePlease
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(185, 307);
+            this.label9.Location = new System.Drawing.Point(183, 284);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(43, 13);
             this.label9.TabIndex = 16;
@@ -1536,7 +1536,7 @@ namespace CurePlease
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 307);
+            this.label8.Location = new System.Drawing.Point(4, 284);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(127, 13);
             this.label8.TabIndex = 15;
@@ -1550,7 +1550,7 @@ namespace CurePlease
             0,
             0,
             65536});
-            this.indiRecast.Location = new System.Drawing.Point(136, 303);
+            this.indiRecast.Location = new System.Drawing.Point(134, 280);
             this.indiRecast.Maximum = new decimal(new int[] {
             99,
             0,
@@ -1602,7 +1602,7 @@ namespace CurePlease
             " Indi-Fade"});
             this.INDISpell.Location = new System.Drawing.Point(6, 19);
             this.INDISpell.Name = "INDISpell";
-            this.INDISpell.Size = new System.Drawing.Size(220, 277);
+            this.INDISpell.Size = new System.Drawing.Size(220, 251);
             this.INDISpell.TabIndex = 1;
             // 
             // tabPage3

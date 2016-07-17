@@ -346,7 +346,7 @@ namespace CurePlease
         public static int CheckSpellRecast(string checked_recastspellName)
         {
             var magic = _ELITEAPIPL.Resources.GetSpell(checked_recastspellName, 0);
-            if (_ELITEAPIPL.Recast.GetSpellRecast((int)magic.Index) == 0)
+            if (_ELITEAPIPL.Recast.GetSpellRecast(magic.Index) == 0)
             {
                 return 0;
             }
@@ -370,14 +370,24 @@ namespace CurePlease
             {
                 return false;
             }
-
         }
 
         public static bool HasSpell(string checked_spellName)
         {
-            if (_ELITEAPIPL.Player.HasSpell(_ELITEAPIPL.Resources.GetSpell(checked_spellName, 0).Index))
+            var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
+            if (_ELITEAPIPL.Player.HasSpell(magic.Index))
             {
-                return true;
+                int mainLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.MainJob];
+                int subjobLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.SubJob];
+                if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
+                {
+                    return true;
+                }
+
+                    else
+                {
+                    return false;
+                }
             }
             else
             {

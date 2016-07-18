@@ -2269,6 +2269,7 @@ namespace CurePlease
 
                 #region "== Party Member Debuff Removal"
 
+               // XmlTextReader reader = new XmlTextReader("debuff_chatentries.xml");
 
                 // First create an array of know debuffs and character names, will appear as such
                 // [id] = 1, [name] = "Player", [Debuff] = "Silenced"

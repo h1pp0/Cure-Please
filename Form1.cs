@@ -2297,17 +2297,27 @@ namespace CurePlease
 
                 if (!this.castingLock && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
                 {
-                    // Before anything if Comosure is checked use Composure first.
+                    // Before anything if Comosure is checked use Composure first, same with Light Arts and Addendum.
                     if ((Settings.Default.Composure) && (!this.plStatusCheck(StatusEffect.Composure)) && (GetAbilityRecast("Composure") == 0) && (HasAbility("Composure")))
                     {
                         _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
                         this.ActionLockMethod();
                     }
-                    if ((Settings.Default.plBlink) && (!this.plStatusCheck(StatusEffect.Blink)) && (CheckSpellRecast("Blink") == 0) && (HasSpell("Blink")))
+                    else if ((Settings.Default.lightArts) && (!this.plStatusCheck(StatusEffect.Light_Arts)) && (!this.plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Light Arts") == 0) && (HasAbility("Light Arts")))
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Light Arts\" <me>");
+                        this.ActionLockMethod();
+                    }
+                    else if ((Settings.Default.addWhite) && (!this.plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Stratagems") == 0) && (HasAbility("Stratagems")))
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
+                        this.ActionLockMethod();
+                    }
+                    else if ((Settings.Default.plBlink) && (!this.plStatusCheck(StatusEffect.Blink)) && (CheckSpellRecast("Blink") == 0) && (HasSpell("Blink")))
                     {
                         this.castSpell("<me>", "Blink");
                     }
-                    if ((Settings.Default.plPhalanx) && (!this.plStatusCheck(StatusEffect.Phalanx)) && (CheckSpellRecast("Phalanx") == 0) && (HasSpell("Phalanx")))
+                    else if ((Settings.Default.plPhalanx) && (!this.plStatusCheck(StatusEffect.Phalanx)) && (CheckSpellRecast("Phalanx") == 0) && (HasSpell("Phalanx")))
                     {
                         this.castSpell("<me>", "Phalanx");
                     }

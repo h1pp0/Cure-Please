@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using System.Text;
 
 // ReSharper disable InconsistentNaming
 
@@ -313,7 +315,7 @@ namespace CurePlease
         public static EliteAPI _ELITEAPIPL;
         public EliteAPI _ELITEAPIMonitored;
         public ListBox processids = new ListBox();
-        // Stores the previously-colored button, if any        
+        // Stores the previously-colored button, if any       
 
         float plX;
         float plY;
@@ -328,6 +330,7 @@ namespace CurePlease
         int castingSafetyPercentage = 100;
         private bool islowmp;
         //private Dictionary<int, string> PTMemberList;
+
 
         #region "==Get Ability /Spell Recast / Thank you, dlsmd - mmonetwork.com"
 
@@ -374,17 +377,30 @@ namespace CurePlease
 
         public static bool HasSpell(string checked_spellName)
         {
+            var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob);
             var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
+            int mainLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.MainJob];
+            int subjobLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.SubJob];
+
             if (_ELITEAPIPL.Player.HasSpell(magic.Index))
             {
-                int mainLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.MainJob];
-                int subjobLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.SubJob];
-                if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
+                if ((checked_spellName == "Refresh III" || (checked_spellName == "Temper II") && _ELITEAPIPL.Player.MainJob == 5) && (JobPoints.SpentJobPoints >= 1200))
+                {
+                        return true;
+                } 
+                else if (checked_spellName.Contains("storm II") && _ELITEAPIPL.Player.MainJob == 20 && JobPoints.SpentJobPoints >= 100)
                 {
                     return true;
                 }
-
-                    else
+                else if (checked_spellName == "Reraise IV" && _ELITEAPIPL.Player.MainJob == 3 && JobPoints.SpentJobPoints >= 100)
+                {
+                    return true;
+                }
+                else if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
+                {
+                    return true;
+                }
+                else
                 {
                     return false;
                 }
@@ -2253,6 +2269,18 @@ namespace CurePlease
 
                 #region "== Party Member Debuff Removal"
 
+
+                // First create an array of know debuffs and character names, will appear as such
+                // [id] = 1, [name] = "Player", [Debuff] = "Silenced"
+                // Debuffs will be removed in order of ID.
+                // string[] party_debuffs;
+
+
+
+
+
+
+
                 #endregion
 
                 #region "== PL Auto Buffs"
@@ -2282,7 +2310,7 @@ namespace CurePlease
                     {
                         this.castSpell("<me>", "Phalanx");
                     }
-                    else if ((Settings.Default.plReraise) && (!this.plStatusCheck(StatusEffect.Reraise)))
+                    else if ((Settings.Default.plReraise) && (!this.plStatusCheck(StatusEffect.Reraise)) && this.CheckReraiseLevelPossession())
                     {
                         if ((Settings.Default.plReraiseLevel == 1) && (CheckSpellRecast("Reraise") == 0) && (HasSpell("Reraise")) && _ELITEAPIPL.Player.MP > 150)
                         {
@@ -2301,7 +2329,7 @@ namespace CurePlease
                             this.castSpell("<me>", "Reraise IV");
                         }
                     }
-                    else if ((Settings.Default.plRefresh) && (!this.plStatusCheck(StatusEffect.Refresh)))
+                    else if ((Settings.Default.plRefresh) && (!this.plStatusCheck(StatusEffect.Refresh)) && this.CheckRefreshLevelPossession())
                     {
                         if ((Settings.Default.plRefreshLevel == 1) && (CheckSpellRecast("Refresh") == 0) && (HasSpell("Refresh")))
                         {
@@ -2347,7 +2375,7 @@ namespace CurePlease
                             this.castSpell("<me>", barStatus_spellList[Settings.Default.plBarStatus_Spell]);
                         } 
                     }
-                    else if ((Settings.Default.plGainBoost) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), Settings.Default.plGainBoost_Spell.Replace("Gain", "").Replace("Boost", "").Replace("_", "_Boost2"))))
+                    else if ((Settings.Default.plGainBoost) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), Settings.Default.plGainBoost_Spell.Replace("Gain_", "").Replace("Boost_", "") +"_Boost2")))
                     {
                         string BoostGain_spell_status = Settings.Default.plGainBoost_Spell.Replace("Gain_", "").Replace("Boost_", "");
                         BoostGain_spell_status += "_Boost2";
@@ -3594,7 +3622,7 @@ namespace CurePlease
         }
         #endregion
 
-        #region "== Shellra & Protectra Recast Level"
+        #region "== Shellra Protectra, Refresh and Reraise Recast Level"
         private bool CheckShellraLevelRecast()
         {
             switch ((int)Settings.Default.plShellralevel)
@@ -3628,6 +3656,38 @@ namespace CurePlease
                     return CheckSpellRecast("Protectra IV") == 0;
                 case 5:
                     return CheckSpellRecast("Protectra V") == 0;
+                default:
+                    return false;
+            }
+        }
+
+        private bool CheckReraiseLevelPossession()
+        {
+            switch ((int)Settings.Default.plReraiseLevel)
+            {
+                case 1:
+                    return HasSpell("Reraise");
+                case 2:
+                    return HasSpell("Reraise II");
+                case 3:
+                    return HasSpell("Reraise III");
+                case 4:
+                    return HasSpell("Reraise IV");
+                default:
+                    return false;
+            }
+        }
+
+        private bool CheckRefreshLevelPossession()
+        {
+            switch ((int)Settings.Default.plRefreshLevel)
+            {
+                case 1:
+                    return HasSpell("Refresh");
+                case 2:
+                    return HasSpell("Refresh II");
+                case 3:
+                    return HasSpell("Refresh III");
                 default:
                     return false;
             }

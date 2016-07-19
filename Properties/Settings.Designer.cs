@@ -2042,9 +2042,9 @@ namespace CurePlease.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string plGainBoost_Spell {
+        public int plGainBoost_Spell {
             get {
-                return ((string)(this["plGainBoost_Spell"]));
+                return ((int)(this["plGainBoost_Spell"]));
             }
             set {
                 this["plGainBoost_Spell"] = value;
@@ -2204,6 +2204,18 @@ namespace CurePlease.Properties {
             }
             set {
                 this["plStormSpell_Spell"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool plAuspice {
+            get {
+                return ((bool)(this["plAuspice"]));
+            }
+            set {
+                this["plAuspice"] = value;
             }
         }
     }

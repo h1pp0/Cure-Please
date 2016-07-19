@@ -97,6 +97,9 @@ namespace CurePlease
             this.autoPhalanxIILabel = new System.Windows.Forms.Label();
             this.autoHasteLabel = new System.Windows.Forms.Label();
             this.plBuffGroup = new System.Windows.Forms.GroupBox();
+            this.plStormSpell_Spell = new System.Windows.Forms.ComboBox();
+            this.plStormSpell = new System.Windows.Forms.CheckBox();
+            this.plKlimaform = new System.Windows.Forms.CheckBox();
             this.plEnspell_spell = new System.Windows.Forms.ComboBox();
             this.plEnspell = new System.Windows.Forms.CheckBox();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -280,9 +283,7 @@ namespace CurePlease
             this.mpMinCastValue = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.plKlimaform = new System.Windows.Forms.CheckBox();
-            this.plStormSpell_Spell = new System.Windows.Forms.ComboBox();
-            this.plStormSpell = new System.Windows.Forms.CheckBox();
+            this.plAuspice = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -623,6 +624,7 @@ namespace CurePlease
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.plAuspice);
             this.groupBox9.Controls.Add(this.plBarStatus_Spell);
             this.groupBox9.Controls.Add(this.plGainBoost);
             this.groupBox9.Controls.Add(this.plBarStatus);
@@ -689,20 +691,20 @@ namespace CurePlease
             // 
             this.plGainBoost_spell.FormattingEnabled = true;
             this.plGainBoost_spell.Items.AddRange(new object[] {
-            "Gain_STR",
-            "Gain_DEX",
-            "Gain_VIT",
-            "Gain_AGI",
-            "Gain_INT",
-            "Gain_MND",
-            "Gain_CHR",
-            "Boost_STR",
-            "Boost_DEX",
-            "Boost_VIT",
-            "Boost_AGI",
-            "Boost_INT",
-            "Boost_MND",
-            "Boost_CHR"});
+            "Gain-STR",
+            "Gain-DEX",
+            "Gain-VIT",
+            "Gain-AGI",
+            "Gain-INT",
+            "Gain-MND",
+            "Gain-CHR",
+            "Boost-STR",
+            "Boost-DEX",
+            "Boost-VIT",
+            "Boost-AGI",
+            "Boost-INT",
+            "Boost-MND",
+            "Boost-CHR"});
             this.plGainBoost_spell.Location = new System.Drawing.Point(96, 61);
             this.plGainBoost_spell.Name = "plGainBoost_spell";
             this.plGainBoost_spell.Size = new System.Drawing.Size(177, 21);
@@ -1202,6 +1204,51 @@ namespace CurePlease
             this.plBuffGroup.TabIndex = 5;
             this.plBuffGroup.TabStop = false;
             this.plBuffGroup.Text = "   PL Buffs";
+            // 
+            // plStormSpell_Spell
+            // 
+            this.plStormSpell_Spell.FormattingEnabled = true;
+            this.plStormSpell_Spell.Items.AddRange(new object[] {
+            "Firestorm",
+            "Sandstorm",
+            "Rainstorm",
+            "Windstorm",
+            "Hailstorm",
+            "Thunderstorm",
+            "Voidstorm ",
+            "Aurorastorm",
+            "Firestorm II",
+            "Sandstorm II",
+            "Rainstorm II",
+            "Windstorm II",
+            "Hailstorm II",
+            "Thunderstorm II",
+            "Voidstorm II",
+            "Aurorastorm II"});
+            this.plStormSpell_Spell.Location = new System.Drawing.Point(91, 185);
+            this.plStormSpell_Spell.Name = "plStormSpell_Spell";
+            this.plStormSpell_Spell.Size = new System.Drawing.Size(121, 21);
+            this.plStormSpell_Spell.TabIndex = 17;
+            // 
+            // plStormSpell
+            // 
+            this.plStormSpell.AutoSize = true;
+            this.plStormSpell.Location = new System.Drawing.Point(7, 189);
+            this.plStormSpell.Name = "plStormSpell";
+            this.plStormSpell.Size = new System.Drawing.Size(56, 17);
+            this.plStormSpell.TabIndex = 16;
+            this.plStormSpell.Text = "Storm:";
+            this.plStormSpell.UseVisualStyleBackColor = true;
+            // 
+            // plKlimaform
+            // 
+            this.plKlimaform.AutoSize = true;
+            this.plKlimaform.Location = new System.Drawing.Point(8, 212);
+            this.plKlimaform.Name = "plKlimaform";
+            this.plKlimaform.Size = new System.Drawing.Size(71, 17);
+            this.plKlimaform.TabIndex = 15;
+            this.plKlimaform.Text = "Klimaform";
+            this.plKlimaform.UseVisualStyleBackColor = true;
             // 
             // plEnspell_spell
             // 
@@ -3530,50 +3577,15 @@ namespace CurePlease
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // plKlimaform
+            // plAuspice
             // 
-            this.plKlimaform.AutoSize = true;
-            this.plKlimaform.Location = new System.Drawing.Point(8, 212);
-            this.plKlimaform.Name = "plKlimaform";
-            this.plKlimaform.Size = new System.Drawing.Size(71, 17);
-            this.plKlimaform.TabIndex = 15;
-            this.plKlimaform.Text = "Klimaform";
-            this.plKlimaform.UseVisualStyleBackColor = true;
-            // 
-            // plStormSpell_Spell
-            // 
-            this.plStormSpell_Spell.FormattingEnabled = true;
-            this.plStormSpell_Spell.Items.AddRange(new object[] {
-            "Firestorm",
-            "Sandstorm",
-            "Rainstorm",
-            "Windstorm",
-            "Hailstorm",
-            "Thunderstorm",
-            "Voidstorm ",
-            "Aurorastorm",
-            "Firestorm II",
-            "Sandstorm II",
-            "Rainstorm II",
-            "Windstorm II",
-            "Hailstorm II",
-            "Thunderstorm II",
-            "Voidstorm II",
-            "Aurorastorm II"});
-            this.plStormSpell_Spell.Location = new System.Drawing.Point(91, 185);
-            this.plStormSpell_Spell.Name = "plStormSpell_Spell";
-            this.plStormSpell_Spell.Size = new System.Drawing.Size(121, 21);
-            this.plStormSpell_Spell.TabIndex = 17;
-            // 
-            // plStormSpell
-            // 
-            this.plStormSpell.AutoSize = true;
-            this.plStormSpell.Location = new System.Drawing.Point(7, 189);
-            this.plStormSpell.Name = "plStormSpell";
-            this.plStormSpell.Size = new System.Drawing.Size(56, 17);
-            this.plStormSpell.TabIndex = 16;
-            this.plStormSpell.Text = "Storm:";
-            this.plStormSpell.UseVisualStyleBackColor = true;
+            this.plAuspice.AutoSize = true;
+            this.plAuspice.Location = new System.Drawing.Point(9, 134);
+            this.plAuspice.Name = "plAuspice";
+            this.plAuspice.Size = new System.Drawing.Size(64, 17);
+            this.plAuspice.TabIndex = 18;
+            this.plAuspice.Text = "Auspice";
+            this.plAuspice.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -3918,5 +3930,6 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox plKlimaform;
         private System.Windows.Forms.ComboBox plStormSpell_Spell;
         private System.Windows.Forms.CheckBox plStormSpell;
+        private System.Windows.Forms.CheckBox plAuspice;
     }
 }

@@ -309,9 +309,6 @@ namespace CurePlease
             return item != null ? (ushort)item.ItemID : (ushort)0;
         }
 
-
-
-
         public static EliteAPI _ELITEAPIPL;
         public EliteAPI _ELITEAPIMonitored;
         public ListBox processids = new ListBox();
@@ -324,15 +321,13 @@ namespace CurePlease
         byte playerOptionsSelected;
         byte autoOptionsSelected;
 
-
         bool castingLock;
         bool pauseActions;
-        int castingSafetyPercentage = 100;
         private bool islowmp;
         //private Dictionary<int, string> PTMemberList;
 
 
-        #region "==Get Ability /Spell Recast / Thank you, dlsmd - mmonetwork.com"
+        #region "==Get Ability /Spell Recast / Thank you, dlsmd - elitemmonetwork.com"
 
         public static int GetAbilityRecast(string checked_abilityName)
         {
@@ -348,7 +343,7 @@ namespace CurePlease
 
         public static int CheckSpellRecast(string checked_recastspellName)
         {
-            var magic = _ELITEAPIPL.Resources.GetSpell(checked_recastspellName, 0);
+             var magic = _ELITEAPIPL.Resources.GetSpell(checked_recastspellName, 0);
             if (_ELITEAPIPL.Recast.GetSpellRecast(magic.Index) == 0)
             {
                 return 0;
@@ -356,7 +351,7 @@ namespace CurePlease
             else
             {
                 return 1;
-            }
+            } 
         }
 
         #endregion
@@ -377,38 +372,36 @@ namespace CurePlease
 
         public static bool HasSpell(string checked_spellName)
         {
-            var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob);
-            var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
-            int mainLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.MainJob];
-            int subjobLevelRequired = magic.LevelRequired[_ELITEAPIPL.Player.SubJob];
+             var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob);                               var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
+             int mainLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)];                                 int subjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.SubJob)];
 
-            if (_ELITEAPIPL.Player.HasSpell(magic.Index))
-            {
-                if ((checked_spellName == "Refresh III" || (checked_spellName == "Temper II") && _ELITEAPIPL.Player.MainJob == 5) && (JobPoints.SpentJobPoints >= 1200))
-                {
-                        return true;
-                } 
-                else if (checked_spellName.Contains("storm II") && _ELITEAPIPL.Player.MainJob == 20 && JobPoints.SpentJobPoints >= 100)
-                {
-                    return true;
-                }
-                else if (checked_spellName == "Reraise IV" && _ELITEAPIPL.Player.MainJob == 3 && JobPoints.SpentJobPoints >= 100)
-                {
-                    return true;
-                }
-                else if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
-                {
-                    return true;
-                }
-                else
-                {
+             if (_ELITEAPIPL.Player.HasSpell(magic.ID))
+             {
+                 if ((checked_spellName == "Refresh III" || (checked_spellName == "Temper II") && _ELITEAPIPL.Player.MainJob == 5) && (JobPoints.SpentJobPoints >= 1200))
+                 {
+                         return true;
+                 } 
+                 else if (checked_spellName.Contains("storm II") && _ELITEAPIPL.Player.MainJob == 20 && JobPoints.SpentJobPoints >= 100)
+                 {
+                     return true;
+                 }
+                 else if (checked_spellName == "Reraise IV" && _ELITEAPIPL.Player.MainJob == 3 && JobPoints.SpentJobPoints >= 100)
+                 {
+                     return true;
+                 }
+                 else if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
+                 {
+                     return true;
+                 }
+                 else
+                 {
                     return false;
                 }
-            }
-            else
-            {
+             }
+             else
+             {
                 return false;
-            }
+             } 
         }
 
         #endregion
@@ -975,7 +968,6 @@ namespace CurePlease
             new TimeSpan()
         };
         #endregion
-
 
         #region "== Getting POL Process and FFACE dll Check"
         //FFXI Process      
@@ -2276,28 +2268,16 @@ namespace CurePlease
                 // Debuffs will be removed in order of ID.
                 // string[] party_debuffs;
 
-
-
-
-
-
-
                 #endregion
 
                 #region "== PL Auto Buffs"
                 // PL Auto Buffs
 
-                // ARRAYS FOR STATUS EFFECTS 
-                string[] barElement_status = { "Barfire", "Barstone", "Barwater", "Baraero", "Barblizzard", "Barthunder", "Barfire", "Barstone", "Barwater", "Baraero", "Barblizzard", "Barthunder" };
-                string[] barStatus_status = { "Baramnesia", "Barvirus", "Barparalyze", "Barsilence", "Barpetrify", "Barpoison", "Barblind", "Barsleep", "Baramnesia", "Barvirus", "Barparalyze", "Barsilence", "Barpetrify", "Barpoison", "Barblind", "Barsleep" };
-                string[] enspell_list = { "Enfire", "Enstone", "Enwater", "Enaero", "Enblizzard", "Enthunder", "Enfire II", "Enstone II", "Enwater II", "Enaero II", "Enblizzard II", "Enthunder II" };
-                string[] Stormspell_list = {"Firestorm","Sandstorm","Rainstorm","Windstorm","Hailstorm","Thunderstorm","Voidstorm","Aurorastorm","Firestorm II","Sandstorm II","Rainstorm II","Windstorm II","Hailstorm II","Thunderstorm II","Voidstorm II","Aurorastorm II"};
-                string[] Stormspell_status = { "Firestorm", "Sandstorm", "Rainstorm", "Windstorm", "Hailstorm", "Thunderstorm", "Voidstorm", "Aurorastorm", "Firestorm", "Sandstorm", "Rainstorm", "Windstorm", "Hailstorm", "Thunderstorm", "Voidstorm", "Aurorastorm" };
-
-
                 if (!this.castingLock && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
                 {
-                    // Before anything if Comosure is checked use Composure first, same with Light Arts and Addendum.
+
+                    #region == Job Abilities that improve buffs ==
+
                     if ((Settings.Default.Composure) && (!this.plStatusCheck(StatusEffect.Composure)) && (GetAbilityRecast("Composure") == 0) && (HasAbility("Composure")))
                     {
                         _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
@@ -2313,14 +2293,23 @@ namespace CurePlease
                         _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
                         this.ActionLockMethod();
                     }
+                    #endregion
+
+                    #region == Blink ==
                     else if ((Settings.Default.plBlink) && (!this.plStatusCheck(StatusEffect.Blink)) && (CheckSpellRecast("Blink") == 0) && (HasSpell("Blink")))
                     {
                         this.castSpell("<me>", "Blink");
                     }
+                    #endregion
+
+                    #region == Phalanx ==
                     else if ((Settings.Default.plPhalanx) && (!this.plStatusCheck(StatusEffect.Phalanx)) && (CheckSpellRecast("Phalanx") == 0) && (HasSpell("Phalanx")))
                     {
                         this.castSpell("<me>", "Phalanx");
                     }
+                    #endregion
+
+                    #region == Reraise ==
                     else if ((Settings.Default.plReraise) && (!this.plStatusCheck(StatusEffect.Reraise)) && this.CheckReraiseLevelPossession())
                     {
                         if ((Settings.Default.plReraiseLevel == 1) && (CheckSpellRecast("Reraise") == 0) && (HasSpell("Reraise")) && _ELITEAPIPL.Player.MP > 150)
@@ -2340,6 +2329,9 @@ namespace CurePlease
                             this.castSpell("<me>", "Reraise IV");
                         }
                     }
+                    #endregion
+
+                    #region == Refresh ==
                     else if ((Settings.Default.plRefresh) && (!this.plStatusCheck(StatusEffect.Refresh)) && this.CheckRefreshLevelPossession())
                     {
                         if ((Settings.Default.plRefreshLevel == 1) && (CheckSpellRecast("Refresh") == 0) && (HasSpell("Refresh")))
@@ -2355,10 +2347,16 @@ namespace CurePlease
                             this.castSpell("<me>", "Refresh III");
                         }
                     }
+                    #endregion
+
+                    #region == Stoneskin ==
                     else if ((Settings.Default.plStoneskin) && (!this.plStatusCheck(StatusEffect.Stoneskin)) && (CheckSpellRecast("Stoneskin") == 0) && (HasSpell("Stoneskin")))
                     {
                         this.castSpell("<me>", "Stoneskin");
                     }
+                    #endregion
+
+                    #region == Shellra & Protectra ==
                     else if ((Settings.Default.plShellra) && (!this.plStatusCheck(StatusEffect.Shell)) && this.CheckShellraLevelRecast())
                     {
                         this.castSpell("<me>", this.GetShellraLevel(Settings.Default.plShellralevel));
@@ -2368,42 +2366,263 @@ namespace CurePlease
                     {
                         this.castSpell("<me>", this.GetProtectraLevel(Settings.Default.plProtectralevel));
                     }
-                    else if ((Settings.Default.plBarElement) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), barElement_status[Settings.Default.plBarElement_Spell])))
-                    {
-                        string[] barElement_spellList = { "Barfire", "Barstone", "Barwater", "Baraero", "Barblizzard", "Barthunder", "Barfira", "Barstonra", "Barwatera", "Baraera", "Barblizzara", "Barthundra" };
+                    #endregion
 
-                        if ((CheckSpellRecast(barElement_spellList[Settings.Default.plBarElement_Spell]) == 0) && (HasSpell(barElement_spellList[Settings.Default.plBarElement_Spell])))
-                        {
-                            this.castSpell("<me>", barElement_spellList[Settings.Default.plBarElement_Spell]);
-                        }
-                    }
-                    else if ((Settings.Default.plBarStatus) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), barStatus_status[Settings.Default.plBarElement_Spell])))
+                    #region== Barspells ELEMENTAL - Single Target ==
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barfire) && (CheckSpellRecast("Barfire") == 0) && (HasSpell("Barfire"))))
                     {
-                        string[] barStatus_spellList = { "Baramnesia", "Barvirus", "Barparalyze", "Barsilence", "Barpetrify", "Barpoison", "Barblind", "Barsleep", "Baramnesra", "Barvira", "Barparalyzra", "Barsilencera", "Barpetra", "Barpoisonra", "Barblindra", "Barsleepra" };
+                        this.castSpell("<me>", "Barfire");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 1) && (!this.plStatusCheck(StatusEffect.Barstone) && (CheckSpellRecast("Barstone") == 0) && (HasSpell("Barstone"))))
+                    {
+                        this.castSpell("<me>", "Barstone");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 2) && (!this.plStatusCheck(StatusEffect.Barwater) && (CheckSpellRecast("Barwater") == 0) && (HasSpell("Barwater"))))
+                    {
+                        this.castSpell("<me>", "Barwater");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 3) && (!this.plStatusCheck(StatusEffect.Baraero) && (CheckSpellRecast("Baraero") == 0) && (HasSpell("Baraero"))))
+                    {
+                        this.castSpell("<me>", "Baraero");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 4) && (!this.plStatusCheck(StatusEffect.Barblizzard) && (CheckSpellRecast("Barblizzard") == 0) && (HasSpell("Barblizzard"))))
+                    {
+                        this.castSpell("<me>", "Barblizzard");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 5) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthunder") == 0) && (HasSpell("Barthunder"))))
+                    {
+                        this.castSpell("<me>", "Barthunder");
+                    }
+                    #endregion
 
-                        if ((CheckSpellRecast(barStatus_spellList[Settings.Default.plBarStatus_Spell]) == 0) && (HasSpell(barStatus_spellList[Settings.Default.plBarStatus_Spell])))
-                        {
-                            this.castSpell("<me>", barStatus_spellList[Settings.Default.plBarStatus_Spell]);
-                        } 
-                    }
-                    else if ((Settings.Default.plGainBoost) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), Settings.Default.plGainBoost_Spell.Replace("Gain_", "").Replace("Boost_", "") +"_Boost2")))
+                    #region== Barspells ELEMENTAL - AoE ==
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 6) && (!this.plStatusCheck(StatusEffect.Barfire) && (CheckSpellRecast("Barfira") == 0) && (HasSpell("Barfira"))))
                     {
-                        string BoostGain_spell_status = Settings.Default.plGainBoost_Spell.Replace("Gain_", "").Replace("Boost_", "");
-                        BoostGain_spell_status += "_Boost2";
+                        this.castSpell("<me>", "Barfira");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 7) && (!this.plStatusCheck(StatusEffect.Barstone) && (CheckSpellRecast("Barstonra") == 0) && (HasSpell("Barstonra"))))
+                    {
+                        this.castSpell("<me>", "Barstonra");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 8) && (!this.plStatusCheck(StatusEffect.Barwater) && (CheckSpellRecast("Barwatera") == 0) && (HasSpell("Barwatera"))))
+                    {
+                        this.castSpell("<me>", "Barwatera");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 9) && (!this.plStatusCheck(StatusEffect.Baraero) && (CheckSpellRecast("Baraera") == 0) && (HasSpell("Baraera"))))
+                    {
+                        this.castSpell("<me>", "Baraera");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 10) && (!this.plStatusCheck(StatusEffect.Barblizzard) && (CheckSpellRecast("Barblizzara") == 0) && (HasSpell("Barblizzara"))))
+                    {
+                        this.castSpell("<me>", "Barblizzara");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthundra") == 0) && (HasSpell("Barthundra"))))
+                    {
+                        this.castSpell("<me>", "Barthundra");
+                    }
 
-                        string spelltobechecked = Settings.Default.plGainBoost_Spell.Replace("_", "-");
-                        if ((CheckSpellRecast(spelltobechecked) == 0) && (HasSpell(spelltobechecked)))
-                        {
-                            this.castSpell("<me>", Settings.Default.plGainBoost_Spell.Replace("_", "-"));
-                        }
-                    }
-                    else if ((Settings.Default.plStormSpell) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), Stormspell_status[Settings.Default.plStormSpell_Spell])))
+                    #endregion
+
+                    #region== Barspells STATUS - Single Target ==
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 0) && (!this.plStatusCheck(StatusEffect.Baramnesia) && (CheckSpellRecast("Baramnesia") == 0) && (HasSpell("Baramnesia"))))
                     {
-                        if ((CheckSpellRecast(Stormspell_list[Settings.Default.plStormSpell_Spell]) == 0) && (HasSpell(Stormspell_list[Settings.Default.plStormSpell_Spell])))
-                        {
-                            this.castSpell("<me>", Stormspell_list[Settings.Default.plStormSpell_Spell]);
-                        }
+                        this.castSpell("<me>", "Baramnesia");
                     }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 1) && (!this.plStatusCheck(StatusEffect.Barvirus) && (CheckSpellRecast("Barvirus") == 0) && (HasSpell("Barvirus"))))
+                    {
+                        this.castSpell("<me>", "Barvirus");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 2) && (!this.plStatusCheck(StatusEffect.Barparalyze) && (CheckSpellRecast("Barparalyze") == 0) && (HasSpell("Barparalyze"))))
+                    {
+                        this.castSpell("<me>", "Barparalyze");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 3) && (!this.plStatusCheck(StatusEffect.Barsilence) && (CheckSpellRecast("Barsilence") == 0) && (HasSpell("Barsilence"))))
+                    {
+                        this.castSpell("<me>", "Barsilence");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 4) && (!this.plStatusCheck(StatusEffect.Barpetrify) && (CheckSpellRecast("Barpetrify") == 0) && (HasSpell("Barpetrify"))))
+                    {
+                        this.castSpell("<me>", "Barpetrify");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 5) && (!this.plStatusCheck(StatusEffect.Barpoison) && (CheckSpellRecast("Barpoison") == 0) && (HasSpell("Barpoison"))))
+                    {
+                        this.castSpell("<me>", "Barpoison");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 6) && (!this.plStatusCheck(StatusEffect.Barblind) && (CheckSpellRecast("Barblind") == 0) && (HasSpell("Barblind"))))
+                    {
+                        this.castSpell("<me>", "Barblind");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 7) && (!this.plStatusCheck(StatusEffect.Barsleep) && (CheckSpellRecast("Barsleep") == 0) && (HasSpell("Barsleep"))))
+                    {
+                        this.castSpell("<me>", "Barsleep");
+                    }
+                    #endregion
+
+                    #region == Barspells STATUS - AoE ==
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 8) && (!this.plStatusCheck(StatusEffect.Baramnesia) && (CheckSpellRecast("Baramnesra") == 0) && (HasSpell("Baramnesra"))))
+                    {
+                        this.castSpell("<me>", "Baramnesra");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 9) && (!this.plStatusCheck(StatusEffect.Barvirus) && (CheckSpellRecast("Barvira") == 0) && (HasSpell("Barvira"))))
+                    {
+                        this.castSpell("<me>", "Barvira");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 10) && (!this.plStatusCheck(StatusEffect.Barparalyze) && (CheckSpellRecast("Barparalyzra") == 0) && (HasSpell("Barparalyzra"))))
+                    {
+                        this.castSpell("<me>", "Barparalyzra");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 11) && (!this.plStatusCheck(StatusEffect.Barpoison) && (CheckSpellRecast("Barsilencera") == 0) && (HasSpell("Barsilencera"))))
+                    {
+                        this.castSpell("<me>", "Barsilencera");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 12) && (!this.plStatusCheck(StatusEffect.Barsilence) && (CheckSpellRecast("Barpetra") == 0) && (HasSpell("Barpetra"))))
+                    {
+                        this.castSpell("<me>", "Barpetra");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 13) && (!this.plStatusCheck(StatusEffect.Barpetrify) && (CheckSpellRecast("Barpoisonra") == 0) && (HasSpell("Barpoisonra"))))
+                    {
+                        this.castSpell("<me>", "Barpoisonra");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 14) && (!this.plStatusCheck(StatusEffect.Barblind) && (CheckSpellRecast("Barblindra") == 0) && (HasSpell("Barblindra"))))
+                    {
+                        this.castSpell("<me>", "Barblindra");
+                    }
+                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarStatus_Spell == 15) && (!this.plStatusCheck(StatusEffect.Barsleep) && (CheckSpellRecast("Barsleepra") == 0) && (HasSpell("Barsleepra"))))
+                    {
+                        this.castSpell("<me>", "Barsleepra");
+                    }
+                    #endregion
+
+                    #region== Gain Spells ==
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 0) && !this.plStatusCheck(StatusEffect.STR_Boost2) && (CheckSpellRecast("Gain-STR") == 0) && (HasSpell("Gain-STR")))
+                    {
+                        this.castSpell("<me>", "Gain-STR");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 1) && !this.plStatusCheck(StatusEffect.DEX_Boost2) && (CheckSpellRecast("Gain-DEX") == 0) && (HasSpell("Gain-DEX")))
+                    {
+                        this.castSpell("<me>", "Gain-DEX");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 2) && !this.plStatusCheck(StatusEffect.VIT_Boost2) && (CheckSpellRecast("Gain-VIT") == 0) && (HasSpell("Gain-VIT")))
+                    {
+                        this.castSpell("<me>", "Gain-VIT");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 3) && !this.plStatusCheck(StatusEffect.AGI_Boost2) && (CheckSpellRecast("Gain-AGI") == 0) && (HasSpell("Gain-AGI")))
+                    {
+                        this.castSpell("<me>", "Gain-AGI");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 4) && !this.plStatusCheck(StatusEffect.INT_Boost2) && (CheckSpellRecast("Gain-INT") == 0) && (HasSpell("Gain-INT")))
+                    {
+                        this.castSpell("<me>", "Gain-INT");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 5) && !this.plStatusCheck(StatusEffect.MND_Boost2) && (CheckSpellRecast("Gain-MND") == 0) && (HasSpell("Gain-MND")))
+                    {
+                        this.castSpell("<me>", "Gain-MND");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 6) && !this.plStatusCheck(StatusEffect.CHR_Boost2) && (CheckSpellRecast("Gain-CHR") == 0) && (HasSpell("Gain-CHR")))
+                    {
+                        this.castSpell("<me>", "Gain-CHR");
+                    }
+                    #endregion
+
+                    #region== Boost Spells ==
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 7) && !this.plStatusCheck(StatusEffect.STR_Boost2) && (CheckSpellRecast("Boost-STR") == 0) && (HasSpell("Boost-STR")))
+                    {
+                        this.castSpell("<me>", "Boost-STR");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 8) && !this.plStatusCheck(StatusEffect.DEX_Boost2) && (CheckSpellRecast("Boost-DEX") == 0) && (HasSpell("Boost-DEX")))
+                    {
+                        this.castSpell("<me>", "Boost-DEX");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 9) && !this.plStatusCheck(StatusEffect.VIT_Boost2) && (CheckSpellRecast("Boost-VIT") == 0) && (HasSpell("Boost-VIT")))
+                    {
+                        this.castSpell("<me>", "Boost-VIT");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 10) && !this.plStatusCheck(StatusEffect.AGI_Boost2) && (CheckSpellRecast("Boost-AGI") == 0) && (HasSpell("Boost-AGI")))
+                    {
+                        this.castSpell("<me>", "Boost-AGI");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 11) && !this.plStatusCheck(StatusEffect.INT_Boost2) && (CheckSpellRecast("Boost-INT") == 0) && (HasSpell("Boost-INT")))
+                    {
+                        this.castSpell("<me>", "Boost-INT");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 12) && !this.plStatusCheck(StatusEffect.MND_Boost2) && (CheckSpellRecast("Boost-MND") == 0) && (HasSpell("Boost-MND")))
+                    {
+                        this.castSpell("<me>", "Boost-MND");
+                    }
+                    else if (Settings.Default.plGainBoost && (Settings.Default.plGainBoost_Spell == 13) && !this.plStatusCheck(StatusEffect.CHR_Boost2) && (CheckSpellRecast("Boost-CHR") == 0) && (HasSpell("Boost-CHR")))
+                    {
+                        this.castSpell("<me>", "Boost-CHR");
+                    }
+                    #endregion
+
+                    #region== Storm Spells ==
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 0) && (!this.plStatusCheck(StatusEffect.Firestorm) && (CheckSpellRecast("Firestorm") == 0) && (HasSpell("Firestorm"))))
+                    {
+                        this.castSpell("<me>", "Firestorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 1) && (!this.plStatusCheck(StatusEffect.Sandstorm) && (CheckSpellRecast("Sandstorm") == 0) && (HasSpell("Sandstorm"))))
+                    {
+                        this.castSpell("<me>", "Sandstorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 2) && (!this.plStatusCheck(StatusEffect.Rainstorm) && (CheckSpellRecast("Rainstorm") == 0) && (HasSpell("Rainstorm"))))
+                    {
+                        this.castSpell("<me>", "Rainstorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 3) && (!this.plStatusCheck(StatusEffect.Windstorm) && (CheckSpellRecast("Windstorm") == 0) && (HasSpell("Windstorm"))))
+                    {
+                        this.castSpell("<me>", "Windstorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 4) && (!this.plStatusCheck(StatusEffect.Hailstorm) && (CheckSpellRecast("Hailstorm") == 0) && (HasSpell("Hailstorm"))))
+                    {
+                        this.castSpell("<me>", "Hailstorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 5) && (!this.plStatusCheck(StatusEffect.Thunderstorm) && (CheckSpellRecast("Thunderstorm") == 0) && (HasSpell("Thunderstorm"))))
+                    {
+                        this.castSpell("<me>", "Thunderstorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 6) && (!this.plStatusCheck(StatusEffect.Voidstorm) && (CheckSpellRecast("Voidstorm") == 0) && (HasSpell("Voidstorm"))))
+                    {
+                        this.castSpell("<me>", "Voidstorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 7) && (!this.plStatusCheck(StatusEffect.Aurorastorm) && (CheckSpellRecast("Aurorastorm") == 0) && (HasSpell("Aurorastorm"))))
+                    {
+                        this.castSpell("<me>", "Aurorastorm");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 8) && (!this.plStatusCheck(StatusEffect.Firestorm) && (CheckSpellRecast("Firestorm II") == 0) && (HasSpell("Firestorm II"))))
+                    {
+                        this.castSpell("<me>", "Firestorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 9) && (!this.plStatusCheck(StatusEffect.Sandstorm) && (CheckSpellRecast("Sandstorm II") == 0) && (HasSpell("Sandstorm II"))))
+                    {
+                        this.castSpell("<me>", "Sandstorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 10) && (!this.plStatusCheck(StatusEffect.Rainstorm) && (CheckSpellRecast("Rainstorm II") == 0) && (HasSpell("Rainstorm II"))))
+                    {
+                        this.castSpell("<me>", "Rainstorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 11) && (!this.plStatusCheck(StatusEffect.Windstorm) && (CheckSpellRecast("Windstorm II") == 0) && (HasSpell("Windstorm II"))))
+                    {
+                        this.castSpell("<me>", "Windstorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 12) && (!this.plStatusCheck(StatusEffect.Hailstorm) && (CheckSpellRecast("Hailstorm II") == 0) && (HasSpell("Hailstorm II"))))
+                    {
+                        this.castSpell("<me>", "Hailstorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 13) && (!this.plStatusCheck(StatusEffect.Thunderstorm) && (CheckSpellRecast("Thunderstorm II") == 0) && (HasSpell("Thunderstorm II"))))
+                    {
+                        this.castSpell("<me>", "Thunderstorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 14) && (!this.plStatusCheck(StatusEffect.Voidstorm) && (CheckSpellRecast("Voidstorm II") == 0) && (HasSpell("Voidstorm II"))))
+                    {
+                        this.castSpell("<me>", "Voidstorm II");
+                    }
+                    else if ((Settings.Default.plStormSpell) && (Settings.Default.plStormSpell_Spell == 15) && (!this.plStatusCheck(StatusEffect.Aurorastorm) && (CheckSpellRecast("Aurorastorm II") == 0) && (HasSpell("Aurorastorm II"))))
+                    {
+                        this.castSpell("<me>", "Aurorastorm II");
+                    }
+                    #endregion
+
+                    #region == Klimaform ==
                     else if ((Settings.Default.plKlimaform) && !this.plStatusCheck(StatusEffect.Klimaform))
                     {
                         if ((CheckSpellRecast("Klimaform") == 0) && (HasSpell("Klimaform")))
@@ -2411,6 +2630,9 @@ namespace CurePlease
                             this.castSpell("<me>", "Klimaform");
                         }
                     }
+                    #endregion
+
+                    #region == Temper ==
                     else if ((Settings.Default.plTemper) && (!this.plStatusCheck(StatusEffect.Multi_Strikes)))
                     {
                         if ((Settings.Default.plTemperLevel == 1) && (CheckSpellRecast("Temper") == 0) && (HasSpell("Temper")))
@@ -2422,13 +2644,66 @@ namespace CurePlease
                             this.castSpell("<me>", "Temper II");
                         }
                     }
-                    else if ((Settings.Default.plEnspell) && !this.plStatusCheck((StatusEffect)Enum.Parse(typeof(StatusEffect), enspell_list[Settings.Default.plEnspell_Spell])))
+                    #endregion
+
+                    #region == Enspells ==
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 0) && !this.plStatusCheck(StatusEffect.Enfire) && (CheckSpellRecast("Enfire") == 0) && (HasSpell("Enfire")))
                     {
-                        if ((CheckSpellRecast(enspell_list[Settings.Default.plEnspell_Spell]) == 0) && (HasSpell(enspell_list[Settings.Default.plEnspell_Spell])))
-                        {
-                            this.castSpell("<me>", enspell_list[Settings.Default.plEnspell_Spell]);
-                        }
+                        this.castSpell("<me>", "Enfire");
                     }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 1) && !this.plStatusCheck(StatusEffect.Enstone) && (CheckSpellRecast("Enstone") == 0) && (HasSpell("Enstone")))
+                    {
+                        this.castSpell("<me>", "Enstone");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 2) && !this.plStatusCheck(StatusEffect.Enwater) && (CheckSpellRecast("Enwater") == 0) && (HasSpell("Enwater")))
+                    {
+                        this.castSpell("<me>", "Enwater");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 3) && !this.plStatusCheck(StatusEffect.Enaero) && (CheckSpellRecast("Enaero") == 0) && (HasSpell("Enaero")))
+                    {
+                        this.castSpell("<me>", "Enaero");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 4) && !this.plStatusCheck(StatusEffect.Enblizzard) && (CheckSpellRecast("Enblozzard") == 0) && (HasSpell("Enblizzard")))
+                    {
+                        this.castSpell("<me>", "Enblizzard");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 5) && !this.plStatusCheck(StatusEffect.Enthunder) && (CheckSpellRecast("Enthunder") == 0) && (HasSpell("Enthunder")))
+                    {
+                        this.castSpell("<me>", "Enthunder");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 6) && !this.plStatusCheck(StatusEffect.Enfire_2) && (CheckSpellRecast("Enfire II") == 0) && (HasSpell("Enfire II")))
+                    {
+                        this.castSpell("<me>", "Enfire II");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 7) && !this.plStatusCheck(StatusEffect.Enstone_2) && (CheckSpellRecast("Enstone II") == 0) && (HasSpell("Enstone II")))
+                    {
+                        this.castSpell("<me>", "Enstone II");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 8) && !this.plStatusCheck(StatusEffect.Enwater_2) && (CheckSpellRecast("Enwater II") == 0) && (HasSpell("Enwater II")))
+                    {
+                        this.castSpell("<me>", "Enwater II");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 9) && !this.plStatusCheck(StatusEffect.Enaero_2) && (CheckSpellRecast("Enaero II") == 0) && (HasSpell("Enaero II")))
+                    {
+                        this.castSpell("<me>", "Enaero II");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 10) && !this.plStatusCheck(StatusEffect.Enblizzard_2) && (CheckSpellRecast("Enblozzard II") == 0) && (HasSpell("Enblizzard II")))
+                    {
+                        this.castSpell("<me>", "Enblizzard II");
+                    }
+                    else if ((Settings.Default.plEnspell) && (Settings.Default.plEnspell_Spell == 11) && !this.plStatusCheck(StatusEffect.Enthunder_2) && (CheckSpellRecast("Enthunder II") == 0) && (HasSpell("Enthunder II")))
+                    {
+                        this.castSpell("<me>", "Enthunder II");
+                    }
+
+                    #endregion
+
+                    #region== Auspice ==
+                    else if ((Settings.Default.plAuspice) && (!this.plStatusCheck(StatusEffect.Auspice)) && (CheckSpellRecast("Auspice") == 0) && (HasSpell("Auspice")))
+                    {
+                        this.castSpell("<me>", "Auspice");
+                    }
+                    #endregion
                 }
                 // End PL Auto Buffs
                 #endregion
@@ -2869,8 +3144,6 @@ namespace CurePlease
         }
         #endregion
 
-
-
         #region "== Get Shellra & Protectra level"
         private string GetShellraLevel(decimal p)
         {
@@ -3294,20 +3567,34 @@ namespace CurePlease
                 return;
             }
 
-            if (_ELITEAPIPL.CastBar.Percent * 100.0f >= 75)
+            Thread.Sleep(TimeSpan.FromSeconds(0.5));
+            var count = 0;
+            float lastPercent = 0;
+            while (_ELITEAPIPL.CastBar.Percent < 100)
             {
-                this.castingLockLabel.Text = "Casting is soon to be UNLOCKED!";
-                this.castingStatusCheck.Enabled = false;
-                this.castingUnlockTimer.Enabled = true;
+                Thread.Sleep(TimeSpan.FromSeconds(0.1));
+                if (lastPercent != _ELITEAPIPL.CastBar.Percent)
+                {
+                    count = 0;
+                    lastPercent = _ELITEAPIPL.CastBar.Percent;
+                }
+                else if (count == 10)
+                {
+                    this.castingLockLabel.Text = "Casting is INTERRUPTED!";
+                    this.castingStatusCheck.Enabled = false;
+                    this.castingUnlockTimer.Enabled = true;
+                    break;
+                }
+                else
+                {
+                    count++;
+                    lastPercent = _ELITEAPIPL.CastBar.Percent;
+                }
             }
-            else if (this.castingSafetyPercentage == _ELITEAPIPL.CastBar.Percent * 100.0f)
-            {
-                this.castingLockLabel.Text = "Casting is INTERRUPTED!";
-                this.castingStatusCheck.Enabled = false;
-                this.castingUnlockTimer.Enabled = true;
-            }
+            this.castingLockLabel.Text = "Casting is soon to be AVAILABLE!";
+            this.castingStatusCheck.Enabled = false;
+            this.castingUnlockTimer.Enabled = true;
 
-            this.castingSafetyPercentage = (int)(_ELITEAPIPL.CastBar.Percent * 100.0f);
         }
 
         private void castingUnlockTimer_Tick(object sender, EventArgs e)
@@ -3633,7 +3920,7 @@ namespace CurePlease
         }
         #endregion
 
-        #region "== Shellra Protectra, Refresh and Reraise Recast Level"
+        #region "== Shellra Protectra, Recast Level and Refresh and Reraise Spell check"
         private bool CheckShellraLevelRecast()
         {
             switch ((int)Settings.Default.plShellralevel)

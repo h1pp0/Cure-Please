@@ -198,6 +198,7 @@ namespace CurePlease
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.debugging_MSGBOX = new System.Windows.Forms.Label();
             this.player17HP = new CurePlease.NewProgressBar();
             this.player16HP = new CurePlease.NewProgressBar();
             this.player15HP = new CurePlease.NewProgressBar();
@@ -2012,6 +2013,14 @@ namespace CurePlease
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClickTray);
             // 
+            // debugging_MSGBOX
+            // 
+            this.debugging_MSGBOX.AutoSize = true;
+            this.debugging_MSGBOX.Location = new System.Drawing.Point(450, 5);
+            this.debugging_MSGBOX.Name = "debugging_MSGBOX";
+            this.debugging_MSGBOX.Size = new System.Drawing.Size(0, 13);
+            this.debugging_MSGBOX.TabIndex = 22;
+            // 
             // player17HP
             // 
             this.player17HP.BackColor = System.Drawing.SystemColors.Control;
@@ -2181,6 +2190,7 @@ namespace CurePlease
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(654, 358);
+            this.Controls.Add(this.debugging_MSGBOX);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -2415,6 +2425,7 @@ namespace CurePlease
         private ToolStripMenuItem chatLogToolStripMenuItem;
         public Button setinstance;
         public Button setinstance2;
+        public Label debugging_MSGBOX;
     }
 }
 

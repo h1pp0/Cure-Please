@@ -506,7 +506,7 @@
     <Setting Name="plGainBoost" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="plGainBoost_Spell" Type="System.String" Scope="User">
+    <Setting Name="plGainBoost_Spell" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="plEnspell" Type="System.Boolean" Scope="User">
@@ -547,6 +547,9 @@
     </Setting>
     <Setting Name="plStormSpell_Spell" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="plAuspice" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -16,6 +16,7 @@ namespace CurePlease
     using EliteMMO.API;
     using static Form1;
 
+
     #region=="Chat Modes"
     public enum ChatMode
     {
@@ -118,7 +119,8 @@ namespace CurePlease
     public partial class Form4 : Form
     {
 
-       private Form1 f1;
+        public int lastKnown_chatline;
+        private Form1 f1;
 
         public Form4(Form1 f)
         {
@@ -129,19 +131,17 @@ namespace CurePlease
 
             if (f1.setinstance2.Enabled == true)
             {
+                #region "== First generate all current chat entries."
                 _ELITEAPIPL = new EliteAPI((int)f1.processids.SelectedItem);
-                characterNamed_label.Text = "Chatlog for character: " + _ELITEAPIPL.Player.Name+"\n";
-
-               // EliteAPI.ChatEntry chatline;
-               // var lines = new List<EliteAPI.ChatEntry>();
-
-               // while ((chatline = _ELITEAPIPL.Chat.GetNextChatLine()) != null)
-              //  {
-               //         chatlog_box.AppendText(chatline.Text + "\n");
-               //         lines.Add(chatline);
-             //   }
+                characterNamed_label.Text = "Chatlog for character: " + _ELITEAPIPL.Player.Name + "\n";
 
 
+                // chatlog_box.AppendText(chatline.Text + "\n");
+
+
+
+
+                #endregion
             }
 
 
@@ -152,6 +152,7 @@ namespace CurePlease
 
         }
 
+
         private void CloseChatLog_button_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -159,6 +160,35 @@ namespace CurePlease
 
         private void chatlogscan_timer_Tick(object sender, EventArgs e)
         {
+            #region "== Now add any additional chat entries every set period of time"
+
+         /*   _ELITEAPIPL = new EliteAPI((int)f1.processids.SelectedItem);
+
+            EliteAPI.ChatEntry chatline;
+            var lines = new List<EliteAPI.ChatEntry>();
+
+            while ((chatline = _ELITEAPIPL.Chat.GetNextChatLine()) != null)
+            {
+                if (!(chatline.Index1 == lastKnown_chatline))
+                {
+                    lines.Add(chatline);
+                }
+            }
+
+            int total_lines = lines.Count();
+            int count_removal = total_lines - 15;
+
+            lines.RemoveRange(0, count_removal);
+
+            foreach (var o in lines)
+            {
+                chatlog_box.AppendText(o + "\n");
+            }
+
+            chatlogscan_timer.Stop(); */
+
+            #endregion
+
 
         }
     }

@@ -375,7 +375,7 @@ namespace CurePlease
              var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob);                               var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
              int mainLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)];                                 int subjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.SubJob)];
 
-             if (_ELITEAPIPL.Player.HasSpell(magic.ID))
+             if (_ELITEAPIPL.Player.HasSpell(magic.Index))
              {
                  if ((checked_spellName == "Refresh III" || (checked_spellName == "Temper II") && _ELITEAPIPL.Player.MainJob == 5) && (JobPoints.SpentJobPoints >= 1200))
                  {

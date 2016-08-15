@@ -479,17 +479,17 @@
     <Setting Name="plPhalanx" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="GeoSpell" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="GeoSpell" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="GeoSpell_Target" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="IndiSpell" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="IndiSpell" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="EntrustedIndiSpell" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="EntrustedIndiSpell" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="Entrusted_Target" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

@@ -2213,7 +2213,7 @@ namespace CurePlease
             this.MinimumSize = new System.Drawing.Size(16, 39);
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.Text = "Cure Please v. 2.0.0.4";
+            this.Text = "Cure Please v. 2.0.0.5";
             this.TransparencyKey = System.Drawing.Color.Silver;
             this.party0.ResumeLayout(false);
             this.party0.PerformLayout();

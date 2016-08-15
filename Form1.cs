@@ -343,7 +343,7 @@ namespace CurePlease
 
         public static int CheckSpellRecast(string checked_recastspellName)
         {
-             var magic = _ELITEAPIPL.Resources.GetSpell(checked_recastspellName, 0);
+            var magic = _ELITEAPIPL.Resources.GetSpell(checked_recastspellName, 0);
             if (_ELITEAPIPL.Recast.GetSpellRecast(magic.Index) == 0)
             {
                 return 0;
@@ -351,7 +351,7 @@ namespace CurePlease
             else
             {
                 return 1;
-            } 
+            }
         }
 
         #endregion
@@ -372,36 +372,36 @@ namespace CurePlease
 
         public static bool HasSpell(string checked_spellName)
         {
-             var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob);                               var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
-             int mainLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)];                                 int subjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.SubJob)];
+            var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob); var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
+            int mainLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)]; int subjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.SubJob)];
 
-             if (_ELITEAPIPL.Player.HasSpell(magic.Index))
-             {
-                 if ((checked_spellName == "Refresh III" || (checked_spellName == "Temper II") && _ELITEAPIPL.Player.MainJob == 5) && (JobPoints.SpentJobPoints >= 1200))
-                 {
-                         return true;
-                 } 
-                 else if (checked_spellName.Contains("storm II") && _ELITEAPIPL.Player.MainJob == 20 && JobPoints.SpentJobPoints >= 100)
-                 {
-                     return true;
-                 }
-                 else if (checked_spellName == "Reraise IV" && _ELITEAPIPL.Player.MainJob == 3 && JobPoints.SpentJobPoints >= 100)
-                 {
-                     return true;
-                 }
-                 else if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
-                 {
-                     return true;
-                 }
-                 else
-                 {
+            if (_ELITEAPIPL.Player.HasSpell(magic.Index))
+            {
+                if ((checked_spellName == "Refresh III" || (checked_spellName == "Temper II") && _ELITEAPIPL.Player.MainJob == 5) && (JobPoints.SpentJobPoints >= 1200))
+                {
+                    return true;
+                }
+                else if (checked_spellName.Contains("storm II") && _ELITEAPIPL.Player.MainJob == 20 && JobPoints.SpentJobPoints >= 100)
+                {
+                    return true;
+                }
+                else if (checked_spellName == "Reraise IV" && _ELITEAPIPL.Player.MainJob == 3 && JobPoints.SpentJobPoints >= 100)
+                {
+                    return true;
+                }
+                else if (!(mainLevelRequired == -1) && (mainLevelRequired <= _ELITEAPIPL.Player.MainJobLevel) || !(subjobLevelRequired == -1) && (subjobLevelRequired <= _ELITEAPIPL.Player.SubJobLevel))
+                {
+                    return true;
+                }
+                else
+                {
                     return false;
                 }
-             }
-             else
-             {
+            }
+            else
+            {
                 return false;
-             } 
+            }
         }
 
         #endregion
@@ -2261,7 +2261,7 @@ namespace CurePlease
 
                 #region "== Party Member Debuff Removal"
 
-               // XmlTextReader reader = new XmlTextReader("debuff_chatentries.xml");
+                // XmlTextReader reader = new XmlTextReader("debuff_chatentries.xml");
 
                 // First create an array of know debuffs and character names, will appear as such
                 // [id] = 1, [name] = "Player", [Debuff] = "Silenced"
@@ -2369,54 +2369,54 @@ namespace CurePlease
                     #endregion
 
                     #region== Barspells ELEMENTAL - Single Target ==
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barfire) && (CheckSpellRecast("Barfire") == 0) && (HasSpell("Barfire"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barfire) && (CheckSpellRecast("Barfire") == 0) && (HasSpell("Barfire"))))
                     {
                         this.castSpell("<me>", "Barfire");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 1) && (!this.plStatusCheck(StatusEffect.Barstone) && (CheckSpellRecast("Barstone") == 0) && (HasSpell("Barstone"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 1) && (!this.plStatusCheck(StatusEffect.Barstone) && (CheckSpellRecast("Barstone") == 0) && (HasSpell("Barstone"))))
                     {
                         this.castSpell("<me>", "Barstone");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 2) && (!this.plStatusCheck(StatusEffect.Barwater) && (CheckSpellRecast("Barwater") == 0) && (HasSpell("Barwater"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 2) && (!this.plStatusCheck(StatusEffect.Barwater) && (CheckSpellRecast("Barwater") == 0) && (HasSpell("Barwater"))))
                     {
                         this.castSpell("<me>", "Barwater");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 3) && (!this.plStatusCheck(StatusEffect.Baraero) && (CheckSpellRecast("Baraero") == 0) && (HasSpell("Baraero"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 3) && (!this.plStatusCheck(StatusEffect.Baraero) && (CheckSpellRecast("Baraero") == 0) && (HasSpell("Baraero"))))
                     {
                         this.castSpell("<me>", "Baraero");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 4) && (!this.plStatusCheck(StatusEffect.Barblizzard) && (CheckSpellRecast("Barblizzard") == 0) && (HasSpell("Barblizzard"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 4) && (!this.plStatusCheck(StatusEffect.Barblizzard) && (CheckSpellRecast("Barblizzard") == 0) && (HasSpell("Barblizzard"))))
                     {
                         this.castSpell("<me>", "Barblizzard");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 5) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthunder") == 0) && (HasSpell("Barthunder"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 5) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthunder") == 0) && (HasSpell("Barthunder"))))
                     {
                         this.castSpell("<me>", "Barthunder");
                     }
                     #endregion
 
                     #region== Barspells ELEMENTAL - AoE ==
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 6) && (!this.plStatusCheck(StatusEffect.Barfire) && (CheckSpellRecast("Barfira") == 0) && (HasSpell("Barfira"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 6) && (!this.plStatusCheck(StatusEffect.Barfire) && (CheckSpellRecast("Barfira") == 0) && (HasSpell("Barfira"))))
                     {
                         this.castSpell("<me>", "Barfira");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 7) && (!this.plStatusCheck(StatusEffect.Barstone) && (CheckSpellRecast("Barstonra") == 0) && (HasSpell("Barstonra"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 7) && (!this.plStatusCheck(StatusEffect.Barstone) && (CheckSpellRecast("Barstonra") == 0) && (HasSpell("Barstonra"))))
                     {
                         this.castSpell("<me>", "Barstonra");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 8) && (!this.plStatusCheck(StatusEffect.Barwater) && (CheckSpellRecast("Barwatera") == 0) && (HasSpell("Barwatera"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 8) && (!this.plStatusCheck(StatusEffect.Barwater) && (CheckSpellRecast("Barwatera") == 0) && (HasSpell("Barwatera"))))
                     {
                         this.castSpell("<me>", "Barwatera");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 9) && (!this.plStatusCheck(StatusEffect.Baraero) && (CheckSpellRecast("Baraera") == 0) && (HasSpell("Baraera"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 9) && (!this.plStatusCheck(StatusEffect.Baraero) && (CheckSpellRecast("Baraera") == 0) && (HasSpell("Baraera"))))
                     {
                         this.castSpell("<me>", "Baraera");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 10) && (!this.plStatusCheck(StatusEffect.Barblizzard) && (CheckSpellRecast("Barblizzara") == 0) && (HasSpell("Barblizzara"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 10) && (!this.plStatusCheck(StatusEffect.Barblizzard) && (CheckSpellRecast("Barblizzara") == 0) && (HasSpell("Barblizzara"))))
                     {
                         this.castSpell("<me>", "Barblizzara");
                     }
-                    else if ((Settings.Default.plBarStatus) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthundra") == 0) && (HasSpell("Barthundra"))))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthundra") == 0) && (HasSpell("Barthundra"))))
                     {
                         this.castSpell("<me>", "Barthundra");
                     }
@@ -3039,42 +3039,90 @@ namespace CurePlease
 
                             #region "==Geomancer Spells"
 
-                            if (Settings.Default.EnableGeoSpells)
+                            // ENTRUSTED INDI SPELL CASTING
+                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)))
                             {
-                                string[] GeoSpells_party = { "Geo-Voidance", "Geo-Precision", "Geo-Regen", "Geo-Haste", "Geo-Attunement", "Geo-Focus", "Geo-Barrier", "Geo-Refresh", "Geo-CHR", "Geo-MND", "Geo-Fury", "Geo-INT", "Geo-AGI", "Geo-Fend", "Geo-VIT", "Geo-DEX", "Geo-Acumen", "Geo-STR" };
+                                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
+                                    if (SpellCheckedResult == "SpellError_Cancel")
+                                    {
+                                        Settings.Default.EnableGeoSpells = false;
+                                        MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
+                                    }
+                                    else if (SpellCheckedResult == "SpellNA")
+                                    {
 
-                                // First check that either Geo_Engaged is off or you're engaged in battle
-                                if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
+                                    }
+                                    else
+                                    {
+                                    if (Settings.Default.Entrusted_Target == "")
+                                    {
+                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                    }
+                                    else
+                                    {
+                                        this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
+                                    }
+                                    }
+                            }
+
+                            if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
+                            {
+                                // INDI SPELL CASTING
+                                if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (playerIndi_Span[0].Minutes >= Settings.Default.indiRecast) && (!this.castingLock))
                                 {
-                                    // Entrust Active, Cast INDI- spell on specified target
-                                    if (this.plStatusCheck((StatusEffect)584))
+                                    if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
                                     {
-                                        if ((this._ELITEAPIMonitored.Player.HP > 0) && (CheckSpellRecast(Settings.Default.EntrustedIndiSpell) == 0) && (HasSpell(Settings.Default.EntrustedIndiSpell)) && (!this.castingLock))
+                                        string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
+                                        if (SpellCheckedResult == "SpellError_Cancel")
                                         {
-                                            this.castSpell(Settings.Default.Entrusted_Target, Settings.Default.EntrustedIndiSpell);
+                                            Settings.Default.EnableGeoSpells = false;
+                                            MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells."); 
                                         }
-                                    }
-                                    // Cast INDI- spell
-                                    if ((this._ELITEAPIMonitored.Player.HP > 0) && (playerIndi_Span[0].Minutes >= Settings.Default.indiRecast) && (!this.castingLock))
-                                    {
-                                        this.castSpell("<me>", Settings.Default.IndiSpell);
-                                        this.playerIndi[0] = DateTime.Now;
-                                    }
-                                    // Cast GEO- Spell
-                                    if ((_ELITEAPIMonitored.Player.HP > 0) && (CheckSpellRecast(Settings.Default.GeoSpell) == 0) && (HasSpell(Settings.Default.GeoSpell)) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock))
-                                    {
-                                        if (GeoSpells_party.Contains(Settings.Default.GeoSpell))
+                                        else if (SpellCheckedResult == "SpellNA")
                                         {
-                                            this.castSpell(Settings.Default.GeoSpell_Target, Settings.Default.GeoSpell);
-                                        }
-                                        else if ((_ELITEAPIMonitored.Player.Status == 1) && (!castingLock) && (!GeoSpells_party.Contains(Settings.Default.GeoSpell)))
-                                        {
-                                            this.castSpell("<bt>", Settings.Default.GeoSpell);
-                                        }
-                                    }
 
+                                        }
+                                        else
+                                        {
+                                            this.castSpell("<me>", SpellCheckedResult);
+                                            this.playerIndi[0] = DateTime.Now;
+                                        }
+                                    }
                                 }
 
+                                // GEO SPELL CASTING
+                                if ((Settings.Default.EnableGeoSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock && (_ELITEAPIMonitored.Player.Status == 1)))
+                                {
+                                    
+                                        string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
+                                        if (SpellCheckedResult == "SpellError_Cancel")
+                                        {
+                                            Settings.Default.EnableGeoSpells = false;
+                                            MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
+                                        }
+                                        else if (SpellCheckedResult == "SpellNA")
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if (_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5)
+                                            {
+                                                if (Settings.Default.GeoSpell_Target == "")
+                                                {
+                                                    this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                }
+                                                else
+                                                {
+                                                    this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
+                                                }
+                                            }
+                                            else {
+                                                this.castSpell("<bt>", SpellCheckedResult);
+                                            }
+                                        }
+                                    
+                                }
 
                             }
                             #endregion
@@ -3182,6 +3230,374 @@ namespace CurePlease
                     return "Protectra";
             }
         }
+        #endregion
+
+        #region "== Geo Spell Checker"
+        private string ReturnGeoSpell(int GEOSpell_ID, int GeoSpell_Type)
+        {
+            if (GEOSpell_ID == 0)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Poison") == 0) && (HasSpell("Indi-Poison")))
+                {
+                    return "Indi-Poison";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Poison") == 0) && (HasSpell("Geo-Poison")))
+                {
+                    return "Geo-Poison";
+                }
+                else { return "SpellNA"; }
+            }
+            if (GEOSpell_ID == 1)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Voidance") == 0) && (HasSpell("Indi-Voidance")))
+                {
+                    return "Indi-Voidance";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Voidance") == 0) && (HasSpell("Geo-Voidance")))
+                {
+                    return "Geo-Voidance";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 2)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Precision") == 0) && (HasSpell("Indi-Precision")))
+                {
+                    return "Indi-Precision";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Precision") == 0) && (HasSpell("Geo-Precision")))
+                {
+                    return "Geo-Precision";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 3)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Regen") == 0) && (HasSpell("Indi-Regen")))
+                {
+                    return "Indi-Regen";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Regen") == 0) && (HasSpell("Geo-Regen")))
+                {
+                    return "Geo-Regen";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 4)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Haste") == 0) && (HasSpell("Indi-Haste")))
+                {
+                    return "Indi-Haste";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Haste") == 0) && (HasSpell("Geo-Haste")))
+                {
+                    return "Geo-Haste";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 5)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Attunement") == 0) && (HasSpell("Indi-Attunement")))
+                {
+                    return "Indi-Attunement";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Attunement") == 0) && (HasSpell("Geo-Attunement")))
+                {
+                    return "Geo-Attunement";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 6)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Focus") == 0) && (HasSpell("Indi-Focus")))
+                {
+                    return "Indi-Focus";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Focus") == 0) && (HasSpell("Geo-Focus")))
+                {
+                    return "Geo-Focus";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 7)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Barrier") == 0) && (HasSpell("Indi-Barrier")))
+                {
+                    return "Indi-Barrier";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Barrier") == 0) && (HasSpell("Geo-Barrier")))
+                {
+                    return "Geo-Barrier";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 8)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Refresh") == 0) && (HasSpell("Indi-Refresh")))
+                {
+                    return "Indi-Refresh";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Refresh") == 0) && (HasSpell("Geo-Refresh")))
+                {
+                    return "Geo-Refresh";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 9)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-CHR") == 0) && (HasSpell("Indi-CHR")))
+                {
+                    return "Indi-CHR";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-CHR") == 0) && (HasSpell("Geo-CHR")))
+                {
+                    return "Geo-CHR";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 10)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-MND") == 0) && (HasSpell("Indi-MND")))
+                {
+                    return "Indi-MND";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-MND") == 0) && (HasSpell("Geo-MND")))
+                {
+                    return "Geo-MND";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 11)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fury") == 0) && (HasSpell("Indi-Fury")))
+                {
+                    return "Indi-Fury";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Fury") == 0) && (HasSpell("Geo-Fury")))
+                {
+                    return "Geo-Fury";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 12)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-INT") == 0) && (HasSpell("Indi-INT")))
+                {
+                    return "Indi-INT";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-INT") == 0) && (HasSpell("Geo-INT")))
+                {
+                    return "Geo-INT";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 13)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-AGI") == 0) && (HasSpell("Indi-AGI")))
+                {
+                    return "Indi-AGI";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-AGI") == 0) && (HasSpell("Geo-AGI")))
+                {
+                    return "Geo-AGI";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 14)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fend") == 0) && (HasSpell("Indi-Fend")))
+                {
+                    return "Indi-Fend";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Fend") == 0) && (HasSpell("Geo-Fend")))
+                {
+                    return "Geo-Fend";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 15)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-VIT") == 0) && (HasSpell("Indi-VIT")))
+                {
+                    return "Indi-VIT";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-VIT") == 0) && (HasSpell("Geo-VIT")))
+                {
+                    return "Geo-VIT";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 16)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-DEX") == 0) && (HasSpell("Indi-DEX")))
+                {
+                    return "Indi-DEX";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-DEX") == 0) && (HasSpell("Geo-DEX")))
+                {
+                    return "Geo-DEX";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 17)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Acumen") == 0) && (HasSpell("Indi-Acumen")))
+                {
+                    return "Indi-Acumen";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Acumen") == 0) && (HasSpell("Geo-Acumen")))
+                {
+                    return "Geo-Acumen";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 18)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-STR") == 0) && (HasSpell("Indi-STR")))
+                {
+                    return "Indi-STR";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-STR") == 0) && (HasSpell("Geo-STR")))
+                {
+                    return "Geo-STR";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 19)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Slow") == 0) && (HasSpell("Indi-Slow")))
+                {
+                    return "Indi-Slow";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Slow") == 0) && (HasSpell("Geo-Slow")))
+                {
+                    return "Geo-Slow";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 20)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Torpor") == 0) && (HasSpell("Indi-Torpor")))
+                {
+                    return "Indi-Torpor";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Torpor") == 0) && (HasSpell("Geo-Torpor")))
+                {
+                    return "Geo-Torpor";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 21)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Slip") == 0) && (HasSpell("Indi-Slip")))
+                {
+                    return "Indi-Slip";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Slip") == 0) && (HasSpell("Geo-Slip")))
+                {
+                    return "Geo-Slip";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 22)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Languor") == 0) && (HasSpell("Indi-Languor")))
+                {
+                    return "Indi-Languor";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Languor") == 0) && (HasSpell("Geo-Languor")))
+                {
+                    return "Geo-Languor";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 23)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Paralysis") == 0) && (HasSpell("Indi-Paralysis")))
+                {
+                    return "Indi-Paralysis";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Paralysis") == 0) && (HasSpell("Geo-Paralysis")))
+                {
+                    return "Geo-Paralysis";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 24)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Vex") == 0) && (HasSpell("Indi-Vex")))
+                {
+                    return "Indi-Vex";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Vex") == 0) && (HasSpell("Geo-Vex")))
+                {
+                    return "Geo-Vex";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 25)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Frailty") == 0) && (HasSpell("Indi-Frailty")))
+                {
+                    return "Indi-Frailty";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Frailty") == 0) && (HasSpell("Geo-Frailty")))
+                {
+                    return "Geo-Frailty";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 26)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Wilt") == 0) && (HasSpell("Indi-Wilt")))
+                {
+                    return "Indi-Wilt";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Wilt") == 0) && (HasSpell("Geo-Wilt")))
+                {
+                    return "Geo-Wilt";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 27)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Malaise") == 0) && (HasSpell("Indi-Malaise")))
+                {
+                    return "Indi-Malaise";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Malaise") == 0) && (HasSpell("Geo-Malaise")))
+                {
+                    return "Geo-Malaise";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 28)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Gravity") == 0) && (HasSpell("Indi-Gravity")))
+                {
+                    return "Indi-Gravity";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Gravity") == 0) && (HasSpell("Geo-Gravity")))
+                {
+                    return "Geo-Gravity";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 29)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fade") == 0) && (HasSpell("Indi-Fade")))
+                {
+                    return "Indi-Fade";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Fade") == 0) && (HasSpell("Geo-Fade")))
+                {
+                    return "Geo-Fade";
+                }
+                else { return "SpellNA"; }
+            }
+            else { return "SpellError_Cancel"; }
+        }
+
         #endregion
 
         #region "== settingsToolStripMenuItem (settings Tab)"
@@ -3698,11 +4114,11 @@ namespace CurePlease
         }
         private void EntrustTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings.Default.GeoSpell_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
+            Settings.Default.Entrusted_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
         }
         private void GeoTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings.Default.Entrusted_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
+            Settings.Default.GeoSpell_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
         }
 
 

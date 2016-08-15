@@ -206,11 +206,10 @@ namespace CurePlease
             this.indiRecast.Value = Properties.Settings.Default.indiRecast;
             this.EnableGeoSpells.Checked = Properties.Settings.Default.EnableGeoSpells;
             this.GEO_engaged.Checked = Properties.Settings.Default.GEO_engaged;
-            this.GEOSpell.SelectedItem = Properties.Settings.Default.GeoSpell;
+            this.GEOSpell.SelectedIndex = Properties.Settings.Default.GeoSpell;
             this.GEOSpell_target.Text = Properties.Settings.Default.GeoSpell_Target;
-            this.INDISpell.SelectedItem = Properties.Settings.Default.IndiSpell;
-            this.entrustINDISpell.SelectedItem = Properties.Settings.Default.EntrustedIndiSpell;
-            this.entrustSpell_target.Text = Properties.Settings.Default.Entrusted_Target;
+            this.INDISpell.SelectedIndex = Properties.Settings.Default.IndiSpell;
+            this.entrustINDISpell.SelectedIndex = Properties.Settings.Default.EntrustedIndiSpell;
             this.entrustSpell_target.Text = Properties.Settings.Default.Entrusted_Target;
             // Additional PL cast
             this.plTemper.Checked = Properties.Settings.Default.plTemper;
@@ -442,10 +441,10 @@ namespace CurePlease
             Properties.Settings.Default.indiRecast = this.indiRecast.Value;
             Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
             Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
-            Properties.Settings.Default.GeoSpell = (string)this.GEOSpell.SelectedItem;
+            Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
             Properties.Settings.Default.GeoSpell_Target = this.GEOSpell_target.Text;
-            Properties.Settings.Default.IndiSpell = (string)this.INDISpell.SelectedItem;
-            Properties.Settings.Default.EntrustedIndiSpell = (string)this.entrustINDISpell.SelectedItem;
+            Properties.Settings.Default.IndiSpell = this.INDISpell.SelectedIndex;
+            Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
             Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
             Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
             Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
@@ -1125,10 +1124,10 @@ namespace CurePlease
             Properties.Settings.Default.indiRecast = this.indiRecast.Value;
             Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
             Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
-            Properties.Settings.Default.GeoSpell = (string)this.GEOSpell.SelectedItem;
+            Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
             Properties.Settings.Default.GeoSpell_Target = this.GEOSpell_target.Text;
-            Properties.Settings.Default.IndiSpell = (string)this.INDISpell.SelectedItem;
-            Properties.Settings.Default.EntrustedIndiSpell = (string)this.entrustINDISpell.SelectedItem;
+            Properties.Settings.Default.IndiSpell = this.INDISpell.SelectedIndex;
+            Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
             Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
             Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
             Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;

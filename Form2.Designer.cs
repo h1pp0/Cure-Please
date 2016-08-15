@@ -57,6 +57,7 @@ namespace CurePlease
             this.cure1amount = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.plAuspice = new System.Windows.Forms.CheckBox();
             this.plBarStatus_Spell = new System.Windows.Forms.ComboBox();
             this.plGainBoost = new System.Windows.Forms.CheckBox();
             this.plBarStatus = new System.Windows.Forms.CheckBox();
@@ -283,7 +284,6 @@ namespace CurePlease
             this.mpMinCastValue = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.plAuspice = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -641,6 +641,16 @@ namespace CurePlease
             this.groupBox9.TabIndex = 12;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Group PL Buffs";
+            // 
+            // plAuspice
+            // 
+            this.plAuspice.AutoSize = true;
+            this.plAuspice.Location = new System.Drawing.Point(9, 134);
+            this.plAuspice.Name = "plAuspice";
+            this.plAuspice.Size = new System.Drawing.Size(64, 17);
+            this.plAuspice.TabIndex = 18;
+            this.plAuspice.Text = "Auspice";
+            this.plAuspice.UseVisualStyleBackColor = true;
             // 
             // plBarStatus_Spell
             // 
@@ -1493,10 +1503,10 @@ namespace CurePlease
             this.GEO_engaged.AutoSize = true;
             this.GEO_engaged.Location = new System.Drawing.Point(43, 40);
             this.GEO_engaged.Name = "GEO_engaged";
-            this.GEO_engaged.Size = new System.Drawing.Size(121, 17);
+            this.GEO_engaged.Size = new System.Drawing.Size(169, 17);
             this.GEO_engaged.TabIndex = 3;
-            this.GEO_engaged.Text = "Only when engaged";
-            this.toolTip1.SetToolTip(this.GEO_engaged, "Unless the spell is Regen or Refresh only cast when player engaged.");
+            this.GEO_engaged.Text = "Use INDI only when engaged.";
+            this.toolTip1.SetToolTip(this.GEO_engaged, "Geo- and Entrusted spells will only be used when in combat.");
             this.GEO_engaged.UseVisualStyleBackColor = true;
             // 
             // EnableGeoSpells
@@ -3576,16 +3586,6 @@ namespace CurePlease
             this.toolTip1.SetToolTip(this.button4, "Click here or Close to Save Settings!");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // plAuspice
-            // 
-            this.plAuspice.AutoSize = true;
-            this.plAuspice.Location = new System.Drawing.Point(9, 134);
-            this.plAuspice.Name = "plAuspice";
-            this.plAuspice.Size = new System.Drawing.Size(64, 17);
-            this.plAuspice.TabIndex = 18;
-            this.plAuspice.Text = "Auspice";
-            this.plAuspice.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 

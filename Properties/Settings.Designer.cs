@@ -1933,10 +1933,10 @@ namespace CurePlease.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GeoSpell {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int GeoSpell {
             get {
-                return ((string)(this["GeoSpell"]));
+                return ((int)(this["GeoSpell"]));
             }
             set {
                 this["GeoSpell"] = value;
@@ -1957,10 +1957,10 @@ namespace CurePlease.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string IndiSpell {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int IndiSpell {
             get {
-                return ((string)(this["IndiSpell"]));
+                return ((int)(this["IndiSpell"]));
             }
             set {
                 this["IndiSpell"] = value;
@@ -1969,10 +1969,10 @@ namespace CurePlease.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string EntrustedIndiSpell {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int EntrustedIndiSpell {
             get {
-                return ((string)(this["EntrustedIndiSpell"]));
+                return ((int)(this["EntrustedIndiSpell"]));
             }
             set {
                 this["EntrustedIndiSpell"] = value;

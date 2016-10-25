@@ -1904,7 +1904,6 @@ namespace CurePlease
                             this.CureCalculator(id);
                             break;
                         }
-                        Debug.WriteLine(this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Name);
                         if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Settings.Default.curePercentage) && (this.castingPossible(id)))
                         {
                             this.CureCalculator(id);

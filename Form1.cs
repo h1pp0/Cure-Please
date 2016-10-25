@@ -309,6 +309,18 @@ namespace CurePlease
             return item != null ? (ushort)item.ItemID : (ushort)0;
         }
 
+        private int GetAbilityRecastBySpellId(int id)
+        {
+            var abilityIds = _ELITEAPIPL.Recast.GetAbilityIds();
+            for (var x = 0; x < abilityIds.Count; x++)
+            {
+                if (abilityIds[x] == id)
+                    return _ELITEAPIPL.Recast.GetAbilityRecast(x);
+            }
+
+            return -1;
+        }
+
         public static EliteAPI _ELITEAPIPL;
         public EliteAPI _ELITEAPIMonitored;
         public ListBox processids = new ListBox();
@@ -1833,14 +1845,14 @@ namespace CurePlease
             #endregion
 
             #region "== Job ability Divine Seal and Convert"
-            if (Settings.Default.divineSealBox && _ELITEAPIPL.Player.MPP <= 11 && _ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Divine_Seal) == 0 && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+            if (Settings.Default.divineSealBox && _ELITEAPIPL.Player.MPP <= 11 && this.GetAbilityRecastBySpellId((int)AbilityList.Divine_Seal) == 0 && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(3000);
                 _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Seal\" <me>");
                 this.ActionLockMethod();
             }
 
-            else if (Settings.Default.Convert && _ELITEAPIPL.Player.MPP <= 10 && _ELITEAPIPL.Recast.GetAbilityRecast((int)AbilityList.Convert) == 0 && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+            else if (Settings.Default.Convert && _ELITEAPIPL.Player.MPP <= 10 && this.GetAbilityRecastBySpellId((int)AbilityList.Convert) == 0 && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(1000);
                 _ELITEAPIPL.ThirdParty.SendString("/ja \"Convert\" <me>");

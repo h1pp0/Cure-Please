@@ -3216,7 +3216,7 @@ namespace CurePlease
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Entrust\" <me>");
                                     this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.Dematerialize) && (_ELITEAPIMonitored.Player.Status == 1) && (_ELITEAPIPL.Player.Pet.HealthPercent > 1) && (GetAbilityRecast("Demateralize") == 0) && (HasAbility("Dematerialize")))
+                                else if ((Settings.Default.Dematerialize) && (_ELITEAPIMonitored.Player.Status == 1) && (_ELITEAPIPL.Player.Pet.HealthPercent > 1) && (GetAbilityRecast("Dematerialize") == 0) && (HasAbility("Dematerialize")))
                                 {
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Dematerialize\" <me>");
                                     this.ActionLockMethod();

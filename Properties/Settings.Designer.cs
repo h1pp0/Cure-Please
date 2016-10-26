@@ -2218,5 +2218,17 @@ namespace CurePlease.Properties {
                 this["plAuspice"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableLuopanSpells {
+            get {
+                return ((bool)(this["EnableLuopanSpells"]));
+            }
+            set {
+                this["EnableLuopanSpells"] = value;
+            }
+        }
     }
 }

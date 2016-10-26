@@ -284,6 +284,7 @@ namespace CurePlease
             this.mpMinCastValue = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.EnableLuopanSpells = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -1485,6 +1486,7 @@ namespace CurePlease
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.EnableLuopanSpells);
             this.tabPage6.Controls.Add(this.GEO_engaged);
             this.tabPage6.Controls.Add(this.EnableGeoSpells);
             this.tabPage6.Controls.Add(this.groupBox7);
@@ -1596,9 +1598,9 @@ namespace CurePlease
             this.groupBox6.Controls.Add(this.label6);
             this.groupBox6.Controls.Add(this.GEOSpell_target);
             this.groupBox6.Controls.Add(this.GEOSpell);
-            this.groupBox6.Location = new System.Drawing.Point(244, 8);
+            this.groupBox6.Location = new System.Drawing.Point(244, 40);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(252, 368);
+            this.groupBox6.Size = new System.Drawing.Size(252, 336);
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "GEO Spells";
@@ -1606,7 +1608,7 @@ namespace CurePlease
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 344);
+            this.label6.Location = new System.Drawing.Point(6, 314);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 13);
             this.label6.TabIndex = 4;
@@ -1615,7 +1617,7 @@ namespace CurePlease
             // GEOSpell_target
             // 
             this.GEOSpell_target.Enabled = false;
-            this.GEOSpell_target.Location = new System.Drawing.Point(120, 341);
+            this.GEOSpell_target.Location = new System.Drawing.Point(120, 308);
             this.GEOSpell_target.Name = "GEOSpell_target";
             this.GEOSpell_target.Size = new System.Drawing.Size(126, 20);
             this.GEOSpell_target.TabIndex = 3;
@@ -1658,7 +1660,7 @@ namespace CurePlease
             "Geo-Fade"});
             this.GEOSpell.Location = new System.Drawing.Point(6, 19);
             this.GEOSpell.Name = "GEOSpell";
-            this.GEOSpell.Size = new System.Drawing.Size(240, 316);
+            this.GEOSpell.Size = new System.Drawing.Size(240, 277);
             this.GEOSpell.TabIndex = 2;
             // 
             // groupBox5
@@ -3587,6 +3589,17 @@ namespace CurePlease
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // EnableLuopanSpells
+            // 
+            this.EnableLuopanSpells.AutoSize = true;
+            this.EnableLuopanSpells.Location = new System.Drawing.Point(244, 17);
+            this.EnableLuopanSpells.Name = "EnableLuopanSpells";
+            this.EnableLuopanSpells.Size = new System.Drawing.Size(117, 17);
+            this.EnableLuopanSpells.TabIndex = 4;
+            this.EnableLuopanSpells.Text = "Enable GEO- spells";
+            this.EnableLuopanSpells.UseVisualStyleBackColor = true;
+            this.EnableLuopanSpells.CheckedChanged += new System.EventHandler(this.EnableLuopanSpells_CheckedChanged);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3931,5 +3944,6 @@ namespace CurePlease
         private System.Windows.Forms.ComboBox plStormSpell_Spell;
         private System.Windows.Forms.CheckBox plStormSpell;
         private System.Windows.Forms.CheckBox plAuspice;
+        private System.Windows.Forms.CheckBox EnableLuopanSpells;
     }
 }

@@ -211,6 +211,7 @@ namespace CurePlease
             this.INDISpell.SelectedIndex = Properties.Settings.Default.IndiSpell;
             this.entrustINDISpell.SelectedIndex = Properties.Settings.Default.EntrustedIndiSpell;
             this.entrustSpell_target.Text = Properties.Settings.Default.Entrusted_Target;
+            this.EnableLuopanSpells.Checked = Properties.Settings.Default.EnableLuopanSpells;
             // Additional PL cast
             this.plTemper.Checked = Properties.Settings.Default.plTemper;
             if (Properties.Settings.Default.plTemperLevel == 1 && this.plTemper.Checked == true)
@@ -447,6 +448,7 @@ namespace CurePlease
             Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
             Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
             Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
+            Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
             Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
             Properties.Settings.Default.plTemper = this.plTemper.Checked;
             if (this.plTemperLevel1.Checked)
@@ -912,8 +914,6 @@ namespace CurePlease
             if (this.EnableGeoSpells.Checked)
             {
                 this.INDISpell.Enabled = true;
-                this.GEOSpell.Enabled = true;
-                this.GEOSpell_target.Enabled = true;
                 this.entrustINDISpell.Enabled = true;
                 this.entrustSpell_target.Enabled = true;
 
@@ -921,17 +921,31 @@ namespace CurePlease
             else if (this.EnableGeoSpells.Checked == false)
             {
                 this.INDISpell.Enabled = false;
-                this.GEOSpell.Enabled = false;
-                this.GEOSpell_target.Enabled = false;
                 this.entrustINDISpell.Enabled = false;
                 this.entrustSpell_target.Enabled = false;
 
             }
         }
+
+        private void EnableLuopanSpells_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.EnableLuopanSpells.Checked)
+            {
+                this.GEOSpell.Enabled = true;
+                this.GEOSpell_target.Enabled = true;
+            }
+            else if (this.EnableLuopanSpells.Checked == false)
+            {
+                this.GEOSpell.Enabled = false;
+                this.GEOSpell_target.Enabled = false;
+            }
+        }
+
+
         #endregion
 
 
-                #region "== Form Closing Settings"
+        #region "== Form Closing Settings"
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.cure1enabled = this.cure1enabled.Checked;
@@ -1130,6 +1144,7 @@ namespace CurePlease
             Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
             Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
             Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
+            Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
             Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
 
             // Additional PL cast

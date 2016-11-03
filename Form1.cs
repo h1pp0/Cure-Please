@@ -1,19 +1,17 @@
-﻿using CurePlease.Properties;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml;
-using System.Text;
-
+﻿
 // ReSharper disable InconsistentNaming
 
 namespace CurePlease
 {
+    using CurePlease.Properties;
     using EliteMMO.API;
+    using System;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Threading;
+    using System.Windows.Forms;
 
     public partial class Form1 : Form
     {

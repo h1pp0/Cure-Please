@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Forms;
-using System.Threading;
-
+﻿
 namespace CurePlease
 {
-        #region "== Form2"
+    using System;
+    using System.Globalization;
+    using System.Windows.Forms;
+
+    #region "== Form2"
     public partial class Form2 : Form
     {
 

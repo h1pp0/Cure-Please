@@ -1,9 +1,10 @@
-﻿using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-
+﻿
 namespace CurePlease
 {
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Windows.Forms;
+
     public class NewProgressBar : ProgressBar
     {
         public NewProgressBar ()

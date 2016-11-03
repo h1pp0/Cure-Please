@@ -3086,7 +3086,7 @@ namespace CurePlease
                             // ENTRUSTED INDI SPELL CASTING
                             if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)))
                             {
-                                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
+                                string SpellCheckedResult = ReturnGeoSpell(Settings.Default.EntrustedIndiSpell, 1);
                                     if (SpellCheckedResult == "SpellError_Cancel")
                                     {
                                         Settings.Default.EnableGeoSpells = false;
@@ -3098,14 +3098,14 @@ namespace CurePlease
                                     }
                                     else
                                     {
-                                    if (Settings.Default.Entrusted_Target == "")
-                                    {
-                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
-                                    }
-                                    else
-                                    {
-                                        this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
-                                    }
+                                        if (Settings.Default.Entrusted_Target == "")
+                                        {
+                                            this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                        }
+                                        else
+                                        {
+                                            this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
+                                        }
                                     }
                             }
 
@@ -3135,7 +3135,7 @@ namespace CurePlease
                                 }
 
                                 // GEO SPELL CASTING
-                                if ((Settings.Default.EnableGeoSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock && (_ELITEAPIMonitored.Player.Status == 1)))
+                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock && (_ELITEAPIMonitored.Player.Status == 1)))
                                 {
                                     
                                         string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
@@ -3216,7 +3216,7 @@ namespace CurePlease
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Entrust\" <me>");
                                     this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.Dematerialize) && (_ELITEAPIMonitored.Player.Status == 1) && (_ELITEAPIPL.Player.Pet.HealthPercent > 1) && (GetAbilityRecast("Demateralize") == 0) && (HasAbility("Dematerialize")))
+                                else if ((Settings.Default.Dematerialize) && (_ELITEAPIMonitored.Player.Status == 1) && (_ELITEAPIPL.Player.Pet.HealthPercent > 1) && (GetAbilityRecast("Dematerialize") == 0) && (HasAbility("Dematerialize")))
                                 {
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Dematerialize\" <me>");
                                     this.ActionLockMethod();

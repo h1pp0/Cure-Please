@@ -212,6 +212,13 @@ namespace CurePlease
             this.entrustINDISpell.SelectedIndex = Properties.Settings.Default.EntrustedIndiSpell;
             this.entrustSpell_target.Text = Properties.Settings.Default.Entrusted_Target;
             this.EnableLuopanSpells.Checked = Properties.Settings.Default.EnableLuopanSpells;
+            this.BlazeOfGloryBox.Checked = Properties.Settings.Default.BlazeOfGlory;
+            this.autoTarget.Checked = Properties.Settings.Default.AutoTarget;
+            this.autoTargetSpell.Text = Properties.Settings.Default.autoTargetSpell;
+            this.RadialArcanaBox.Checked = Properties.Settings.Default.RadialArcana;
+            this.RadialArcanaMP.Value = Properties.Settings.Default.RadialArcanaMP;
+            this.FullCircleBox.Checked = Properties.Settings.Default.FullCircle;
+
             // Additional PL cast
             this.plTemper.Checked = Properties.Settings.Default.plTemper;
             if (Properties.Settings.Default.plTemperLevel == 1 && this.plTemper.Checked == true)
@@ -236,6 +243,30 @@ namespace CurePlease
             this.plKlimaform.Checked = Properties.Settings.Default.plKlimaform;
             this.plStormSpell_Spell.SelectedIndex = Properties.Settings.Default.plStormSpell_Spell;
             this.plAuspice.Checked = Properties.Settings.Default.plAuspice;
+
+            // CURAGA SPELLS 
+            this.curagaEnabled.Checked = Properties.Settings.Default.curagaEnabled;
+            this.curaga2Enabled.Checked = Properties.Settings.Default.curaga2Enabled;
+            this.curaga3Enabled.Checked = Properties.Settings.Default.curaga3Enabled;
+            this.curaga4Enabled.Checked = Properties.Settings.Default.curaga4Enabled;
+            this.curaga5Enabled.Checked = Properties.Settings.Default.curaga5Enabled;
+
+            this.curagaAmount.Value = Properties.Settings.Default.curagaAmount;
+            this.curaga2Amount.Value = Properties.Settings.Default.curaga2Amount;
+            this.curaga3Amount.Value = Properties.Settings.Default.curaga3Amount;
+            this.curaga4Amount.Value = Properties.Settings.Default.curaga4Amount;
+            this.curaga5Amount.Value = Properties.Settings.Default.curaga5Amount;
+
+            this.curagaCurePercentage.Value = Properties.Settings.Default.curagaCurePercentage;
+            this.curagaPercentageValueLabel.Text = Properties.Settings.Default.curagaCurePercentage.ToString(CultureInfo.InvariantCulture);
+
+
+
+
+
+
+
+
         }
 
         private void curePercentage_ValueChanged(object sender, EventArgs e)
@@ -246,6 +277,10 @@ namespace CurePlease
         private void priorityCurePercentage_ValueChanged(object sender, EventArgs e)
         {
             this.priorityCurePercentageValueLabel.Text = this.priorityCurePercentage.Value.ToString();
+        }
+        private void curagaPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            this.curagaPercentageValueLabel.Text = this.curagaCurePercentage.Value.ToString();
         }
         #endregion        
 
@@ -450,6 +485,12 @@ namespace CurePlease
             Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
             Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
             Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
+            Properties.Settings.Default.BlazeOfGlory = this.BlazeOfGloryBox.Checked;
+            Properties.Settings.Default.AutoTarget = this.autoTarget.Checked;
+            Properties.Settings.Default.autoTargetSpell = this.autoTargetSpell.Text;
+            Properties.Settings.Default.RadialArcana = this.RadialArcanaBox.Checked;
+            Properties.Settings.Default.FullCircle = this.FullCircleBox.Checked;
+            Properties.Settings.Default.RadialArcanaMP = this.RadialArcanaMP.Value;
             Properties.Settings.Default.plTemper = this.plTemper.Checked;
             if (this.plTemperLevel1.Checked)
             {
@@ -471,6 +512,34 @@ namespace CurePlease
             Properties.Settings.Default.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
             Properties.Settings.Default.plKlimaform = this.plKlimaform.Checked;
             Properties.Settings.Default.plAuspice = this.plAuspice.Checked;
+
+            // CURAGA SPELLS 
+            Properties.Settings.Default.curagaEnabled = this.curagaEnabled.Checked;
+            Properties.Settings.Default.curaga2Enabled = this.curaga2Enabled.Checked;
+            Properties.Settings.Default.curaga3Enabled = this.curaga3Enabled.Checked;
+            Properties.Settings.Default.curaga4Enabled = this.curaga4Enabled.Checked;
+            Properties.Settings.Default.curaga5Enabled = this.curaga5Enabled.Checked;
+
+            Properties.Settings.Default.curagaAmount = Convert.ToInt32(this.curagaAmount.Value);
+            Properties.Settings.Default.curaga2Amount = Convert.ToInt32(this.curaga2Amount.Value);
+            Properties.Settings.Default.curaga3Amount = Convert.ToInt32(this.curaga3Amount.Value);
+            Properties.Settings.Default.curaga4Amount = Convert.ToInt32(this.curaga4Amount.Value);
+            Properties.Settings.Default.curaga5Amount = Convert.ToInt32(this.curaga5Amount.Value);
+
+            Properties.Settings.Default.curagaCurePercentage = this.curagaCurePercentage.Value;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             Properties.Settings.Default.Save();            
             this.Close();
@@ -1134,19 +1203,6 @@ namespace CurePlease
             Properties.Settings.Default.AutoProtectSpell = this.autoProtect.SelectedIndex;
             Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
 
-            // New Spells
-            Properties.Settings.Default.indiRecast = this.indiRecast.Value;
-            Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
-            Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
-            Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
-            Properties.Settings.Default.GeoSpell_Target = this.GEOSpell_target.Text;
-            Properties.Settings.Default.IndiSpell = this.INDISpell.SelectedIndex;
-            Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
-            Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
-            Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
-            Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
-            Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
-
             // Additional PL cast
             Properties.Settings.Default.plTemper = this.plTemper.Checked;
             if (this.plTemperLevel1.Checked)
@@ -1170,14 +1226,40 @@ namespace CurePlease
             Properties.Settings.Default.plKlimaform = this.plKlimaform.Checked;
             Properties.Settings.Default.plAuspice = this.plAuspice.Checked;
 
+            // New Spells
+            Properties.Settings.Default.indiRecast = this.indiRecast.Value;
+            Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
+            Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
+            Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
+            Properties.Settings.Default.GeoSpell_Target = this.GEOSpell_target.Text;
+            Properties.Settings.Default.IndiSpell = this.INDISpell.SelectedIndex;
+            Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
+            Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
+            Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
+            Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
+            Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
+            Properties.Settings.Default.BlazeOfGlory = this.BlazeOfGloryBox.Checked;
+            Properties.Settings.Default.AutoTarget = this.autoTarget.Checked;
+            Properties.Settings.Default.FullCircle = this.FullCircleBox.Checked;
+            Properties.Settings.Default.autoTargetSpell = this.autoTargetSpell.Text; 
+
+            // CURAGA SPELLS 
+            Properties.Settings.Default.curagaEnabled = this.curagaEnabled.Checked;
+            Properties.Settings.Default.curaga2Enabled = this.curaga2Enabled.Checked;
+            Properties.Settings.Default.curaga3Enabled = this.curaga3Enabled.Checked;
+            Properties.Settings.Default.curaga4Enabled = this.curaga4Enabled.Checked;
+            Properties.Settings.Default.curaga5Enabled = this.curaga5Enabled.Checked;
+
+            Properties.Settings.Default.curagaAmount = Convert.ToInt32(this.curagaAmount.Value);
+            Properties.Settings.Default.curaga2Amount = Convert.ToInt32(this.curaga2Amount.Value);
+            Properties.Settings.Default.curaga3Amount = Convert.ToInt32(this.curaga3Amount.Value);
+            Properties.Settings.Default.curaga4Amount = Convert.ToInt32(this.curaga4Amount.Value);
+            Properties.Settings.Default.curaga5Amount = Convert.ToInt32(this.curaga5Amount.Value);
 
             Properties.Settings.Default.Save();
         }
 
-        private void plShellralevel_ValueChanged(object sender, EventArgs e)
-        {
 
-        }
     }
         #endregion
 }

@@ -52,10 +52,12 @@
             this.chatlog_box.Size = new System.Drawing.Size(863, 367);
             this.chatlog_box.TabIndex = 0;
             this.chatlog_box.Text = "";
+            this.chatlog_box.TextChanged += new System.EventHandler(this.chatlog_box_TextChanged);
             // 
             // ChatLogMessage_textfield
             // 
             this.ChatLogMessage_textfield.Location = new System.Drawing.Point(12, 413);
+            this.ChatLogMessage_textfield.MaxLength = 125;
             this.ChatLogMessage_textfield.Name = "ChatLogMessage_textfield";
             this.ChatLogMessage_textfield.Size = new System.Drawing.Size(701, 24);
             this.ChatLogMessage_textfield.TabIndex = 1;
@@ -69,6 +71,7 @@
             this.SendMessage_botton.TabIndex = 2;
             this.SendMessage_botton.Text = "Send";
             this.SendMessage_botton.UseVisualStyleBackColor = true;
+            this.SendMessage_botton.Click += new System.EventHandler(this.SendMessage_botton_Click);
             // 
             // CloseChatLog_button
             // 

@@ -12,9 +12,13 @@ namespace CurePlease
     using System.Linq;
     using System.Threading;
     using System.Windows.Forms;
+    using System.Collections.Generic;
 
     public partial class Form1 : Form
     {
+
+        uint lastTargetID = 0;
+
         #region "FFACE Tools Enumerations"
         public enum LoginStatus
         {
@@ -51,228 +55,6 @@ namespace CurePlease
         /// <summary>
         /// Ability List
         /// </summary>
-        public enum AbilityList : byte
-        {
-            Two_Hour = 0,
-            Berserk = 1,
-            Warcry = 2,
-            Defender = 3,
-            Aggressor = 4,
-            Provoke = 5,
-            Enrage = 6,
-            Tomahawk = 7,
-            Retaliation = 8,
-            Restraint = 9,
-            Rune_Enhancement_Elemental = 10,
-            Blood_Rage = 11,
-            Focus = 13,
-            Dodge = 14,
-            Chakra = 15,
-            Boost = 16,
-            Counterstance = 17,
-            Chi_Blast = 18,
-            Mantra = 19,
-            Formless_Strikes = 20,
-            Footwork = 21,
-            Perfect_Counter = 22,
-            Vallation = 23,
-            Swordplay = 24,
-            Lunge = 25,
-            Divine_Seal = 26,
-            Martyr = 27,
-            Devotion = 28,
-            Afflatus_Solace = 29,
-            Afflatus_Misery = 30,
-            Impetus = 31,
-            Divine_Caress = 32,
-            Sacrosanctity = 33,
-            Enmity_Douse = 34,
-            Manawell = 35,
-            Saboteur = 36,
-            Spontaneity = 37,
-            Elemental_Seal = 38,
-            Mana_Wall = 39,
-            Conspirator = 40,
-            Sepulcher = 41,
-            Palisade = 42,
-            Arcane_Crest = 43,
-            Scarlet_Delirium = 44,
-            Spur = 45,
-            Run_Wild = 46,
-            Tenuto = 47,
-            Marcato = 48,
-            Convert = 49,
-            Composure = 50,
-            Bounty_Shot = 51,
-            Decoy_Shot = 52,
-            Hamanoha = 53,
-            Hagakure = 54,
-            Issekigan = 57,
-            Dragon_Breaker = 58,
-            Pflug = 59,
-            Steal = 60,
-            Despoil = 61,
-            Flee = 62,
-            Hide = 63,
-            Sneak_Attack = 64,
-            Mug = 65,
-            Trick_Attack = 66,
-            Assassins_Charge = 67,
-            Feint = 68,
-            Accomplice = 69,
-            Steady_Wing = 70,
-            Mana_Cede = 71,
-            Embolden = 72,
-            Shield_Bash = 73,
-            Holy_Circle = 74,
-            Sentinel = 75,
-            Cover = 76,
-            Rampart = 77,
-            Fealty = 78,
-            Chivalry = 79,
-            Divine_Emblem = 80,
-            Unbridled_Learning = 81,
-            Triple_Shot = 84,
-            Souleater = 85,
-            Arcane_Circle = 86,
-            Last_Resort = 87,
-            Weapon_Bash = 88,
-            Dark_Seal = 89,
-            Diabolic_Eye = 90,
-            Nether_Void = 91,
-            Rune_Enchantment = 92,
-            Charm = 97,
-            Gauge = 98,
-            Tame = 99,
-            Fight = 100,
-            Heel = 101,
-            Sic = 102,
-            Reward = 103,
-            Call_Beast = 104,
-            Feral_Howl = 105,
-            Killer_Instinct = 106,
-            Snarl = 107,
-            Nightingale = 109,
-            Troubadour = 110,
-            Pianissimo = 112,
-            Valiance = 113,
-            Cooldown = 114,
-            Deus_Ex_Automata = 115,
-            Gambit = 116,
-            Liement = 117,
-            One_for_All = 118,
-            Rayke = 119,
-            Battuta = 120,
-            Scavenge = 121,
-            Shadowbind = 122,
-            Camouflage = 123,
-            Sharpshot = 124,
-            Barrage = 125,
-            Unlimited_Shot = 126,
-            Stealth_Shot = 127,
-            Flashy_Shot = 128,
-            Velocity_Shot = 129,
-            Widened_Compass = 130,
-            Odyllic_Subterfuge = 131,
-            Konzen_ittai = 132,
-            Third_Eye = 133,
-            Meditate = 134,
-            Warding_Circle = 135,
-            Shikikoyo = 136,
-            Blade_Bash = 137,
-            Hasso = 138,
-            Seigan = 139,
-            Sekkanoki = 140,
-            Sengikori = 141,
-            Ward = 142,
-            Effusion = 143,
-            Sange = 145,
-            Yonin = 146,
-            Innin = 147,
-            Futae = 148,
-            Ancient_Circle = 157,
-            Jump = 158,
-            High_Jump = 159,
-            Super_Jump = 160,
-            Dismiss = 161,
-            Spirit_Link = 162,
-            Call_Wyvern = 163,
-            Deep_Breathing = 164,
-            Angon = 165,
-            Assault = 170,
-            Retreat = 171,
-            Release = 172,
-            Blood_Pact_Rage = 173,
-            Blood_Pact_Ward = 174,
-            Elemental_Siphon = 175,
-            Avatars_Favor = 176,
-            Chain_Affinity = 181,
-            Burst_Affinity = 182,
-            Convergence = 183,
-            Diffusion = 184,
-            Efflux = 185,
-            COR_Roll = 193,
-            Double_Up = 194,
-            Elemental_Shot = 195,
-            Random_Deal = 196,
-            Snake_Eye = 197,
-            Fold = 198,
-            Quick_Draw = 199,
-            Activate = 205,
-            Repair = 206,
-            Deploy = 207,
-            Deactivate = 208,
-            Retrieve = 209,
-            Fire_Maneuver = 210,
-            Role_Reversal = 211,
-            Ventriloquy = 212,
-            Tactical_Switch = 213,
-            Maintenance = 214,
-            Healing_Waltz = 215,
-            Sambas = 216,
-            Curing_Waltz = 217,
-            Spectral_Jig = 218,
-            Saber_Dance = 219,
-            Steps = 220,
-            Flourishes_I = 221,
-            Reverse_Flourish = 222,
-            No_Foot_Rise = 223,
-            Fan_Dance = 224,
-            Divine_Waltz = 225,
-            Flourishes_III = 226,
-            Waltzes = 227,
-            Light_Arts = 228,
-            Modus_Veritas = 230,
-            Penury = 231,
-            Dark_Arts = 232,
-            Stratagems = 233,
-            Sublimation = 234,
-            Enlightenment = 235,
-            Presto = 236,
-            Libra = 237,
-            Smiting_Breath = 238,
-            Restoring_Breath = 239,
-            Bully = 240,
-            Swipe = 241,
-            Vivacious_Pulse = 242,
-            Full_Circle = 243,
-            Lasting_Emanation = 244,
-            Collimated_Fervor = 245,
-            Life_Cycle = 246,
-            Blaze_Glory = 247,
-            Dematerialize = 248,
-            Theurgic_Focus = 249,
-            Concentric_Pulse = 250,
-            Mending_Halation = 251,
-            Radial_Arcana = 252,
-            Relinquish = 253,
-            SP_II = 254,
-            Pet_commands = 255,
-            Entrust = 93
-
-        } // @ public enum AbilityList : byte
-
-
 
         #endregion
 
@@ -979,12 +761,14 @@ namespace CurePlease
         };
         #endregion
 
+
         #region "== Getting POL Process and FFACE dll Check"
         //FFXI Process      
         public Form1()
         {
             this.InitializeComponent();
             var pol = Process.GetProcessesByName("pol");
+
 
             if (pol.Length < 1)
             {
@@ -1486,6 +1270,40 @@ namespace CurePlease
         }
         #endregion
 
+        #region "== Curaga Calculation"
+        private void CuragaCalculator(byte partyMemberId)
+        {
+
+            if ((Settings.Default.curaga5Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga5Amount) && (CheckSpellRecast("Curaga V") == 0) && (HasSpell("Curaga V")) && (_ELITEAPIPL.Player.MP > 380))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga V\" " + this._ELITEAPIMonitored.Player.Name);
+                this.CastLockMethod();
+            }
+            else if ((Settings.Default.curaga4Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga4Amount) && (CheckSpellRecast("Curaga IV") == 0) && (HasSpell("Curaga IV")) && (_ELITEAPIPL.Player.MP > 260))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga IV\" " + this._ELITEAPIMonitored.Player.Name);
+                this.CastLockMethod();
+            }
+            else if ((Settings.Default.curaga3Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga3Amount) && (CheckSpellRecast("Curaga III") == 0) && (HasSpell("Curaga III")) && (_ELITEAPIPL.Player.MP > 180))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga III\" " + this._ELITEAPIMonitored.Player.Name);
+                this.CastLockMethod();
+            }
+            else if ((Settings.Default.curaga2Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga2Amount) && (CheckSpellRecast("Curaga II") == 0) && (HasSpell("Curaga II")) && (_ELITEAPIPL.Player.MP > 120))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga II\" " + this._ELITEAPIMonitored.Player.Name);
+                this.CastLockMethod();
+            }
+            else if ((Settings.Default.curagaEnabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curagaAmount) && (CheckSpellRecast("Curaga") == 0) && (HasSpell("Curaga")) && (_ELITEAPIPL.Player.MP > 60))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga\" " + this._ELITEAPIMonitored.Player.Name);
+                this.CastLockMethod();
+            }
+        }
+
+        #endregion
+
+
         #region "== CastingPossible (Distance)"
         private bool castingPossible(byte partyMemberId)
         {
@@ -1644,6 +1462,7 @@ namespace CurePlease
                 Thread.Sleep(15000);
             }
             #endregion
+
 
             // Grab current time for calculations below
             #region "== Calculate time since an Auto Spell was cast on particular player"
@@ -1843,19 +1662,41 @@ namespace CurePlease
             #endregion
 
             #region "== Job ability Divine Seal and Convert"
-            if (Settings.Default.divineSealBox && _ELITEAPIPL.Player.MPP <= 11 && this.GetAbilityRecastBySpellId((int)AbilityList.Divine_Seal) == 0 && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+            if (Settings.Default.divineSealBox && _ELITEAPIPL.Player.MPP <= 11 && (GetAbilityRecast("Divine Seal") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(3000);
                 _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Seal\" <me>");
                 this.ActionLockMethod();
             }
 
-            else if (Settings.Default.Convert && _ELITEAPIPL.Player.MPP <= 10 && this.GetAbilityRecastBySpellId((int)AbilityList.Convert) == 0 && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+            else if (Settings.Default.Convert && (_ELITEAPIPL.Player.MP <= Settings.Default.ConvertMP) && (GetAbilityRecast("Convert") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(1000);
                 _ELITEAPIPL.ThirdParty.SendString("/ja \"Convert\" <me>");
                 return;
                 //ActionLockMethod();
+            }
+
+            else if (Settings.Default.RadialArcana && (_ELITEAPIPL.Player.MP <= Settings.Default.RadialArcanaMP) && (GetAbilityRecast("Radial Arcana") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness) && (!this.castingLock))
+            {
+                // Check if a pet is already active
+                if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1 && _ELITEAPIPL.Player.Pet.Distance <= 9) {
+                    Thread.Sleep(1000);
+                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Radial Arcana\" <me>");
+                } else if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1 && _ELITEAPIPL.Player.Pet.Distance >= 9 && (GetAbilityRecast("Full Circle") == 0)) {
+                    Thread.Sleep(1000);
+                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
+                    Thread.Sleep(3000);
+                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.RadialArcanaSpell, 2);
+                    this.castSpell("<me>", SpellCheckedResult);
+                    
+                }
+                else {
+                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.RadialArcanaSpell, 2);
+                    this.castSpell("<me>", SpellCheckedResult);
+                }
+
+
             }
             #endregion
 
@@ -1888,11 +1729,33 @@ namespace CurePlease
                 //var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
                 var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().OrderBy(p => p.CurrentHPP).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber);
 
+                var cures_required = new List<byte>();
+                // Loop through keys in order of lowest HP and see if multiple fits the requirements. 
+                foreach (byte id in playerHpOrder.Take(6))
+                {
+                    // Cures
+                    // First, is casting possible, and enabled?
+                    if (this.castingPossible(id) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Active >= 1) && (enabledBoxes[id].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (!this.castingLock))
+                    {
+                        if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Settings.Default.curagaCurePercentage) && (this.castingPossible(id)))
+                        {
+                            cures_required.Add(id);
+
+                        }
+                    }
+                    if (cures_required.Count >= 3)
+                    {
+                        byte[] arr = cures_required.ToArray();
+                        CuragaCalculator(arr[0]);
+                    }
+                }
+
+          
+
 
                 // Loop through keys in order of lowest HP to highest HP
                 foreach (byte id in playerHpOrder)
                 {
-
                     // Cures
                     // First, is casting possible, and enabled?
                     if (this.castingPossible(id) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Active >= 1) && (enabledBoxes[id].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (!this.castingLock))
@@ -3082,35 +2945,35 @@ namespace CurePlease
                             #region "==Geomancer Spells"
 
                             // ENTRUSTED INDI SPELL CASTING
-                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)))
+                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)) && (!this.castingLock))
                             {
                                 string SpellCheckedResult = ReturnGeoSpell(Settings.Default.EntrustedIndiSpell, 1);
-                                    if (SpellCheckedResult == "SpellError_Cancel")
-                                    {
-                                        Settings.Default.EnableGeoSpells = false;
-                                        MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
-                                    }
-                                    else if (SpellCheckedResult == "SpellNA")
-                                    {
+                                if (SpellCheckedResult == "SpellError_Cancel")
+                                {
+                                    Settings.Default.EnableGeoSpells = false;
+                                    MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
+                                }
+                                else if (SpellCheckedResult == "SpellNA")
+                                {
 
+                                }
+                                else
+                                {
+                                    if (Settings.Default.Entrusted_Target == "")
+                                    {
+                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
                                     }
                                     else
                                     {
-                                        if (Settings.Default.Entrusted_Target == "")
-                                        {
-                                            this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
-                                        }
-                                        else
-                                        {
-                                            this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
-                                        }
+                                        this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
                                     }
+                                }
                             }
 
                             if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
                             {
                                 // INDI SPELL CASTING
-                                if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (playerIndi_Span[0].Minutes >= Settings.Default.indiRecast) && (!this.castingLock))
+                                if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock))
                                 {
                                     if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
                                     {
@@ -3118,7 +2981,7 @@ namespace CurePlease
                                         if (SpellCheckedResult == "SpellError_Cancel")
                                         {
                                             Settings.Default.EnableGeoSpells = false;
-                                            MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells."); 
+                                            MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
                                         }
                                         else if (SpellCheckedResult == "SpellNA")
                                         {
@@ -3133,9 +2996,19 @@ namespace CurePlease
                                 }
 
                                 // GEO SPELL CASTING
-                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock && (_ELITEAPIMonitored.Player.Status == 1)))
+                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock) && (_ELITEAPIMonitored.Player.Status == 1))
                                 {
-                                    
+
+                                    // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE
+                                    if ((Settings.Default.BlazeOfGlory) && (GetAbilityRecast("Blaze of Glory") == 0) && (HasAbility("Blaze of Glory")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Blaze of Glory\" <me>");
+                                        this.ActionLockMethod();
+                                    }
+
+                                    else
+                                    {
+
                                         string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
                                         if (SpellCheckedResult == "SpellError_Cancel")
                                         {
@@ -3159,11 +3032,12 @@ namespace CurePlease
                                                     this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
                                                 }
                                             }
-                                            else {
+                                            else
+                                            {
                                                 this.castSpell("<bt>", SpellCheckedResult);
                                             }
                                         }
-                                    
+                                    }
                                 }
 
                             }
@@ -3220,6 +3094,29 @@ namespace CurePlease
                                     this.ActionLockMethod();
                                 }
                             }
+
+                            #endregion
+
+                            #region "== Auto cast a spell to get on hate list"
+
+                            EliteAPI.TargetInfo target = _ELITEAPIMonitored.Target.GetTargetInfo();
+                            uint targetIdx = target.TargetIndex;
+                            var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
+
+
+                            if (!this.castingLock && Settings.Default.AutoTarget && _ELITEAPIPL.Player.MainJob==21 && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                            {
+                                Thread.Sleep(TimeSpan.FromSeconds(1.0));
+
+                                this.castSpell("<bt>", Settings.Default.autoTargetSpell);
+
+                                lastTargetID = entity.TargetID;
+
+
+                            }
+                            #endregion
+
+
                         }
                     }
                 }
@@ -3228,13 +3125,13 @@ namespace CurePlease
 
 
 
+        #region "== Get Shellra & Protectra level"
+
         private void shell_Player(byte id)
         {
             throw new NotImplementedException();
         }
-        #endregion
 
-        #region "== Get Shellra & Protectra level"
         private string GetShellraLevel(decimal p)
         {
             switch ((int)p)
@@ -3279,18 +3176,6 @@ namespace CurePlease
         {
             if (GEOSpell_ID == 0)
             {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Poison") == 0) && (HasSpell("Indi-Poison")))
-                {
-                    return "Indi-Poison";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Poison") == 0) && (HasSpell("Geo-Poison")))
-                {
-                    return "Geo-Poison";
-                }
-                else { return "SpellNA"; }
-            }
-            if (GEOSpell_ID == 1)
-            {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Voidance") == 0) && (HasSpell("Indi-Voidance")))
                 {
                     return "Indi-Voidance";
@@ -3301,7 +3186,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 2)
+            else if (GEOSpell_ID == 1)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Precision") == 0) && (HasSpell("Indi-Precision")))
                 {
@@ -3313,7 +3198,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 3)
+            else if (GEOSpell_ID == 2)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Regen") == 0) && (HasSpell("Indi-Regen")))
                 {
@@ -3325,7 +3210,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 4)
+            else if (GEOSpell_ID == 3)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Haste") == 0) && (HasSpell("Indi-Haste")))
                 {
@@ -3337,7 +3222,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 5)
+            else if (GEOSpell_ID == 4)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Attunement") == 0) && (HasSpell("Indi-Attunement")))
                 {
@@ -3349,7 +3234,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 6)
+            else if (GEOSpell_ID == 5)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Focus") == 0) && (HasSpell("Indi-Focus")))
                 {
@@ -3361,7 +3246,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 7)
+            else if (GEOSpell_ID == 6)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Barrier") == 0) && (HasSpell("Indi-Barrier")))
                 {
@@ -3373,7 +3258,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 8)
+            else if (GEOSpell_ID == 7)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Refresh") == 0) && (HasSpell("Indi-Refresh")))
                 {
@@ -3385,7 +3270,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 9)
+            else if (GEOSpell_ID == 8)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-CHR") == 0) && (HasSpell("Indi-CHR")))
                 {
@@ -3397,7 +3282,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 10)
+            else if (GEOSpell_ID == 9)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-MND") == 0) && (HasSpell("Indi-MND")))
                 {
@@ -3409,7 +3294,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 11)
+            else if (GEOSpell_ID == 10)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fury") == 0) && (HasSpell("Indi-Fury")))
                 {
@@ -3421,7 +3306,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 12)
+            else if (GEOSpell_ID == 11)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-INT") == 0) && (HasSpell("Indi-INT")))
                 {
@@ -3433,7 +3318,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 13)
+            else if (GEOSpell_ID == 12)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-AGI") == 0) && (HasSpell("Indi-AGI")))
                 {
@@ -3445,7 +3330,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 14)
+            else if (GEOSpell_ID == 13)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fend") == 0) && (HasSpell("Indi-Fend")))
                 {
@@ -3457,7 +3342,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 15)
+            else if (GEOSpell_ID == 14)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-VIT") == 0) && (HasSpell("Indi-VIT")))
                 {
@@ -3469,7 +3354,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 16)
+            else if (GEOSpell_ID == 15)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-DEX") == 0) && (HasSpell("Indi-DEX")))
                 {
@@ -3481,7 +3366,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 17)
+            else if (GEOSpell_ID == 16)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Acumen") == 0) && (HasSpell("Indi-Acumen")))
                 {
@@ -3493,7 +3378,7 @@ namespace CurePlease
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 18)
+            else if (GEOSpell_ID == 17)
             {
                 if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-STR") == 0) && (HasSpell("Indi-STR")))
                 {
@@ -3502,6 +3387,18 @@ namespace CurePlease
                 else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-STR") == 0) && (HasSpell("Geo-STR")))
                 {
                     return "Geo-STR";
+                }
+                else { return "SpellNA"; }
+            }
+            else if (GEOSpell_ID == 18)
+            {
+                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Poison") == 0) && (HasSpell("Indi-Poison")))
+                {
+                    return "Indi-Poison";
+                }
+                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Poison") == 0) && (HasSpell("Geo-Poison")))
+                {
+                    return "Geo-Poison";
                 }
                 else { return "SpellNA"; }
             }
@@ -4025,10 +3922,11 @@ namespace CurePlease
                 return;
             }
 
+
             Thread.Sleep(TimeSpan.FromSeconds(0.5));
             var count = 0;
             float lastPercent = 0;
-            while (_ELITEAPIPL.CastBar.Percent < 100)
+            while (_ELITEAPIPL.CastBar.Percent != 1)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(0.1));
                 if (lastPercent != _ELITEAPIPL.CastBar.Percent)
@@ -4036,9 +3934,9 @@ namespace CurePlease
                     count = 0;
                     lastPercent = _ELITEAPIPL.CastBar.Percent;
                 }
-                else if (count == 10)
+                else if (count >= 10)
                 {
-                    this.castingLockLabel.Text = "Casting is INTERRUPTED!";
+                    this.castingLockLabel.Text = "Casting was INTERRUPTED!";
                     this.castingStatusCheck.Enabled = false;
                     this.castingUnlockTimer.Enabled = true;
                     break;
@@ -4049,10 +3947,12 @@ namespace CurePlease
                     lastPercent = _ELITEAPIPL.CastBar.Percent;
                 }
             }
+
             this.castingLockLabel.Text = "Casting is soon to be AVAILABLE!";
             this.castingStatusCheck.Enabled = false;
             this.castingUnlockTimer.Enabled = true;
 
+            
         }
 
         private void castingUnlockTimer_Tick(object sender, EventArgs e)
@@ -4085,7 +3985,7 @@ namespace CurePlease
                 return;
             }
 
-            this.castingLockLabel.Text = "Casting is UNLOCKED!";
+            this.castingLockLabel.Text = "Casting is UNLOCKED! ";
             this.castingLock = false;
             this.actionUnlockTimer.Enabled = false;
             this.actionTimer.Enabled = true;

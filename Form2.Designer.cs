@@ -34,6 +34,20 @@ namespace CurePlease
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.curagaPercentageValueLabel = new System.Windows.Forms.Label();
+            this.curagaCurePercentage = new System.Windows.Forms.TrackBar();
+            this.label30 = new System.Windows.Forms.Label();
+            this.curaga5Amount = new System.Windows.Forms.NumericUpDown();
+            this.curaga4Amount = new System.Windows.Forms.NumericUpDown();
+            this.curaga3Amount = new System.Windows.Forms.NumericUpDown();
+            this.curaga2Amount = new System.Windows.Forms.NumericUpDown();
+            this.curagaAmount = new System.Windows.Forms.NumericUpDown();
+            this.curaga5Enabled = new System.Windows.Forms.CheckBox();
+            this.curaga4Enabled = new System.Windows.Forms.CheckBox();
+            this.curagaEnabled = new System.Windows.Forms.CheckBox();
+            this.curaga2Enabled = new System.Windows.Forms.CheckBox();
+            this.curaga3Enabled = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.fullCureenabled = new System.Windows.Forms.CheckBox();
             this.fullCureamount = new System.Windows.Forms.NumericUpDown();
@@ -122,6 +136,10 @@ namespace CurePlease
             this.plBlink = new System.Windows.Forms.CheckBox();
             this.plStoneskin = new System.Windows.Forms.CheckBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.autoTarget = new System.Windows.Forms.CheckBox();
+            this.autoTargetSpell = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.EnableLuopanSpells = new System.Windows.Forms.CheckBox();
             this.GEO_engaged = new System.Windows.Forms.CheckBox();
             this.EnableGeoSpells = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -139,6 +157,9 @@ namespace CurePlease
             this.INDISpell = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.FullCircleBox = new System.Windows.Forms.CheckBox();
+            this.RadialArcanaBox = new System.Windows.Forms.CheckBox();
+            this.BlazeOfGloryBox = new System.Windows.Forms.CheckBox();
             this.DematerializeBox = new System.Windows.Forms.CheckBox();
             this.EntrustBox = new System.Windows.Forms.CheckBox();
             this.rdmJAgroup = new System.Windows.Forms.GroupBox();
@@ -275,6 +296,12 @@ namespace CurePlease
             this.monitoredDebuffEnabled = new System.Windows.Forms.CheckBox();
             this.plDebuffEnabled = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label25 = new System.Windows.Forms.Label();
+            this.MPItems = new System.Windows.Forms.ListBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.RadialArcanaMP = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.mpMintempitemusage = new System.Windows.Forms.NumericUpDown();
@@ -284,9 +311,19 @@ namespace CurePlease
             this.mpMinCastValue = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.EnableLuopanSpells = new System.Windows.Forms.CheckBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.ConvertMP = new System.Windows.Forms.NumericUpDown();
+            this.RadialArcanaSpell = new System.Windows.Forms.ComboBox();
+            this.label27 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.curagaCurePercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga5Amount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga4Amount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga3Amount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga2Amount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curagaAmount)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fullCureamount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.priorityCurePercentage)).BeginInit();
@@ -330,9 +367,13 @@ namespace CurePlease
             this.plDebuffWrapperPanel.SuspendLayout();
             this.plDebuffPanel.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.groupBox11.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RadialArcanaMP)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ConvertMP)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -351,14 +392,190 @@ namespace CurePlease
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox12);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(737, 382);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Healing Magic";
+            this.tabPage1.Text = " Healing Magic ";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.curagaPercentageValueLabel);
+            this.groupBox12.Controls.Add(this.curagaCurePercentage);
+            this.groupBox12.Controls.Add(this.label30);
+            this.groupBox12.Controls.Add(this.curaga5Amount);
+            this.groupBox12.Controls.Add(this.curaga4Amount);
+            this.groupBox12.Controls.Add(this.curaga3Amount);
+            this.groupBox12.Controls.Add(this.curaga2Amount);
+            this.groupBox12.Controls.Add(this.curagaAmount);
+            this.groupBox12.Controls.Add(this.curaga5Enabled);
+            this.groupBox12.Controls.Add(this.curaga4Enabled);
+            this.groupBox12.Controls.Add(this.curagaEnabled);
+            this.groupBox12.Controls.Add(this.curaga2Enabled);
+            this.groupBox12.Controls.Add(this.curaga3Enabled);
+            this.groupBox12.Location = new System.Drawing.Point(5, 196);
+            this.groupBox12.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox12.Size = new System.Drawing.Size(727, 186);
+            this.groupBox12.TabIndex = 8;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = " AoE Healing (beta) ";
+            // 
+            // curagaPercentageValueLabel
+            // 
+            this.curagaPercentageValueLabel.AutoSize = true;
+            this.curagaPercentageValueLabel.Location = new System.Drawing.Point(397, 22);
+            this.curagaPercentageValueLabel.Name = "curagaPercentageValueLabel";
+            this.curagaPercentageValueLabel.Size = new System.Drawing.Size(13, 13);
+            this.curagaPercentageValueLabel.TabIndex = 9;
+            this.curagaPercentageValueLabel.Text = "0";
+            this.toolTip1.SetToolTip(this.curagaPercentageValueLabel, resources.GetString("curagaPercentageValueLabel.ToolTip"));
+            // 
+            // curagaCurePercentage
+            // 
+            this.curagaCurePercentage.Location = new System.Drawing.Point(200, 38);
+            this.curagaCurePercentage.Maximum = 100;
+            this.curagaCurePercentage.Name = "curagaCurePercentage";
+            this.curagaCurePercentage.Size = new System.Drawing.Size(323, 45);
+            this.curagaCurePercentage.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.curagaCurePercentage, resources.GetString("curagaCurePercentage.ToolTip"));
+            this.curagaCurePercentage.Value = 75;
+            this.curagaCurePercentage.ValueChanged += new System.EventHandler(this.curagaPercentage_ValueChanged);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(197, 22);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(94, 13);
+            this.label30.TabIndex = 8;
+            this.label30.Text = "Curaga Threshold:";
+            this.toolTip1.SetToolTip(this.label30, resources.GetString("label30.ToolTip"));
+            // 
+            // curaga5Amount
+            // 
+            this.curaga5Amount.Location = new System.Drawing.Point(83, 111);
+            this.curaga5Amount.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.curaga5Amount.Name = "curaga5Amount";
+            this.curaga5Amount.Size = new System.Drawing.Size(71, 20);
+            this.curaga5Amount.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.curaga5Amount, "Cast \"Cure\" with this amont of HP loss");
+            // 
+            // curaga4Amount
+            // 
+            this.curaga4Amount.Location = new System.Drawing.Point(83, 88);
+            this.curaga4Amount.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.curaga4Amount.Name = "curaga4Amount";
+            this.curaga4Amount.Size = new System.Drawing.Size(71, 20);
+            this.curaga4Amount.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.curaga4Amount, "Cast \"Cure\" with this amont of HP loss");
+            // 
+            // curaga3Amount
+            // 
+            this.curaga3Amount.Location = new System.Drawing.Point(83, 64);
+            this.curaga3Amount.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.curaga3Amount.Name = "curaga3Amount";
+            this.curaga3Amount.Size = new System.Drawing.Size(71, 20);
+            this.curaga3Amount.TabIndex = 15;
+            this.toolTip1.SetToolTip(this.curaga3Amount, "Cast \"Cure\" with this amont of HP loss");
+            // 
+            // curaga2Amount
+            // 
+            this.curaga2Amount.Location = new System.Drawing.Point(83, 41);
+            this.curaga2Amount.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.curaga2Amount.Name = "curaga2Amount";
+            this.curaga2Amount.Size = new System.Drawing.Size(71, 20);
+            this.curaga2Amount.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.curaga2Amount, "Cast \"Cure\" with this amont of HP loss");
+            // 
+            // curagaAmount
+            // 
+            this.curagaAmount.Location = new System.Drawing.Point(83, 18);
+            this.curagaAmount.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.curagaAmount.Name = "curagaAmount";
+            this.curagaAmount.Size = new System.Drawing.Size(71, 20);
+            this.curagaAmount.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.curagaAmount, "Cast \"Cure\" with this amont of HP loss");
+            // 
+            // curaga5Enabled
+            // 
+            this.curaga5Enabled.AutoSize = true;
+            this.curaga5Enabled.Location = new System.Drawing.Point(7, 112);
+            this.curaga5Enabled.Margin = new System.Windows.Forms.Padding(2);
+            this.curaga5Enabled.Name = "curaga5Enabled";
+            this.curaga5Enabled.Size = new System.Drawing.Size(70, 17);
+            this.curaga5Enabled.TabIndex = 13;
+            this.curaga5Enabled.Text = "Curaga V";
+            this.curaga5Enabled.UseVisualStyleBackColor = true;
+            // 
+            // curaga4Enabled
+            // 
+            this.curaga4Enabled.AutoSize = true;
+            this.curaga4Enabled.Location = new System.Drawing.Point(7, 89);
+            this.curaga4Enabled.Margin = new System.Windows.Forms.Padding(2);
+            this.curaga4Enabled.Name = "curaga4Enabled";
+            this.curaga4Enabled.Size = new System.Drawing.Size(73, 17);
+            this.curaga4Enabled.TabIndex = 12;
+            this.curaga4Enabled.Text = "Curaga IV";
+            this.curaga4Enabled.UseVisualStyleBackColor = true;
+            // 
+            // curagaEnabled
+            // 
+            this.curagaEnabled.AutoSize = true;
+            this.curagaEnabled.Location = new System.Drawing.Point(7, 19);
+            this.curagaEnabled.Margin = new System.Windows.Forms.Padding(2);
+            this.curagaEnabled.Name = "curagaEnabled";
+            this.curagaEnabled.Size = new System.Drawing.Size(60, 17);
+            this.curagaEnabled.TabIndex = 9;
+            this.curagaEnabled.Text = "Curaga";
+            this.curagaEnabled.UseVisualStyleBackColor = true;
+            // 
+            // curaga2Enabled
+            // 
+            this.curaga2Enabled.AutoSize = true;
+            this.curaga2Enabled.Location = new System.Drawing.Point(7, 42);
+            this.curaga2Enabled.Margin = new System.Windows.Forms.Padding(2);
+            this.curaga2Enabled.Name = "curaga2Enabled";
+            this.curaga2Enabled.Size = new System.Drawing.Size(69, 17);
+            this.curaga2Enabled.TabIndex = 10;
+            this.curaga2Enabled.Text = "Curaga II";
+            this.curaga2Enabled.UseVisualStyleBackColor = true;
+            // 
+            // curaga3Enabled
+            // 
+            this.curaga3Enabled.AutoSize = true;
+            this.curaga3Enabled.Location = new System.Drawing.Point(7, 66);
+            this.curaga3Enabled.Margin = new System.Windows.Forms.Padding(2);
+            this.curaga3Enabled.Name = "curaga3Enabled";
+            this.curaga3Enabled.Size = new System.Drawing.Size(72, 17);
+            this.curaga3Enabled.TabIndex = 11;
+            this.curaga3Enabled.Text = "Curaga III";
+            this.curaga3Enabled.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -384,7 +601,7 @@ namespace CurePlease
             this.groupBox2.Controls.Add(this.cure1amount);
             this.groupBox2.Location = new System.Drawing.Point(6, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(495, 373);
+            this.groupBox2.Size = new System.Drawing.Size(725, 187);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Healing Options";
@@ -417,22 +634,28 @@ namespace CurePlease
             // 
             // priorityCurePercentage
             // 
-            this.priorityCurePercentage.Location = new System.Drawing.Point(164, 103);
+            this.priorityCurePercentage.Location = new System.Drawing.Point(199, 111);
             this.priorityCurePercentage.Maximum = 100;
             this.priorityCurePercentage.Name = "priorityCurePercentage";
             this.priorityCurePercentage.Size = new System.Drawing.Size(323, 45);
             this.priorityCurePercentage.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.priorityCurePercentage, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
             this.priorityCurePercentage.Value = 75;
-            this.priorityCurePercentage.ValueChanged += new System.EventHandler(this.priorityCurePercentage_ValueChanged);
+            this.priorityCurePercentage.ValueChanged += new System.EventHandler(this.curePercentage_ValueChanged);
             // 
             // priorityCurePercentageLabel
             // 
             this.priorityCurePercentageLabel.AutoSize = true;
-            this.priorityCurePercentageLabel.Location = new System.Drawing.Point(171, 87);
+            this.priorityCurePercentageLabel.Location = new System.Drawing.Point(205, 96);
             this.priorityCurePercentageLabel.Name = "priorityCurePercentageLabel";
             this.priorityCurePercentageLabel.Size = new System.Drawing.Size(116, 13);
             this.priorityCurePercentageLabel.TabIndex = 1;
             this.priorityCurePercentageLabel.Text = "High Priority Threshold:";
+            this.toolTip1.SetToolTip(this.priorityCurePercentageLabel, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
             // 
             // cure6enabled
             // 
@@ -470,11 +693,14 @@ namespace CurePlease
             // priorityCurePercentageValueLabel
             // 
             this.priorityCurePercentageValueLabel.AutoSize = true;
-            this.priorityCurePercentageValueLabel.Location = new System.Drawing.Point(370, 87);
+            this.priorityCurePercentageValueLabel.Location = new System.Drawing.Point(405, 96);
             this.priorityCurePercentageValueLabel.Name = "priorityCurePercentageValueLabel";
             this.priorityCurePercentageValueLabel.Size = new System.Drawing.Size(13, 13);
             this.priorityCurePercentageValueLabel.TabIndex = 2;
             this.priorityCurePercentageValueLabel.Text = "0";
+            this.toolTip1.SetToolTip(this.priorityCurePercentageValueLabel, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
             // 
             // cure3enabled
             // 
@@ -511,18 +737,21 @@ namespace CurePlease
             // 
             // curePercentage
             // 
-            this.curePercentage.Location = new System.Drawing.Point(164, 28);
+            this.curePercentage.Location = new System.Drawing.Point(199, 36);
             this.curePercentage.Maximum = 100;
             this.curePercentage.Name = "curePercentage";
             this.curePercentage.Size = new System.Drawing.Size(323, 45);
             this.curePercentage.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.curePercentage, "EXAMPLE:\r\n\r\nDefault settings: 75%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.");
             this.curePercentage.Value = 75;
             this.curePercentage.ValueChanged += new System.EventHandler(this.curePercentage_ValueChanged);
             // 
             // cure2enabled
             // 
             this.cure2enabled.AutoSize = true;
-            this.cure2enabled.Location = new System.Drawing.Point(6, 43);
+            this.cure2enabled.Location = new System.Drawing.Point(5, 42);
             this.cure2enabled.Name = "cure2enabled";
             this.cure2enabled.Size = new System.Drawing.Size(57, 17);
             this.cure2enabled.TabIndex = 3;
@@ -555,11 +784,14 @@ namespace CurePlease
             // curePercentageValueLabel
             // 
             this.curePercentageValueLabel.AutoSize = true;
-            this.curePercentageValueLabel.Location = new System.Drawing.Point(370, 12);
+            this.curePercentageValueLabel.Location = new System.Drawing.Point(405, 20);
             this.curePercentageValueLabel.Name = "curePercentageValueLabel";
             this.curePercentageValueLabel.Size = new System.Drawing.Size(13, 13);
             this.curePercentageValueLabel.TabIndex = 2;
             this.curePercentageValueLabel.Text = "0";
+            this.toolTip1.SetToolTip(this.curePercentageValueLabel, "EXAMPLE:\r\n\r\nDefault settings: 75%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.");
             // 
             // cure3amount
             // 
@@ -577,11 +809,14 @@ namespace CurePlease
             // curePercentageLabel
             // 
             this.curePercentageLabel.AutoSize = true;
-            this.curePercentageLabel.Location = new System.Drawing.Point(171, 12);
+            this.curePercentageLabel.Location = new System.Drawing.Point(205, 20);
             this.curePercentageLabel.Name = "curePercentageLabel";
             this.curePercentageLabel.Size = new System.Drawing.Size(82, 13);
             this.curePercentageLabel.TabIndex = 1;
             this.curePercentageLabel.Text = "Cure Threshold:";
+            this.toolTip1.SetToolTip(this.curePercentageLabel, "EXAMPLE:\r\n\r\nDefault settings: 75%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.");
             // 
             // cure2amount
             // 
@@ -785,7 +1020,6 @@ namespace CurePlease
             this.plShellralevel.Name = "plShellralevel";
             this.plShellralevel.Size = new System.Drawing.Size(41, 20);
             this.plShellralevel.TabIndex = 9;
-            this.plShellralevel.ValueChanged += new System.EventHandler(this.plShellralevel_ValueChanged);
             // 
             // plProtectra
             // 
@@ -1486,6 +1720,9 @@ namespace CurePlease
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.autoTarget);
+            this.tabPage6.Controls.Add(this.autoTargetSpell);
+            this.tabPage6.Controls.Add(this.label24);
             this.tabPage6.Controls.Add(this.EnableLuopanSpells);
             this.tabPage6.Controls.Add(this.GEO_engaged);
             this.tabPage6.Controls.Add(this.EnableGeoSpells);
@@ -1499,6 +1736,46 @@ namespace CurePlease
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Geomancy";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // autoTarget
+            // 
+            this.autoTarget.AutoSize = true;
+            this.autoTarget.Location = new System.Drawing.Point(497, 16);
+            this.autoTarget.Name = "autoTarget";
+            this.autoTarget.Size = new System.Drawing.Size(47, 17);
+            this.autoTarget.TabIndex = 8;
+            this.autoTarget.Text = "auto";
+            this.toolTip1.SetToolTip(this.autoTarget, "Checks monster ID if different casts the set spell on the <bt>");
+            this.autoTarget.UseVisualStyleBackColor = true;
+            // 
+            // autoTargetSpell
+            // 
+            this.autoTargetSpell.Location = new System.Drawing.Point(550, 14);
+            this.autoTargetSpell.Name = "autoTargetSpell";
+            this.autoTargetSpell.Size = new System.Drawing.Size(100, 20);
+            this.autoTargetSpell.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.autoTargetSpell, "Checks monster ID if different casts the set spell on the <bt>");
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(656, 17);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(72, 13);
+            this.label24.TabIndex = 7;
+            this.label24.Text = "on new target";
+            this.toolTip1.SetToolTip(this.label24, "Checks monster ID if different casts the set spell on the <bt>");
+            // 
+            // EnableLuopanSpells
+            // 
+            this.EnableLuopanSpells.AutoSize = true;
+            this.EnableLuopanSpells.Location = new System.Drawing.Point(244, 17);
+            this.EnableLuopanSpells.Name = "EnableLuopanSpells";
+            this.EnableLuopanSpells.Size = new System.Drawing.Size(117, 17);
+            this.EnableLuopanSpells.TabIndex = 4;
+            this.EnableLuopanSpells.Text = "Enable GEO- spells";
+            this.EnableLuopanSpells.UseVisualStyleBackColor = true;
+            this.EnableLuopanSpells.CheckedChanged += new System.EventHandler(this.EnableLuopanSpells_CheckedChanged);
             // 
             // GEO_engaged
             // 
@@ -1527,9 +1804,9 @@ namespace CurePlease
             this.groupBox7.Controls.Add(this.label7);
             this.groupBox7.Controls.Add(this.entrustSpell_target);
             this.groupBox7.Controls.Add(this.entrustINDISpell);
-            this.groupBox7.Location = new System.Drawing.Point(502, 8);
+            this.groupBox7.Location = new System.Drawing.Point(502, 40);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(229, 368);
+            this.groupBox7.Size = new System.Drawing.Size(229, 336);
             this.groupBox7.TabIndex = 1;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Entrust";
@@ -1537,7 +1814,7 @@ namespace CurePlease
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 345);
+            this.label7.Location = new System.Drawing.Point(6, 312);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 13);
             this.label7.TabIndex = 4;
@@ -1546,7 +1823,7 @@ namespace CurePlease
             // entrustSpell_target
             // 
             this.entrustSpell_target.Enabled = false;
-            this.entrustSpell_target.Location = new System.Drawing.Point(97, 340);
+            this.entrustSpell_target.Location = new System.Drawing.Point(97, 307);
             this.entrustSpell_target.Name = "entrustSpell_target";
             this.entrustSpell_target.Size = new System.Drawing.Size(126, 20);
             this.entrustSpell_target.TabIndex = 3;
@@ -1558,7 +1835,6 @@ namespace CurePlease
             this.entrustINDISpell.Enabled = false;
             this.entrustINDISpell.FormattingEnabled = true;
             this.entrustINDISpell.Items.AddRange(new object[] {
-            "Indi-Poison",
             "Indi-Voidance",
             "Indi-Precision",
             "Indi-Regen",
@@ -1577,6 +1853,7 @@ namespace CurePlease
             "Indi-DEX",
             "Indi-Acumen",
             "Indi-STR",
+            "Indi-Poison",
             "Indi-Slow",
             "Indi-Torpor",
             "Indi-Slip",
@@ -1590,7 +1867,7 @@ namespace CurePlease
             " Indi-Fade"});
             this.entrustINDISpell.Location = new System.Drawing.Point(6, 19);
             this.entrustINDISpell.Name = "entrustINDISpell";
-            this.entrustINDISpell.Size = new System.Drawing.Size(217, 316);
+            this.entrustINDISpell.Size = new System.Drawing.Size(217, 277);
             this.entrustINDISpell.TabIndex = 2;
             // 
             // groupBox6
@@ -1628,7 +1905,6 @@ namespace CurePlease
             this.GEOSpell.Enabled = false;
             this.GEOSpell.FormattingEnabled = true;
             this.GEOSpell.Items.AddRange(new object[] {
-            "Geo-Poison",
             "Geo-Voidance",
             "Geo-Precision",
             "Geo-Regen",
@@ -1647,6 +1923,7 @@ namespace CurePlease
             "Geo-DEX",
             "Geo-Acumen",
             "Geo-STR",
+            "Geo-Poison",
             "Geo-Slow",
             "Geo-Torpor",
             "Geo-Slip",
@@ -1722,7 +1999,6 @@ namespace CurePlease
             this.INDISpell.Enabled = false;
             this.INDISpell.FormattingEnabled = true;
             this.INDISpell.Items.AddRange(new object[] {
-            "Indi-Poison",
             "Indi-Voidance",
             "Indi-Precision",
             "Indi-Regen",
@@ -1741,6 +2017,7 @@ namespace CurePlease
             "Indi-DEX",
             "Indi-Acumen",
             "Indi-STR",
+            "Indi-Poison",
             "Indi-Slow",
             "Indi-Torpor",
             "Indi-Slip",
@@ -1772,6 +2049,9 @@ namespace CurePlease
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.FullCircleBox);
+            this.groupBox8.Controls.Add(this.RadialArcanaBox);
+            this.groupBox8.Controls.Add(this.BlazeOfGloryBox);
             this.groupBox8.Controls.Add(this.DematerializeBox);
             this.groupBox8.Controls.Add(this.EntrustBox);
             this.groupBox8.Location = new System.Drawing.Point(177, 206);
@@ -1781,10 +2061,43 @@ namespace CurePlease
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Geomancer";
             // 
+            // FullCircleBox
+            // 
+            this.FullCircleBox.AutoSize = true;
+            this.FullCircleBox.Enabled = false;
+            this.FullCircleBox.Location = new System.Drawing.Point(20, 46);
+            this.FullCircleBox.Name = "FullCircleBox";
+            this.FullCircleBox.Size = new System.Drawing.Size(71, 17);
+            this.FullCircleBox.TabIndex = 5;
+            this.FullCircleBox.Text = "Full Circle";
+            this.toolTip1.SetToolTip(this.FullCircleBox, "When Luopan is 6.8 yalms further than the Monitored player it will wait 3 seconds" +
+        " then Full Circle the GEO spell.");
+            this.FullCircleBox.UseVisualStyleBackColor = true;
+            // 
+            // RadialArcanaBox
+            // 
+            this.RadialArcanaBox.AutoSize = true;
+            this.RadialArcanaBox.Location = new System.Drawing.Point(20, 115);
+            this.RadialArcanaBox.Name = "RadialArcanaBox";
+            this.RadialArcanaBox.Size = new System.Drawing.Size(96, 17);
+            this.RadialArcanaBox.TabIndex = 1;
+            this.RadialArcanaBox.Text = "Radial Arcana ";
+            this.RadialArcanaBox.UseVisualStyleBackColor = true;
+            // 
+            // BlazeOfGloryBox
+            // 
+            this.BlazeOfGloryBox.AutoSize = true;
+            this.BlazeOfGloryBox.Location = new System.Drawing.Point(20, 92);
+            this.BlazeOfGloryBox.Name = "BlazeOfGloryBox";
+            this.BlazeOfGloryBox.Size = new System.Drawing.Size(93, 17);
+            this.BlazeOfGloryBox.TabIndex = 3;
+            this.BlazeOfGloryBox.Text = "Blaze Of Glory";
+            this.BlazeOfGloryBox.UseVisualStyleBackColor = true;
+            // 
             // DematerializeBox
             // 
             this.DematerializeBox.AutoSize = true;
-            this.DematerializeBox.Location = new System.Drawing.Point(20, 46);
+            this.DematerializeBox.Location = new System.Drawing.Point(20, 69);
             this.DematerializeBox.Name = "DematerializeBox";
             this.DematerializeBox.Size = new System.Drawing.Size(89, 17);
             this.DematerializeBox.TabIndex = 4;
@@ -3487,6 +3800,10 @@ namespace CurePlease
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.label25);
+            this.tabPage5.Controls.Add(this.MPItems);
+            this.tabPage5.Controls.Add(this.groupBox11);
+            this.tabPage5.Controls.Add(this.groupBox10);
             this.tabPage5.Controls.Add(this.groupBox4);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
@@ -3495,6 +3812,84 @@ namespace CurePlease
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "MP Options";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(7, 133);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(284, 26);
+            this.label25.TabIndex = 12;
+            this.label25.Text = "Select as many or as few items you\'d like to use on low MP\r\nEach item is used in " +
+    "the order defined below.";
+            // 
+            // MPItems
+            // 
+            this.MPItems.FormattingEnabled = true;
+            this.MPItems.Items.AddRange(new object[] {
+            "Lucid Ether I",
+            "Lucid Ether II",
+            "Lucid Ether III",
+            "Lucid Elixir I",
+            "Lucid Elixir II",
+            "Mana Powder",
+            "Mana Mist",
+            "Megalixir"});
+            this.MPItems.Location = new System.Drawing.Point(6, 170);
+            this.MPItems.Name = "MPItems";
+            this.MPItems.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.MPItems.Size = new System.Drawing.Size(299, 199);
+            this.MPItems.TabIndex = 0;
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.label26);
+            this.groupBox11.Controls.Add(this.ConvertMP);
+            this.groupBox11.Location = new System.Drawing.Point(338, 6);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(393, 100);
+            this.groupBox11.TabIndex = 11;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Convert Settings";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.label27);
+            this.groupBox10.Controls.Add(this.RadialArcanaSpell);
+            this.groupBox10.Controls.Add(this.label11);
+            this.groupBox10.Controls.Add(this.RadialArcanaMP);
+            this.groupBox10.Location = new System.Drawing.Point(338, 112);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(393, 106);
+            this.groupBox10.TabIndex = 10;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Radial Arcana Settings";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(21, 21);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(252, 13);
+            this.label11.TabIndex = 13;
+            this.label11.Text = "Begin Radial Arcana MP recovery when MP below: ";
+            // 
+            // RadialArcanaMP
+            // 
+            this.RadialArcanaMP.Increment = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.RadialArcanaMP.Location = new System.Drawing.Point(279, 18);
+            this.RadialArcanaMP.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.RadialArcanaMP.Name = "RadialArcanaMP";
+            this.RadialArcanaMP.Size = new System.Drawing.Size(84, 20);
+            this.RadialArcanaMP.TabIndex = 12;
             // 
             // groupBox4
             // 
@@ -3589,16 +3984,67 @@ namespace CurePlease
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // EnableLuopanSpells
+            // label26
             // 
-            this.EnableLuopanSpells.AutoSize = true;
-            this.EnableLuopanSpells.Location = new System.Drawing.Point(244, 17);
-            this.EnableLuopanSpells.Name = "EnableLuopanSpells";
-            this.EnableLuopanSpells.Size = new System.Drawing.Size(117, 17);
-            this.EnableLuopanSpells.TabIndex = 4;
-            this.EnableLuopanSpells.Text = "Enable GEO- spells";
-            this.EnableLuopanSpells.UseVisualStyleBackColor = true;
-            this.EnableLuopanSpells.CheckedChanged += new System.EventHandler(this.EnableLuopanSpells_CheckedChanged);
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(6, 18);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(132, 13);
+            this.label26.TabIndex = 15;
+            this.label26.Text = "Convert when MP below:  ";
+            // 
+            // ConvertMP
+            // 
+            this.ConvertMP.Increment = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.ConvertMP.Location = new System.Drawing.Point(144, 15);
+            this.ConvertMP.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.ConvertMP.Name = "ConvertMP";
+            this.ConvertMP.Size = new System.Drawing.Size(84, 20);
+            this.ConvertMP.TabIndex = 14;
+            // 
+            // RadialArcanaSpell
+            // 
+            this.RadialArcanaSpell.FormattingEnabled = true;
+            this.RadialArcanaSpell.Items.AddRange(new object[] {
+            "Geo-Voidance",
+            "Geo-Precision",
+            "Geo-Regen",
+            "Geo-Haste",
+            "Geo-Attunement",
+            "Geo-Focus",
+            "Geo-Barrier",
+            "Geo-Refresh",
+            "Geo-CHR",
+            "Geo-MND",
+            "Geo-Fury",
+            "Geo-INT",
+            "Geo-AGI",
+            "Geo-Fend",
+            "Geo-VIT",
+            "Geo-DEX",
+            "Geo-Acumen",
+            "Geo-STR"});
+            this.RadialArcanaSpell.Location = new System.Drawing.Point(242, 44);
+            this.RadialArcanaSpell.Name = "RadialArcanaSpell";
+            this.RadialArcanaSpell.Size = new System.Drawing.Size(121, 21);
+            this.RadialArcanaSpell.TabIndex = 36;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(24, 44);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(183, 13);
+            this.label27.TabIndex = 37;
+            this.label27.Text = "Geomancy spell to cast for Full Circle.";
             // 
             // Form2
             // 
@@ -3619,6 +4065,14 @@ namespace CurePlease
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.curagaCurePercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga5Amount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga4Amount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga3Amount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curaga2Amount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.curagaAmount)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fullCureamount)).EndInit();
@@ -3682,10 +4136,17 @@ namespace CurePlease
             this.plDebuffPanel.ResumeLayout(false);
             this.plDebuffPanel.PerformLayout();
             this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RadialArcanaMP)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ConvertMP)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3867,7 +4328,6 @@ namespace CurePlease
         private System.Windows.Forms.NumericUpDown mpMinCastValue;
         private System.Windows.Forms.NumericUpDown plProtectralevel;
         private System.Windows.Forms.NumericUpDown plShellralevel;
-        private System.Windows.Forms.CheckBox lowMPuseitem;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown mpMintempitemusage;
         private System.Windows.Forms.ToolTip toolTip1;
@@ -3945,5 +4405,36 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox plStormSpell;
         private System.Windows.Forms.CheckBox plAuspice;
         private System.Windows.Forms.CheckBox EnableLuopanSpells;
+        private System.Windows.Forms.CheckBox autoTarget;
+        private System.Windows.Forms.TextBox autoTargetSpell;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.CheckBox BlazeOfGloryBox;
+        private System.Windows.Forms.CheckBox RadialArcanaBox;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.NumericUpDown RadialArcanaMP;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox lowMPuseitem;
+        private System.Windows.Forms.ListBox MPItems;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.CheckBox FullCircleBox;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.CheckBox curaga5Enabled;
+        private System.Windows.Forms.CheckBox curaga4Enabled;
+        private System.Windows.Forms.CheckBox curagaEnabled;
+        private System.Windows.Forms.CheckBox curaga2Enabled;
+        private System.Windows.Forms.CheckBox curaga3Enabled;
+        private System.Windows.Forms.NumericUpDown curaga5Amount;
+        private System.Windows.Forms.NumericUpDown curaga4Amount;
+        private System.Windows.Forms.NumericUpDown curaga3Amount;
+        private System.Windows.Forms.NumericUpDown curaga2Amount;
+        private System.Windows.Forms.NumericUpDown curagaAmount;
+        private System.Windows.Forms.Label curagaPercentageValueLabel;
+        private System.Windows.Forms.TrackBar curagaCurePercentage;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.NumericUpDown ConvertMP;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.ComboBox RadialArcanaSpell;
     }
 }

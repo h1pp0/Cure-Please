@@ -4755,13 +4755,16 @@ namespace CurePlease
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (WindowerMode == "Ashita")
+            if (setinstance2.Enabled == true)
             {
-                _ELITEAPIPL.ThirdParty.SendString("/addon unload CurePlease_addon");
-            }
-            else if (WindowerMode == "Windower")
-            {
-                _ELITEAPIPL.ThirdParty.SendString("//lua unload CurePlease_addon");
+                if (WindowerMode == "Ashita")
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("/addon unload CurePlease_addon");
+                }
+                else if (WindowerMode == "Windower")
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("//lua unload CurePlease_addon");
+                }
             }
             
             Application.Exit();

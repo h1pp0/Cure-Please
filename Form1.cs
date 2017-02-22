@@ -4755,7 +4755,8 @@ namespace CurePlease
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (setinstance2.Enabled == true)
+            if (setinstance.Enabled == true)
+            {
                 if (WindowerMode == "Ashita")
                 {
                     _ELITEAPIPL.ThirdParty.SendString("/addon unload CurePlease_addon");

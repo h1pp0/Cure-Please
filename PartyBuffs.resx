@@ -117,65 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="update_effects.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="label30.ToolTip" xml:space="preserve">
-    <value>Will only cast Curaga if more than 3 peoples HP is below this threshold, gsuggested to keep it faily low to reduce Curaga spam.
-
-EXAMPLE:
-
-Default setting: 60
-If 3 members HP is at or below 60% of their health then 
-they will be marked as needing a Cure, then a check will be the party member with the lowest HP to decide what tier is needed.</value>
-  </data>
-  <data name="curagaCurePercentage.ToolTip" xml:space="preserve">
-    <value>Will only cast Curaga if more than 3 peoples HP is below this threshold, suggested to keep it faily low to reduce Curaga spam.
-
-EXAMPLE:
-
-Default setting: 60
-If 3 members HP is at or below 60% of their health then 
-they will be marked as needing a Cure, then a check will be the party member with the lowest HP to decide what tier is needed.</value>
-  </data>
-  <data name="curagaPercentageValueLabel.ToolTip" xml:space="preserve">
-    <value>Will only cast Curaga if more than 3 peoples HP is below this threshold, gsuggested to keep it faily low to reduce Curaga spam.
-
-EXAMPLE:
-
-Default setting: 60
-If 3 members HP is at or below 60% of their health then 
-they will be marked as needing a Cure, then a check will be the party member with the lowest HP to decide what tier is needed.</value>
-  </data>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>171</value>
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACaDAAPuREAT78SADUAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAVQYABLwUAFnIGAK4yxUC+s0WBf/LFQGaAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAgwoAEM0dBtHaIgr/0h8Ixs4aAWvLEgAeAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAKsPADnPHAX/yhYAzsIZAGG2EAA6sQ4AIIMKAAsAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCwABzBYAaMsTA8PLEgLy0BkB/9EbAv/RGQH/zhoC88oZ
-        AtbJGQGvxhkAacgQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0xMAAcsQABfLEgAwzBcARMMZ
-        AHDLHALH2SkK/+I1H//MFABCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArA4AG78WAFrFHACOyhwBuswd
-        A+TWIwX+2SkJ/9omDtzSIAWFyxEACAAAAAAAAAAAAAAAAAAAAACICwAUyB8Cw9YiBP7RHQH9zxoB0s8a
-        AKLQHgF5zRgATswRABsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsA8AL+E+Iv3gQyn/1Tgiz9M0
-        G6HQLRKKzygLecQdAmK5FQBKsQ4AKI0LAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADLFAAp1ScKbNsz
-        GJPcOyKv3D0kxN87ItXePyTs4D0d/+I5F//aKwzqzBMAJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AACiDAATwRgAYM4mB6bTKQnO1ysJ79stB//XKgT/1SMD1MsTACEAAAAAAAAAAAAAAAAAAAAAAAAAAJUN
-        AB/MMRms3lI7+uNJLfzeOR3F2isMitMiA2nMGABFzBEAFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AADJKAyU6F9G/9gzE/TSJgig0igHhs4oCIPJJQV9yCICcL0XAE/HEAAGAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAzBUAJNYpB5DbMA613DEOxNsvDMrULQ3n2jEM/+M+Ev/kQBf/zhsAZAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADFKRG241xD/+NUOP3fQyfU1iwNiMkSABIAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyxUANc0XAETMEQAQAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAA/H+sQeB/rEHA/6xBwH+sQcADrEH4A6xB8AOsQcAfrEHAB6xB4AOsQfgDrEHgD6xB4AesQeAH
-        rEH+B6xB/j+sQQ==
-</value>
-  </data>
 </root>

@@ -2469,5 +2469,113 @@ namespace CurePlease.Properties {
                 this["RadialArcanaSpell"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool pauseOnZone {
+            get {
+                return ((bool)(this["pauseOnZone"]));
+            }
+            set {
+                this["pauseOnZone"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool pauseOnStartup {
+            get {
+                return ((bool)(this["pauseOnStartup"]));
+            }
+            set {
+                this["pauseOnStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool plAquaveil {
+            get {
+                return ((bool)(this["plAquaveil"]));
+            }
+            set {
+                this["plAquaveil"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string autoFollowName {
+            get {
+                return ((string)(this["autoFollowName"]));
+            }
+            set {
+                this["autoFollowName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public decimal autoFollowDistance {
+            get {
+                return ((decimal)(this["autoFollowDistance"]));
+            }
+            set {
+                this["autoFollowDistance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int requiredCuragaNumbers {
+            get {
+                return ((int)(this["requiredCuragaNumbers"]));
+            }
+            set {
+                this["requiredCuragaNumbers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int curagaTargetType {
+            get {
+                return ((int)(this["curagaTargetType"]));
+            }
+            set {
+                this["curagaTargetType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string curagaTargetName {
+            get {
+                return ((string)(this["curagaTargetName"]));
+            }
+            set {
+                this["curagaTargetName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool naErase {
+            get {
+                return ((bool)(this["naErase"]));
+            }
+            set {
+                this["naErase"] = value;
+            }
+        }
     }
 }

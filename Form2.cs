@@ -148,6 +148,7 @@ namespace CurePlease
             this.naPlague.Checked = Properties.Settings.Default.naPlague;
             this.naPoison.Checked = Properties.Settings.Default.naPoison;
             this.naSilence.Checked = Properties.Settings.Default.naSilence;
+            this.naErase.Checked = Properties.Settings.Default.naErase;
             this.plProtectra.Checked = Properties.Settings.Default.plProtectra;
             this.plShellra.Checked = Properties.Settings.Default.plShellra;
             this.plProtectralevel.Value = Properties.Settings.Default.plProtectralevel;
@@ -243,6 +244,9 @@ namespace CurePlease
             this.plKlimaform.Checked = Properties.Settings.Default.plKlimaform;
             this.plStormSpell_Spell.SelectedIndex = Properties.Settings.Default.plStormSpell_Spell;
             this.plAuspice.Checked = Properties.Settings.Default.plAuspice;
+            this.plAquaveil.Checked = Properties.Settings.Default.plAquaveil;
+
+            this.ConvertMP.Value = Properties.Settings.Default.ConvertMP;
 
             // CURAGA SPELLS 
             this.curagaEnabled.Checked = Properties.Settings.Default.curagaEnabled;
@@ -259,10 +263,17 @@ namespace CurePlease
 
             this.curagaCurePercentage.Value = Properties.Settings.Default.curagaCurePercentage;
             this.curagaPercentageValueLabel.Text = Properties.Settings.Default.curagaCurePercentage.ToString(CultureInfo.InvariantCulture);
+            this.curagaTargetType.SelectedIndex = Properties.Settings.Default.curagaTargetType;
+            this.curagaTargetName.Text = Properties.Settings.Default.curagaTargetName;
+            this.requiredCuragaNumbers.SelectedIndex = Properties.Settings.Default.requiredCuragaNumbers;
+            
+            // Stop on ....
+            this.pauseOnZoneBox.Checked = Properties.Settings.Default.pauseOnZone;
+            this.pauseOnStartBox.Checked = Properties.Settings.Default.pauseOnStartup;
 
-
-
-
+            // Auto Follow
+            this.autoFollowName.Text = Properties.Settings.Default.autoFollowName;
+            this.autoFollowDistance.Value = Properties.Settings.Default.autoFollowDistance;
 
 
 
@@ -422,6 +433,7 @@ namespace CurePlease
             Properties.Settings.Default.naPlague = this.naPlague.Checked;
             Properties.Settings.Default.naPoison = this.naPoison.Checked;
             Properties.Settings.Default.naSilence = this.naSilence.Checked;
+            Properties.Settings.Default.naErase = this.naErase.Checked;
             Properties.Settings.Default.lowMPuseitem = this.lowMPuseitem.Checked;
             Properties.Settings.Default.mpMintempitemusage = this.mpMintempitemusage.Value;
             Properties.Settings.Default.monitoredAgiDown = this.monitoredAgiDown.Checked;
@@ -512,6 +524,9 @@ namespace CurePlease
             Properties.Settings.Default.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
             Properties.Settings.Default.plKlimaform = this.plKlimaform.Checked;
             Properties.Settings.Default.plAuspice = this.plAuspice.Checked;
+            Properties.Settings.Default.plAquaveil = this.plAquaveil.Checked;
+
+            Properties.Settings.Default.ConvertMP = this.ConvertMP.Value;
 
             // CURAGA SPELLS 
             Properties.Settings.Default.curagaEnabled = this.curagaEnabled.Checked;
@@ -528,13 +543,17 @@ namespace CurePlease
 
             Properties.Settings.Default.curagaCurePercentage = this.curagaCurePercentage.Value;
 
+            Properties.Settings.Default.curagaTargetType = this.curagaTargetType.SelectedIndex;
+            Properties.Settings.Default.curagaTargetName = this.curagaTargetName.Text;
+            Properties.Settings.Default.requiredCuragaNumbers = this.requiredCuragaNumbers.SelectedIndex;
 
+            // Stop on ....
+            Properties.Settings.Default.pauseOnZone = this.pauseOnZoneBox.Checked;
+            Properties.Settings.Default.pauseOnStartup = this.pauseOnStartBox.Checked;
 
-
-
-
-
-
+            // Auto Follow
+            Properties.Settings.Default.autoFollowName = this.autoFollowName.Text;
+            Properties.Settings.Default.autoFollowDistance = this.autoFollowDistance.Value;
 
 
 
@@ -1017,6 +1036,9 @@ namespace CurePlease
         #region "== Form Closing Settings"
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
+
+            /*
+
             Properties.Settings.Default.cure1enabled = this.cure1enabled.Checked;
             Properties.Settings.Default.cure2enabled = this.cure2enabled.Checked;
             Properties.Settings.Default.cure3enabled = this.cure3enabled.Checked;
@@ -1225,6 +1247,7 @@ namespace CurePlease
             Properties.Settings.Default.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
             Properties.Settings.Default.plKlimaform = this.plKlimaform.Checked;
             Properties.Settings.Default.plAuspice = this.plAuspice.Checked;
+            Properties.Settings.Default.plAquaveil = this.plAquaveil.Checked;
 
             // New Spells
             Properties.Settings.Default.indiRecast = this.indiRecast.Value;
@@ -1256,10 +1279,15 @@ namespace CurePlease
             Properties.Settings.Default.curaga4Amount = Convert.ToInt32(this.curaga4Amount.Value);
             Properties.Settings.Default.curaga5Amount = Convert.ToInt32(this.curaga5Amount.Value);
 
+            // Stop on ....
+            Properties.Settings.Default.pauseOnZone = this.pauseOnZoneBox.Checked;
+            Properties.Settings.Default.pauseOnStartup = this.pauseOnStartBox.Checked;
+
             Properties.Settings.Default.Save();
+
+            */
+
         }
-
-
     }
         #endregion
 }

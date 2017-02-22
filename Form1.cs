@@ -4755,7 +4755,7 @@ namespace CurePlease
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (setinstance2.Enabled == true)
+            if (setinstance.Enabled == true)
             {
                 if (WindowerMode == "Ashita")
                 {
@@ -4766,7 +4766,6 @@ namespace CurePlease
                     _ELITEAPIPL.ThirdParty.SendString("//lua unload CurePlease_addon");
                 }
             }
-            
             Application.Exit();
         }
     }

@@ -8,10 +8,6 @@ namespace CurePlease
     using System.Drawing;
 
 
-
-
-
-
     public partial class Form4 : Form
     {
         private Form1 f1;

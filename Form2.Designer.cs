@@ -312,7 +312,6 @@ namespace CurePlease
             this.plStoneskin = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.requiredCuragaNumbers = new System.Windows.Forms.ComboBox();
             this.label31 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.curagaTargetName = new System.Windows.Forms.TextBox();
@@ -331,6 +330,7 @@ namespace CurePlease
             this.cure2enabled = new System.Windows.Forms.CheckBox();
             this.cure1enabled = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.requiredCuragaNumbers = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -393,6 +393,7 @@ namespace CurePlease
             this.groupBox12.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).BeginInit();
             this.SuspendLayout();
             // 
             // button4
@@ -4027,20 +4028,6 @@ namespace CurePlease
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = " AoE Healing (beta) ";
             // 
-            // requiredCuragaNumbers
-            // 
-            this.requiredCuragaNumbers.FormattingEnabled = true;
-            this.requiredCuragaNumbers.Items.AddRange(new object[] {
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"});
-            this.requiredCuragaNumbers.Location = new System.Drawing.Point(607, 112);
-            this.requiredCuragaNumbers.Name = "requiredCuragaNumbers";
-            this.requiredCuragaNumbers.Size = new System.Drawing.Size(64, 21);
-            this.requiredCuragaNumbers.TabIndex = 23;
-            // 
             // label31
             // 
             this.label31.AutoSize = true;
@@ -4244,6 +4231,28 @@ namespace CurePlease
             this.tabControl1.Size = new System.Drawing.Size(745, 408);
             this.tabControl1.TabIndex = 0;
             // 
+            // requiredCuragaNumbers
+            // 
+            this.requiredCuragaNumbers.Location = new System.Drawing.Point(604, 111);
+            this.requiredCuragaNumbers.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.requiredCuragaNumbers.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.requiredCuragaNumbers.Name = "requiredCuragaNumbers";
+            this.requiredCuragaNumbers.Size = new System.Drawing.Size(68, 20);
+            this.requiredCuragaNumbers.TabIndex = 23;
+            this.requiredCuragaNumbers.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4350,6 +4359,7 @@ namespace CurePlease
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4647,12 +4657,12 @@ namespace CurePlease
         private System.Windows.Forms.TextBox curagaTargetName;
         private System.Windows.Forms.ComboBox curagaTargetType;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.ComboBox requiredCuragaNumbers;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.TextBox autoFollowName;
         private System.Windows.Forms.NumericUpDown autoFollowDistance;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.NumericUpDown requiredCuragaNumbers;
     }
 }

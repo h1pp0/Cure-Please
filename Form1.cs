@@ -1875,7 +1875,7 @@ namespace CurePlease
 
                         }
                     }
-                    if (cures_required.Count >= Settings.Default.requiredCuragaNumbers)
+                    if (cures_required.Count >= Settings.Default.curagaRequiredMembers)
                     {
                         byte[] arr = cures_required.ToArray();
                         CuragaCalculator(arr[0]);
@@ -4175,7 +4175,6 @@ namespace CurePlease
             }
 
             this.actionTimer.Enabled = false;
-            castHalt_Timer.Enabled = true;
 
             var count = 0;
             float lastPercent = 0;
@@ -4745,11 +4744,6 @@ namespace CurePlease
         private void buff_checker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             buff_checker.RunWorkerAsync();
-        }
-
-        private void castHalt_Timer_Tick(object sender, EventArgs e)
-        {
-            castHalt_Timer.Enabled = false;
         }
 
 

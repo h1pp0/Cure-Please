@@ -61,10 +61,16 @@ namespace CurePlease
             this.player0enabled = new System.Windows.Forms.CheckBox();
             this.player5 = new System.Windows.Forms.Label();
             this.player4 = new System.Windows.Forms.Label();
+            this.player5HP = new CurePlease.NewProgressBar();
             this.player3 = new System.Windows.Forms.Label();
+            this.player4HP = new CurePlease.NewProgressBar();
             this.player2 = new System.Windows.Forms.Label();
+            this.player3HP = new CurePlease.NewProgressBar();
             this.player1 = new System.Windows.Forms.Label();
+            this.player2HP = new CurePlease.NewProgressBar();
+            this.player1HP = new CurePlease.NewProgressBar();
             this.player0 = new System.Windows.Forms.Label();
+            this.player0HP = new CurePlease.NewProgressBar();
             this.playerOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.followToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -134,10 +140,16 @@ namespace CurePlease
             this.player12enabled = new System.Windows.Forms.CheckBox();
             this.player17 = new System.Windows.Forms.Label();
             this.player16 = new System.Windows.Forms.Label();
+            this.player17HP = new CurePlease.NewProgressBar();
             this.player15 = new System.Windows.Forms.Label();
+            this.player16HP = new CurePlease.NewProgressBar();
             this.player14 = new System.Windows.Forms.Label();
+            this.player15HP = new CurePlease.NewProgressBar();
             this.player13 = new System.Windows.Forms.Label();
+            this.player14HP = new CurePlease.NewProgressBar();
+            this.player13HP = new CurePlease.NewProgressBar();
             this.player12 = new System.Windows.Forms.Label();
+            this.player12HP = new CurePlease.NewProgressBar();
             this.partyMembersUpdate = new System.Windows.Forms.Timer(this.components);
             this.actionTimer = new System.Windows.Forms.Timer(this.components);
             this.player6 = new System.Windows.Forms.Label();
@@ -165,6 +177,12 @@ namespace CurePlease
             this.player8priority = new System.Windows.Forms.CheckBox();
             this.player7priority = new System.Windows.Forms.CheckBox();
             this.player6priority = new System.Windows.Forms.CheckBox();
+            this.player11HP = new CurePlease.NewProgressBar();
+            this.player10HP = new CurePlease.NewProgressBar();
+            this.player9HP = new CurePlease.NewProgressBar();
+            this.player8HP = new CurePlease.NewProgressBar();
+            this.player7HP = new CurePlease.NewProgressBar();
+            this.player6HP = new CurePlease.NewProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -204,25 +222,6 @@ namespace CurePlease
             this.programDelayTimer = new System.Windows.Forms.Timer(this.components);
             this.AilmentChecker = new System.ComponentModel.BackgroundWorker();
             this.buff_checker = new System.ComponentModel.BackgroundWorker();
-            this.castHalt_Timer = new System.Windows.Forms.Timer(this.components);
-            this.player17HP = new CurePlease.NewProgressBar();
-            this.player16HP = new CurePlease.NewProgressBar();
-            this.player15HP = new CurePlease.NewProgressBar();
-            this.player14HP = new CurePlease.NewProgressBar();
-            this.player13HP = new CurePlease.NewProgressBar();
-            this.player12HP = new CurePlease.NewProgressBar();
-            this.player11HP = new CurePlease.NewProgressBar();
-            this.player10HP = new CurePlease.NewProgressBar();
-            this.player9HP = new CurePlease.NewProgressBar();
-            this.player8HP = new CurePlease.NewProgressBar();
-            this.player7HP = new CurePlease.NewProgressBar();
-            this.player6HP = new CurePlease.NewProgressBar();
-            this.player5HP = new CurePlease.NewProgressBar();
-            this.player4HP = new CurePlease.NewProgressBar();
-            this.player3HP = new CurePlease.NewProgressBar();
-            this.player2HP = new CurePlease.NewProgressBar();
-            this.player1HP = new CurePlease.NewProgressBar();
-            this.player0HP = new CurePlease.NewProgressBar();
             this.party0.SuspendLayout();
             this.playerOptions.SuspendLayout();
             this.party2.SuspendLayout();
@@ -632,6 +631,15 @@ namespace CurePlease
             this.player4.TabIndex = 1;
             this.player4.Text = "Inactive";
             // 
+            // player5HP
+            // 
+            this.player5HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player5HP.Location = new System.Drawing.Point(7, 210);
+            this.player5HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player5HP.Name = "player5HP";
+            this.player5HP.Size = new System.Drawing.Size(219, 9);
+            this.player5HP.TabIndex = 0;
+            // 
             // player3
             // 
             this.player3.AutoSize = true;
@@ -643,6 +651,15 @@ namespace CurePlease
             this.player3.Size = new System.Drawing.Size(45, 13);
             this.player3.TabIndex = 1;
             this.player3.Text = "Inactive";
+            // 
+            // player4HP
+            // 
+            this.player4HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player4HP.Location = new System.Drawing.Point(7, 174);
+            this.player4HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player4HP.Name = "player4HP";
+            this.player4HP.Size = new System.Drawing.Size(219, 9);
+            this.player4HP.TabIndex = 0;
             // 
             // player2
             // 
@@ -656,6 +673,15 @@ namespace CurePlease
             this.player2.TabIndex = 1;
             this.player2.Text = "Inactive";
             // 
+            // player3HP
+            // 
+            this.player3HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player3HP.Location = new System.Drawing.Point(7, 138);
+            this.player3HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player3HP.Name = "player3HP";
+            this.player3HP.Size = new System.Drawing.Size(219, 9);
+            this.player3HP.TabIndex = 0;
+            // 
             // player1
             // 
             this.player1.AutoSize = true;
@@ -668,6 +694,24 @@ namespace CurePlease
             this.player1.TabIndex = 1;
             this.player1.Text = "Inactive";
             // 
+            // player2HP
+            // 
+            this.player2HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player2HP.Location = new System.Drawing.Point(7, 102);
+            this.player2HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player2HP.Name = "player2HP";
+            this.player2HP.Size = new System.Drawing.Size(219, 9);
+            this.player2HP.TabIndex = 0;
+            // 
+            // player1HP
+            // 
+            this.player1HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player1HP.Location = new System.Drawing.Point(7, 66);
+            this.player1HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player1HP.Name = "player1HP";
+            this.player1HP.Size = new System.Drawing.Size(219, 9);
+            this.player1HP.TabIndex = 0;
+            // 
             // player0
             // 
             this.player0.AutoSize = true;
@@ -679,6 +723,15 @@ namespace CurePlease
             this.player0.Size = new System.Drawing.Size(45, 13);
             this.player0.TabIndex = 1;
             this.player0.Text = "Inactive";
+            // 
+            // player0HP
+            // 
+            this.player0HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player0HP.Location = new System.Drawing.Point(7, 31);
+            this.player0HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player0HP.Name = "player0HP";
+            this.player0HP.Size = new System.Drawing.Size(219, 9);
+            this.player0HP.TabIndex = 0;
             // 
             // playerOptions
             // 
@@ -1338,6 +1391,15 @@ namespace CurePlease
             this.player16.TabIndex = 1;
             this.player16.Text = "Inactive";
             // 
+            // player17HP
+            // 
+            this.player17HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player17HP.Location = new System.Drawing.Point(7, 210);
+            this.player17HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player17HP.Name = "player17HP";
+            this.player17HP.Size = new System.Drawing.Size(185, 9);
+            this.player17HP.TabIndex = 0;
+            // 
             // player15
             // 
             this.player15.AutoSize = true;
@@ -1349,6 +1411,15 @@ namespace CurePlease
             this.player15.Size = new System.Drawing.Size(45, 13);
             this.player15.TabIndex = 1;
             this.player15.Text = "Inactive";
+            // 
+            // player16HP
+            // 
+            this.player16HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player16HP.Location = new System.Drawing.Point(7, 174);
+            this.player16HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player16HP.Name = "player16HP";
+            this.player16HP.Size = new System.Drawing.Size(185, 9);
+            this.player16HP.TabIndex = 0;
             // 
             // player14
             // 
@@ -1362,6 +1433,15 @@ namespace CurePlease
             this.player14.TabIndex = 1;
             this.player14.Text = "Inactive";
             // 
+            // player15HP
+            // 
+            this.player15HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player15HP.Location = new System.Drawing.Point(7, 138);
+            this.player15HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player15HP.Name = "player15HP";
+            this.player15HP.Size = new System.Drawing.Size(185, 9);
+            this.player15HP.TabIndex = 0;
+            // 
             // player13
             // 
             this.player13.AutoSize = true;
@@ -1374,6 +1454,24 @@ namespace CurePlease
             this.player13.TabIndex = 1;
             this.player13.Text = "Inactive";
             // 
+            // player14HP
+            // 
+            this.player14HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player14HP.Location = new System.Drawing.Point(7, 102);
+            this.player14HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player14HP.Name = "player14HP";
+            this.player14HP.Size = new System.Drawing.Size(185, 9);
+            this.player14HP.TabIndex = 0;
+            // 
+            // player13HP
+            // 
+            this.player13HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player13HP.Location = new System.Drawing.Point(7, 66);
+            this.player13HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player13HP.Name = "player13HP";
+            this.player13HP.Size = new System.Drawing.Size(185, 9);
+            this.player13HP.TabIndex = 0;
+            // 
             // player12
             // 
             this.player12.AutoSize = true;
@@ -1385,6 +1483,15 @@ namespace CurePlease
             this.player12.Size = new System.Drawing.Size(45, 13);
             this.player12.TabIndex = 1;
             this.player12.Text = "Inactive";
+            // 
+            // player12HP
+            // 
+            this.player12HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player12HP.Location = new System.Drawing.Point(7, 31);
+            this.player12HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player12HP.Name = "player12HP";
+            this.player12HP.Size = new System.Drawing.Size(185, 9);
+            this.player12HP.TabIndex = 0;
             // 
             // partyMembersUpdate
             // 
@@ -1732,6 +1839,60 @@ namespace CurePlease
             this.toolTips.SetToolTip(this.player6priority, "Check to Enable Player Priority");
             this.player6priority.UseVisualStyleBackColor = true;
             // 
+            // player11HP
+            // 
+            this.player11HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player11HP.Location = new System.Drawing.Point(7, 210);
+            this.player11HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player11HP.Name = "player11HP";
+            this.player11HP.Size = new System.Drawing.Size(185, 9);
+            this.player11HP.TabIndex = 0;
+            // 
+            // player10HP
+            // 
+            this.player10HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player10HP.Location = new System.Drawing.Point(7, 174);
+            this.player10HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player10HP.Name = "player10HP";
+            this.player10HP.Size = new System.Drawing.Size(185, 9);
+            this.player10HP.TabIndex = 0;
+            // 
+            // player9HP
+            // 
+            this.player9HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player9HP.Location = new System.Drawing.Point(7, 138);
+            this.player9HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player9HP.Name = "player9HP";
+            this.player9HP.Size = new System.Drawing.Size(185, 9);
+            this.player9HP.TabIndex = 0;
+            // 
+            // player8HP
+            // 
+            this.player8HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player8HP.Location = new System.Drawing.Point(8, 102);
+            this.player8HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player8HP.Name = "player8HP";
+            this.player8HP.Size = new System.Drawing.Size(185, 9);
+            this.player8HP.TabIndex = 0;
+            // 
+            // player7HP
+            // 
+            this.player7HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player7HP.Location = new System.Drawing.Point(7, 66);
+            this.player7HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player7HP.Name = "player7HP";
+            this.player7HP.Size = new System.Drawing.Size(185, 9);
+            this.player7HP.TabIndex = 0;
+            // 
+            // player6HP
+            // 
+            this.player6HP.BackColor = System.Drawing.SystemColors.Control;
+            this.player6HP.Location = new System.Drawing.Point(7, 31);
+            this.player6HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.player6HP.Name = "player6HP";
+            this.player6HP.Size = new System.Drawing.Size(185, 9);
+            this.player6HP.TabIndex = 0;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -2056,173 +2217,6 @@ namespace CurePlease
             this.buff_checker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.buff_checker_DoWork);
             this.buff_checker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.buff_checker_RunWorkerCompleted);
             // 
-            // castHalt_Timer
-            // 
-            this.castHalt_Timer.Interval = 500;
-            this.castHalt_Timer.Tick += new System.EventHandler(this.castHalt_Timer_Tick);
-            // 
-            // player17HP
-            // 
-            this.player17HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player17HP.Location = new System.Drawing.Point(7, 210);
-            this.player17HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player17HP.Name = "player17HP";
-            this.player17HP.Size = new System.Drawing.Size(185, 9);
-            this.player17HP.TabIndex = 0;
-            // 
-            // player16HP
-            // 
-            this.player16HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player16HP.Location = new System.Drawing.Point(7, 174);
-            this.player16HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player16HP.Name = "player16HP";
-            this.player16HP.Size = new System.Drawing.Size(185, 9);
-            this.player16HP.TabIndex = 0;
-            // 
-            // player15HP
-            // 
-            this.player15HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player15HP.Location = new System.Drawing.Point(7, 138);
-            this.player15HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player15HP.Name = "player15HP";
-            this.player15HP.Size = new System.Drawing.Size(185, 9);
-            this.player15HP.TabIndex = 0;
-            // 
-            // player14HP
-            // 
-            this.player14HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player14HP.Location = new System.Drawing.Point(7, 102);
-            this.player14HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player14HP.Name = "player14HP";
-            this.player14HP.Size = new System.Drawing.Size(185, 9);
-            this.player14HP.TabIndex = 0;
-            // 
-            // player13HP
-            // 
-            this.player13HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player13HP.Location = new System.Drawing.Point(7, 66);
-            this.player13HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player13HP.Name = "player13HP";
-            this.player13HP.Size = new System.Drawing.Size(185, 9);
-            this.player13HP.TabIndex = 0;
-            // 
-            // player12HP
-            // 
-            this.player12HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player12HP.Location = new System.Drawing.Point(7, 31);
-            this.player12HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player12HP.Name = "player12HP";
-            this.player12HP.Size = new System.Drawing.Size(185, 9);
-            this.player12HP.TabIndex = 0;
-            // 
-            // player11HP
-            // 
-            this.player11HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player11HP.Location = new System.Drawing.Point(7, 210);
-            this.player11HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player11HP.Name = "player11HP";
-            this.player11HP.Size = new System.Drawing.Size(185, 9);
-            this.player11HP.TabIndex = 0;
-            // 
-            // player10HP
-            // 
-            this.player10HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player10HP.Location = new System.Drawing.Point(7, 174);
-            this.player10HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player10HP.Name = "player10HP";
-            this.player10HP.Size = new System.Drawing.Size(185, 9);
-            this.player10HP.TabIndex = 0;
-            // 
-            // player9HP
-            // 
-            this.player9HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player9HP.Location = new System.Drawing.Point(7, 138);
-            this.player9HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player9HP.Name = "player9HP";
-            this.player9HP.Size = new System.Drawing.Size(185, 9);
-            this.player9HP.TabIndex = 0;
-            // 
-            // player8HP
-            // 
-            this.player8HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player8HP.Location = new System.Drawing.Point(8, 102);
-            this.player8HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player8HP.Name = "player8HP";
-            this.player8HP.Size = new System.Drawing.Size(185, 9);
-            this.player8HP.TabIndex = 0;
-            // 
-            // player7HP
-            // 
-            this.player7HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player7HP.Location = new System.Drawing.Point(7, 66);
-            this.player7HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player7HP.Name = "player7HP";
-            this.player7HP.Size = new System.Drawing.Size(185, 9);
-            this.player7HP.TabIndex = 0;
-            // 
-            // player6HP
-            // 
-            this.player6HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player6HP.Location = new System.Drawing.Point(7, 31);
-            this.player6HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player6HP.Name = "player6HP";
-            this.player6HP.Size = new System.Drawing.Size(185, 9);
-            this.player6HP.TabIndex = 0;
-            // 
-            // player5HP
-            // 
-            this.player5HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player5HP.Location = new System.Drawing.Point(7, 210);
-            this.player5HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player5HP.Name = "player5HP";
-            this.player5HP.Size = new System.Drawing.Size(219, 9);
-            this.player5HP.TabIndex = 0;
-            // 
-            // player4HP
-            // 
-            this.player4HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player4HP.Location = new System.Drawing.Point(7, 174);
-            this.player4HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player4HP.Name = "player4HP";
-            this.player4HP.Size = new System.Drawing.Size(219, 9);
-            this.player4HP.TabIndex = 0;
-            // 
-            // player3HP
-            // 
-            this.player3HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player3HP.Location = new System.Drawing.Point(7, 138);
-            this.player3HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player3HP.Name = "player3HP";
-            this.player3HP.Size = new System.Drawing.Size(219, 9);
-            this.player3HP.TabIndex = 0;
-            // 
-            // player2HP
-            // 
-            this.player2HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player2HP.Location = new System.Drawing.Point(7, 102);
-            this.player2HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player2HP.Name = "player2HP";
-            this.player2HP.Size = new System.Drawing.Size(219, 9);
-            this.player2HP.TabIndex = 0;
-            // 
-            // player1HP
-            // 
-            this.player1HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player1HP.Location = new System.Drawing.Point(7, 66);
-            this.player1HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player1HP.Name = "player1HP";
-            this.player1HP.Size = new System.Drawing.Size(219, 9);
-            this.player1HP.TabIndex = 0;
-            // 
-            // player0HP
-            // 
-            this.player0HP.BackColor = System.Drawing.SystemColors.Control;
-            this.player0HP.Location = new System.Drawing.Point(7, 31);
-            this.player0HP.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.player0HP.Name = "player0HP";
-            this.player0HP.Size = new System.Drawing.Size(219, 9);
-            this.player0HP.TabIndex = 0;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2472,7 +2466,6 @@ namespace CurePlease
         private ToolStripMenuItem partyBuffsdebugToolStripMenuItem;
         public System.ComponentModel.BackgroundWorker AilmentChecker;
         private System.ComponentModel.BackgroundWorker buff_checker;
-        private Timer castHalt_Timer;
     }
 }
 

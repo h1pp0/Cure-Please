@@ -265,7 +265,7 @@ namespace CurePlease
             this.curagaPercentageValueLabel.Text = Properties.Settings.Default.curagaCurePercentage.ToString(CultureInfo.InvariantCulture);
             this.curagaTargetType.SelectedIndex = Properties.Settings.Default.curagaTargetType;
             this.curagaTargetName.Text = Properties.Settings.Default.curagaTargetName;
-            this.requiredCuragaNumbers.SelectedIndex = Properties.Settings.Default.requiredCuragaNumbers;
+            this.requiredCuragaNumbers.Value = Properties.Settings.Default.curagaRequiredMembers;
             
             // Stop on ....
             this.pauseOnZoneBox.Checked = Properties.Settings.Default.pauseOnZone;
@@ -545,7 +545,7 @@ namespace CurePlease
 
             Properties.Settings.Default.curagaTargetType = this.curagaTargetType.SelectedIndex;
             Properties.Settings.Default.curagaTargetName = this.curagaTargetName.Text;
-            Properties.Settings.Default.requiredCuragaNumbers = this.requiredCuragaNumbers.SelectedIndex;
+            Properties.Settings.Default.curagaRequiredMembers = this.requiredCuragaNumbers.Value;
 
             // Stop on ....
             Properties.Settings.Default.pauseOnZone = this.pauseOnZoneBox.Checked;

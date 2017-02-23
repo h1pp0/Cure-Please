@@ -629,9 +629,6 @@
     <Setting Name="autoFollowDistance" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="requiredCuragaNumbers" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
     <Setting Name="curagaTargetType" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
@@ -640,6 +637,9 @@
     </Setting>
     <Setting Name="naErase" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="curagaRequiredMembers" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">3</Value>
     </Setting>
   </Settings>
 </SettingsFile>

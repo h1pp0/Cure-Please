@@ -2532,18 +2532,6 @@ namespace CurePlease.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int requiredCuragaNumbers {
-            get {
-                return ((int)(this["requiredCuragaNumbers"]));
-            }
-            set {
-                this["requiredCuragaNumbers"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int curagaTargetType {
             get {
@@ -2575,6 +2563,18 @@ namespace CurePlease.Properties {
             }
             set {
                 this["naErase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public decimal curagaRequiredMembers {
+            get {
+                return ((decimal)(this["curagaRequiredMembers"]));
+            }
+            set {
+                this["curagaRequiredMembers"] = value;
             }
         }
     }

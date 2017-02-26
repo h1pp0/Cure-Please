@@ -17,6 +17,8 @@ namespace CurePlease
     using System.Net;
     using System.Net.Sockets;
 
+    using System.Text;
+
     public partial class Form1 : Form
     {
 
@@ -1271,6 +1273,34 @@ namespace CurePlease
         }
         #endregion
 
+        private void removeDebuff(string characterName, int debuffID)
+        {
+            foreach (BuffStorage ailment in ActiveBuffs)
+            {
+                if (ailment.CharacterName.ToLower() == characterName.ToLower())
+                    {
+                    //MessageBox.Show("Found Match: " + ailment.CharacterName.ToLower()+" => "+characterName.ToLower());
+
+
+
+                        // Build a new list, find cast debuff and remove it.
+                        List<string> named_Debuffs = ailment.CharacterBuffs.Split(',').ToList();
+                        named_Debuffs.Remove(debuffID.ToString());
+                
+                        // Now rebuild the list and replace previous one
+                        var stringList = String.Join(",", named_Debuffs);
+
+                        var i = ActiveBuffs.FindIndex(x => x.CharacterName.ToLower() == characterName.ToLower());
+                        ActiveBuffs[i].CharacterBuffs = stringList;
+                }
+                
+            }
+
+        }
+
+
+
+
         #region "== CastLock"
         private void CastLockMethod()
         {
@@ -1328,26 +1358,9 @@ namespace CurePlease
         #endregion
 
         #region "== Curaga Calculation"
-        private void CuragaCalculator(byte partyMemberId)
+        private void CuragaCalculator(int partyMemberId)
         {
-            string lowestHP_Name;
-
-            // Grab the PT member with lowest HP's name.
-            var playerLowestHP = this._ELITEAPIMonitored.Party.GetPartyMembers().OrderBy(p => p.CurrentHPP).OrderBy(p => p.Active == 0).Select(p => p.Name).FirstOrDefault();
-            if (playerLowestHP != null)
-            {
-                lowestHP_Name = playerLowestHP;
-            }
-            else
-            {
-                lowestHP_Name = _ELITEAPIMonitored.Player.Name;
-            }
-
-
-
-
-
-
+            string lowestHP_Name = _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name;
 
             if ((Settings.Default.curaga5Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga5Amount) && (CheckSpellRecast("Curaga V") == 0) && (HasSpell("Curaga V")) && (_ELITEAPIPL.Player.MP > 380))
             {
@@ -1358,7 +1371,7 @@ namespace CurePlease
                 }
                 else
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga V\" " + this._ELITEAPIMonitored.Player.Name);
+                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga V\" " + Settings.Default.curagaTargetName);
                     this.CastLockMethod();
                 }
 
@@ -1372,7 +1385,7 @@ namespace CurePlease
                 }
                 else
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga IV\" " + this._ELITEAPIMonitored.Player.Name);
+                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga IV\" " + Settings.Default.curagaTargetName);
                     this.CastLockMethod();
                 }
             }
@@ -1385,7 +1398,7 @@ namespace CurePlease
                 }
                 else
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga III\" " + this._ELITEAPIMonitored.Player.Name);
+                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga III\" " + Settings.Default.curagaTargetName);
                     this.CastLockMethod();
                 }
             }
@@ -1398,7 +1411,7 @@ namespace CurePlease
                 }
                 else
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga II\" " + this._ELITEAPIMonitored.Player.Name);
+                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga II\" " + Settings.Default.curagaTargetName);
                     this.CastLockMethod();
                 }
             }
@@ -1411,7 +1424,7 @@ namespace CurePlease
                 }
                 else
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga\" " + this._ELITEAPIMonitored.Player.Name);
+                    _ELITEAPIPL.ThirdParty.SendString("/ma \"Curaga\" " + Settings.Default.curagaTargetName);
                     this.CastLockMethod();
                 }
             }
@@ -1877,12 +1890,10 @@ namespace CurePlease
                     }
                     if (cures_required.Count >= Settings.Default.curagaRequiredMembers)
                     {
-                        byte[] arr = cures_required.ToArray();
-                        CuragaCalculator(arr[0]);
+                        int lowestHP_id = cures_required.First(); 
+                        CuragaCalculator(lowestHP_id);
                     }
                 }
-
-
 
 
                 // Loop through keys in order of lowest HP to highest HP
@@ -2301,6 +2312,7 @@ namespace CurePlease
 
                 if ((Settings.Default.naSpellsenable) && (!this.castingLock))
                 {
+                    int BreakOut = 0;
                     var partyMembers = _ELITEAPIPL.Party.GetPartyMembers();
 
                     foreach (BuffStorage ailment in ActiveBuffs)
@@ -2311,92 +2323,124 @@ namespace CurePlease
                             {
                                 List<string> named_Debuffs = ailment.CharacterBuffs.Split(',').ToList();
 
-                                // BEGIN CHECKS FOR DEBUFFS
-
                                 //DOOM
                                 if (Settings.Default.naCurse && named_Debuffs.Contains("15") && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
                                 {
                                     this.castSpell(ptMember.Name, "Cursna");
-                                    //break;
+                                    BreakOut = 1;
                                 }
                                 //SLEEP
                                 else if (named_Debuffs.Contains("2") && (CheckSpellRecast(Settings.Default.wakeSleepSpellString) == 0) && (HasSpell(Settings.Default.wakeSleepSpellString)))
                                 {
                                     this.castSpell(ptMember.Name, Settings.Default.wakeSleepSpellString);
+                                    removeDebuff(ptMember.Name, 2);
+                                    BreakOut = 1;
                                 }
                                 //PETRIFICATION
                                 else if (Settings.Default.naPetrification && named_Debuffs.Contains("7") && (CheckSpellRecast("Stona") == 0) && (HasSpell("Stona")))
                                 {
                                     this.castSpell(ptMember.Name, "Stona");
+                                    removeDebuff(ptMember.Name, 7);
+                                    BreakOut = 1;
                                 }
                                 //SILENCE
                                 else if (Settings.Default.naSilence && named_Debuffs.Contains("6") && (CheckSpellRecast("Silena") == 0) && (HasSpell("Silena")))
                                 {
                                     this.castSpell(ptMember.Name, "Silena");
+                                    removeDebuff(ptMember.Name, 6);
+                                    BreakOut = 1;
                                 }
                                 //PARALYSIS
                                 else if (Settings.Default.naParalysis && named_Debuffs.Contains("4") && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("PAralyna")))
                                 {
                                     this.castSpell(ptMember.Name, "Paralyna");
+                                    removeDebuff(ptMember.Name, 4);
+                                    BreakOut = 1;
                                 }
                                 //DISEASE
                                 else if (Settings.Default.naDisease && named_Debuffs.Contains("8") && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")))
                                 {
                                     this.castSpell(ptMember.Name, "Viruna");
+                                    removeDebuff(ptMember.Name, 8);
+                                    BreakOut = 1;
+
                                 }
                                 //CURSE
                                 else if (Settings.Default.naCurse && named_Debuffs.Contains("9") && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
                                 {
                                     this.castSpell(ptMember.Name, "Cursna");
+                                    removeDebuff(ptMember.Name, 9);
+                                    BreakOut = 1;
                                 }
                                 //BLINDNESS
                                 else if (Settings.Default.naBlindness && named_Debuffs.Contains("5") && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")))
                                 {
                                     this.castSpell(ptMember.Name, "Blindna");
+                                    removeDebuff(ptMember.Name, 5);
+                                    BreakOut = 1;
                                 }
                                 //POISON
                                 else if (Settings.Default.naPoison && named_Debuffs.Contains("3") && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")))
                                 {
                                     this.castSpell(ptMember.Name, "Poisona");
+                                    removeDebuff(ptMember.Name, 3);
+                                    BreakOut = 1;
                                 }
                                 // SLOW
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("13") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 13);
+                                    BreakOut = 1;
                                 }
                                 // BIO
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("135") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 135);
+                                    BreakOut = 1;
                                 }
                                 // BIND
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("11") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 11);
+                                    BreakOut = 1;
                                 }
                                 // GRAVITY
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("12") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 12);
+                                    BreakOut = 1;
                                 }
                                 // ACCURACY DOWN
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("146") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 146);
+                                    BreakOut = 1;
                                 }
                                 // DEFENSE DOWN
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("149") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 149);
+                                    BreakOut = 1;
                                 }
                                 // ATTACK DOWN
                                 else if (Settings.Default.naErase && named_Debuffs.Contains("147") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                                 {
                                     this.castSpell(ptMember.Name, "Erase");
-                                }
+                                    removeDebuff(ptMember.Name, 147);
+                                    BreakOut = 1;
+                                }                         
+                            }
 
-
-
+                            if (BreakOut == 1)
+                            {
+                                break;
+                            
                             }
                         }
                     }
@@ -3372,6 +3416,12 @@ namespace CurePlease
                 }
 
             }
+
+
+
+            // ACTION TIMER END
+
+
 
         }
 
@@ -4699,29 +4749,30 @@ namespace CurePlease
             }
         }
 
-        public TcpListener listen = new TcpListener(IPAddress.Parse("127.0.0.1"), 19769);
+        private const int listenPort = 19769;
 
         private void buff_checker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             if (Settings.Default.naSpellsenable)
             {
+                bool done = false;
+
+                UdpClient listener = new UdpClient(listenPort);
+                IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), listenPort);
+
+                string received_data;
+
+                byte[] receive_byte_array;
+
                 try
                 {
-                    listen.Start();
-                    Byte[] bytes = new byte[256];
-                    TcpClient client = listen.AcceptTcpClient();
-
-                    NetworkStream stream = client.GetStream();
-
-                    int i;
-                    String data = null;
-
-                    while (stream.DataAvailable)
+                    while (!done)
                     {
-                        i = stream.Read(bytes, 0, bytes.Length);
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                        receive_byte_array = listener.Receive(ref groupEP);
 
-                        string[] name = data.Split('-');
+                        received_data = Encoding.ASCII.GetString(receive_byte_array, 0, receive_byte_array.Length);
+
+                        string[] name = received_data.Split('-');
 
                         ActiveBuffs.RemoveAll(buf => buf.CharacterName == name[0]);
 
@@ -4731,25 +4782,28 @@ namespace CurePlease
                             CharacterBuffs = name[1]
                         });
                     }
-                    client.Close();
                 }
-                catch (SocketException exceptionError)
+                catch (Exception error)
                 {
-                    MessageBox.Show(exceptionError.Message);
+                    
+                }
+                finally
+                {
+                    listener.Close();
                 }
             }
-            Thread.Sleep(1000);
         }
 
         private void buff_checker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            Thread.Sleep(2000);
             buff_checker.RunWorkerAsync();
         }
 
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (setinstance.Enabled == true)
+            if (setinstance2.Enabled == true)
             {
                 if (WindowerMode == "Ashita")
                 {

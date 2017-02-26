@@ -54,7 +54,7 @@
             // update_effects
             // 
             this.update_effects.Enabled = true;
-            this.update_effects.Interval = 5000;
+            this.update_effects.Interval = 1000;
             this.update_effects.Tick += new System.EventHandler(this.update_effects_Tick);
             // 
             // PartyBuffs

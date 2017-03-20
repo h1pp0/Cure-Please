@@ -829,6 +829,7 @@ namespace CurePlease
             this.POLID.BackColor = Color.White;
             this.plPosition.Enabled = true;
             this.setinstance2.Enabled = true;
+            Settings.Default.autoFollowName = "";
 
             foreach (var dats in Process.GetProcessesByName("pol").Where(dats => POLID.Text == dats.MainWindowTitle))
             {
@@ -884,6 +885,8 @@ namespace CurePlease
                 this.pauseButton.ForeColor = Color.Red;
                 actionTimer.Enabled = false;
             }
+
+            followTimer.Enabled = true;
         }
 
         private bool CheckForDLLFiles()
@@ -1278,22 +1281,22 @@ namespace CurePlease
             foreach (BuffStorage ailment in ActiveBuffs)
             {
                 if (ailment.CharacterName.ToLower() == characterName.ToLower())
-                    {
+                {
                     //MessageBox.Show("Found Match: " + ailment.CharacterName.ToLower()+" => "+characterName.ToLower());
 
 
 
-                        // Build a new list, find cast debuff and remove it.
-                        List<string> named_Debuffs = ailment.CharacterBuffs.Split(',').ToList();
-                        named_Debuffs.Remove(debuffID.ToString());
-                
-                        // Now rebuild the list and replace previous one
-                        var stringList = String.Join(",", named_Debuffs);
+                    // Build a new list, find cast debuff and remove it.
+                    List<string> named_Debuffs = ailment.CharacterBuffs.Split(',').ToList();
+                    named_Debuffs.Remove(debuffID.ToString());
 
-                        var i = ActiveBuffs.FindIndex(x => x.CharacterName.ToLower() == characterName.ToLower());
-                        ActiveBuffs[i].CharacterBuffs = stringList;
+                    // Now rebuild the list and replace previous one
+                    var stringList = String.Join(",", named_Debuffs);
+
+                    var i = ActiveBuffs.FindIndex(x => x.CharacterName.ToLower() == characterName.ToLower());
+                    ActiveBuffs[i].CharacterBuffs = stringList;
                 }
-                
+
             }
 
         }
@@ -1843,6 +1846,30 @@ namespace CurePlease
 
 
             }
+
+            else if (Settings.Default.FullCircle && !this.castingLock)
+            {
+                // When out of range Distance is 59 Yalms regardless, Must be within 15 yalms to gain the effect
+
+                //Check if "pet" is active and out of range of the monitored player
+                if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1) {
+                    ushort PetsIndex = _ELITEAPIPL.Player.PetIndex;
+                    var PetsEntity = _ELITEAPIMonitored.Entity.GetEntity((int)PetsIndex);
+
+                    if (_ELITEAPIMonitored.Player.Status == 1 && PetsEntity.Distance >= 10)
+                    {
+                        // Wait two seconds, if still the same Full Circle the pet away
+                        Thread.Sleep(2);
+                        if (PetsEntity.Distance >= 10 && GetAbilityRecast("Full Circle") == 0) {
+                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
+                        }
+
+                    }
+
+                }
+
+
+            }
             #endregion
 
             #region "== Low MP Tell / MP OK Tell"
@@ -1890,7 +1917,7 @@ namespace CurePlease
                     }
                     if (cures_required.Count >= Settings.Default.curagaRequiredMembers)
                     {
-                        int lowestHP_id = cures_required.First(); 
+                        int lowestHP_id = cures_required.First();
                         CuragaCalculator(lowestHP_id);
                     }
                 }
@@ -2336,6 +2363,13 @@ namespace CurePlease
                                     removeDebuff(ptMember.Name, 2);
                                     BreakOut = 1;
                                 }
+                                //SLEEP 2
+                                else if (named_Debuffs.Contains("19") && (CheckSpellRecast(Settings.Default.wakeSleepSpellString) == 0) && (HasSpell(Settings.Default.wakeSleepSpellString)))
+                                {
+                                    this.castSpell(ptMember.Name, Settings.Default.wakeSleepSpellString);
+                                    removeDebuff(ptMember.Name, 19);
+                                    BreakOut = 1;
+                                }
                                 //PETRIFICATION
                                 else if (Settings.Default.naPetrification && named_Debuffs.Contains("7") && (CheckSpellRecast("Stona") == 0) && (HasSpell("Stona")))
                                 {
@@ -2434,13 +2468,13 @@ namespace CurePlease
                                     this.castSpell(ptMember.Name, "Erase");
                                     removeDebuff(ptMember.Name, 147);
                                     BreakOut = 1;
-                                }                         
+                                }
                             }
 
                             if (BreakOut == 1)
                             {
                                 break;
-                            
+
                             }
                         }
                     }
@@ -2902,6 +2936,31 @@ namespace CurePlease
                 // End PL Auto Buffs
                 #endregion
 
+
+
+                #region "== Auto cast a spell to get on hate list"
+
+                EliteAPI.TargetInfo target = _ELITEAPIMonitored.Target.GetTargetInfo();
+                uint targetIdx = target.TargetIndex;
+                var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
+
+
+                if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                {
+
+                    Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                    this.castSpell("<t>", Settings.Default.autoTargetSpell);
+
+                    lastTargetID = entity.TargetID;
+
+
+                }
+                #endregion
+
+
+
                 // Auto Casting
                 #region "== Auto Haste"
                 foreach (byte id in playerHpOrder)
@@ -3333,6 +3392,7 @@ namespace CurePlease
                                 }
 
                             }
+
                             #endregion
 
                             // so PL job abilities are in order
@@ -3385,32 +3445,94 @@ namespace CurePlease
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Dematerialize\" <me>");
                                     this.ActionLockMethod();
                                 }
+                                else if ((Settings.Default.DevotionBox) && (GetAbilityRecast("Devotion") == 0) && (HasAbility("Devotion")) && _ELITEAPIPL.Player.HPP > 80 && (!Settings.Default.DevotionWhenEngaged || (_ELITEAPIMonitored.Player.Status == 1)))
+                                {
+                                    if ((Settings.Default.DevotionTargetType == 0))                                  
+                                    {
+                                        int selectedPlayer = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == Settings.Default.DevotionTargetName && p.CurrentMP <= Settings.Default.DevotionMP).Select(p => p.TargetIndex).First();
+
+                                        if (selectedPlayer != 0 )
+                                        {
+                                            var playerEntity = _ELITEAPIPL.Entity.GetEntity(Convert.ToInt32(selectedPlayer));
+
+                                            if (playerEntity.Distance < 10 && playerEntity.Distance > 0) {
+                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Settings.Default.DevotionTargetName);
+                                                this.ActionLockMethod();
+                                            }
+                                        }
+                                    } else if (Settings.Default.DevotionTargetType == 1)
+                                    {
+                                        var cParty = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
+
+                                        // Find out what party the PL is a part of
+                                        int plParty = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIPL.Player.Name).Select(p => p.MemberNumber).First();
+                                        int memberOF = 0;
+
+                                        if (plParty <= 5)
+                                        {
+                                            memberOF = 1;
+                                        } else if (plParty <= 11 && plParty >= 6) {
+                                            memberOF = 2;
+
+                                        } else if (plParty <= 17 && plParty >= 12) {
+                                            memberOF = 3;
+                                        }
+
+                                        foreach (var pData in cParty)
+                                        {
+                                            if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
+                                            {
+                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                {
+                                                    var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                    if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                        this.ActionLockMethod();
+                                                        break;
+                                                    }
+                                                }
+
+                                            } else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
+                                            {
+                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                {
+                                                    var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                    if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                        this.ActionLockMethod();
+                                                        break;
+                                                    }
+                                                }
+
+                                            } else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
+                                            {
+                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                {
+                                                    var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                    if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                        this.ActionLockMethod();
+                                                        break;
+                                                    }
+                                                }
+
+                                            } else
+                                            {
+
+                                            }
+
+                                        }
+                                    }
+                                }
                             }
 
                             #endregion
-
-                            #region "== Auto cast a spell to get on hate list"
-
-                            EliteAPI.TargetInfo target = _ELITEAPIMonitored.Target.GetTargetInfo();
-                            uint targetIdx = target.TargetIndex;
-                            var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
-
-
-                            if (!this.castingLock && Settings.Default.AutoTarget && _ELITEAPIPL.Player.MainJob == 21 && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
-                            {
-
-                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                                _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                this.castSpell("<t>", Settings.Default.autoTargetSpell);
-
-                                lastTargetID = entity.TargetID;
-
-
-                            }
-                            #endregion
-
-
                         }
                     }
                 }
@@ -4362,7 +4484,6 @@ namespace CurePlease
         }
         private void followToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _ELITEAPIPL.ThirdParty.SendString("/follow " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);
             Settings.Default.autoFollowName = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
             this.CastLockMethod();
         }
@@ -4374,7 +4495,10 @@ namespace CurePlease
         {
             Settings.Default.GeoSpell_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
         }
-
+        private void DevotionTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings.Default.GeoSpell_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
+        }
 
         private void phalanxIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -4507,34 +4631,36 @@ namespace CurePlease
         #region "== Pause Button"
         private void button3_Click(object sender, EventArgs e)
         {
+
+
             this.pauseActions = !this.pauseActions;
 
-        if (!this.pauseActions)
-        {
-            this.pauseButton.Text = "Pause";
-            this.pauseButton.ForeColor = Color.Black;
-            actionTimer.Enabled = true;
-
-            if (firstTime_Pause == 0)
+            if (!this.pauseActions)
             {
-                buff_checker.RunWorkerAsync();
-                firstTime_Pause = 1;
+                this.pauseButton.Text = "Pause";
+                this.pauseButton.ForeColor = Color.Black;
+                actionTimer.Enabled = true;
+
+                if (firstTime_Pause == 0 && Settings.Default.naSpellsenable)
+                {
+                    buff_checker.RunWorkerAsync();
+                    firstTime_Pause = 1;
+
+                }
+
+                if (Settings.Default.naSpellsenable && LUA_Plugin_Loaded == 0)
+                {
+                    if (WindowerMode == "Windower") {
+                        _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
+                    }
+                    else if (WindowerMode == "Ashita")
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
+                    }
+                    LUA_Plugin_Loaded = 1;
+                }
 
             }
-
-            if (Settings.Default.naSpellsenable && LUA_Plugin_Loaded == 0)
-            {
-                if (WindowerMode == "Windower") {
-                    _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
-            }
-            else if (WindowerMode == "Ashita")
-            {
-                _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
-            }
-            LUA_Plugin_Loaded = 1;
-        }
-
-    }
             else if (this.pauseActions)
             {
                 this.pauseButton.Text = "Paused!";
@@ -4785,7 +4911,7 @@ namespace CurePlease
                 }
                 catch (Exception error)
                 {
-                    
+
                 }
                 finally
                 {
@@ -4813,8 +4939,130 @@ namespace CurePlease
                 {
                     _ELITEAPIPL.ThirdParty.SendString("//lua unload CurePlease_addon");
                 }
+                Settings.Default.autoFollowName = "";
             }
             Application.Exit();
         }
+
+        private void followTimer_Tick(object sender, EventArgs e)
+        {
+
+            if ((setinstance2.Enabled == true) && !String.IsNullOrEmpty(Settings.Default.autoFollowName) && !pauseActions)
+            {
+
+                int followersTargetID = followID();
+
+                if (followersTargetID != -1)
+                {
+                    var followTarget = _ELITEAPIPL.Entity.GetEntity(followersTargetID);
+
+                    if ((int)_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).TargetID != followersTargetID)
+                    {
+                        _ELITEAPIPL.Target.SetTarget(0);
+                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                        _ELITEAPIPL.Target.SetTarget(Convert.ToInt32(followersTargetID));
+                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                    }
+
+                    if (!_ELITEAPIPL.Target.GetTargetInfo().LockedOn)
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                        _ELITEAPIPL.ThirdParty.SendString("/lockon <t>");
+                    }
+
+                    while (Math.Truncate(followTarget.Distance) >= (int)Settings.Default.autoFollowDistance)
+                    {
+                        float Target_X = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).X;
+                        float Target_Y = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).Y;
+                        float Target_Z = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).Z;
+
+                        float Player_X = _ELITEAPIPL.Entity.GetLocalPlayer().X;
+                        float Player_Y = _ELITEAPIPL.Entity.GetLocalPlayer().Y;
+                        float Player_Z = _ELITEAPIPL.Entity.GetLocalPlayer().Z;
+
+                        _ELITEAPIPL.AutoFollow.SetAutoFollowCoords(Target_X - Player_X, Target_Y - Player_Y, Target_Z - Player_Z);
+
+                        _ELITEAPIPL.AutoFollow.IsAutoFollowing = true;
+
+                        Thread.Sleep(TimeSpan.FromSeconds(0.1));
+                    }
+
+                    _ELITEAPIPL.AutoFollow.IsAutoFollowing = false;
+
+
+
+
+                }
+            }
+            else return;
+        }
+
+    private int followID()
+    {
+            if ((setinstance2.Enabled == true) && !String.IsNullOrEmpty(Settings.Default.autoFollowName) && !pauseActions)
+            {
+                for (var x = 0; x < 2048; x++)
+                {
+                    var entity = _ELITEAPIPL.Entity.GetEntity(x);
+
+                    if (entity.Name != null && entity.Name.ToLower().Equals(Settings.Default.autoFollowName.ToLower()))
+                    {
+                        return Convert.ToInt32(entity.TargetID);
+                    }
+                }
+                return -1;
+            }
+            else
+                return -1;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+    public static class RichTextBoxExtensions
+    {
+        public static void AppendText(this RichTextBox box, string text, Color color)
+        {
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.AppendText(text);
+            box.SelectionColor = box.ForeColor;
+        }
     }
+
 }

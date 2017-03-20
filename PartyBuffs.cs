@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
+    using System.Drawing;
 
     public partial class PartyBuffs : Form
     {
@@ -60,10 +61,25 @@
                     // Now create a list and loop through each buff and name them
                     List<string> named_buffs = ailment.CharacterBuffs.Split(',').ToList();
 
-                        foreach (string acBuff in named_buffs)
+                    int i = 1;
+                    int count = named_buffs.Count();
+
+                    foreach (string acBuff in named_buffs)
                         {
+                            i++;
+
                             var found_Buff = XMLBuffList.Find(r => r.ID == acBuff);
-                                if (found_Buff != null) ailment_list.AppendText(found_Buff.Name+ " ");
+
+                            if (found_Buff != null)
+                            {
+                                if (i == count)
+                                {
+                                    ailment_list.AppendText(found_Buff.Name + " ");
+                                } else
+                                {
+                                    ailment_list.AppendText(found_Buff.Name + ", ");
+                                }
+                            }
                         }
 
                     
@@ -73,5 +89,10 @@
 
             }
         }
+
+
+
+
+
     }
 }

@@ -89,15 +89,13 @@ namespace CurePlease
             this.curagaCurePercentage = new System.Windows.Forms.TrackBar();
             this.curagaPercentageValueLabel = new System.Windows.Forms.Label();
             this.autoCastCheckBox = new System.Windows.Forms.CheckBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.DevotionTargetType = new System.Windows.Forms.ComboBox();
+            this.DevotionTargetName = new System.Windows.Forms.TextBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.autoFollowName = new System.Windows.Forms.TextBox();
-            this.autoFollowDistance = new System.Windows.Forms.NumericUpDown();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.groupBox13 = new System.Windows.Forms.GroupBox();
-            this.pauseOnStartBox = new System.Windows.Forms.CheckBox();
-            this.pauseOnZoneBox = new System.Windows.Forms.CheckBox();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.DevotionMP = new System.Windows.Forms.NumericUpDown();
             this.label25 = new System.Windows.Forms.Label();
             this.MPItems = new System.Windows.Forms.ListBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
@@ -236,6 +234,7 @@ namespace CurePlease
             this.addWhite = new System.Windows.Forms.CheckBox();
             this.lightArts = new System.Windows.Forms.CheckBox();
             this.whmJAgroup = new System.Windows.Forms.GroupBox();
+            this.DevotionBox = new System.Windows.Forms.CheckBox();
             this.afflatusMisery = new System.Windows.Forms.CheckBox();
             this.afflatusSolace = new System.Windows.Forms.CheckBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -312,6 +311,7 @@ namespace CurePlease
             this.plStoneskin = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.requiredCuragaNumbers = new System.Windows.Forms.NumericUpDown();
             this.label31 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.curagaTargetName = new System.Windows.Forms.TextBox();
@@ -330,7 +330,16 @@ namespace CurePlease
             this.cure2enabled = new System.Windows.Forms.CheckBox();
             this.cure1enabled = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.requiredCuragaNumbers = new System.Windows.Forms.NumericUpDown();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.autoFollowName = new System.Windows.Forms.TextBox();
+            this.autoFollowDistance = new System.Windows.Forms.NumericUpDown();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.pauseOnStartBox = new System.Windows.Forms.CheckBox();
+            this.pauseOnZoneBox = new System.Windows.Forms.CheckBox();
+            this.DevotionWhenEngaged = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -348,9 +357,8 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.curaga5Amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.curagaCurePercentage)).BeginInit();
             this.tabPage5.SuspendLayout();
-            this.groupBox14.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).BeginInit();
-            this.groupBox13.SuspendLayout();
+            this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DevotionMP)).BeginInit();
             this.groupBox11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConvertMP)).BeginInit();
             this.groupBox10.SuspendLayout();
@@ -391,9 +399,13 @@ namespace CurePlease
             this.panel3.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).BeginInit();
+            this.tabPage7.SuspendLayout();
+            this.groupBox14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).BeginInit();
+            this.groupBox13.SuspendLayout();
             this.SuspendLayout();
             // 
             // button4
@@ -604,7 +616,6 @@ namespace CurePlease
             // FullCircleBox
             // 
             this.FullCircleBox.AutoSize = true;
-            this.FullCircleBox.Enabled = false;
             this.FullCircleBox.Location = new System.Drawing.Point(20, 46);
             this.FullCircleBox.Name = "FullCircleBox";
             this.FullCircleBox.Size = new System.Drawing.Size(71, 17);
@@ -1050,10 +1061,42 @@ namespace CurePlease
             this.toolTip1.SetToolTip(this.autoCastCheckBox, "Auto Casts buffs as defined in AutoBuffs.xml");
             this.autoCastCheckBox.UseVisualStyleBackColor = true;
             // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(24, 48);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(79, 13);
+            this.label34.TabIndex = 37;
+            this.label34.Text = "Target method:";
+            this.toolTip1.SetToolTip(this.label34, "Will ONLY be used on members with a native MP above 700 unless a specified target" +
+        " is selected.");
+            // 
+            // DevotionTargetType
+            // 
+            this.DevotionTargetType.FormattingEnabled = true;
+            this.DevotionTargetType.Items.AddRange(new object[] {
+            "Specific Member",
+            "Lowest MP"});
+            this.DevotionTargetType.Location = new System.Drawing.Point(136, 44);
+            this.DevotionTargetType.Name = "DevotionTargetType";
+            this.DevotionTargetType.Size = new System.Drawing.Size(121, 21);
+            this.DevotionTargetType.TabIndex = 38;
+            this.toolTip1.SetToolTip(this.DevotionTargetType, "Will ONLY be used on members with a native MP above 700 unless a specified target" +
+        " is selected.");
+            // 
+            // DevotionTargetName
+            // 
+            this.DevotionTargetName.Location = new System.Drawing.Point(263, 44);
+            this.DevotionTargetName.Name = "DevotionTargetName";
+            this.DevotionTargetName.Size = new System.Drawing.Size(100, 20);
+            this.DevotionTargetName.TabIndex = 39;
+            this.toolTip1.SetToolTip(this.DevotionTargetName, "Will ONLY be used on members with a native MP above 700 unless a specified target" +
+        " is selected.");
+            // 
             // tabPage5
             // 
-            this.tabPage5.Controls.Add(this.groupBox14);
-            this.tabPage5.Controls.Add(this.groupBox13);
+            this.tabPage5.Controls.Add(this.groupBox15);
             this.tabPage5.Controls.Add(this.label25);
             this.tabPage5.Controls.Add(this.MPItems);
             this.tabPage5.Controls.Add(this.groupBox11);
@@ -1067,96 +1110,46 @@ namespace CurePlease
             this.tabPage5.Text = "Other Options";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // groupBox14
+            // groupBox15
             // 
-            this.groupBox14.Controls.Add(this.autoFollowName);
-            this.groupBox14.Controls.Add(this.autoFollowDistance);
-            this.groupBox14.Controls.Add(this.label33);
-            this.groupBox14.Controls.Add(this.label32);
-            this.groupBox14.Location = new System.Drawing.Point(338, 285);
-            this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(393, 84);
-            this.groupBox14.TabIndex = 14;
-            this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "PL Follow Options";
+            this.groupBox15.Controls.Add(this.DevotionWhenEngaged);
+            this.groupBox15.Controls.Add(this.DevotionTargetName);
+            this.groupBox15.Controls.Add(this.DevotionTargetType);
+            this.groupBox15.Controls.Add(this.label34);
+            this.groupBox15.Controls.Add(this.label35);
+            this.groupBox15.Controls.Add(this.DevotionMP);
+            this.groupBox15.Location = new System.Drawing.Point(341, 161);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(393, 102);
+            this.groupBox15.TabIndex = 38;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Devotion Settings";
             // 
-            // autoFollowName
+            // label35
             // 
-            this.autoFollowName.Location = new System.Drawing.Point(77, 18);
-            this.autoFollowName.Name = "autoFollowName";
-            this.autoFollowName.Size = new System.Drawing.Size(177, 20);
-            this.autoFollowName.TabIndex = 3;
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(21, 21);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(237, 13);
+            this.label35.TabIndex = 13;
+            this.label35.Text = "Use Devotion when Party Members MP is below:";
             // 
-            // autoFollowDistance
+            // DevotionMP
             // 
-            this.autoFollowDistance.Location = new System.Drawing.Point(184, 48);
-            this.autoFollowDistance.Maximum = new decimal(new int[] {
-            20,
+            this.DevotionMP.Increment = new decimal(new int[] {
+            25,
             0,
             0,
             0});
-            this.autoFollowDistance.Minimum = new decimal(new int[] {
-            3,
+            this.DevotionMP.Location = new System.Drawing.Point(279, 18);
+            this.DevotionMP.Maximum = new decimal(new int[] {
+            5000,
             0,
             0,
             0});
-            this.autoFollowDistance.Name = "autoFollowDistance";
-            this.autoFollowDistance.Size = new System.Drawing.Size(70, 20);
-            this.autoFollowDistance.TabIndex = 2;
-            this.autoFollowDistance.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(9, 50);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(169, 13);
-            this.label33.TabIndex = 1;
-            this.label33.Text = "Keep Distance from Follow target: ";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(9, 20);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(68, 13);
-            this.label32.TabIndex = 0;
-            this.label32.Text = "Auto Follow: ";
-            // 
-            // groupBox13
-            // 
-            this.groupBox13.Controls.Add(this.pauseOnStartBox);
-            this.groupBox13.Controls.Add(this.pauseOnZoneBox);
-            this.groupBox13.Location = new System.Drawing.Point(338, 199);
-            this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(393, 80);
-            this.groupBox13.TabIndex = 13;
-            this.groupBox13.TabStop = false;
-            this.groupBox13.Text = "Program Options";
-            // 
-            // pauseOnStartBox
-            // 
-            this.pauseOnStartBox.AutoSize = true;
-            this.pauseOnStartBox.Location = new System.Drawing.Point(9, 43);
-            this.pauseOnStartBox.Name = "pauseOnStartBox";
-            this.pauseOnStartBox.Size = new System.Drawing.Size(228, 17);
-            this.pauseOnStartBox.TabIndex = 1;
-            this.pauseOnStartBox.Text = "Pause on startup after selecting characters";
-            this.pauseOnStartBox.UseVisualStyleBackColor = true;
-            // 
-            // pauseOnZoneBox
-            // 
-            this.pauseOnZoneBox.AutoSize = true;
-            this.pauseOnZoneBox.Location = new System.Drawing.Point(9, 20);
-            this.pauseOnZoneBox.Name = "pauseOnZoneBox";
-            this.pauseOnZoneBox.Size = new System.Drawing.Size(164, 17);
-            this.pauseOnZoneBox.TabIndex = 0;
-            this.pauseOnZoneBox.Text = "Pause when character zones";
-            this.pauseOnZoneBox.UseVisualStyleBackColor = true;
+            this.DevotionMP.Name = "DevotionMP";
+            this.DevotionMP.Size = new System.Drawing.Size(84, 20);
+            this.DevotionMP.TabIndex = 12;
             // 
             // label25
             // 
@@ -1192,7 +1185,7 @@ namespace CurePlease
             this.groupBox11.Controls.Add(this.ConvertMP);
             this.groupBox11.Location = new System.Drawing.Point(338, 6);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(393, 100);
+            this.groupBox11.Size = new System.Drawing.Size(393, 62);
             this.groupBox11.TabIndex = 11;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Convert Settings";
@@ -1229,7 +1222,7 @@ namespace CurePlease
             this.groupBox10.Controls.Add(this.RadialArcanaSpell);
             this.groupBox10.Controls.Add(this.label11);
             this.groupBox10.Controls.Add(this.RadialArcanaMP);
-            this.groupBox10.Location = new System.Drawing.Point(338, 112);
+            this.groupBox10.Location = new System.Drawing.Point(338, 74);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(393, 81);
             this.groupBox10.TabIndex = 10;
@@ -2905,6 +2898,7 @@ namespace CurePlease
             // 
             // whmJAgroup
             // 
+            this.whmJAgroup.Controls.Add(this.DevotionBox);
             this.whmJAgroup.Controls.Add(this.divineSealBox);
             this.whmJAgroup.Controls.Add(this.afflatusMisery);
             this.whmJAgroup.Controls.Add(this.afflatusSolace);
@@ -2914,6 +2908,16 @@ namespace CurePlease
             this.whmJAgroup.TabIndex = 0;
             this.whmJAgroup.TabStop = false;
             this.whmJAgroup.Text = "White Mage";
+            // 
+            // DevotionBox
+            // 
+            this.DevotionBox.AutoSize = true;
+            this.DevotionBox.Location = new System.Drawing.Point(6, 88);
+            this.DevotionBox.Name = "DevotionBox";
+            this.DevotionBox.Size = new System.Drawing.Size(69, 17);
+            this.DevotionBox.TabIndex = 3;
+            this.DevotionBox.Text = "Devotion";
+            this.DevotionBox.UseVisualStyleBackColor = true;
             // 
             // afflatusMisery
             // 
@@ -4028,6 +4032,28 @@ namespace CurePlease
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = " AoE Healing (beta) ";
             // 
+            // requiredCuragaNumbers
+            // 
+            this.requiredCuragaNumbers.Location = new System.Drawing.Point(604, 111);
+            this.requiredCuragaNumbers.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.requiredCuragaNumbers.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.requiredCuragaNumbers.Name = "requiredCuragaNumbers";
+            this.requiredCuragaNumbers.Size = new System.Drawing.Size(68, 20);
+            this.requiredCuragaNumbers.TabIndex = 23;
+            this.requiredCuragaNumbers.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
             // label31
             // 
             this.label31.AutoSize = true;
@@ -4225,33 +4251,126 @@ namespace CurePlease
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(745, 408);
             this.tabControl1.TabIndex = 0;
             // 
-            // requiredCuragaNumbers
+            // tabPage7
             // 
-            this.requiredCuragaNumbers.Location = new System.Drawing.Point(604, 111);
-            this.requiredCuragaNumbers.Maximum = new decimal(new int[] {
-            6,
+            this.tabPage7.Controls.Add(this.groupBox14);
+            this.tabPage7.Controls.Add(this.groupBox13);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(737, 382);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "Program Options";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.autoFollowName);
+            this.groupBox14.Controls.Add(this.autoFollowDistance);
+            this.groupBox14.Controls.Add(this.label33);
+            this.groupBox14.Controls.Add(this.label32);
+            this.groupBox14.Location = new System.Drawing.Point(6, 92);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(393, 84);
+            this.groupBox14.TabIndex = 16;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "PL Follow Options";
+            // 
+            // autoFollowName
+            // 
+            this.autoFollowName.Location = new System.Drawing.Point(77, 18);
+            this.autoFollowName.Name = "autoFollowName";
+            this.autoFollowName.Size = new System.Drawing.Size(177, 20);
+            this.autoFollowName.TabIndex = 3;
+            // 
+            // autoFollowDistance
+            // 
+            this.autoFollowDistance.Location = new System.Drawing.Point(184, 48);
+            this.autoFollowDistance.Maximum = new decimal(new int[] {
+            20,
             0,
             0,
             0});
-            this.requiredCuragaNumbers.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.requiredCuragaNumbers.Name = "requiredCuragaNumbers";
-            this.requiredCuragaNumbers.Size = new System.Drawing.Size(68, 20);
-            this.requiredCuragaNumbers.TabIndex = 23;
-            this.requiredCuragaNumbers.Value = new decimal(new int[] {
+            this.autoFollowDistance.Minimum = new decimal(new int[] {
             3,
             0,
             0,
             0});
+            this.autoFollowDistance.Name = "autoFollowDistance";
+            this.autoFollowDistance.Size = new System.Drawing.Size(70, 20);
+            this.autoFollowDistance.TabIndex = 2;
+            this.autoFollowDistance.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(9, 50);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(169, 13);
+            this.label33.TabIndex = 1;
+            this.label33.Text = "Keep Distance from Follow target: ";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(9, 20);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(68, 13);
+            this.label32.TabIndex = 0;
+            this.label32.Text = "Auto Follow: ";
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.pauseOnStartBox);
+            this.groupBox13.Controls.Add(this.pauseOnZoneBox);
+            this.groupBox13.Location = new System.Drawing.Point(6, 6);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(393, 80);
+            this.groupBox13.TabIndex = 15;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Program Options";
+            // 
+            // pauseOnStartBox
+            // 
+            this.pauseOnStartBox.AutoSize = true;
+            this.pauseOnStartBox.Location = new System.Drawing.Point(9, 43);
+            this.pauseOnStartBox.Name = "pauseOnStartBox";
+            this.pauseOnStartBox.Size = new System.Drawing.Size(228, 17);
+            this.pauseOnStartBox.TabIndex = 1;
+            this.pauseOnStartBox.Text = "Pause on startup after selecting characters";
+            this.pauseOnStartBox.UseVisualStyleBackColor = true;
+            // 
+            // pauseOnZoneBox
+            // 
+            this.pauseOnZoneBox.AutoSize = true;
+            this.pauseOnZoneBox.Location = new System.Drawing.Point(9, 20);
+            this.pauseOnZoneBox.Name = "pauseOnZoneBox";
+            this.pauseOnZoneBox.Size = new System.Drawing.Size(164, 17);
+            this.pauseOnZoneBox.TabIndex = 0;
+            this.pauseOnZoneBox.Text = "Pause when character zones";
+            this.pauseOnZoneBox.UseVisualStyleBackColor = true;
+            // 
+            // DevotionWhenEngaged
+            // 
+            this.DevotionWhenEngaged.AutoSize = true;
+            this.DevotionWhenEngaged.Location = new System.Drawing.Point(27, 73);
+            this.DevotionWhenEngaged.Name = "DevotionWhenEngaged";
+            this.DevotionWhenEngaged.Size = new System.Drawing.Size(339, 17);
+            this.DevotionWhenEngaged.TabIndex = 40;
+            this.DevotionWhenEngaged.Text = "Use Devotion ONLY when monitored player is engaged in combat.";
+            this.DevotionWhenEngaged.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -4288,11 +4407,9 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.curagaCurePercentage)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
-            this.groupBox14.ResumeLayout(false);
-            this.groupBox14.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).EndInit();
-            this.groupBox13.ResumeLayout(false);
-            this.groupBox13.PerformLayout();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DevotionMP)).EndInit();
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConvertMP)).EndInit();
@@ -4356,10 +4473,16 @@ namespace CurePlease
             this.tabPage1.ResumeLayout(false);
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).EndInit();
+            this.tabPage7.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).EndInit();
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -4368,9 +4491,6 @@ namespace CurePlease
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.GroupBox groupBox13;
-        private System.Windows.Forms.CheckBox pauseOnStartBox;
-        private System.Windows.Forms.CheckBox pauseOnZoneBox;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.ListBox MPItems;
         private System.Windows.Forms.GroupBox groupBox11;
@@ -4658,11 +4778,23 @@ namespace CurePlease
         private System.Windows.Forms.ComboBox curagaTargetType;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.NumericUpDown requiredCuragaNumbers;
+        private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.TextBox autoFollowName;
         private System.Windows.Forms.NumericUpDown autoFollowDistance;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.NumericUpDown requiredCuragaNumbers;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.CheckBox pauseOnStartBox;
+        private System.Windows.Forms.CheckBox pauseOnZoneBox;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.TextBox DevotionTargetName;
+        private System.Windows.Forms.ComboBox DevotionTargetType;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.NumericUpDown DevotionMP;
+        private System.Windows.Forms.CheckBox DevotionBox;
+        private System.Windows.Forms.CheckBox DevotionWhenEngaged;
     }
 }

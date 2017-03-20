@@ -72,8 +72,6 @@ namespace CurePlease
                 chatlog_box.AppendText(Environment.NewLine);
             }
 
-            ColorText();
-
 
             #endregion
 
@@ -92,24 +90,8 @@ namespace CurePlease
             ChatLogMessage_textfield.Text = string.Empty;
         }
 
-        private void ColorText()
-        {
-
-        }
-
     }
 
-    public static class RichTextBoxExtensions
-    {
-        public static void AppendText(this RichTextBox box, string text, Color color)
-        {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
 
-            box.SelectionColor = color;
-            box.AppendText(text);
-            box.SelectionColor = box.ForeColor;
-        }
-    }
 
 }

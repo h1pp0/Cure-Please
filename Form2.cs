@@ -275,6 +275,13 @@ namespace CurePlease
             this.autoFollowName.Text = Properties.Settings.Default.autoFollowName;
             this.autoFollowDistance.Value = Properties.Settings.Default.autoFollowDistance;
 
+            // Devotion
+            this.DevotionBox.Checked = Properties.Settings.Default.DevotionBox;
+            this.DevotionMP.Value = Properties.Settings.Default.DevotionMP;
+            this.DevotionTargetType.SelectedIndex = Properties.Settings.Default.DevotionTargetType;
+            this.DevotionTargetName.Text = Properties.Settings.Default.DevotionTargetName;
+            this.DevotionWhenEngaged.Checked = Properties.Settings.Default.DevotionWhenEngaged;
+
 
 
 
@@ -555,6 +562,16 @@ namespace CurePlease
             Properties.Settings.Default.autoFollowName = this.autoFollowName.Text;
             Properties.Settings.Default.autoFollowDistance = this.autoFollowDistance.Value;
 
+            // Devotion
+            Properties.Settings.Default.DevotionBox = this.DevotionBox.Checked;
+            Properties.Settings.Default.DevotionMP= this.DevotionMP.Value;
+            Properties.Settings.Default.DevotionTargetType = this.DevotionTargetType.SelectedIndex;
+            Properties.Settings.Default.DevotionTargetName = this.DevotionTargetName.Text;
+
+
+
+
+
 
 
 
@@ -794,6 +811,7 @@ namespace CurePlease
                 this.naPoison.Enabled = false;
                 this.naSilence.Checked = false;
                 this.naSilence.Enabled = false;
+                this.naErase.Enabled = false;
             }
         }
 

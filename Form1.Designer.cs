@@ -76,6 +76,7 @@ namespace CurePlease
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.EntrustTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GeoTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DevotionTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.autoHasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoHasteIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -219,9 +220,9 @@ namespace CurePlease
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.debugging_MSGBOX = new System.Windows.Forms.Label();
-            this.programDelayTimer = new System.Windows.Forms.Timer(this.components);
             this.AilmentChecker = new System.ComponentModel.BackgroundWorker();
             this.buff_checker = new System.ComponentModel.BackgroundWorker();
+            this.followTimer = new System.Windows.Forms.Timer(this.components);
             this.party0.SuspendLayout();
             this.playerOptions.SuspendLayout();
             this.party2.SuspendLayout();
@@ -740,6 +741,7 @@ namespace CurePlease
             this.toolStripSeparator2,
             this.EntrustTargetToolStripMenuItem,
             this.GeoTargetToolStripMenuItem,
+            this.DevotionTargetToolStripMenuItem,
             this.toolStripSeparator7,
             this.autoHasteToolStripMenuItem,
             this.autoHasteIIToolStripMenuItem,
@@ -773,7 +775,7 @@ namespace CurePlease
             this.protectToolStripMenuItem,
             this.shellToolStripMenuItem});
             this.playerOptions.Name = "player0rightclick";
-            this.playerOptions.Size = new System.Drawing.Size(196, 684);
+            this.playerOptions.Size = new System.Drawing.Size(196, 706);
             // 
             // followToolStripMenuItem
             // 
@@ -800,6 +802,13 @@ namespace CurePlease
             this.GeoTargetToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.GeoTargetToolStripMenuItem.Text = "Make GEO-Spell Target";
             this.GeoTargetToolStripMenuItem.Click += new System.EventHandler(this.GeoTargetToolStripMenuItem_Click);
+            // 
+            // DevotionTargetToolStripMenuItem
+            // 
+            this.DevotionTargetToolStripMenuItem.Name = "DevotionTargetToolStripMenuItem";
+            this.DevotionTargetToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.DevotionTargetToolStripMenuItem.Text = "Make Devotion Target";
+            this.DevotionTargetToolStripMenuItem.Click += new System.EventHandler(this.DevotionTargetToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
@@ -2205,17 +2214,18 @@ namespace CurePlease
             this.debugging_MSGBOX.Size = new System.Drawing.Size(0, 13);
             this.debugging_MSGBOX.TabIndex = 22;
             // 
-            // programDelayTimer
-            // 
-            this.programDelayTimer.Interval = 1000;
-            this.programDelayTimer.Tick += new System.EventHandler(this.programDelayTimer_Tick);
-            // 
             // buff_checker
             // 
             this.buff_checker.WorkerReportsProgress = true;
             this.buff_checker.WorkerSupportsCancellation = true;
             this.buff_checker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.buff_checker_DoWork);
             this.buff_checker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.buff_checker_RunWorkerCompleted);
+            // 
+            // followTimer
+            // 
+            this.followTimer.Enabled = true;
+            this.followTimer.Interval = 500;
+            this.followTimer.Tick += new System.EventHandler(this.followTimer_Tick);
             // 
             // Form1
             // 
@@ -2452,6 +2462,7 @@ namespace CurePlease
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem GeoTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem EntrustTargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DevotionTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem autoHasteIIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoFlurryToolStripMenuItem;
@@ -2461,11 +2472,11 @@ namespace CurePlease
         public Button setinstance;
         public Button setinstance2;
         public Label debugging_MSGBOX;
-        private Timer programDelayTimer;
         private ToolStripMenuItem refreshCharactersToolStripMenuItem;
         private ToolStripMenuItem partyBuffsdebugToolStripMenuItem;
         public System.ComponentModel.BackgroundWorker AilmentChecker;
         private System.ComponentModel.BackgroundWorker buff_checker;
+        private Timer followTimer;
     }
 }
 

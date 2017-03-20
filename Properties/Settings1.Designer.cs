@@ -2577,5 +2577,64 @@ namespace CurePlease.Properties {
                 this["curagaRequiredMembers"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Devotion {
+            get {
+                return ((bool)(this["Devotion"]));
+            }
+            set {
+                this["Devotion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
+        public decimal DevotionMP {
+            get {
+                return ((decimal)(this["DevotionMP"]));
+            }
+            set {
+                this["DevotionMP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DevotionTargetType {
+            get {
+                return ((int)(this["DevotionTargetType"]));
+            }
+            set {
+                this["DevotionTargetType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DevotionTargetName {
+            get {
+                return ((string)(this["DevotionTargetName"]));
+            }
+            set {
+                this["DevotionTargetName"] = value;
+            }
+        }
+ [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DevotionWhenEngaged {
+            get {
+                return ((bool)(this["DevotionWhenEngaged"]));
+            }
+            set {
+                this["DevotionWhenEngaged"] = value;
+            }
+        }
     }
 }

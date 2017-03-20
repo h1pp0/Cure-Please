@@ -641,5 +641,20 @@
     <Setting Name="curagaRequiredMembers" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
+    <Setting Name="DevotionBox" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DevotionMP" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
+    <Setting Name="DevotionTargetType" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DevotionTargetName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DevotionWhenEngaged" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

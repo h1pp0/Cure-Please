@@ -204,7 +204,6 @@ namespace CurePlease
 
 
             // GEOMANCER SPELLS ADDED
-            this.indiRecast.Value = Properties.Settings.Default.indiRecast;
             this.EnableGeoSpells.Checked = Properties.Settings.Default.EnableGeoSpells;
             this.GEO_engaged.Checked = Properties.Settings.Default.GEO_engaged;
             this.GEOSpell.SelectedIndex = Properties.Settings.Default.GeoSpell;
@@ -281,6 +280,10 @@ namespace CurePlease
             this.DevotionTargetType.SelectedIndex = Properties.Settings.Default.DevotionTargetType;
             this.DevotionTargetName.Text = Properties.Settings.Default.DevotionTargetName;
             this.DevotionWhenEngaged.Checked = Properties.Settings.Default.DevotionWhenEngaged;
+
+            // 14.May.2017 Additions 
+            GeoAOE_Engaged.Checked = Properties.Settings.Default.GeoAOE_Engaged;
+            Hate_SpellType.SelectedIndex = Properties.Settings.Default.Hate_SpellType;
 
 
 
@@ -493,7 +496,6 @@ namespace CurePlease
 
 
             // New Spells
-            Properties.Settings.Default.indiRecast = this.indiRecast.Value;
             Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
             Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
             Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
@@ -568,7 +570,9 @@ namespace CurePlease
             Properties.Settings.Default.DevotionTargetType = this.DevotionTargetType.SelectedIndex;
             Properties.Settings.Default.DevotionTargetName = this.DevotionTargetName.Text;
 
-
+            // 14.May.2017 Additions 
+            Properties.Settings.Default.GeoAOE_Engaged = GeoAOE_Engaged.Checked;
+            Properties.Settings.Default.Hate_SpellType = Hate_SpellType.SelectedIndex;
 
 
 
@@ -1051,259 +1055,10 @@ namespace CurePlease
         #endregion
 
 
-        #region "== Form Closing Settings"
+        #region "== Form Closing Settings / NO LONGER USED"
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
 
-            /*
-
-            Properties.Settings.Default.cure1enabled = this.cure1enabled.Checked;
-            Properties.Settings.Default.cure2enabled = this.cure2enabled.Checked;
-            Properties.Settings.Default.cure3enabled = this.cure3enabled.Checked;
-            Properties.Settings.Default.cure4enabled = this.cure4enabled.Checked;
-            Properties.Settings.Default.cure5enabled = this.cure5enabled.Checked;
-            Properties.Settings.Default.cure6enabled = this.cure6enabled.Checked;
-            Properties.Settings.Default.cure1amount = Convert.ToInt32(this.cure1amount.Value);
-            Properties.Settings.Default.cure2amount = Convert.ToInt32(this.cure2amount.Value);
-            Properties.Settings.Default.cure3amount = Convert.ToInt32(this.cure3amount.Value);
-            Properties.Settings.Default.cure4amount = Convert.ToInt32(this.cure4amount.Value);
-            Properties.Settings.Default.cure5amount = Convert.ToInt32(this.cure5amount.Value);
-            Properties.Settings.Default.cure6amount = Convert.ToInt32(this.cure6amount.Value);
-            Properties.Settings.Default.curePercentage = this.curePercentage.Value;
-            Properties.Settings.Default.priorityCurePercentage = this.priorityCurePercentage.Value;
-            Properties.Settings.Default.afflatusSolice = this.afflatusSolace.Checked;
-            Properties.Settings.Default.afflatusMisery = this.afflatusMisery.Checked;
-            Properties.Settings.Default.lightArts = this.lightArts.Checked;
-            Properties.Settings.Default.Composure = this.composure.Checked;
-            Properties.Settings.Default.Convert = this.convert.Checked;
-            Properties.Settings.Default.divineSealBox = this.divineSealBox.Checked;
-            Properties.Settings.Default.addWhite = this.addWhite.Checked;
-            Properties.Settings.Default.sublimation = this.sublimation.Checked;
-            Properties.Settings.Default.autoHasteMinutes = this.autoHasteMinutes.Value;
-            Properties.Settings.Default.autoProtectMinutes = this.autoProtect_Minutes.Value;
-            Properties.Settings.Default.autoShellMinutes = this.autoShell_Minutes.Value;
-            Properties.Settings.Default.autoPhalanxIIMinutes = this.autoPhalanxIIMinutes.Value;
-            Properties.Settings.Default.autoRegenMinutes = this.autoRegen_Minutes.Value;
-            Properties.Settings.Default.autoRefreshMinutes = this.autoRefresh_Minutes.Value;
-            Properties.Settings.Default.plSilenceItemEnabled = this.plSilenceItemEnabled.Checked;
-            Properties.Settings.Default.plSilenceItemIndex = this.plSilenceItem.SelectedIndex;
-            Properties.Settings.Default.wakeSleepEnabled = this.wakeSleepEnabled.Checked;
-            Properties.Settings.Default.wakeSleepSpellIndex = this.wakeSleepSpell.SelectedIndex;
-            Properties.Settings.Default.wakeSleepSpellString = this.wakeSleepSpell.Items[this.wakeSleepSpell.SelectedIndex].ToString();
-            Properties.Settings.Default.plDebuffEnabled = this.plDebuffEnabled.Checked;
-            Properties.Settings.Default.monitoredDebuffEnabled = this.monitoredDebuffEnabled.Checked;
-            Properties.Settings.Default.plSilenceItemString = this.plSilenceItem.Items[this.plSilenceItem.SelectedIndex].ToString();
-            Properties.Settings.Default.plBlink = this.plBlink.Checked;
-            Properties.Settings.Default.plReraise = this.plReraise.Checked;
-            if (this.plReraiseLevel1.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 1;
-            }
-            else if (this.plReraiseLevel2.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 2;
-            }
-            else if (this.plReraiseLevel3.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 3;
-            }
-            else if (this.plReraiseLevel4.Checked)
-            {
-                Properties.Settings.Default.plReraiseLevel = 4;
-            }
-            Properties.Settings.Default.plRefresh = this.plRefresh.Checked;
-            if (this.plRefreshLevel1.Checked)
-            {
-                Properties.Settings.Default.plRefreshLevel = 1;
-            }
-            else if (this.plRefreshLevel2.Checked)
-            {
-                Properties.Settings.Default.plRefreshLevel = 2;
-            }
-            else if (this.plRefreshLevel3.Checked)
-            {
-                Properties.Settings.Default.plRefreshLevel = 3;
-            }
-            Properties.Settings.Default.plStoneskin = this.plStoneskin.Checked;
-            Properties.Settings.Default.plPhalanx = this.plPhalanx.Checked;
-            Properties.Settings.Default.plShellra = this.plShellra.Checked;
-            Properties.Settings.Default.plProtectra = this.plProtectra.Checked;
-            Properties.Settings.Default.plProtectralevel = this.plProtectralevel.Value;
-            Properties.Settings.Default.plShellralevel = this.plShellralevel.Value;
-            Properties.Settings.Default.plAgiDown = this.plAgiDown.Checked;
-            Properties.Settings.Default.plAccuracyDown = this.plAccuracyDown.Checked;
-            Properties.Settings.Default.plAddle = this.plAddle.Checked;
-            Properties.Settings.Default.plAttackDown = this.plAttackDown.Checked;
-            Properties.Settings.Default.plBane = this.plBane.Checked;
-            Properties.Settings.Default.plBind = this.plBind.Checked;
-            Properties.Settings.Default.plBio = this.plBio.Checked;
-            Properties.Settings.Default.plBlindness = this.plBlindness.Checked;
-            Properties.Settings.Default.plBurn = this.plBurn.Checked;
-            Properties.Settings.Default.plChrDown = this.plChrDown.Checked;
-            Properties.Settings.Default.plChoke = this.plChoke.Checked;
-            Properties.Settings.Default.plCurse = this.plCurse.Checked;
-            Properties.Settings.Default.plCurse2 = this.plCurse2.Checked;
-            Properties.Settings.Default.plDexDown = this.plDexDown.Checked;
-            Properties.Settings.Default.plDefenseDown = this.plDefenseDown.Checked;
-            Properties.Settings.Default.plDia = this.plDia.Checked;
-            Properties.Settings.Default.plDisease = this.plDisease.Checked;
-            Properties.Settings.Default.plDoom = this.plDoom.Checked;
-            Properties.Settings.Default.plDrown = this.plDrown.Checked;
-            Properties.Settings.Default.plElegy = this.plElegy.Checked;
-            Properties.Settings.Default.plEvasionDown = this.plEvasionDown.Checked;
-            Properties.Settings.Default.plFlash = this.plFlash.Checked;
-            Properties.Settings.Default.plFrost = this.plFrost.Checked;
-            Properties.Settings.Default.plHelix = this.plHelix.Checked;
-            Properties.Settings.Default.plIntDown = this.plIntDown.Checked;
-            Properties.Settings.Default.plMndDown = this.plMndDown.Checked;
-            Properties.Settings.Default.plMagicAccDown = this.plMagicAccDown.Checked;
-            Properties.Settings.Default.plMagicAtkDown = this.plMagicAtkDown.Checked;
-            Properties.Settings.Default.plMaxHpDown = this.plMaxHpDown.Checked;
-            Properties.Settings.Default.plMaxMpDown = this.plMaxMpDown.Checked;
-            Properties.Settings.Default.plMaxTpDown = this.plMaxTpDown.Checked;
-            Properties.Settings.Default.plParalysis = this.plParalysis.Checked;
-            Properties.Settings.Default.plPlague = this.plPlague.Checked;
-            Properties.Settings.Default.plPoison = this.plPoison.Checked;
-            Properties.Settings.Default.plRasp = this.plRasp.Checked;
-            Properties.Settings.Default.plRequiem = this.plRequiem.Checked;
-            Properties.Settings.Default.plStrDown = this.plStrDown.Checked;
-            Properties.Settings.Default.plShock = this.plShock.Checked;
-            Properties.Settings.Default.plSilence = this.plSilence.Checked;
-            Properties.Settings.Default.plSlow = this.plSlow.Checked;
-            Properties.Settings.Default.plThrenody = this.plThrenody.Checked;
-            Properties.Settings.Default.plVitDown = this.plVitDown.Checked;
-            Properties.Settings.Default.plWeight = this.plWeight.Checked;
-            // New UI Elements
-            Properties.Settings.Default.plDoomEnabled = this.plDoomEnabled.Checked;
-            Properties.Settings.Default.plDoomindex = this.plDoomitem.SelectedIndex;
-            Properties.Settings.Default.PLDoomitem = this.plDoomitem.Items[Properties.Settings.Default.plDoomindex].ToString();
-            Properties.Settings.Default.lowMPcheckBox = this.lowMPcheckBox.Checked;
-            Properties.Settings.Default.mpMinCastValue = this.mpMinCastValue.Value;
-            Properties.Settings.Default.naSpellsenable = this.naSpellsenable.Checked;
-            Properties.Settings.Default.naBlindness = this.naBlindness.Checked;
-            Properties.Settings.Default.naCurse = this.naCurse.Checked;
-            Properties.Settings.Default.naDisease = this.naDisease.Checked;
-            Properties.Settings.Default.naParalysis = this.naParalysis.Checked;
-            Properties.Settings.Default.naPetrification = this.naPetrification.Checked;
-            Properties.Settings.Default.naPlague = this.naPlague.Checked;
-            Properties.Settings.Default.naPoison = this.naPoison.Checked;
-            Properties.Settings.Default.naSilence = this.naSilence.Checked;
-            Properties.Settings.Default.lowMPuseitem = this.lowMPuseitem.Checked;
-            Properties.Settings.Default.mpMintempitemusage = this.mpMintempitemusage.Value;
-            Properties.Settings.Default.monitoredAgiDown = this.monitoredAgiDown.Checked;
-            Properties.Settings.Default.monitoredAccuracyDown = this.monitoredAccuracyDown.Checked;
-            Properties.Settings.Default.monitoredAddle = this.monitoredAddle.Checked;
-            Properties.Settings.Default.monitoredAttackDown = this.monitoredAttackDown.Checked;
-            Properties.Settings.Default.monitoredBane = this.monitoredBane.Checked;
-            Properties.Settings.Default.monitoredBind = this.monitoredBind.Checked;
-            Properties.Settings.Default.monitoredBio = this.monitoredBio.Checked;
-            Properties.Settings.Default.monitoredBlindness = this.monitoredBlindness.Checked;
-            Properties.Settings.Default.monitoredBurn = this.monitoredBurn.Checked;
-            Properties.Settings.Default.monitoredChrDown = this.monitoredChrDown.Checked;
-            Properties.Settings.Default.monitoredChoke = this.monitoredChoke.Checked;
-            Properties.Settings.Default.monitoredCurse = this.monitoredCurse.Checked;
-            Properties.Settings.Default.monitoredCurse2 = this.monitoredCurse2.Checked;
-            Properties.Settings.Default.monitoredDexDown = this.monitoredDexDown.Checked;
-            Properties.Settings.Default.monitoredDefenseDown = this.monitoredDefenseDown.Checked;
-            Properties.Settings.Default.monitoredDia = this.monitoredDia.Checked;
-            Properties.Settings.Default.monitoredDisease = this.monitoredDisease.Checked;
-            Properties.Settings.Default.monitoredDoom = this.monitoredDoom.Checked;
-            Properties.Settings.Default.monitoredDrown = this.monitoredDrown.Checked;
-            Properties.Settings.Default.monitoredElegy = this.monitoredElegy.Checked;
-            Properties.Settings.Default.monitoredEvasionDown = this.monitoredEvasionDown.Checked;
-            Properties.Settings.Default.monitoredFlash = this.monitoredFlash.Checked;
-            Properties.Settings.Default.monitoredFrost = this.monitoredFrost.Checked;
-            Properties.Settings.Default.monitoredHelix = this.monitoredHelix.Checked;
-            Properties.Settings.Default.monitoredIntDown = this.monitoredIntDown.Checked;
-            Properties.Settings.Default.monitoredMndDown = this.monitoredMndDown.Checked;
-            Properties.Settings.Default.monitoredMagicAccDown = this.monitoredMagicAccDown.Checked;
-            Properties.Settings.Default.monitoredMagicAtkDown = this.monitoredMagicAtkDown.Checked;
-            Properties.Settings.Default.monitoredMaxHpDown = this.monitoredMaxHpDown.Checked;
-            Properties.Settings.Default.monitoredMaxMpDown = this.monitoredMaxMpDown.Checked;
-            Properties.Settings.Default.monitoredMaxTpDown = this.monitoredMaxTpDown.Checked;
-            Properties.Settings.Default.monitoredParalysis = this.monitoredParalysis.Checked;
-            Properties.Settings.Default.monitoredPetrification = this.monitoredPetrification.Checked;
-            Properties.Settings.Default.monitoredPlague = this.monitoredPlague.Checked;
-            Properties.Settings.Default.monitoredPoison = this.monitoredPoison.Checked;
-            Properties.Settings.Default.monitoredRasp = this.monitoredRasp.Checked;
-            Properties.Settings.Default.monitoredRequiem = this.monitoredRequiem.Checked;
-            Properties.Settings.Default.monitoredStrDown = this.monitoredStrDown.Checked;
-            Properties.Settings.Default.monitoredShock = this.monitoredShock.Checked;
-            Properties.Settings.Default.monitoredSilence = this.monitoredSilence.Checked;
-            Properties.Settings.Default.monitoredSleep = this.monitoredSleep.Checked;
-            Properties.Settings.Default.monitoredSleep2 = this.monitoredSleep2.Checked;
-            Properties.Settings.Default.monitoredSlow = this.monitoredSlow.Checked;
-            Properties.Settings.Default.monitoredThrenody = this.monitoredThrenody.Checked;
-            Properties.Settings.Default.monitoredVitDown = this.monitoredVitDown.Checked;
-            Properties.Settings.Default.monitoredWeight = this.monitoredWeight.Checked;
-            Properties.Settings.Default.AutoCastEngageCheckBox = this.AutoCastEngageCheckBox.Checked;  
-            Properties.Settings.Default.AutoRegenSpell = this.autoRegen.SelectedIndex;
-            Properties.Settings.Default.AutoRefreshSpell = this.autoRefresh.SelectedIndex;
-            Properties.Settings.Default.AutoShellSpell = this.autoShell.SelectedIndex;
-            Properties.Settings.Default.AutoProtectSpell = this.autoProtect.SelectedIndex;
-            Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
-
-            // Additional PL cast
-            Properties.Settings.Default.plTemper = this.plTemper.Checked;
-            if (this.plTemperLevel1.Checked)
-            {
-                Properties.Settings.Default.plTemperLevel = 2;
-            }
-            else if (this.plTemperLevel2.Checked)
-            {
-                Properties.Settings.Default.plTemperLevel = 2;
-            }
-            Properties.Settings.Default.plEnspell = this.plEnspell.Checked;
-            Properties.Settings.Default.plEnspell_Spell = this.plEnspell_spell.SelectedIndex;
-            Properties.Settings.Default.plGainBoost = this.plGainBoost.Checked;
-            Properties.Settings.Default.plGainBoost_Spell = this.plGainBoost_spell.SelectedIndex;
-            Properties.Settings.Default.plBarElement = this.plBarElement.Checked;
-            Properties.Settings.Default.plBarElement_Spell = this.plBarElement_Spell.SelectedIndex;
-            Properties.Settings.Default.plBarStatus = this.plBarStatus.Checked;
-            Properties.Settings.Default.plBarStatus_Spell = this.plBarStatus_Spell.SelectedIndex;
-            Properties.Settings.Default.plStormSpell = this.plStormSpell.Checked;
-            Properties.Settings.Default.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
-            Properties.Settings.Default.plKlimaform = this.plKlimaform.Checked;
-            Properties.Settings.Default.plAuspice = this.plAuspice.Checked;
-            Properties.Settings.Default.plAquaveil = this.plAquaveil.Checked;
-
-            // New Spells
-            Properties.Settings.Default.indiRecast = this.indiRecast.Value;
-            Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
-            Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
-            Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
-            Properties.Settings.Default.GeoSpell_Target = this.GEOSpell_target.Text;
-            Properties.Settings.Default.IndiSpell = this.INDISpell.SelectedIndex;
-            Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
-            Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
-            Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
-            Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
-            Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
-            Properties.Settings.Default.BlazeOfGlory = this.BlazeOfGloryBox.Checked;
-            Properties.Settings.Default.AutoTarget = this.autoTarget.Checked;
-            Properties.Settings.Default.FullCircle = this.FullCircleBox.Checked;
-            Properties.Settings.Default.autoTargetSpell = this.autoTargetSpell.Text; 
-
-            // CURAGA SPELLS 
-            Properties.Settings.Default.curagaEnabled = this.curagaEnabled.Checked;
-            Properties.Settings.Default.curaga2Enabled = this.curaga2Enabled.Checked;
-            Properties.Settings.Default.curaga3Enabled = this.curaga3Enabled.Checked;
-            Properties.Settings.Default.curaga4Enabled = this.curaga4Enabled.Checked;
-            Properties.Settings.Default.curaga5Enabled = this.curaga5Enabled.Checked;
-
-            Properties.Settings.Default.curagaAmount = Convert.ToInt32(this.curagaAmount.Value);
-            Properties.Settings.Default.curaga2Amount = Convert.ToInt32(this.curaga2Amount.Value);
-            Properties.Settings.Default.curaga3Amount = Convert.ToInt32(this.curaga3Amount.Value);
-            Properties.Settings.Default.curaga4Amount = Convert.ToInt32(this.curaga4Amount.Value);
-            Properties.Settings.Default.curaga5Amount = Convert.ToInt32(this.curaga5Amount.Value);
-
-            // Stop on ....
-            Properties.Settings.Default.pauseOnZone = this.pauseOnZoneBox.Checked;
-            Properties.Settings.Default.pauseOnStartup = this.pauseOnStartBox.Checked;
-
-            Properties.Settings.Default.Save();
-
-            */
 
         }
     }

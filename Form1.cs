@@ -1363,7 +1363,12 @@ namespace CurePlease
         #region "== Curaga Calculation"
         private void CuragaCalculator(int partyMemberId)
         {
+
+           
+
             string lowestHP_Name = _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name;
+
+            
 
             if ((Settings.Default.curaga5Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga5Amount) && (CheckSpellRecast("Curaga V") == 0) && (HasSpell("Curaga V")) && (_ELITEAPIPL.Player.MP > 380))
             {
@@ -1898,30 +1903,62 @@ namespace CurePlease
             // Only perform actions if PL is stationary PAUSE GOES HERE
             if ((_ELITEAPIPL.Player.X == this.plX) && (_ELITEAPIPL.Player.Y == this.plY) && (_ELITEAPIPL.Player.Z == this.plZ) && (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn) && ((_ELITEAPIPL.Player.Status == (uint)Status.Standing) || (_ELITEAPIPL.Player.Status == (uint)Status.Fighting)))
             {
-                //var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
-                var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().OrderBy(p => p.CurrentHPP).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber);
 
                 var cures_required = new List<byte>();
-                // Loop through keys in order of lowest HP and see if multiple fits the requirements. 
-                foreach (byte id in playerHpOrder.Take(6))
-                {
-                    // Cures
-                    // First, is casting possible, and enabled?
-                    if (this.castingPossible(id) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].Active >= 1) && (enabledBoxes[id].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (!this.castingLock))
-                    {
-                        if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Settings.Default.curagaCurePercentage) && (this.castingPossible(id)))
-                        {
-                            cures_required.Add(id);
 
-                        }
-                    }
-                    if (cures_required.Count >= Settings.Default.curagaRequiredMembers)
+                int MemberOf_curaga = GeneratePT_structure();
+
+                /////////////////////////// CURAGA //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                var cParty_curaga = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
+
+                int memberOF_curaga = GeneratePT_structure();
+
+                if (memberOF_curaga != 0 && memberOF_curaga != 4)
+                {
+                    foreach (var pData in cParty_curaga)
                     {
-                        int lowestHP_id = cures_required.First();
-                        CuragaCalculator(lowestHP_id);
+                        if (memberOF_curaga == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
+                        {
+                            if (this.castingPossible(pData.MemberNumber) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!this.castingLock))
+                            {
+                                if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Settings.Default.curagaCurePercentage) && (this.castingPossible(pData.MemberNumber)))
+                                {
+                                    cures_required.Add(pData.MemberNumber);
+
+                                }
+                            }
+                        }
+                        else if (memberOF_curaga == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
+                        {
+                            if (this.castingPossible(pData.MemberNumber) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!this.castingLock))
+                            {
+                                if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Settings.Default.curagaCurePercentage) && (this.castingPossible(pData.MemberNumber)))
+                                {
+                                    cures_required.Add(pData.MemberNumber);
+
+                                }
+                            }
+                        }
+                        else if (memberOF_curaga == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
+                        {
+                            if (this.castingPossible(pData.MemberNumber) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!this.castingLock))
+                            {
+                                if ((this._ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Settings.Default.curagaCurePercentage) && (this.castingPossible(pData.MemberNumber)))
+                                {
+                                    cures_required.Add(pData.MemberNumber);
+
+                                }
+                            }
+                        }
+
                     }
                 }
 
+                /////////////////////////// CURE //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
+                var playerHpOrder = this._ELITEAPIMonitored.Party.GetPartyMembers().OrderBy(p => p.CurrentHPP).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber);
 
                 // Loop through keys in order of lowest HP to highest HP
                 foreach (byte id in playerHpOrder)
@@ -2947,14 +2984,19 @@ namespace CurePlease
 
                 if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
                 {
-
-                    Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                    this.castSpell("<t>", Settings.Default.autoTargetSpell);
-
-                    lastTargetID = entity.TargetID;
-
+                    if (Settings.Default.Hate_SpellType == 0)
+                    {
+                        
+                        _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                        Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                        
+                    }
+                    else
+                    {
+                       Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                        this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
+                    }
+                        lastTargetID = entity.TargetID;
 
                 }
                 #endregion
@@ -3343,12 +3385,12 @@ namespace CurePlease
                                     }
                                 }
 
-                                // GEO SPELL CASTING
-                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock) && (_ELITEAPIMonitored.Player.Status == 1))
+                                // GEO SPELL CASTING  && (_ELITEAPIMonitored.Player.Status == 1)
+                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock))
                                 {
 
-                                    // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE
-                                    if ((Settings.Default.BlazeOfGlory) && (GetAbilityRecast("Blaze of Glory") == 0) && (HasAbility("Blaze of Glory")))
+                                    // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
+                                    if ((Settings.Default.BlazeOfGlory) && (GetAbilityRecast("Blaze of Glory") == 0) && (HasAbility("Blaze of Glory")) && (_ELITEAPIMonitored.Player.Status == 1))
                                     {
                                         _ELITEAPIPL.ThirdParty.SendString("/ja \"Blaze of Glory\" <me>");
                                         this.ActionLockMethod();
@@ -3369,7 +3411,7 @@ namespace CurePlease
                                         }
                                         else
                                         {
-                                            if (_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5)
+                                            if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5) && (_ELITEAPIMonitored.Player.Status == 1) || Settings.Default.GeoAOE_Engaged == false)
                                             {
                                                 if (Settings.Default.GeoSpell_Target == "")
                                                 {
@@ -3380,7 +3422,7 @@ namespace CurePlease
                                                     this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
                                                 }
                                             }
-                                            else
+                                            else if (_ELITEAPIMonitored.Player.Status == 1)
                                             {
                                                 Thread.Sleep(TimeSpan.FromSeconds(2.0));
                                                 _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
@@ -3464,69 +3506,57 @@ namespace CurePlease
                                     {
                                         var cParty = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
 
-                                        // Find out what party the PL is a part of
-                                        int plParty = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIPL.Player.Name).Select(p => p.MemberNumber).First();
-                                        int memberOF = 0;
+                                        int memberOF = GeneratePT_structure();
 
-                                        if (plParty <= 5)
-                                        {
-                                            memberOF = 1;
-                                        } else if (plParty <= 11 && plParty >= 6) {
-                                            memberOF = 2;
+                                        if (memberOF != 0 && memberOF != 4) {
 
-                                        } else if (plParty <= 17 && plParty >= 12) {
-                                            memberOF = 3;
-                                        }
-
-                                        foreach (var pData in cParty)
-                                        {
-                                            if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
+                                            foreach (var pData in cParty)
                                             {
-                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
                                                 {
-                                                    var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-
-                                                    if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                     {
-                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
-                                                        this.ActionLockMethod();
-                                                        break;
+                                                        var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                        if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                        {
+                                                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                            this.ActionLockMethod();
+                                                            break;
+                                                        }
+                                                    }
+
+                                                }
+                                                else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
+                                                {
+                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                    {
+                                                        var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                        if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                        {
+                                                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                            this.ActionLockMethod();
+                                                            break;
+                                                        }
+                                                    }
+
+                                                }
+                                                else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
+                                                {
+                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                    {
+                                                        var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                        if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                        {
+                                                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                            this.ActionLockMethod();
+                                                            break;
+                                                        }
                                                     }
                                                 }
-
-                                            } else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
-                                            {
-                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
-                                                {
-                                                    var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-
-                                                    if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
-                                                    {
-                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
-                                                        this.ActionLockMethod();
-                                                        break;
-                                                    }
-                                                }
-
-                                            } else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
-                                            {
-                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
-                                                {
-                                                    var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-
-                                                    if ((pData.CurrentMP <= Settings.Default.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
-                                                    {
-                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
-                                                        this.ActionLockMethod();
-                                                        break;
-                                                    }
-                                                }
-
-                                            } else
-                                            {
-
                                             }
-
                                         }
                                     }
                                 }
@@ -5020,7 +5050,53 @@ namespace CurePlease
 
 
 
+        public int GeneratePT_structure()
+        {
+            // FIRST CHECK THAT BOTH THE PL AND MONITORED PLAYER ARE IN THE SAME PT/ALLIANCE
+            var currentPT = _ELITEAPIMonitored.Party.GetPartyMembers();
 
+            int partyChecker = 0;
+
+            foreach (var PTMember in currentPT)
+            {
+                if (PTMember.Name == _ELITEAPIPL.Player.Name)
+                {
+                    partyChecker++;
+                }
+                else if (PTMember.Name == _ELITEAPIMonitored.Player.Name) {
+                    partyChecker++; 
+                }
+            }
+
+            if (partyChecker == 2)
+            {
+                
+                int plParty = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIPL.Player.Name).Select(p => p.MemberNumber).First();
+
+                if (plParty <= 5)
+                {
+                    return 1;
+                }
+                else if (plParty <= 11 && plParty >= 6)
+                {
+                    return 2;
+
+                }
+                else if (plParty <= 17 && plParty >= 12)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 4;
+            }
+
+        }
 
 
 

@@ -3360,7 +3360,7 @@ namespace CurePlease
                                 }
                             }
 
-                            if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
+                            if (!Settings.Default.GEO_engaged || _ELITEAPIMonitored.Player.Status == 1)
                             {
                                 // INDI SPELL CASTING
                                 if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock))
@@ -3384,34 +3384,37 @@ namespace CurePlease
                                         }
                                     }
                                 }
+                            }
 
                                 // GEO SPELL CASTING  && (_ELITEAPIMonitored.Player.Status == 1)
                                 if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock))
                                 {
 
-                                    // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
-                                    if ((Settings.Default.BlazeOfGlory) && (GetAbilityRecast("Blaze of Glory") == 0) && (HasAbility("Blaze of Glory")) && (_ELITEAPIMonitored.Player.Status == 1))
-                                    {
-                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Blaze of Glory\" <me>");
-                                        this.ActionLockMethod();
-                                    }
+                                // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
+                                if ((Settings.Default.BlazeOfGlory) && (GetAbilityRecast("Blaze of Glory") == 0) && (HasAbility("Blaze of Glory")) && (_ELITEAPIMonitored.Player.Status == 1))
+                                {
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Blaze of Glory\" <me>");
+                                    this.ActionLockMethod();
+                                }
 
+                                else
+                                {
+
+                                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
+                                    if (SpellCheckedResult == "SpellError_Cancel")
+                                    {
+                                        Settings.Default.EnableGeoSpells = false;
+                                        MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
+                                    }
+                                    else if (SpellCheckedResult == "SpellNA")
+                                    {
+
+                                    }
                                     else
                                     {
-
-                                        string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
-                                        if (SpellCheckedResult == "SpellError_Cancel")
+                                        if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
                                         {
-                                            Settings.Default.EnableGeoSpells = false;
-                                            MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
-                                        }
-                                        else if (SpellCheckedResult == "SpellNA")
-                                        {
-
-                                        }
-                                        else
-                                        {
-                                            if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5) && (_ELITEAPIMonitored.Player.Status == 1) || Settings.Default.GeoAOE_Engaged == false)
+                                            if ((_ELITEAPIMonitored.Player.Status == 1) || !Settings.Default.GeoAOE_Engaged)
                                             {
                                                 if (Settings.Default.GeoSpell_Target == "")
                                                 {
@@ -3422,18 +3425,19 @@ namespace CurePlease
                                                     this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
                                                 }
                                             }
-                                            else if (_ELITEAPIMonitored.Player.Status == 1)
-                                            {
-                                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                                                _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                                this.castSpell("<t>", SpellCheckedResult);
-                                            }
+                                        }
+                                        else if (_ELITEAPIMonitored.Player.Status == 1)
+                                        {
+                                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                            _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                                            Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                            this.castSpell("<t>", SpellCheckedResult);
                                         }
                                     }
                                 }
+                                }
 
-                            }
+                            
 
                             #endregion
 
@@ -4971,7 +4975,9 @@ namespace CurePlease
                 }
                 Settings.Default.autoFollowName = "";
             }
-            Application.Exit();
+
+
+
         }
 
         private void followTimer_Tick(object sender, EventArgs e)

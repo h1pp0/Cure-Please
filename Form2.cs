@@ -794,6 +794,7 @@ namespace CurePlease
                 this.naPoison.Enabled = true;
                 this.naSilence.Checked = true;
                 this.naSilence.Enabled = true;
+                this.naErase.Enabled = true;
             }
             else if (this.naSpellsenable.Checked == false)
             {
@@ -816,6 +817,7 @@ namespace CurePlease
                 this.naSilence.Checked = false;
                 this.naSilence.Enabled = false;
                 this.naErase.Enabled = false;
+                this.naErase.Checked = false;
             }
         }
 

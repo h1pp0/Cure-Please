@@ -77,6 +77,7 @@ namespace CurePlease
             this.EntrustTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GeoTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DevotionTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HateEstablisherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.autoHasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoHasteIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -742,6 +743,7 @@ namespace CurePlease
             this.EntrustTargetToolStripMenuItem,
             this.GeoTargetToolStripMenuItem,
             this.DevotionTargetToolStripMenuItem,
+            this.HateEstablisherToolStripMenuItem,
             this.toolStripSeparator7,
             this.autoHasteToolStripMenuItem,
             this.autoHasteIIToolStripMenuItem,
@@ -809,6 +811,13 @@ namespace CurePlease
             this.DevotionTargetToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.DevotionTargetToolStripMenuItem.Text = "Make Devotion Target";
             this.DevotionTargetToolStripMenuItem.Click += new System.EventHandler(this.DevotionTargetToolStripMenuItem_Click);
+            // 
+            // EntrustTargetToolStripMenuItem
+            // 
+            this.HateEstablisherToolStripMenuItem.Name = "HateEstablisherToolStripMenuItem";
+            this.HateEstablisherToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.HateEstablisherToolStripMenuItem.Text = "Make Hate Establisher Target";
+            this.HateEstablisherToolStripMenuItem.Click += new System.EventHandler(this.HateEstablisherToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
@@ -2463,6 +2472,7 @@ namespace CurePlease
         private System.Windows.Forms.ToolStripMenuItem GeoTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem EntrustTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DevotionTargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem HateEstablisherToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem autoHasteIIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoFlurryToolStripMenuItem;

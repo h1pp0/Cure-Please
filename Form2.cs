@@ -284,6 +284,7 @@ namespace CurePlease
             // 14.May.2017 Additions 
             GeoAOE_Engaged.Checked = Properties.Settings.Default.GeoAOE_Engaged;
             Hate_SpellType.SelectedIndex = Properties.Settings.Default.Hate_SpellType;
+            this.autoTarget_target.Text = Properties.Settings.Default.autoTarget_target;
 
 
 
@@ -573,8 +574,7 @@ namespace CurePlease
             // 14.May.2017 Additions 
             Properties.Settings.Default.GeoAOE_Engaged = GeoAOE_Engaged.Checked;
             Properties.Settings.Default.Hate_SpellType = Hate_SpellType.SelectedIndex;
-
-
+            Properties.Settings.Default.autoTarget_target = autoTarget_target.Text;
 
 
 

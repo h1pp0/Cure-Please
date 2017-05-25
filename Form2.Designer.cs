@@ -341,6 +341,8 @@ namespace CurePlease
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.pauseOnStartBox = new System.Windows.Forms.CheckBox();
             this.pauseOnZoneBox = new System.Windows.Forms.CheckBox();
+            this.autoTarget_target = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -1101,7 +1103,7 @@ namespace CurePlease
             // 
             // autoTargetSpell
             // 
-            this.autoTargetSpell.Location = new System.Drawing.Point(127, 68);
+            this.autoTargetSpell.Location = new System.Drawing.Point(102, 68);
             this.autoTargetSpell.Name = "autoTargetSpell";
             this.autoTargetSpell.Size = new System.Drawing.Size(100, 20);
             this.autoTargetSpell.TabIndex = 9;
@@ -1115,7 +1117,7 @@ namespace CurePlease
             this.Hate_SpellType.Items.AddRange(new object[] {
             "Enemy Based",
             "Party Based"});
-            this.Hate_SpellType.Location = new System.Drawing.Point(106, 42);
+            this.Hate_SpellType.Location = new System.Drawing.Point(81, 42);
             this.Hate_SpellType.Name = "Hate_SpellType";
             this.Hate_SpellType.Size = new System.Drawing.Size(121, 21);
             this.Hate_SpellType.TabIndex = 12;
@@ -1126,7 +1128,7 @@ namespace CurePlease
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(43, 45);
+            this.label36.Location = new System.Drawing.Point(18, 45);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(60, 13);
             this.label36.TabIndex = 13;
@@ -1138,7 +1140,7 @@ namespace CurePlease
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(46, 71);
+            this.label37.Location = new System.Drawing.Point(21, 71);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(64, 13);
             this.label37.TabIndex = 14;
@@ -1166,6 +1168,8 @@ namespace CurePlease
             // 
             // groupBox16
             // 
+            this.groupBox16.Controls.Add(this.label8);
+            this.groupBox16.Controls.Add(this.autoTarget_target);
             this.groupBox16.Controls.Add(this.label37);
             this.groupBox16.Controls.Add(this.label36);
             this.groupBox16.Controls.Add(this.Hate_SpellType);
@@ -4394,6 +4398,22 @@ namespace CurePlease
             this.pauseOnZoneBox.Text = "Pause when character zones";
             this.pauseOnZoneBox.UseVisualStyleBackColor = true;
             // 
+            // autoTarget_target
+            // 
+            this.autoTarget_target.Location = new System.Drawing.Point(260, 68);
+            this.autoTarget_target.Name = "autoTarget_target";
+            this.autoTarget_target.Size = new System.Drawing.Size(124, 20);
+            this.autoTarget_target.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(212, 71);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Target:";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4819,5 +4839,7 @@ namespace CurePlease
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.ComboBox Hate_SpellType;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox autoTarget_target;
     }
 }

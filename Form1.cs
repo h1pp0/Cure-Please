@@ -2994,7 +2994,14 @@ namespace CurePlease
                     else
                     {
                        Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                        this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
+                        if (Settings.Default.autoTarget_target != "")
+                        {
+                            this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
+                        }
+                        else
+                        {
+                            this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
+                        }
                     }
                         lastTargetID = entity.TargetID;
 
@@ -4533,7 +4540,10 @@ namespace CurePlease
         {
             Settings.Default.GeoSpell_Target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
         }
-
+        private void HateEstablisherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings.Default.autoTarget_target = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
+        }
         private void phalanxIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _ELITEAPIPL.ThirdParty.SendString("/ma \"Phalanx II\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name);

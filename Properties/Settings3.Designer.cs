@@ -2661,5 +2661,17 @@ namespace CurePlease.Properties {
                 this["GeoAOE_Engaged"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string autoTarget_target {
+            get {
+                return ((string)(this["autoTarget_target"]));
+            }
+            set {
+                this["autoTarget_target"] = value;
+            }
+        }
     }
 }

@@ -482,6 +482,7 @@ namespace CurePlease
             // naErase
             // 
             this.naErase.AutoSize = true;
+            this.naErase.Enabled = false;
             this.naErase.Location = new System.Drawing.Point(3, 157);
             this.naErase.Margin = new System.Windows.Forms.Padding(1);
             this.naErase.Name = "naErase";

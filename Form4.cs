@@ -46,6 +46,7 @@ namespace CurePlease
             else
             {
                 chatlog_box.Text = "No character was selected as the power leveler, close this window and select one.";
+                chatlogscan_timer.Enabled = false;
             }
 
         }

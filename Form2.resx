@@ -147,8 +147,18 @@ Default setting: 60
 If 3 members HP is at or below 60% of their health then 
 they will be marked as needing a Cure, then a check will be the party member with the lowest HP to decide what tier is needed.</value>
   </data>
+  <data name="label24.Text" xml:space="preserve">
+    <value>THIS IS AN EXPERIMENTAL FEATURE
+
+Enabling this reduces the time that the bot will wait 
+before running the next function by 50%, this requires 
+that you're running a way to enable Fast Cast gear such
+as GearSwap or AshitaCast and you MUST have at least 50%
+Fact Cast in gear/traits/gifts.
+</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>171</value>
+    <value>41</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

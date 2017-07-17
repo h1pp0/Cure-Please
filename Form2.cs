@@ -286,6 +286,13 @@ namespace CurePlease
             Hate_SpellType.SelectedIndex = Properties.Settings.Default.Hate_SpellType;
             this.autoTarget_target.Text = Properties.Settings.Default.autoTarget_target;
 
+            // 15.June.2017 Additions 
+            this.healLowMP.Checked = Properties.Settings.Default.healLowMP;
+            this.standAtMP.Checked = Properties.Settings.Default.standAtMP;
+            this.specifiedEngageTarget.Checked = Properties.Settings.Default.specifiedEngageTarget;
+            this.standAtMP_Percentage.Value = Properties.Settings.Default.standAtMP_Percentage;
+            this.healWhenMPBelow.Value = Properties.Settings.Default.healWhenMPBelow;
+            this.enableFastCast_Mode.Checked = Properties.Settings.Default.enableFastCast_Mode;
 
 
 
@@ -572,14 +579,17 @@ namespace CurePlease
             Properties.Settings.Default.DevotionTargetName = this.DevotionTargetName.Text;
 
             // 14.May.2017 Additions 
-            Properties.Settings.Default.GeoAOE_Engaged = GeoAOE_Engaged.Checked;
-            Properties.Settings.Default.Hate_SpellType = Hate_SpellType.SelectedIndex;
-            Properties.Settings.Default.autoTarget_target = autoTarget_target.Text;
+            Properties.Settings.Default.GeoAOE_Engaged = this.GeoAOE_Engaged.Checked;
+            Properties.Settings.Default.Hate_SpellType = this.Hate_SpellType.SelectedIndex;
+            Properties.Settings.Default.autoTarget_target = this.autoTarget_target.Text;
 
-
-
-
-
+            // 15.June.2017 Additions 
+            Properties.Settings.Default.healLowMP = this.healLowMP.Checked;
+            Properties.Settings.Default.standAtMP = this.standAtMP.Checked;
+            Properties.Settings.Default.specifiedEngageTarget = this.specifiedEngageTarget.Checked;
+            Properties.Settings.Default.standAtMP_Percentage = this.standAtMP_Percentage.Value;
+            Properties.Settings.Default.healWhenMPBelow = this.healWhenMPBelow.Value;
+            Properties.Settings.Default.enableFastCast_Mode = this.enableFastCast_Mode.Checked;
 
             Properties.Settings.Default.Save();            
             this.Close();
@@ -1063,6 +1073,7 @@ namespace CurePlease
 
 
         }
+
     }
         #endregion
 }

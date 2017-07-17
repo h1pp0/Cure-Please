@@ -1,7 +1,4 @@
-﻿
-// ReSharper disable InconsistentNaming
-
-namespace CurePlease
+﻿namespace CurePlease
 {
     using CurePlease.Properties;
     using EliteMMO.API;
@@ -28,8 +25,15 @@ namespace CurePlease
             public string CharacterBuffs { get; set; }
         }
 
+        public class CharacterData : List<CharacterData>
+        {
+            public int TargetIndex { get; set; }
+            public int MemberNumber { get; set; }
+        }
+
 
         uint lastTargetID = 0;
+        uint allowAutoMovement = 1;
 
         #region "FFACE Tools Enumerations"
         public enum LoginStatus
@@ -118,10 +122,14 @@ namespace CurePlease
         public static EliteAPI _ELITEAPIPL;
         public EliteAPI _ELITEAPIMonitored;
         public ListBox processids = new ListBox();
-        // Stores the previously-colored button, if any       
+
+
+        public int max_count = 10;
+        public double last_percent = 1;
+
+        // Stores the previously-colored button, if any
 
         public List<BuffStorage> ActiveBuffs = new List<BuffStorage>();
-
 
         float plX;
         float plY;
@@ -133,6 +141,12 @@ namespace CurePlease
         bool castingLock;
         bool pauseActions;
         private bool islowmp;
+
+        public int LUA_Plugin_Loaded = 0;
+        public int firstTime_Pause = 0;
+
+        private const int listenPort = 19769;
+
         //private Dictionary<int, string> PTMemberList;
 
 
@@ -778,7 +792,6 @@ namespace CurePlease
         };
         #endregion
 
-
         #region "== Getting POL Process and FFACE dll Check"
         //FFXI Process      
         public Form1()
@@ -806,11 +819,10 @@ namespace CurePlease
             }
             // Show the current version number..
             this.Text = this.notifyIcon1.Text = "Cure Please v" + Application.ProductVersion;
-
-            #endregion
         }
+        #endregion
 
-        public int LUA_Plugin_Loaded = 0;
+        #region "== Set instances, check plugin etc"
 
         private void setinstance_Click(object sender, EventArgs e)
         {
@@ -897,6 +909,8 @@ namespace CurePlease
             }
             return true;
         }
+
+        #endregion
 
         #region "== partyMemberUpdate"
         private bool partyMemberUpdateMethod(byte partyMemberId)
@@ -1276,6 +1290,7 @@ namespace CurePlease
         }
         #endregion
 
+        #region "== Remove Debuff"
         private void removeDebuff(string characterName, int debuffID)
         {
             foreach (BuffStorage ailment in ActiveBuffs)
@@ -1300,9 +1315,7 @@ namespace CurePlease
             }
 
         }
-
-
-
+        #endregion
 
         #region "== CastLock"
         private void CastLockMethod()
@@ -1364,11 +1377,7 @@ namespace CurePlease
         private void CuragaCalculator(int partyMemberId)
         {
 
-           
-
             string lowestHP_Name = _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name;
-
-            
 
             if ((Settings.Default.curaga5Enabled) && ((((this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Settings.Default.curaga5Amount) && (CheckSpellRecast("Curaga V") == 0) && (HasSpell("Curaga V")) && (_ELITEAPIPL.Player.MP > 380))
             {
@@ -1439,7 +1448,6 @@ namespace CurePlease
         }
 
         #endregion
-
 
         #region "== CastingPossible (Distance)"
         private bool castingPossible(byte partyMemberId)
@@ -1611,7 +1619,6 @@ namespace CurePlease
                 }
             }
             #endregion
-
 
             // Grab current time for calculations below
             #region "== Calculate time since an Auto Spell was cast on particular player"
@@ -1868,19 +1875,15 @@ namespace CurePlease
                         if (PetsEntity.Distance >= 10 && GetAbilityRecast("Full Circle") == 0) {
                             _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
                         }
-
                     }
-
                 }
-
-
             }
             #endregion
 
             #region "== Low MP Tell / MP OK Tell"
             if (_ELITEAPIPL.Player.MP <= (int)Settings.Default.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
             {
-                if (Settings.Default.lowMPcheckBox && !this.islowmp)
+                if (Settings.Default.lowMPcheckBox && !this.islowmp && !Settings.Default.healLowMP)
                 {
                     _ELITEAPIPL.ThirdParty.SendString("/tell " + this._ELITEAPIMonitored.Player.Name + " MP is low!");
                     this.islowmp = true;
@@ -1891,7 +1894,7 @@ namespace CurePlease
             }
             if (_ELITEAPIPL.Player.MP > (int)Settings.Default.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
             {
-                if (Settings.Default.lowMPcheckBox && this.islowmp)
+                if (Settings.Default.lowMPcheckBox && this.islowmp && !Settings.Default.healLowMP)
                 {
                     _ELITEAPIPL.ThirdParty.SendString("/tell " + this._ELITEAPIMonitored.Player.Name + " MP OK!");
                     this.islowmp = false;
@@ -1899,9 +1902,34 @@ namespace CurePlease
             }
             #endregion
 
+
+            #region "== Begin Healing if MP is too low and enabled"
+
+            if (!this.castingLock && Settings.Default.healLowMP == true && _ELITEAPIPL.Player.MP <= Settings.Default.healWhenMPBelow && _ELITEAPIPL.Player.Status == 0)
+            {
+                if (Settings.Default.lowMPcheckBox && !this.islowmp)
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("/tell " + this._ELITEAPIMonitored.Player.Name + " MP is seriously low, /healing.");
+                    this.islowmp = true;
+                }
+                _ELITEAPIPL.ThirdParty.SendString("/heal");
+                this.CastLockMethod();
+            }
+            else if (!this.castingLock && Settings.Default.standAtMP == true && _ELITEAPIPL.Player.MPP >= Settings.Default.standAtMP_Percentage && _ELITEAPIPL.Player.Status == 33)
+            {
+                if (Settings.Default.lowMPcheckBox && !this.islowmp)
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("/tell " + this._ELITEAPIMonitored.Player.Name + " MP has recovered.");
+                    this.islowmp = false;
+                }
+                _ELITEAPIPL.ThirdParty.SendString("/heal");
+                this.CastLockMethod();
+            }
+            #endregion
+
             #region "== PL stationary for Cures (Casting Possible)"
             // Only perform actions if PL is stationary PAUSE GOES HERE
-            if ((_ELITEAPIPL.Player.X == this.plX) && (_ELITEAPIPL.Player.Y == this.plY) && (_ELITEAPIPL.Player.Z == this.plZ) && (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn) && ((_ELITEAPIPL.Player.Status == (uint)Status.Standing) || (_ELITEAPIPL.Player.Status == (uint)Status.Fighting)))
+            if ((_ELITEAPIPL.Player.X == this.plX) && (_ELITEAPIPL.Player.Y == this.plY) && (_ELITEAPIPL.Player.Z == this.plZ) && (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn) && ((_ELITEAPIPL.Player.Status == (uint)Status.Standing) || (_ELITEAPIPL.Player.Status == (uint)Status.Fighting)) && _ELITEAPIPL.Player.Status != 33)
             {
 
                 var cures_required = new List<byte>();
@@ -1910,7 +1938,7 @@ namespace CurePlease
 
                 /////////////////////////// CURAGA //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                var cParty_curaga = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
+                var cParty_curaga = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId).OrderBy(p => p.CurrentHPP);
 
                 int memberOF_curaga = GeneratePT_structure();
 
@@ -1953,6 +1981,13 @@ namespace CurePlease
                         }
 
                     }
+
+                    if (cures_required.Count >= Settings.Default.curagaRequiredMembers)
+                    {
+                        int lowestHP_id = cures_required.First();
+                        CuragaCalculator(lowestHP_id);
+                    }
+
                 }
 
                 /////////////////////////// CURE //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1984,200 +2019,203 @@ namespace CurePlease
                 #region "== PL Debuff Removal with Spells or Items"
                 // PL and Monitored Player Debuff Removal
                 // Starting with PL
-                foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
+                if (_ELITEAPIPL.Player.Status != 33)
                 {
-                    if ((plEffect == StatusEffect.Silence) && (Settings.Default.plSilenceItemEnabled))
+                    foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
                     {
-                        // Check to make sure we have echo drops
-                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(Settings.Default.plSilenceItemString)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(Settings.Default.plSilenceItemString)) > 0)
+                        if ((plEffect == StatusEffect.Silence) && (Settings.Default.plSilenceItemEnabled))
                         {
-                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.plSilenceItemString));
-                            Thread.Sleep(2000);
+                            // Check to make sure we have echo drops
+                            if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(Settings.Default.plSilenceItemString)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(Settings.Default.plSilenceItemString)) > 0)
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.plSilenceItemString));
+                                Thread.Sleep(2000);
+                            }
                         }
-                    }
-                    if ((plEffect == StatusEffect.Doom && Settings.Default.plDoomEnabled) /* Add more options from UI HERE*/)
-                    {
-                        // Check to make sure we have holy water
-                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(Settings.Default.PLDoomitem)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(Settings.Default.PLDoomitem)) > 0)
+                        if ((plEffect == StatusEffect.Doom && Settings.Default.plDoomEnabled) /* Add more options from UI HERE*/)
                         {
-                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.PLDoomitem));
-                            Thread.Sleep(2000);
+                            // Check to make sure we have holy water
+                            if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(Settings.Default.PLDoomitem)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(Settings.Default.PLDoomitem)) > 0)
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", Settings.Default.PLDoomitem));
+                                Thread.Sleep(2000);
+                            }
                         }
-                    }
-                    else if ((plEffect == StatusEffect.Doom) && (Settings.Default.plDoom) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                    }
-                    else if ((plEffect == StatusEffect.Paralysis) && (Settings.Default.plParalysis) && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Paralyna");
-                    }
-                    else if ((plEffect == StatusEffect.Poison) && (Settings.Default.plPoison) && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Poisona");
-                    }
-                    else if ((plEffect == StatusEffect.Attack_Down) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Blindness) && (Settings.Default.plBlindness) && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Blindna");
-                    }
-                    else if ((plEffect == StatusEffect.Bind) && (Settings.Default.plBind) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Weight) && (Settings.Default.plWeight) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Slow) && (Settings.Default.plSlow) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Curse) && (Settings.Default.plCurse) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                    }
-                    else if ((plEffect == StatusEffect.Curse2) && (Settings.Default.plCurse2) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                    }
-                    else if ((plEffect == StatusEffect.Addle) && (Settings.Default.plAddle) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Bane) && (Settings.Default.plBane) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                    }
-                    else if ((plEffect == StatusEffect.Plague) && (Settings.Default.plPlague) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Viruna");
-                    }
-                    else if ((plEffect == StatusEffect.Disease) && (Settings.Default.plDisease) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Viruna");
-                    }
-                    else if ((plEffect == StatusEffect.Burn) && (Settings.Default.plBurn) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Frost) && (Settings.Default.plFrost) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Choke) && (Settings.Default.plChoke) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Rasp) && (Settings.Default.plRasp) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Shock) && (Settings.Default.plShock) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Drown) && (Settings.Default.plDrown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Dia) && (Settings.Default.plDia) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Bio) && (Settings.Default.plBio) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.STR_Down) && (Settings.Default.plStrDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.DEX_Down) && (Settings.Default.plDexDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.VIT_Down) && (Settings.Default.plVitDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.AGI_Down) && (Settings.Default.plAgiDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.INT_Down) && (Settings.Default.plIntDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.MND_Down) && (Settings.Default.plMndDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.CHR_Down) && (Settings.Default.plChrDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Max_HP_Down) && (Settings.Default.plMaxHpDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Max_MP_Down) && (Settings.Default.plMaxMpDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Accuracy_Down) && (Settings.Default.plAccuracyDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Evasion_Down) && (Settings.Default.plEvasionDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Defense_Down) && (Settings.Default.plDefenseDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Flash) && (Settings.Default.plFlash) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Magic_Acc_Down) && (Settings.Default.plMagicAccDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Magic_Atk_Down) && (Settings.Default.plMagicAtkDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Helix) && (Settings.Default.plHelix) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Max_TP_Down) && (Settings.Default.plMaxTpDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Requiem) && (Settings.Default.plRequiem) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Elegy) && (Settings.Default.plElegy) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                    }
-                    else if ((plEffect == StatusEffect.Threnody) && (Settings.Default.plThrenody) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
-                    {
-                        this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        else if ((plEffect == StatusEffect.Doom) && (Settings.Default.plDoom) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                        }
+                        else if ((plEffect == StatusEffect.Paralysis) && (Settings.Default.plParalysis) && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Paralyna");
+                        }
+                        else if ((plEffect == StatusEffect.Poison) && (Settings.Default.plPoison) && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Poisona");
+                        }
+                        else if ((plEffect == StatusEffect.Attack_Down) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Blindness) && (Settings.Default.plBlindness) && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Blindna");
+                        }
+                        else if ((plEffect == StatusEffect.Bind) && (Settings.Default.plBind) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Weight) && (Settings.Default.plWeight) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Slow) && (Settings.Default.plSlow) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Curse) && (Settings.Default.plCurse) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                        }
+                        else if ((plEffect == StatusEffect.Curse2) && (Settings.Default.plCurse2) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                        }
+                        else if ((plEffect == StatusEffect.Addle) && (Settings.Default.plAddle) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Bane) && (Settings.Default.plBane) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                        }
+                        else if ((plEffect == StatusEffect.Plague) && (Settings.Default.plPlague) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Viruna");
+                        }
+                        else if ((plEffect == StatusEffect.Disease) && (Settings.Default.plDisease) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Viruna");
+                        }
+                        else if ((plEffect == StatusEffect.Burn) && (Settings.Default.plBurn) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Frost) && (Settings.Default.plFrost) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Choke) && (Settings.Default.plChoke) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Rasp) && (Settings.Default.plRasp) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Shock) && (Settings.Default.plShock) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Drown) && (Settings.Default.plDrown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Dia) && (Settings.Default.plDia) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Bio) && (Settings.Default.plBio) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.STR_Down) && (Settings.Default.plStrDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.DEX_Down) && (Settings.Default.plDexDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.VIT_Down) && (Settings.Default.plVitDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.AGI_Down) && (Settings.Default.plAgiDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.INT_Down) && (Settings.Default.plIntDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.MND_Down) && (Settings.Default.plMndDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.CHR_Down) && (Settings.Default.plChrDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Max_HP_Down) && (Settings.Default.plMaxHpDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Max_MP_Down) && (Settings.Default.plMaxMpDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Accuracy_Down) && (Settings.Default.plAccuracyDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Evasion_Down) && (Settings.Default.plEvasionDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Defense_Down) && (Settings.Default.plDefenseDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Flash) && (Settings.Default.plFlash) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Magic_Acc_Down) && (Settings.Default.plMagicAccDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Magic_Atk_Down) && (Settings.Default.plMagicAtkDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Helix) && (Settings.Default.plHelix) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Max_TP_Down) && (Settings.Default.plMaxTpDown) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Requiem) && (Settings.Default.plRequiem) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Elegy) && (Settings.Default.plElegy) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
+                        else if ((plEffect == StatusEffect.Threnody) && (Settings.Default.plThrenody) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        {
+                            this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                        }
                     }
                 }
                 #endregion
 
                 #region "== Monitored Player Debuff Removal"
                 // Next, we check monitored player
-                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0))
+                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0) && _ELITEAPIPL.Player.Status != 33)
                 {
                     foreach (StatusEffect monitoredEffect in this._ELITEAPIMonitored.Player.Buffs)
                     {
@@ -2379,7 +2417,7 @@ namespace CurePlease
                     int BreakOut = 0;
                     var partyMembers = _ELITEAPIPL.Party.GetPartyMembers();
 
-                    foreach (BuffStorage ailment in ActiveBuffs)
+                    foreach (BuffStorage ailment in ActiveBuffs.ToList())
                     {
                         foreach (var ptMember in partyMembers)
                         {
@@ -2506,6 +2544,72 @@ namespace CurePlease
                                     removeDebuff(ptMember.Name, 147);
                                     BreakOut = 1;
                                 }
+                                // IF SLOW IS NOT ACTIVE, YET NEITHER IS HASTE DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("33"))
+                                {
+                                    // CHECK IF AUTO HASTE IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoHasteEnabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerHaste[ptMember.MemberNumber] = DateTime.MinValue;
+                                        this.playerHaste_II[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+                                // IF SLOW IS NOT ACTIVE, YET NEITHER IS FLURRY DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("265"))
+                                {
+                                    // CHECK IF AUTO FLURRY IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoFlurryEnabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerFlurry[ptMember.MemberNumber] = DateTime.MinValue;
+                                        this.playerFlurry_II[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+                                // IF SUBLIMATION IS NOT ACTIVE, YET NEITHER IS REFRESH DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("187") && !named_Debuffs.Contains("188") && !named_Debuffs.Contains("44"))
+                                {
+                                    // CHECK IF AUTO REFRESH IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoRefreshEnabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerRefresh[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+                                // IF REGEN IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("42"))
+                                {
+                                    // CHECK IF AUTO REGEN IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoRegen_Enabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerRegen[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+                                // IF PROTECT IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("40"))
+                                {
+                                    // CHECK IF AUTO REGEN IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoProtect_Enabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerProtect[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+                                // IF SHELL IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("41"))
+                                {
+                                    // CHECK IF AUTO REGEN IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoShell_Enabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerShell[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+                                // IF PHALANX II IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                                else if (!named_Debuffs.Contains("116"))
+                                {
+                                    // CHECK IF AUTO REGEN IS ENABLED FOR THIS CHARACTER
+                                    if (this.autoPhalanx_IIEnabled[ptMember.MemberNumber])
+                                    {
+                                        this.playerPhalanx_II[ptMember.MemberNumber] = DateTime.MinValue;
+                                    }
+                                }
+
                             }
 
                             if (BreakOut == 1)
@@ -2681,7 +2785,7 @@ namespace CurePlease
                     {
                         this.castSpell("<me>", "Barblizzara");
                     }
-                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 0) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthundra") == 0) && (HasSpell("Barthundra")) && (!this.castingLock)))
+                    else if ((Settings.Default.plBarElement) && (Settings.Default.plBarElement_Spell == 11) && (!this.plStatusCheck(StatusEffect.Barthunder) && (CheckSpellRecast("Barthundra") == 0) && (HasSpell("Barthundra")) && (!this.castingLock)))
                     {
                         this.castSpell("<me>", "Barthundra");
                     }
@@ -2973,48 +3077,101 @@ namespace CurePlease
                 // End PL Auto Buffs
                 #endregion
 
-
-
                 #region "== Auto cast a spell to get on hate list"
 
                 EliteAPI.TargetInfo target = _ELITEAPIMonitored.Target.GetTargetInfo();
                 uint targetIdx = target.TargetIndex;
                 var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
 
+                int foundID_hateEstablisher = 0;
 
-                if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
                 {
-                    if (Settings.Default.Hate_SpellType == 0)
-                    {
-                        
-                        _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                        Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                        
-                    }
-                    else
-                    {
-                       Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                        if (Settings.Default.autoTarget_target != "")
+                    for (var x = 0; x < 2048; x++)
                         {
-                            this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
+                            var entityH = _ELITEAPIPL.Entity.GetEntity(x);
+
+                            if (entityH.Name != null && entity.Name.ToLower().Equals(Settings.Default.GeoSpell_Target.ToLower()))
+                            {
+                                foundID_hateEstablisher = Convert.ToInt32(entityH.TargetID);
+                            }
+                        }
+
+                    if (foundID_hateEstablisher != 0)
+                    {
+                        var targetEntityH = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher);
+
+                        if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && targetEntityH.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                        {
+                            if (Settings.Default.Hate_SpellType == 0)
+                            {
+                                allowAutoMovement = 1;
+                                _ELITEAPIPL.ThirdParty.SendString("/assist " + targetEntityH.Name);
+                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                this.castSpell("<t>", Settings.Default.autoTargetSpell);
+                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                allowAutoMovement = 0;
+                            }
+                            else
+                            {
+                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                if (Settings.Default.autoTarget_target != "")
+                                {
+                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                    this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
+                                }
+                                else
+                                {
+                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                    this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
+                                }
+                            }
+                            lastTargetID = entity.TargetID;
+
+                        }
+
+
+                    }
+                } else
+                {
+                    if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                    {
+                        if (Settings.Default.Hate_SpellType == 0)
+                        {
+                            allowAutoMovement = 1;
+                            _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                            Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                            this.castSpell("<t>", Settings.Default.autoTargetSpell);
+                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                            allowAutoMovement = 0;
                         }
                         else
                         {
-                            this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
+                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                            if (Settings.Default.autoTarget_target != "")
+                            {
+                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
+                            }
+                            else
+                            {
+                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
+                            }
                         }
-                    }
                         lastTargetID = entity.TargetID;
 
+                    }
                 }
+
+
                 #endregion
-
-
 
                 // Auto Casting
                 #region "== Auto Haste"
                 foreach (byte id in playerHpOrder)
                 {
-                    if ((this.autoHasteEnabled[id]) && (CheckSpellRecast("Haste") == 0) && (HasSpell("Haste")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                    if ((this.autoHasteEnabled[id]) && (CheckSpellRecast("Haste") == 0) && (HasSpell("Haste")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                     {
                         if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                         {
@@ -3054,7 +3211,7 @@ namespace CurePlease
                     #region "== Auto Haste II"
 
                     {
-                        if ((this.autoHaste_IIEnabled[id]) && (CheckSpellRecast("Haste II") == 0) && (HasSpell("Haste II")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                        if ((this.autoHaste_IIEnabled[id]) && (CheckSpellRecast("Haste II") == 0) && (HasSpell("Haste II")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                         {
                             if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                             {
@@ -3094,7 +3251,7 @@ namespace CurePlease
                         #region "== Auto Flurry "
 
                         {
-                            if ((this.autoFlurryEnabled[id]) && (CheckSpellRecast("Flurry") == 0) && (HasSpell("Flurry")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                            if ((this.autoFlurryEnabled[id]) && (CheckSpellRecast("Flurry") == 0) && (HasSpell("Flurry")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                             {
                                 if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                 {
@@ -3134,7 +3291,7 @@ namespace CurePlease
                             #region "== Auto Flurry II"
 
                             {
-                                if ((this.autoFlurry_IIEnabled[id]) && (CheckSpellRecast("Flurry II") == 0) && (HasSpell("Flurry II")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                if ((this.autoFlurry_IIEnabled[id]) && (CheckSpellRecast("Flurry II") == 0) && (HasSpell("Flurry II")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
@@ -3174,7 +3331,7 @@ namespace CurePlease
                                 #region "== Auto Shell"
                                 string[] shell_spells = { "Shell", "Shell II", "Shell III", "Shell IV", "Shell V" };
 
-                                if ((this.autoShell_Enabled[id]) && (CheckSpellRecast(shell_spells[Properties.Settings.Default.AutoShellSpell]) == 0) && (HasSpell(shell_spells[Properties.Settings.Default.AutoShellSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                if ((this.autoShell_Enabled[id]) && (CheckSpellRecast(shell_spells[Properties.Settings.Default.AutoShellSpell]) == 0) && (HasSpell(shell_spells[Properties.Settings.Default.AutoShellSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
@@ -3212,7 +3369,7 @@ namespace CurePlease
 
                                 string[] protect_spells = { "Protect", "Protect II", "Protect III", "Protect IV", "Protect V" };
 
-                                if ((this.autoProtect_Enabled[id]) && (CheckSpellRecast(protect_spells[Properties.Settings.Default.AutoProtectSpell]) == 0) && (HasSpell(protect_spells[Properties.Settings.Default.AutoProtectSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                if ((this.autoProtect_Enabled[id]) && (CheckSpellRecast(protect_spells[Properties.Settings.Default.AutoProtectSpell]) == 0) && (HasSpell(protect_spells[Properties.Settings.Default.AutoProtectSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
@@ -3247,7 +3404,7 @@ namespace CurePlease
                                 #endregion
 
                                 #region "== Auto Phalanx II"
-                                if ((this.autoPhalanx_IIEnabled[id]) && (CheckSpellRecast("Phalanx II") == 0) && (HasSpell("Phalanx II")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                if ((this.autoPhalanx_IIEnabled[id]) && (CheckSpellRecast("Phalanx II") == 0) && (HasSpell("Phalanx II")) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
@@ -3274,7 +3431,7 @@ namespace CurePlease
 
                                 string[] regen_spells = { "Regen", "Regen II", "Regen III", "Regen IV", "Regen V" };
 
-                                if ((this.autoRegen_Enabled[id]) && (CheckSpellRecast(regen_spells[Properties.Settings.Default.AutoRegenSpell]) == 0) && (HasSpell(regen_spells[Properties.Settings.Default.AutoRegenSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                if ((this.autoRegen_Enabled[id]) && (CheckSpellRecast(regen_spells[Properties.Settings.Default.AutoRegenSpell]) == 0) && (HasSpell(regen_spells[Properties.Settings.Default.AutoRegenSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
@@ -3313,7 +3470,7 @@ namespace CurePlease
 
                                 string[] refresh_spells = { "Refresh", "Refresh II", "Refresh III" };
 
-                                if ((this.autoRefreshEnabled[id]) && (CheckSpellRecast(refresh_spells[Properties.Settings.Default.AutoRefreshSpell]) == 0) && (HasSpell(refresh_spells[Properties.Settings.Default.AutoRefreshSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)))
+                                if ((this.autoRefreshEnabled[id]) && (CheckSpellRecast(refresh_spells[Properties.Settings.Default.AutoRefreshSpell]) == 0) && (HasSpell(refresh_spells[Properties.Settings.Default.AutoRefreshSpell])) && (_ELITEAPIPL.Player.MP > Settings.Default.mpMinCastValue) && (!this.castingLock) && (this.castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == this._ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
@@ -3342,7 +3499,7 @@ namespace CurePlease
                             #region "==Geomancer Spells"
 
                             // ENTRUSTED INDI SPELL CASTING
-                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)) && (!this.castingLock))
+                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
                             {
                                 string SpellCheckedResult = ReturnGeoSpell(Settings.Default.EntrustedIndiSpell, 1);
                                 if (SpellCheckedResult == "SpellError_Cancel")
@@ -3370,7 +3527,7 @@ namespace CurePlease
                             if (!Settings.Default.GEO_engaged || _ELITEAPIMonitored.Player.Status == 1)
                             {
                                 // INDI SPELL CASTING
-                                if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock))
+                                if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
                                     {
@@ -3394,7 +3551,7 @@ namespace CurePlease
                             }
 
                                 // GEO SPELL CASTING  && (_ELITEAPIMonitored.Player.Status == 1)
-                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock))
+                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
                                 {
 
                                 // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
@@ -3435,14 +3592,22 @@ namespace CurePlease
                                         }
                                         else if (_ELITEAPIMonitored.Player.Status == 1)
                                         {
-                                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                            // Pause AutoMovement
+                                            allowAutoMovement = 0;
+
                                             _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
                                             Thread.Sleep(TimeSpan.FromSeconds(1.5));
                                             this.castSpell("<t>", SpellCheckedResult);
+                                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
+
                                         }
                                     }
                                 }
-                                }
+
+                                // Restart AutoMovement
+                                allowAutoMovement = 1;
+
+                            }
 
                             
 
@@ -3450,7 +3615,7 @@ namespace CurePlease
 
                             // so PL job abilities are in order
                             #region "== All other Job Abilities"
-                            if (!this.castingLock && !this.plStatusCheck(StatusEffect.Amnesia))
+                            if (!this.castingLock && !this.plStatusCheck(StatusEffect.Amnesia) && _ELITEAPIPL.Player.Status != 33)
                             {
 
                                 if ((Settings.Default.afflatusSolice) && (!this.plStatusCheck(StatusEffect.Afflatus_Solace)) && (GetAbilityRecast("Afflatus Solace") == 0) && (HasAbility("Afflatus Solace")))
@@ -3500,32 +3665,37 @@ namespace CurePlease
                                 }
                                 else if ((Settings.Default.DevotionBox) && (GetAbilityRecast("Devotion") == 0) && (HasAbility("Devotion")) && _ELITEAPIPL.Player.HPP > 80 && (!Settings.Default.DevotionWhenEngaged || (_ELITEAPIMonitored.Player.Status == 1)))
                                 {
-                                    if ((Settings.Default.DevotionTargetType == 0))                                  
-                                    {
-                                        int selectedPlayer = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == Settings.Default.DevotionTargetName && p.CurrentMP <= Settings.Default.DevotionMP).Select(p => p.TargetIndex).First();
 
-                                        if (selectedPlayer != 0 )
+                                    // First Generate the current party number, this will be used regardless of the type
+                                    int memberOF = GeneratePT_structure();
+
+                                    // Now generate the party
+                                    var cParty = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
+
+                                    // Make sure member number is not 0 (null) or 4 (void)
+                                    if (memberOF != 0 && memberOF != 4)
+                                    {
+                                        // Run through Each party member as we're looking for either a specifc name or if set otherwise anyone with the MP criteria in the current party.
+                                       foreach (var pData in cParty)
                                         {
-                                            var playerEntity = _ELITEAPIPL.Entity.GetEntity(Convert.ToInt32(selectedPlayer));
-
-                                            if (playerEntity.Distance < 10 && playerEntity.Distance > 0) {
-                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Settings.Default.DevotionTargetName);
-                                                this.ActionLockMethod();
-                                            }
-                                        }
-                                    } else if (Settings.Default.DevotionTargetType == 1)
-                                    {
-                                        var cParty = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
-
-                                        int memberOF = GeneratePT_structure();
-
-                                        if (memberOF != 0 && memberOF != 4) {
-
-                                            foreach (var pData in cParty)
+                                            // If party of party v1
+                                            if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
                                             {
-                                                if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
+                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                 {
-                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                    if ((Settings.Default.DevotionTargetType == 0))
+                                                    {
+                                                        if (pData.Name == Settings.Default.DevotionTargetName)
+                                                        {
+                                                            var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+                                                            if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Settings.Default.DevotionMP)
+                                                            {
+                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Settings.Default.DevotionTargetName);
+                                                                this.ActionLockMethod();
+                                                            }
+                                                        }
+                                                    }
+                                                    else
                                                     {
                                                         var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
 
@@ -3536,11 +3706,25 @@ namespace CurePlease
                                                             break;
                                                         }
                                                     }
-
                                                 }
-                                                else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
+                                            } // If part of party 2
+                                            else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
+                                            {
+                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                 {
-                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                    if ((Settings.Default.DevotionTargetType == 0))
+                                                    {
+                                                        if (pData.Name == Settings.Default.DevotionTargetName)
+                                                        {
+                                                            var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+                                                            if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Settings.Default.DevotionMP)
+                                                            {
+                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Settings.Default.DevotionTargetName);
+                                                                this.ActionLockMethod();
+                                                            }
+                                                        }
+                                                    }
+                                                    else
                                                     {
                                                         var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
 
@@ -3551,11 +3735,25 @@ namespace CurePlease
                                                             break;
                                                         }
                                                     }
-
                                                 }
-                                                else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
+                                            } // If part of party 3
+                                            else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
+                                            {
+                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                 {
-                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                    if ((Settings.Default.DevotionTargetType == 0))
+                                                    {
+                                                        if (pData.Name == Settings.Default.DevotionTargetName)
+                                                        {
+                                                            var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+                                                            if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Settings.Default.DevotionMP)
+                                                            {
+                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Settings.Default.DevotionTargetName);
+                                                                this.ActionLockMethod();
+                                                            }
+                                                        }
+                                                    }
+                                                    else
                                                     {
                                                         var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
 
@@ -3576,19 +3774,13 @@ namespace CurePlease
                             #endregion
                         }
                     }
+
                 }
 
             }
 
-
-
             // ACTION TIMER END
-
-
-
         }
-
-
 
         #region "== Get Shellra & Protectra level"
 
@@ -4392,16 +4584,27 @@ namespace CurePlease
             var count = 0;
             float lastPercent = 0;
 
-            while (_ELITEAPIPL.CastBar.Percent != 1)
+            if (Properties.Settings.Default.enableFastCast_Mode == true)
+            {
+                max_count = 5;
+                last_percent = 0.50;
+            } else
+            {
+                max_count = 10;
+                last_percent = 1;
+            }
+
+            while (_ELITEAPIPL.CastBar.Percent <= last_percent)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(0.1));
 
+               // if (_ELITEAPIPL.CastBar.Percent != 1 ) { MessageBox.Show("Cast Bar @ " + _ELITEAPIPL.CastBar.Percent + " MAX @ " + max_count + " LAST @ " + last_percent); }
                 if (lastPercent != _ELITEAPIPL.CastBar.Percent)
                 {
                     count = 0;
                     lastPercent = _ELITEAPIPL.CastBar.Percent;
                 }
-                else if (count == 10)
+                else if (count == max_count)
                 {
                     this.castingLockLabel.Text = "Casting was INTERRUPTED!";
                     this.castingStatusCheck.Enabled = false;
@@ -4417,6 +4620,7 @@ namespace CurePlease
             }
 
             this.castingLockLabel.Text = "Casting is soon to be AVAILABLE!";
+            Thread.Sleep(500);
             this.castingStatusCheck.Enabled = false;
             this.castingUnlockTimer.Enabled = true;
             this.actionTimer.Enabled = true;
@@ -4670,8 +4874,6 @@ namespace CurePlease
         }
         #endregion
 
-        public int firstTime_Pause = 0;
-
         #region "== Pause Button"
         private void button3_Click(object sender, EventArgs e)
         {
@@ -4883,13 +5085,7 @@ namespace CurePlease
         }
         #endregion
 
-        private void programDelayTimer_Tick(object sender, EventArgs e)
-        {
-
-
-
-
-        }
+        #region "== Refresh Characters and Unload set characters"
 
         private void refreshCharactersToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -4919,7 +5115,9 @@ namespace CurePlease
             }
         }
 
-        private const int listenPort = 19769;
+        #endregion
+
+        #region "== Buff Checker DO_WORK function"
 
         private void buff_checker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -4964,12 +5162,19 @@ namespace CurePlease
             }
         }
 
+        #endregion
+
+        #region "== Repeatedly run the Buff_Checker to keep upto date"
+
         private void buff_checker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             Thread.Sleep(2000);
             buff_checker.RunWorkerAsync();
         }
 
+        #endregion
+
+        #region "== Form Closing /unload LUA"
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -4986,14 +5191,15 @@ namespace CurePlease
                 Settings.Default.autoFollowName = "";
             }
 
-
-
         }
 
+        #endregion
+
+        #region "== Follow the Target"
         private void followTimer_Tick(object sender, EventArgs e)
         {
 
-            if ((setinstance2.Enabled == true) && !String.IsNullOrEmpty(Settings.Default.autoFollowName) && !pauseActions)
+            if ((setinstance2.Enabled == true) && !String.IsNullOrEmpty(Settings.Default.autoFollowName) && !pauseActions && allowAutoMovement == 1)
             {
 
                 int followersTargetID = followID();
@@ -5043,7 +5249,11 @@ namespace CurePlease
             else return;
         }
 
-    private int followID()
+        #endregion
+
+        #region "== Grab Follow ID"
+
+        private int followID()
     {
             if ((setinstance2.Enabled == true) && !String.IsNullOrEmpty(Settings.Default.autoFollowName) && !pauseActions)
             {
@@ -5060,11 +5270,11 @@ namespace CurePlease
             }
             else
                 return -1;
-        }
+    }
 
+        #endregion
 
-
-
+        #region "== Generate Party Structure"
 
         public int GeneratePT_structure()
         {
@@ -5079,14 +5289,14 @@ namespace CurePlease
                 {
                     partyChecker++;
                 }
-                else if (PTMember.Name == _ELITEAPIMonitored.Player.Name) {
-                    partyChecker++; 
+                if (PTMember.Name == _ELITEAPIMonitored.Player.Name) {
+                    partyChecker++;
                 }
             }
 
-            if (partyChecker == 2)
+          if (partyChecker >= 2)
             {
-                
+
                 int plParty = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIPL.Player.Name).Select(p => p.MemberNumber).First();
 
                 if (plParty <= 5)
@@ -5114,34 +5324,12 @@ namespace CurePlease
 
         }
 
+        #endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+        // END OF THE FORM SCRIPT
+    }
+        // END OF THE FORM SCRIPT 
 
 
     public static class RichTextBoxExtensions

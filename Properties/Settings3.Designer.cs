@@ -2661,5 +2661,89 @@ namespace CurePlease.Properties {
                 this["GeoAOE_Engaged"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string autoTarget_target {
+            get {
+                return ((string)(this["autoTarget_target"]));
+            }
+            set {
+                this["autoTarget_target"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool healLowMP {
+            get {
+                return ((bool)(this["healLowMP"]));
+            }
+            set {
+                this["healLowMP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool standAtMP {
+            get {
+                return ((bool)(this["standAtMP"]));
+            }
+            set {
+                this["standAtMP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public decimal standAtMP_Percentage {
+            get {
+                return ((decimal)(this["standAtMP_Percentage"]));
+            }
+            set {
+                this["standAtMP_Percentage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool specifiedEngageTarget {
+            get {
+                return ((bool)(this["specifiedEngageTarget"]));
+            }
+            set {
+                this["specifiedEngageTarget"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public decimal healWhenMPBelow {
+            get {
+                return ((decimal)(this["healWhenMPBelow"]));
+            }
+            set {
+                this["healWhenMPBelow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool enableFastCast_Mode {
+            get {
+                return ((bool)(this["enableFastCast_Mode"]));
+            }
+            set {
+                this["enableFastCast_Mode"] = value;
+            }
+        }
     }
 }

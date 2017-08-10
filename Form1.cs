@@ -2640,9 +2640,6 @@
                 if ((!this.castingLock) && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
                 {
 
-                    int abilityID = _ELITEAPIPL.Resources.GetAbility("Saboteur", 0).TimerID;
-                    MessageBox.Show("Ability ID is: " + _ELITEAPIPL.Recast.GetAbilityRecast(abilityID));
-
 
                     #region == Job Abilities that improve buffs ==
 
@@ -3482,14 +3479,24 @@
                             // INDI SPELL CASTING
                             if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
                             {
+
+                                string name1_lower = "blank";
+                                string name2_lower = Settings.Default.GeoSpell_Target.ToLower();
+
+
                                 for (var x = 0; x < 2048; x++)
                                 {
                                     var entityH2 = _ELITEAPIPL.Entity.GetEntity(x);
-
-                                    if (entityH2.Name != null && entityH2.Name.ToLower() == Settings.Default.GeoSpell_Target.ToLower())
+                                    if (entityH2.Name != "" && entityH2.Name != null)
                                     {
-                                        foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
-                                    } else { foundID_hateEstablisher2 = 0; }
+                                        name1_lower = entityH2.Name.ToLower();
+
+                                        if (name1_lower == name2_lower)
+                                        {
+                                            foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
+                                            break;
+                                        }
+                                    }
                                 }
                             }
 
@@ -3497,13 +3504,8 @@
 
                                 var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher2);
 
-                                if (!Settings.Default.GEO_engaged || targetEntityH2.Status == 1)
-                                {
-
-                                    if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                if (targetEntityH2.Status == 1 && Settings.Default.EnableGeoSpells && targetEntityH2.HealthPercent > 0 && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
                                     {
-                                        if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
-                                        {
                                             string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
                                             if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
                                             {
@@ -3515,9 +3517,8 @@
                                                 this.castSpell("<me>", SpellCheckedResult);
                                                 this.playerIndi[0] = DateTime.Now;
                                             }
-                                        }
                                     }
-                                }
+                                
                             }
                             else
                             {
@@ -3561,14 +3562,23 @@
 
                                     if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
                                     {
+                                        string name1_lower = "blank";
+                                        string name2_lower = Settings.Default.GeoSpell_Target.ToLower();
+
+
                                         for (var x = 0; x < 2048; x++)
                                         {
                                             var entityH2 = _ELITEAPIPL.Entity.GetEntity(x);
-
-                                            if (entityH2.Name != null && entityH2.Name.ToLower() == Settings.Default.GeoSpell_Target.ToLower())
+                                            if (entityH2.Name != "" && entityH2.Name != null)
                                             {
-                                                foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
-                                            } else { foundID_hateEstablisher2 = 0; }
+                                                name1_lower = entityH2.Name.ToLower();
+
+                                                if (name1_lower == name2_lower)
+                                                {
+                                                    foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                         if (foundID_hateEstablisher2 != 0)

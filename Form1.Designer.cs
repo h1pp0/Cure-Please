@@ -73,6 +73,7 @@ namespace CurePlease
             this.player0HP = new CurePlease.NewProgressBar();
             this.playerOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.followToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopfollowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.EntrustTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GeoTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -739,6 +740,7 @@ namespace CurePlease
             // 
             this.playerOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.followToolStripMenuItem,
+            this.stopfollowToolStripMenuItem,
             this.toolStripSeparator2,
             this.EntrustTargetToolStripMenuItem,
             this.GeoTargetToolStripMenuItem,
@@ -785,6 +787,13 @@ namespace CurePlease
             this.followToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.followToolStripMenuItem.Text = "/follow";
             this.followToolStripMenuItem.Click += new System.EventHandler(this.followToolStripMenuItem_Click);
+            // 
+            // stopfollowToolStripMenuItem
+            // 
+            this.stopfollowToolStripMenuItem.Name = "followToolStripMenuItem";
+            this.stopfollowToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.stopfollowToolStripMenuItem.Text = "Cancel /follow";
+            this.stopfollowToolStripMenuItem.Click += new System.EventHandler(this.stopfollowToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -2468,6 +2477,7 @@ namespace CurePlease
         private System.Windows.Forms.ToolStripMenuItem autoRegenVToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripMenuItem followToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopfollowToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem GeoTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem EntrustTargetToolStripMenuItem;

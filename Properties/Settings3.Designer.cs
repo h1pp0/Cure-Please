@@ -2745,5 +2745,29 @@ namespace CurePlease.Properties {
                 this["enableFastCast_Mode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
+        public string IpAddress {
+            get {
+                return ((string)(this["IpAddress"]));
+            }
+            set {
+                this["IpAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool lowerTier {
+            get {
+                return ((bool)(this["lowerTier"]));
+            }
+            set {
+                this["lowerTier"] = value;
+            }
+        }
     }
 }

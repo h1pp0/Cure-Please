@@ -295,6 +295,11 @@ namespace CurePlease
             this.enableFastCast_Mode.Checked = Properties.Settings.Default.enableFastCast_Mode;
 
 
+            // 27.July.2017 Additions
+            this.ipAddress.Text = Properties.Settings.Default.IpAddress;
+            // this.lowerTier_box.Checked = Properties.Settings.Default.lowerTier;
+
+
 
         }
 
@@ -590,6 +595,23 @@ namespace CurePlease
             Properties.Settings.Default.standAtMP_Percentage = this.standAtMP_Percentage.Value;
             Properties.Settings.Default.healWhenMPBelow = this.healWhenMPBelow.Value;
             Properties.Settings.Default.enableFastCast_Mode = this.enableFastCast_Mode.Checked;
+
+            // 27.July.2017 Additions
+            Properties.Settings.Default.IpAddress = this.ipAddress.Text;
+            // Properties.Settings.Default.lowerTier = this.lowerTier_box.Checked;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             Properties.Settings.Default.Save();            
             this.Close();
@@ -1074,6 +1096,10 @@ namespace CurePlease
 
         }
 
+        private void priorityCurePercentageLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
         #endregion
 }

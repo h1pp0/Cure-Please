@@ -1323,7 +1323,6 @@
             this.castingLock = true;
             this.castingLockLabel.Text = "Casting is LOCKED";
             this.castingLockTimer.Enabled = true;
-            this.actionTimer.Enabled = false;
         }
         #endregion
 
@@ -1333,7 +1332,6 @@
             this.castingLock = true;
             this.castingLockLabel.Text = "Casting is LOCKED";
             this.actionUnlockTimer.Enabled = true;
-            this.actionTimer.Enabled = false;
         }
         #endregion
 
@@ -1370,6 +1368,7 @@
                 _ELITEAPIPL.ThirdParty.SendString("/ma \"Cure\" " + this._ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name);
                 this.CastLockMethod();
             }
+
         }
         #endregion
 
@@ -1591,6 +1590,10 @@
         #region "== actionTimer (LoginStatus)"
         private void actionTimer_Tick(object sender, EventArgs e)
         {
+
+
+
+
 
 
             if (_ELITEAPIPL == null || this._ELITEAPIMonitored == null)
@@ -1902,7 +1905,6 @@
             }
             #endregion
 
-
             #region "== Begin Healing if MP is too low and enabled"
 
             if (!this.castingLock && Settings.Default.healLowMP == true && _ELITEAPIPL.Player.MP <= Settings.Default.healWhenMPBelow && _ELITEAPIPL.Player.Status == 0)
@@ -2019,7 +2021,7 @@
                 #region "== PL Debuff Removal with Spells or Items"
                 // PL and Monitored Player Debuff Removal
                 // Starting with PL
-                if (_ELITEAPIPL.Player.Status != 33)
+                if (_ELITEAPIPL.Player.Status != 33 && !castingLock)
                 {
                     foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
                     {
@@ -2065,11 +2067,11 @@
                         {
                             this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
                         }
-                        else if ((plEffect == StatusEffect.Weight) && (Settings.Default.plWeight) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        else if ((plEffect == StatusEffect.Weight) && (Settings.Default.plWeight) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                         {
                             this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
                         }
-                        else if ((plEffect == StatusEffect.Slow) && (Settings.Default.plSlow) && (Settings.Default.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
+                        else if ((plEffect == StatusEffect.Slow) && (Settings.Default.plSlow) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")))
                         {
                             this.castSpell(_ELITEAPIPL.Player.Name, "Erase");
                         }
@@ -2215,7 +2217,7 @@
 
                 #region "== Monitored Player Debuff Removal"
                 // Next, we check monitored player
-                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0) && _ELITEAPIPL.Player.Status != 33)
+                if ((_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)this._ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (this._ELITEAPIMonitored.Player.HP > 0) && _ELITEAPIPL.Player.Status != 33 && !castingLock)
                 {
                     foreach (StatusEffect monitoredEffect in this._ELITEAPIMonitored.Player.Buffs)
                     {
@@ -2412,7 +2414,7 @@
                 #region "== Party Member Debuff Removal" 
                 // DEBUFF ORDER: DOOM, Sleep, Petrification, Silence, Paralysis, Disease, Curse, Blindness, Poison 
 
-                if ((Settings.Default.naSpellsenable) && (!this.castingLock))
+                if ((Settings.Default.naSpellsenable) && !castingLock)
                 {
                     int BreakOut = 0;
                     var partyMembers = _ELITEAPIPL.Party.GetPartyMembers();
@@ -2545,7 +2547,7 @@
                                     BreakOut = 1;
                                 }
                                 // IF SLOW IS NOT ACTIVE, YET NEITHER IS HASTE DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("33"))
+                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("33") && !named_Debuffs.Contains("265"))
                                 {
                                     // CHECK IF AUTO HASTE IS ENABLED FOR THIS CHARACTER
                                     if (this.autoHasteEnabled[ptMember.MemberNumber])
@@ -2555,7 +2557,7 @@
                                     }
                                 }
                                 // IF SLOW IS NOT ACTIVE, YET NEITHER IS FLURRY DESPITE BEING ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("265"))
+                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("265") && !named_Debuffs.Contains("33"))
                                 {
                                     // CHECK IF AUTO FLURRY IS ENABLED FOR THIS CHARACTER
                                     if (this.autoFlurryEnabled[ptMember.MemberNumber])
@@ -2637,6 +2639,10 @@
 
                 if ((!this.castingLock) && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
                 {
+
+                    int abilityID = _ELITEAPIPL.Resources.GetAbility("Saboteur", 0).TimerID;
+                    MessageBox.Show("Ability ID is: " + _ELITEAPIPL.Recast.GetAbilityRecast(abilityID));
+
 
                     #region == Job Abilities that improve buffs ==
 
@@ -3083,57 +3089,6 @@
                 uint targetIdx = target.TargetIndex;
                 var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
 
-                int foundID_hateEstablisher = 0;
-
-                if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
-                {
-                    for (var x = 0; x < 2048; x++)
-                        {
-                            var entityH = _ELITEAPIPL.Entity.GetEntity(x);
-
-                            if (entityH.Name != null && entity.Name.ToLower().Equals(Settings.Default.GeoSpell_Target.ToLower()))
-                            {
-                                foundID_hateEstablisher = Convert.ToInt32(entityH.TargetID);
-                            }
-                        }
-
-                    if (foundID_hateEstablisher != 0)
-                    {
-                        var targetEntityH = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher);
-
-                        if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && targetEntityH.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
-                        {
-                            if (Settings.Default.Hate_SpellType == 0)
-                            {
-                                allowAutoMovement = 1;
-                                _ELITEAPIPL.ThirdParty.SendString("/assist " + targetEntityH.Name);
-                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                this.castSpell("<t>", Settings.Default.autoTargetSpell);
-                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                                allowAutoMovement = 0;
-                            }
-                            else
-                            {
-                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                                if (Settings.Default.autoTarget_target != "")
-                                {
-                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                    this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
-                                }
-                                else
-                                {
-                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                    this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
-                                }
-                            }
-                            lastTargetID = entity.TargetID;
-
-                        }
-
-
-                    }
-                } else
-                {
                     if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
                     {
                         if (Settings.Default.Hate_SpellType == 0)
@@ -3162,7 +3117,7 @@
                         lastTargetID = entity.TargetID;
 
                     }
-                }
+                
 
 
                 #endregion
@@ -3498,18 +3453,17 @@
 
                             #region "==Geomancer Spells"
 
+                            // FIGURE OUT WHO'S ENGAGED STATUS WE'RE CHECKING
+                            int foundID_hateEstablisher2 = 0;
+
                             // ENTRUSTED INDI SPELL CASTING
                             if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
                             {
                                 string SpellCheckedResult = ReturnGeoSpell(Settings.Default.EntrustedIndiSpell, 1);
-                                if (SpellCheckedResult == "SpellError_Cancel")
+                                if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
                                 {
                                     Settings.Default.EnableGeoSpells = false;
                                     MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
-                                }
-                                else if (SpellCheckedResult == "SpellNA")
-                                {
-
                                 }
                                 else
                                 {
@@ -3524,30 +3478,71 @@
                                 }
                             }
 
-                            if (!Settings.Default.GEO_engaged || _ELITEAPIMonitored.Player.Status == 1)
-                            {
-                                // INDI SPELL CASTING
-                                if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
-                                    {
-                                        string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
-                                        if (SpellCheckedResult == "SpellError_Cancel")
-                                        {
-                                            Settings.Default.EnableGeoSpells = false;
-                                            MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
-                                        }
-                                        else if (SpellCheckedResult == "SpellNA")
-                                        {
 
-                                        }
-                                        else
+                            // INDI SPELL CASTING
+                            if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
+                            {
+                                for (var x = 0; x < 2048; x++)
+                                {
+                                    var entityH2 = _ELITEAPIPL.Entity.GetEntity(x);
+
+                                    if (entityH2.Name != null && entityH2.Name.ToLower() == Settings.Default.GeoSpell_Target.ToLower())
+                                    {
+                                        foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
+                                    } else { foundID_hateEstablisher2 = 0; }
+                                }
+                            }
+
+                            if (foundID_hateEstablisher2 != 0) {
+
+                                var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher2);
+
+                                if (!Settings.Default.GEO_engaged || targetEntityH2.Status == 1)
+                                {
+
+                                    if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                    {
+                                        if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
                                         {
-                                            this.castSpell("<me>", SpellCheckedResult);
-                                            this.playerIndi[0] = DateTime.Now;
+                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
+                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
+                                            {
+                                                Settings.Default.EnableGeoSpells = false;
+                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
+                                            }
+                                            else
+                                            {
+                                                this.castSpell("<me>", SpellCheckedResult);
+                                                this.playerIndi[0] = DateTime.Now;
+                                            }
                                         }
                                     }
                                 }
+                            }
+                            else
+                            {
+                                if (!Settings.Default.GEO_engaged || _ELITEAPIMonitored.Player.Status == 1)
+                                {
+
+                                    if ((Settings.Default.EnableGeoSpells) && (this._ELITEAPIMonitored.Player.HP > 0) && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                    {
+                                        if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
+                                        {
+                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
+                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
+                                            {
+                                                Settings.Default.EnableGeoSpells = false;
+                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
+                                            }
+                                            else
+                                            {
+                                                this.castSpell("<me>", SpellCheckedResult);
+                                                this.playerIndi[0] = DateTime.Now;
+                                            }
+                                        }
+                                    }
+                                }
+
                             }
 
                                 // GEO SPELL CASTING  && (_ELITEAPIMonitored.Player.Status == 1)
@@ -3564,44 +3559,95 @@
                                 else
                                 {
 
-                                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
-                                    if (SpellCheckedResult == "SpellError_Cancel")
+                                    if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
                                     {
-                                        Settings.Default.EnableGeoSpells = false;
-                                        MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
-                                    }
-                                    else if (SpellCheckedResult == "SpellNA")
-                                    {
-
-                                    }
-                                    else
-                                    {
-                                        if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                        for (var x = 0; x < 2048; x++)
                                         {
-                                            if ((_ELITEAPIMonitored.Player.Status == 1) || !Settings.Default.GeoAOE_Engaged)
+                                            var entityH2 = _ELITEAPIPL.Entity.GetEntity(x);
+
+                                            if (entityH2.Name != null && entityH2.Name.ToLower() == Settings.Default.GeoSpell_Target.ToLower())
                                             {
-                                                if (Settings.Default.GeoSpell_Target == "")
+                                                foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
+                                            } else { foundID_hateEstablisher2 = 0; }
+                                        }
+                                    }
+                                        if (foundID_hateEstablisher2 != 0)
+                                        {
+                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
+                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
+                                            {
+                                                Settings.Default.EnableGeoSpells = false;
+                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
+                                            }
+                                            else
+                                            {
+                                                var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher2);
+
+                                                if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
                                                 {
-                                                    this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                    if ((targetEntityH2.Status == 1) || !Settings.Default.GeoAOE_Engaged)
+                                                    {
+                                                        if (Settings.Default.GeoSpell_Target == "")
+                                                        {
+                                                            this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                        }
+                                                        else
+                                                        {
+                                                            this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
+                                                        }
+                                                    }
                                                 }
-                                                else
+                                                else if (targetEntityH2.Status == 1)
                                                 {
-                                                    this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
+                                                    // Pause AutoMovement
+                                                    allowAutoMovement = 0;
+
+                                                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                                    this.castSpell("<t>", SpellCheckedResult);
+                                                    Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                                }
+
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
+                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
+                                            {
+                                                Settings.Default.EnableGeoSpells = false;
+                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
+                                            }
+                                            else
+                                            {
+                                                if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                                {
+                                                    if ((_ELITEAPIMonitored.Player.Status == 1) || !Settings.Default.GeoAOE_Engaged)
+                                                    {
+                                                        if (Settings.Default.GeoSpell_Target == "")
+                                                        {
+                                                            this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                        }
+                                                        else
+                                                        {
+                                                            this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
+                                                        }
+                                                    }
+                                                }
+                                                else if (_ELITEAPIMonitored.Player.Status == 1)
+                                                {
+                                                    // Pause AutoMovement
+                                                    allowAutoMovement = 0;
+
+                                                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                                    this.castSpell("<t>", SpellCheckedResult);
+                                                    Thread.Sleep(TimeSpan.FromSeconds(2.0));
                                                 }
                                             }
                                         }
-                                        else if (_ELITEAPIMonitored.Player.Status == 1)
-                                        {
-                                            // Pause AutoMovement
-                                            allowAutoMovement = 0;
-
-                                            _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                                            Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                            this.castSpell("<t>", SpellCheckedResult);
-                                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
-
-                                        }
-                                    }
+                                    
                                 }
 
                                 // Restart AutoMovement
@@ -4579,7 +4625,7 @@
                 return;
             }
 
-            this.actionTimer.Enabled = false;
+            // this.actionTimer.Enabled = false;
 
             var count = 0;
             float lastPercent = 0;
@@ -4609,7 +4655,7 @@
                     this.castingLockLabel.Text = "Casting was INTERRUPTED!";
                     this.castingStatusCheck.Enabled = false;
                     this.castingUnlockTimer.Enabled = true;
-                    this.actionTimer.Enabled = true;
+                   // this.actionTimer.Enabled = true;
                     break;
                 }
                 else
@@ -4623,7 +4669,7 @@
             Thread.Sleep(500);
             this.castingStatusCheck.Enabled = false;
             this.castingUnlockTimer.Enabled = true;
-            this.actionTimer.Enabled = true;
+           // this.actionTimer.Enabled = true;
 
         }
 
@@ -4643,7 +4689,7 @@
             {
                 this.castingLockLabel.Text = "Casting is UNLOCKED!";
                 this.castingLock = false;
-                this.actionTimer.Enabled = true;
+             //   this.actionTimer.Enabled = true;
                 this.castingUnlockTimer.Enabled = false;
             }
         }
@@ -4665,7 +4711,7 @@
                 this.castingLockLabel.Text = "Casting is UNLOCKED! ";
                 this.castingLock = false;
                 this.actionUnlockTimer.Enabled = false;
-                this.actionTimer.Enabled = true;
+            //    this.actionTimer.Enabled = true;
             }
         }
         #endregion
@@ -4731,6 +4777,10 @@
         {
             Settings.Default.autoFollowName = this._ELITEAPIMonitored.Party.GetPartyMembers()[this.playerOptionsSelected].Name;
             this.CastLockMethod();
+        }
+        private void stopfollowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings.Default.autoFollowName = "";
         }
         private void EntrustTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -5126,7 +5176,7 @@
                 bool done = false;
 
                 UdpClient listener = new UdpClient(listenPort);
-                IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), listenPort);
+                IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse(Settings.Default.IpAddress), listenPort);
 
                 string received_data;
 
@@ -5208,41 +5258,45 @@
                 {
                     var followTarget = _ELITEAPIPL.Entity.GetEntity(followersTargetID);
 
-                    if ((int)_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).TargetID != followersTargetID)
+                    // ONLY TARGET AND BEGIN FOLLOW IF TARGET IS AT THE DEFINED DISTANCE
+                    if (Math.Truncate(followTarget.Distance) >= (int)Settings.Default.autoFollowDistance)
                     {
-                        _ELITEAPIPL.Target.SetTarget(0);
-                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
-                        _ELITEAPIPL.Target.SetTarget(Convert.ToInt32(followersTargetID));
-                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
+
+                        if ((int)_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).TargetID != followersTargetID)
+                        {
+                            _ELITEAPIPL.Target.SetTarget(0);
+                            Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                            _ELITEAPIPL.Target.SetTarget(Convert.ToInt32(followersTargetID));
+                            Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                        }
+
+                        if (!_ELITEAPIPL.Target.GetTargetInfo().LockedOn)
+                        {
+                            Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                            _ELITEAPIPL.ThirdParty.SendString("/lockon <t>");
+                        }
+
+                        while (Math.Truncate(followTarget.Distance) >= (int)Settings.Default.autoFollowDistance)
+                        {
+                            float Target_X = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).X;
+                            float Target_Y = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).Y;
+                            float Target_Z = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).Z;
+
+                            float Player_X = _ELITEAPIPL.Entity.GetLocalPlayer().X;
+                            float Player_Y = _ELITEAPIPL.Entity.GetLocalPlayer().Y;
+                            float Player_Z = _ELITEAPIPL.Entity.GetLocalPlayer().Z;
+
+                            _ELITEAPIPL.AutoFollow.SetAutoFollowCoords(Target_X - Player_X, Target_Y - Player_Y, Target_Z - Player_Z);
+
+                            _ELITEAPIPL.AutoFollow.IsAutoFollowing = true;
+
+                            Thread.Sleep(TimeSpan.FromSeconds(0.1));
+                        }
+
+                        _ELITEAPIPL.AutoFollow.IsAutoFollowing = false;
+
+
                     }
-
-                    if (!_ELITEAPIPL.Target.GetTargetInfo().LockedOn)
-                    {
-                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
-                        _ELITEAPIPL.ThirdParty.SendString("/lockon <t>");
-                    }
-
-                    while (Math.Truncate(followTarget.Distance) >= (int)Settings.Default.autoFollowDistance)
-                    {
-                        float Target_X = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).X;
-                        float Target_Y = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).Y;
-                        float Target_Z = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).Z;
-
-                        float Player_X = _ELITEAPIPL.Entity.GetLocalPlayer().X;
-                        float Player_Y = _ELITEAPIPL.Entity.GetLocalPlayer().Y;
-                        float Player_Z = _ELITEAPIPL.Entity.GetLocalPlayer().Z;
-
-                        _ELITEAPIPL.AutoFollow.SetAutoFollowCoords(Target_X - Player_X, Target_Y - Player_Y, Target_Z - Player_Z);
-
-                        _ELITEAPIPL.AutoFollow.IsAutoFollowing = true;
-
-                        Thread.Sleep(TimeSpan.FromSeconds(0.1));
-                    }
-
-                    _ELITEAPIPL.AutoFollow.IsAutoFollowing = false;
-
-
-
 
                 }
             }

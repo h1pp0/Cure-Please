@@ -236,6 +236,7 @@ namespace CurePlease
             this.monitoredDebuffEnabled = new System.Windows.Forms.CheckBox();
             this.plDebuffEnabled = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.RadialArcanaBox = new System.Windows.Forms.CheckBox();
             this.BlazeOfGloryBox = new System.Windows.Forms.CheckBox();
@@ -340,7 +341,35 @@ namespace CurePlease
             this.cure2enabled = new System.Windows.Forms.CheckBox();
             this.cure1enabled = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.groupBox20 = new System.Windows.Forms.GroupBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label39 = new System.Windows.Forms.Label();
+            this.groupBox23 = new System.Windows.Forms.GroupBox();
+            this.comboBox7 = new System.Windows.Forms.ComboBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.groupBox22 = new System.Windows.Forms.GroupBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.groupBox19 = new System.Windows.Forms.GroupBox();
+            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.label45 = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.groupBox18 = new System.Windows.Forms.GroupBox();
+            this.ipAddress = new System.Windows.Forms.TextBox();
+            this.label38 = new System.Windows.Forms.Label();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.label24 = new System.Windows.Forms.Label();
             this.enableFastCast_Mode = new System.Windows.Forms.CheckBox();
@@ -416,7 +445,16 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.requiredCuragaNumbers)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.groupBox20.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox23.SuspendLayout();
+            this.panel7.SuspendLayout();
+            this.groupBox22.SuspendLayout();
+            this.groupBox21.SuspendLayout();
+            this.groupBox19.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.groupBox18.SuspendLayout();
             this.groupBox17.SuspendLayout();
             this.groupBox14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).BeginInit();
@@ -425,7 +463,7 @@ namespace CurePlease
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(636, 426);
+            this.button4.Location = new System.Drawing.Point(632, 581);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 23);
             this.button4.TabIndex = 2;
@@ -650,7 +688,7 @@ namespace CurePlease
             // GEOSpell_target
             // 
             this.GEOSpell_target.Enabled = false;
-            this.GEOSpell_target.Location = new System.Drawing.Point(79, 290);
+            this.GEOSpell_target.Location = new System.Drawing.Point(79, 450);
             this.GEOSpell_target.Name = "GEOSpell_target";
             this.GEOSpell_target.Size = new System.Drawing.Size(167, 20);
             this.GEOSpell_target.TabIndex = 3;
@@ -659,7 +697,7 @@ namespace CurePlease
             // entrustSpell_target
             // 
             this.entrustSpell_target.Enabled = false;
-            this.entrustSpell_target.Location = new System.Drawing.Point(100, 290);
+            this.entrustSpell_target.Location = new System.Drawing.Point(97, 449);
             this.entrustSpell_target.Name = "entrustSpell_target";
             this.entrustSpell_target.Size = new System.Drawing.Size(126, 20);
             this.entrustSpell_target.TabIndex = 3;
@@ -907,6 +945,7 @@ namespace CurePlease
             this.toolTip1.SetToolTip(this.priorityCurePercentageLabel, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
         "s lower than 60% it will then perform a check to see what tier is needed and cas" +
         "t that tier if available.\r\n\r\n\r\n");
+            this.priorityCurePercentageLabel.Click += new System.EventHandler(this.priorityCurePercentageLabel_Click);
             // 
             // priorityCurePercentage
             // 
@@ -1069,6 +1108,7 @@ namespace CurePlease
             // 
             // DevotionTargetType
             // 
+            this.DevotionTargetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DevotionTargetType.FormattingEnabled = true;
             this.DevotionTargetType.Items.AddRange(new object[] {
             "Specific Member",
@@ -1125,6 +1165,7 @@ namespace CurePlease
             // 
             // Hate_SpellType
             // 
+            this.Hate_SpellType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Hate_SpellType.FormattingEnabled = true;
             this.Hate_SpellType.Items.AddRange(new object[] {
             "Enemy Based",
@@ -1247,7 +1288,7 @@ namespace CurePlease
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(737, 382);
+            this.tabPage5.Size = new System.Drawing.Size(737, 541);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Other Options";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1424,6 +1465,7 @@ namespace CurePlease
             // 
             // RadialArcanaSpell
             // 
+            this.RadialArcanaSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.RadialArcanaSpell.FormattingEnabled = true;
             this.RadialArcanaSpell.Items.AddRange(new object[] {
             "Geo-Voidance",
@@ -1545,7 +1587,7 @@ namespace CurePlease
             this.tabPage4.Controls.Add(this.plDebuffEnabled);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(737, 382);
+            this.tabPage4.Size = new System.Drawing.Size(737, 541);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Debuff Removal";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1565,9 +1607,9 @@ namespace CurePlease
             this.panel6.Controls.Add(this.naSilence);
             this.panel6.Controls.Add(this.naCurse);
             this.panel6.Controls.Add(this.naPlague);
-            this.panel6.Location = new System.Drawing.Point(273, 38);
+            this.panel6.Location = new System.Drawing.Point(273, 37);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(141, 324);
+            this.panel6.Size = new System.Drawing.Size(141, 500);
             this.panel6.TabIndex = 11;
             // 
             // naBlindness
@@ -1669,7 +1711,7 @@ namespace CurePlease
             // plDoomEnabled
             // 
             this.plDoomEnabled.AutoSize = true;
-            this.plDoomEnabled.Location = new System.Drawing.Point(23, 262);
+            this.plDoomEnabled.Location = new System.Drawing.Point(23, 433);
             this.plDoomEnabled.Name = "plDoomEnabled";
             this.plDoomEnabled.Size = new System.Drawing.Size(173, 17);
             this.plDoomEnabled.TabIndex = 6;
@@ -1683,7 +1725,7 @@ namespace CurePlease
             this.plDoomitem.Items.AddRange(new object[] {
             "Holy Water",
             "Hallowed Water"});
-            this.plDoomitem.Location = new System.Drawing.Point(23, 282);
+            this.plDoomitem.Location = new System.Drawing.Point(23, 453);
             this.plDoomitem.Name = "plDoomitem";
             this.plDoomitem.Size = new System.Drawing.Size(183, 21);
             this.plDoomitem.TabIndex = 5;
@@ -1696,7 +1738,7 @@ namespace CurePlease
             "Cure",
             "Cura",
             "Curaga"});
-            this.wakeSleepSpell.Location = new System.Drawing.Point(23, 341);
+            this.wakeSleepSpell.Location = new System.Drawing.Point(23, 512);
             this.wakeSleepSpell.Name = "wakeSleepSpell";
             this.wakeSleepSpell.Size = new System.Drawing.Size(183, 21);
             this.wakeSleepSpell.TabIndex = 4;
@@ -1711,7 +1753,7 @@ namespace CurePlease
             "Remedy",
             "Remedy Ointment",
             "Vicar\'s Drink"});
-            this.plSilenceItem.Location = new System.Drawing.Point(23, 221);
+            this.plSilenceItem.Location = new System.Drawing.Point(23, 392);
             this.plSilenceItem.Name = "plSilenceItem";
             this.plSilenceItem.Size = new System.Drawing.Size(183, 21);
             this.plSilenceItem.TabIndex = 4;
@@ -1742,7 +1784,7 @@ namespace CurePlease
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(574, 37);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(148, 325);
+            this.panel1.Size = new System.Drawing.Size(148, 498);
             this.panel1.TabIndex = 2;
             // 
             // panel2
@@ -2353,7 +2395,7 @@ namespace CurePlease
             // wakeSleepEnabled
             // 
             this.wakeSleepEnabled.AutoSize = true;
-            this.wakeSleepEnabled.Location = new System.Drawing.Point(23, 321);
+            this.wakeSleepEnabled.Location = new System.Drawing.Point(23, 492);
             this.wakeSleepEnabled.Name = "wakeSleepEnabled";
             this.wakeSleepEnabled.Size = new System.Drawing.Size(116, 17);
             this.wakeSleepEnabled.TabIndex = 1;
@@ -2368,7 +2410,7 @@ namespace CurePlease
             this.plDebuffWrapperPanel.Controls.Add(this.plDebuffPanel);
             this.plDebuffWrapperPanel.Location = new System.Drawing.Point(420, 37);
             this.plDebuffWrapperPanel.Name = "plDebuffWrapperPanel";
-            this.plDebuffWrapperPanel.Size = new System.Drawing.Size(148, 325);
+            this.plDebuffWrapperPanel.Size = new System.Drawing.Size(148, 499);
             this.plDebuffWrapperPanel.TabIndex = 2;
             // 
             // plDebuffPanel
@@ -2940,7 +2982,7 @@ namespace CurePlease
             // plSilenceItemEnabled
             // 
             this.plSilenceItemEnabled.AutoSize = true;
-            this.plSilenceItemEnabled.Location = new System.Drawing.Point(23, 201);
+            this.plSilenceItemEnabled.Location = new System.Drawing.Point(23, 372);
             this.plSilenceItemEnabled.Name = "plSilenceItemEnabled";
             this.plSilenceItemEnabled.Size = new System.Drawing.Size(183, 17);
             this.plSilenceItemEnabled.TabIndex = 1;
@@ -2971,16 +3013,26 @@ namespace CurePlease
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox24);
             this.tabPage3.Controls.Add(this.groupBox8);
             this.tabPage3.Controls.Add(this.rdmJAgroup);
             this.tabPage3.Controls.Add(this.schJAgroup);
             this.tabPage3.Controls.Add(this.whmJAgroup);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(737, 382);
+            this.tabPage3.Size = new System.Drawing.Size(737, 541);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Job Abilities";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox24
+            // 
+            this.groupBox24.Location = new System.Drawing.Point(486, 4);
+            this.groupBox24.Name = "groupBox24";
+            this.groupBox24.Size = new System.Drawing.Size(248, 375);
+            this.groupBox24.TabIndex = 3;
+            this.groupBox24.TabStop = false;
+            this.groupBox24.Text = "Bard";
             // 
             // groupBox8
             // 
@@ -2991,7 +3043,7 @@ namespace CurePlease
             this.groupBox8.Controls.Add(this.EntrustBox);
             this.groupBox8.Location = new System.Drawing.Point(177, 206);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(302, 169);
+            this.groupBox8.Size = new System.Drawing.Size(302, 173);
             this.groupBox8.TabIndex = 2;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Geomancer";
@@ -3141,7 +3193,7 @@ namespace CurePlease
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(737, 382);
+            this.tabPage6.Size = new System.Drawing.Size(737, 541);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Geomancy";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -3185,7 +3237,7 @@ namespace CurePlease
             this.groupBox7.Controls.Add(this.entrustINDISpell);
             this.groupBox7.Location = new System.Drawing.Point(502, 59);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(229, 317);
+            this.groupBox7.Size = new System.Drawing.Size(229, 476);
             this.groupBox7.TabIndex = 1;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Entrust";
@@ -3193,7 +3245,7 @@ namespace CurePlease
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(9, 294);
+            this.label7.Location = new System.Drawing.Point(21, 453);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 13);
             this.label7.TabIndex = 4;
@@ -3236,7 +3288,7 @@ namespace CurePlease
             " Indi-Fade"});
             this.entrustINDISpell.Location = new System.Drawing.Point(6, 19);
             this.entrustINDISpell.Name = "entrustINDISpell";
-            this.entrustINDISpell.Size = new System.Drawing.Size(217, 264);
+            this.entrustINDISpell.Size = new System.Drawing.Size(217, 420);
             this.entrustINDISpell.TabIndex = 2;
             // 
             // groupBox6
@@ -3246,7 +3298,7 @@ namespace CurePlease
             this.groupBox6.Controls.Add(this.GEOSpell);
             this.groupBox6.Location = new System.Drawing.Point(244, 59);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(252, 317);
+            this.groupBox6.Size = new System.Drawing.Size(252, 476);
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "GEO Spells";
@@ -3254,7 +3306,7 @@ namespace CurePlease
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 296);
+            this.label6.Location = new System.Drawing.Point(6, 452);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 13);
             this.label6.TabIndex = 4;
@@ -3297,7 +3349,7 @@ namespace CurePlease
             "Geo-Fade"});
             this.GEOSpell.Location = new System.Drawing.Point(9, 19);
             this.GEOSpell.Name = "GEOSpell";
-            this.GEOSpell.Size = new System.Drawing.Size(240, 264);
+            this.GEOSpell.Size = new System.Drawing.Size(240, 420);
             this.GEOSpell.TabIndex = 2;
             // 
             // groupBox5
@@ -3305,7 +3357,7 @@ namespace CurePlease
             this.groupBox5.Controls.Add(this.INDISpell);
             this.groupBox5.Location = new System.Drawing.Point(6, 59);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(232, 317);
+            this.groupBox5.Size = new System.Drawing.Size(232, 476);
             this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "INDI Spells";
@@ -3347,7 +3399,7 @@ namespace CurePlease
             " Indi-Fade"});
             this.INDISpell.Location = new System.Drawing.Point(6, 19);
             this.INDISpell.Name = "INDISpell";
-            this.INDISpell.Size = new System.Drawing.Size(220, 290);
+            this.INDISpell.Size = new System.Drawing.Size(220, 446);
             this.INDISpell.TabIndex = 1;
             // 
             // tabPage2
@@ -3359,7 +3411,7 @@ namespace CurePlease
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(737, 382);
+            this.tabPage2.Size = new System.Drawing.Size(737, 541);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Enhancing Magic";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -3396,6 +3448,7 @@ namespace CurePlease
             // 
             // plBarStatus_Spell
             // 
+            this.plBarStatus_Spell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.plBarStatus_Spell.FormattingEnabled = true;
             this.plBarStatus_Spell.Items.AddRange(new object[] {
             "Baramnesia ",
@@ -3441,6 +3494,7 @@ namespace CurePlease
             // 
             // plGainBoost_spell
             // 
+            this.plGainBoost_spell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.plGainBoost_spell.FormattingEnabled = true;
             this.plGainBoost_spell.Items.AddRange(new object[] {
             "Gain-STR",
@@ -3464,6 +3518,7 @@ namespace CurePlease
             // 
             // plBarElement_Spell
             // 
+            this.plBarElement_Spell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.plBarElement_Spell.FormattingEnabled = true;
             this.plBarElement_Spell.Items.AddRange(new object[] {
             "Barfire",
@@ -3594,6 +3649,7 @@ namespace CurePlease
             // 
             // autoRegen
             // 
+            this.autoRegen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoRegen.FormattingEnabled = true;
             this.autoRegen.Items.AddRange(new object[] {
             "Regen",
@@ -3640,6 +3696,7 @@ namespace CurePlease
             // 
             // autoProtect
             // 
+            this.autoProtect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoProtect.FormattingEnabled = true;
             this.autoProtect.Items.AddRange(new object[] {
             "Protect",
@@ -3686,6 +3743,7 @@ namespace CurePlease
             // 
             // autoShell
             // 
+            this.autoShell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoShell.FormattingEnabled = true;
             this.autoShell.Items.AddRange(new object[] {
             "Shell",
@@ -3750,6 +3808,7 @@ namespace CurePlease
             // 
             // autoRefresh
             // 
+            this.autoRefresh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoRefresh.FormattingEnabled = true;
             this.autoRefresh.Items.AddRange(new object[] {
             "Refresh",
@@ -3878,6 +3937,7 @@ namespace CurePlease
             // 
             // plStormSpell_Spell
             // 
+            this.plStormSpell_Spell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.plStormSpell_Spell.FormattingEnabled = true;
             this.plStormSpell_Spell.Items.AddRange(new object[] {
             "Firestorm",
@@ -3923,6 +3983,7 @@ namespace CurePlease
             // 
             // plEnspell_spell
             // 
+            this.plEnspell_spell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.plEnspell_spell.FormattingEnabled = true;
             this.plEnspell_spell.Items.AddRange(new object[] {
             "Enfire",
@@ -4151,7 +4212,7 @@ namespace CurePlease
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(737, 382);
+            this.tabPage1.Size = new System.Drawing.Size(737, 541);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = " Healing Magic ";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -4177,11 +4238,11 @@ namespace CurePlease
             this.groupBox12.Controls.Add(this.curagaEnabled);
             this.groupBox12.Controls.Add(this.curaga2Enabled);
             this.groupBox12.Controls.Add(this.curaga3Enabled);
-            this.groupBox12.Location = new System.Drawing.Point(5, 196);
+            this.groupBox12.Location = new System.Drawing.Point(5, 197);
             this.groupBox12.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox12.Name = "groupBox12";
             this.groupBox12.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox12.Size = new System.Drawing.Size(727, 186);
+            this.groupBox12.Size = new System.Drawing.Size(725, 186);
             this.groupBox12.TabIndex = 8;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = " AoE Healing (beta) ";
@@ -4332,7 +4393,7 @@ namespace CurePlease
             this.groupBox2.Controls.Add(this.cure1amount);
             this.groupBox2.Location = new System.Drawing.Point(6, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(725, 187);
+            this.groupBox2.Size = new System.Drawing.Size(725, 189);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Healing Options";
@@ -4402,6 +4463,7 @@ namespace CurePlease
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
@@ -4410,21 +4472,886 @@ namespace CurePlease
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(745, 408);
+            this.tabControl1.Size = new System.Drawing.Size(745, 567);
             this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.groupBox20);
+            this.tabPage8.Controls.Add(this.label40);
+            this.tabPage8.Controls.Add(this.numericUpDown1);
+            this.tabPage8.Controls.Add(this.label39);
+            this.tabPage8.Controls.Add(this.groupBox23);
+            this.tabPage8.Controls.Add(this.panel7);
+            this.tabPage8.Controls.Add(this.groupBox22);
+            this.tabPage8.Controls.Add(this.groupBox21);
+            this.tabPage8.Controls.Add(this.groupBox19);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(737, 541);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Singing";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // groupBox20
+            // 
+            this.groupBox20.Controls.Add(this.comboBox3);
+            this.groupBox20.Controls.Add(this.comboBox4);
+            this.groupBox20.Controls.Add(this.label43);
+            this.groupBox20.Controls.Add(this.label44);
+            this.groupBox20.Location = new System.Drawing.Point(6, 130);
+            this.groupBox20.Name = "groupBox20";
+            this.groupBox20.Size = new System.Drawing.Size(340, 100);
+            this.groupBox20.TabIndex = 7;
+            this.groupBox20.TabStop = false;
+            this.groupBox20.Text = "Song Three";
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox3.Location = new System.Drawing.Point(115, 59);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(193, 21);
+            this.comboBox3.TabIndex = 3;
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox4.Location = new System.Drawing.Point(115, 26);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(193, 21);
+            this.comboBox4.TabIndex = 2;
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(6, 65);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(38, 13);
+            this.label43.TabIndex = 1;
+            this.label43.Text = "Song: ";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(6, 30);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(76, 13);
+            this.label44.TabIndex = 0;
+            this.label44.Text = "Dummy Song: ";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(193, 360);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(48, 13);
+            this.label40.TabIndex = 6;
+            this.label40.Text = "minute/s";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(126, 358);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(61, 20);
+            this.numericUpDown1.TabIndex = 5;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(12, 360);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(107, 13);
+            this.label39.TabIndex = 4;
+            this.label39.Text = "Recast songs every: ";
+            // 
+            // groupBox23
+            // 
+            this.groupBox23.Controls.Add(this.comboBox7);
+            this.groupBox23.Controls.Add(this.label47);
+            this.groupBox23.Location = new System.Drawing.Point(6, 479);
+            this.groupBox23.Name = "groupBox23";
+            this.groupBox23.Size = new System.Drawing.Size(340, 56);
+            this.groupBox23.TabIndex = 2;
+            this.groupBox23.TabStop = false;
+            this.groupBox23.Text = "Clarion Song";
+            // 
+            // comboBox7
+            // 
+            this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox7.FormattingEnabled = true;
+            this.comboBox7.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox7.Location = new System.Drawing.Point(120, 19);
+            this.comboBox7.Name = "comboBox7";
+            this.comboBox7.Size = new System.Drawing.Size(193, 21);
+            this.comboBox7.TabIndex = 7;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(11, 24);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(38, 13);
+            this.label47.TabIndex = 6;
+            this.label47.Text = "Song: ";
+            // 
+            // panel7
+            // 
+            this.panel7.AutoScroll = true;
+            this.panel7.BackColor = System.Drawing.Color.White;
+            this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel7.Controls.Add(this.panel8);
+            this.panel7.Location = new System.Drawing.Point(353, 6);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(378, 529);
+            this.panel7.TabIndex = 3;
+            // 
+            // panel8
+            // 
+            this.panel8.Location = new System.Drawing.Point(-1, -1);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(357, 529);
+            this.panel8.TabIndex = 0;
+            // 
+            // groupBox22
+            // 
+            this.groupBox22.Controls.Add(this.comboBox2);
+            this.groupBox22.Controls.Add(this.comboBox1);
+            this.groupBox22.Controls.Add(this.label42);
+            this.groupBox22.Controls.Add(this.label41);
+            this.groupBox22.Location = new System.Drawing.Point(6, 241);
+            this.groupBox22.Name = "groupBox22";
+            this.groupBox22.Size = new System.Drawing.Size(340, 100);
+            this.groupBox22.TabIndex = 2;
+            this.groupBox22.TabStop = false;
+            this.groupBox22.Text = "Song Four";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox2.Location = new System.Drawing.Point(115, 59);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(193, 21);
+            this.comboBox2.TabIndex = 3;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox1.Location = new System.Drawing.Point(115, 25);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(193, 21);
+            this.comboBox1.TabIndex = 2;
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(6, 65);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(38, 13);
+            this.label42.TabIndex = 1;
+            this.label42.Text = "Song: ";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(6, 30);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(76, 13);
+            this.label41.TabIndex = 0;
+            this.label41.Text = "Dummy Song: ";
+            // 
+            // groupBox21
+            // 
+            this.groupBox21.Controls.Add(this.comboBox6);
+            this.groupBox21.Controls.Add(this.label46);
+            this.groupBox21.Location = new System.Drawing.Point(6, 68);
+            this.groupBox21.Name = "groupBox21";
+            this.groupBox21.Size = new System.Drawing.Size(340, 56);
+            this.groupBox21.TabIndex = 1;
+            this.groupBox21.TabStop = false;
+            this.groupBox21.Text = "Song Two";
+            // 
+            // comboBox6
+            // 
+            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox6.FormattingEnabled = true;
+            this.comboBox6.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox6.Location = new System.Drawing.Point(115, 19);
+            this.comboBox6.Name = "comboBox6";
+            this.comboBox6.Size = new System.Drawing.Size(193, 21);
+            this.comboBox6.TabIndex = 7;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(6, 24);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(38, 13);
+            this.label46.TabIndex = 6;
+            this.label46.Text = "Song: ";
+            // 
+            // groupBox19
+            // 
+            this.groupBox19.Controls.Add(this.comboBox5);
+            this.groupBox19.Controls.Add(this.label45);
+            this.groupBox19.Location = new System.Drawing.Point(6, 6);
+            this.groupBox19.Name = "groupBox19";
+            this.groupBox19.Size = new System.Drawing.Size(340, 56);
+            this.groupBox19.TabIndex = 0;
+            this.groupBox19.TabStop = false;
+            this.groupBox19.Text = "Song One";
+            // 
+            // comboBox5
+            // 
+            this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox5.FormattingEnabled = true;
+            this.comboBox5.Items.AddRange(new object[] {
+            "Knight\'s Minne",
+            "Knight\'s Minne II",
+            "Knight\'s Minne III",
+            "Knight\'s Minne IV",
+            "Knight\'s Minne V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Valor Minuet ",
+            "Valor Minuet II",
+            "Valor Minuet III",
+            "Valor Minuet IV",
+            "Valor Minuet V",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Army\'s Paeon",
+            "Army\'s Paeon II",
+            "Army\'s Paeon III",
+            "Army\'s Paeon IV",
+            "Army\'s Paeon V",
+            "Army\'s Paeon VI",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sword Madrigal",
+            "Blade Madrigal",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Hunter\'s Prelude",
+            "Archer\'s Prelude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sinewy Etude",
+            "Dextrous Etude",
+            "Vivacious Etude",
+            "Quick Etude",
+            "Learned Etude",
+            "Spirited Etude",
+            "Enchanting Etude",
+            "Herculean Etude",
+            "Uncanny Etude",
+            "Vital Etude",
+            "Swift Etude",
+            "Sage Etude",
+            "Logical Etude",
+            "Bewitching Etude",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sheepfoe Mambo",
+            "Dragonfoe Mambo",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Mage\'s Ballad ",
+            "Mage\'s Ballad II",
+            "Mage\'s Ballad III",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Advancing March ",
+            "Victory March ",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Fire Carol",
+            "Fire Carol II",
+            "Ice Carol",
+            "Ice Carol II",
+            "Wind Carol",
+            "Wind Carol II",
+            "Earth Carol",
+            "Earth Carol II",
+            "Lightning Carol",
+            "Lightning Carol II",
+            "Water Carol",
+            "Water Carol II",
+            "Light Carol",
+            "Light Carol II",
+            "Dark Carol",
+            "Dark Carol II",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Godess\'s Hymnus",
+            "---------------------------------------------------------------------------------" +
+                "---------------------------------",
+            "Sentinel\'s Scherzo"});
+            this.comboBox5.Location = new System.Drawing.Point(115, 20);
+            this.comboBox5.Name = "comboBox5";
+            this.comboBox5.Size = new System.Drawing.Size(193, 21);
+            this.comboBox5.TabIndex = 5;
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(6, 25);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(38, 13);
+            this.label45.TabIndex = 4;
+            this.label45.Text = "Song: ";
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.groupBox18);
             this.tabPage7.Controls.Add(this.groupBox17);
             this.tabPage7.Controls.Add(this.groupBox14);
             this.tabPage7.Controls.Add(this.groupBox13);
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(737, 382);
+            this.tabPage7.Size = new System.Drawing.Size(737, 541);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Program Options";
             this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // groupBox18
+            // 
+            this.groupBox18.Controls.Add(this.ipAddress);
+            this.groupBox18.Controls.Add(this.label38);
+            this.groupBox18.Location = new System.Drawing.Point(405, 6);
+            this.groupBox18.Name = "groupBox18";
+            this.groupBox18.Size = new System.Drawing.Size(326, 48);
+            this.groupBox18.TabIndex = 18;
+            this.groupBox18.TabStop = false;
+            this.groupBox18.Text = "CurePlease Addon Data";
+            // 
+            // ipAddress
+            // 
+            this.ipAddress.Enabled = false;
+            this.ipAddress.Location = new System.Drawing.Point(75, 18);
+            this.ipAddress.Name = "ipAddress";
+            this.ipAddress.Size = new System.Drawing.Size(180, 20);
+            this.ipAddress.TabIndex = 1;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(7, 22);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(61, 13);
+            this.label38.TabIndex = 0;
+            this.label38.Text = "IP Address:";
             // 
             // groupBox17
             // 
@@ -4552,14 +5479,14 @@ namespace CurePlease
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(764, 461);
+            this.ClientSize = new System.Drawing.Size(764, 611);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(780, 500);
-            this.MinimumSize = new System.Drawing.Size(750, 500);
+            this.MaximumSize = new System.Drawing.Size(780, 650);
+            this.MinimumSize = new System.Drawing.Size(750, 650);
             this.Name = "Form2";
             this.Text = " ";
             this.TopMost = true;
@@ -4654,7 +5581,23 @@ namespace CurePlease
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage8.PerformLayout();
+            this.groupBox20.ResumeLayout(false);
+            this.groupBox20.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox23.ResumeLayout(false);
+            this.groupBox23.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.groupBox22.ResumeLayout(false);
+            this.groupBox22.PerformLayout();
+            this.groupBox21.ResumeLayout(false);
+            this.groupBox21.PerformLayout();
+            this.groupBox19.ResumeLayout(false);
+            this.groupBox19.PerformLayout();
             this.tabPage7.ResumeLayout(false);
+            this.groupBox18.ResumeLayout(false);
+            this.groupBox18.PerformLayout();
             this.groupBox17.ResumeLayout(false);
             this.groupBox17.PerformLayout();
             this.groupBox14.ResumeLayout(false);
@@ -4944,7 +5887,6 @@ namespace CurePlease
         private System.Windows.Forms.Label curePercentageLabel;
         private System.Windows.Forms.NumericUpDown cure2amount;
         private System.Windows.Forms.NumericUpDown cure1amount;
-        private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.CheckBox autoCastCheckBox;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.TextBox curagaTargetName;
@@ -4987,5 +5929,35 @@ namespace CurePlease
         private System.Windows.Forms.GroupBox groupBox17;
         private System.Windows.Forms.CheckBox enableFastCast_Mode;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.GroupBox groupBox18;
+        private System.Windows.Forms.TextBox ipAddress;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.TabPage tabPage8;
+        public System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.GroupBox groupBox22;
+        private System.Windows.Forms.GroupBox groupBox21;
+        private System.Windows.Forms.GroupBox groupBox19;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.GroupBox groupBox24;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.GroupBox groupBox23;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.GroupBox groupBox20;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.ComboBox comboBox6;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.ComboBox comboBox7;
+        private System.Windows.Forms.Label label47;
     }
 }

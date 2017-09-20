@@ -18,7 +18,7 @@
 
     public partial class Form1 : Form
     {
-
+        #region "==Custom Classes"
         public class BuffStorage : List<BuffStorage>
         {
             public string CharacterName { get; set; }
@@ -30,12 +30,28 @@
             public int TargetIndex { get; set; }
             public int MemberNumber { get; set; }
         }
+        public class SongData : List<SongData>
+        {
+            public string song_type { get; set; }
+            public int song_position { get; set; }
+            public string song_name { get; set; }
+            public int buff_id { get; set; }
+        }
 
+        public class GeoData : List<GeoData>
+        {
+            public int geo_position { get; set; }
+            public string indi_spell { get; set; }
+            public string geo_spell { get; set; }
+        }
+        #endregion
 
         uint lastTargetID = 0;
         uint allowAutoMovement = 1;
 
-        #region "FFACE Tools Enumerations"
+        int song_casting = 0;
+
+        #region "==FFACE Tools Enumerations"
         public enum LoginStatus
         {
             CharacterLoginScreen = 0,
@@ -130,6 +146,9 @@
         // Stores the previously-colored button, if any
 
         public List<BuffStorage> ActiveBuffs = new List<BuffStorage>();
+        public List<SongData> SongInfo = new List<SongData>();
+        public List<GeoData> GeomancerInfo = new List<GeoData>();
+        public List<int> known_song_buffs = new List<int>();
 
         float plX;
         float plY;
@@ -144,10 +163,6 @@
 
         public int LUA_Plugin_Loaded = 0;
         public int firstTime_Pause = 0;
-
-        private const int listenPort = 19769;
-
-        //private Dictionary<int, string> PTMemberList;
 
 
         #region "==Get Ability /Spell Recast / Thank you, dlsmd - elitemmonetwork.com"
@@ -195,8 +210,14 @@
 
         public static bool HasSpell(string checked_spellName)
         {
-            var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob); var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
-            int mainLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)]; int subjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.SubJob)];
+
+
+            var JobPoints = _ELITEAPIPL.Player.GetJobPoints(_ELITEAPIPL.Player.MainJob);
+            var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
+
+
+            int mainLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)];
+            int subjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.SubJob)];
 
             if (_ELITEAPIPL.Player.HasSpell(magic.Index))
             {
@@ -236,7 +257,7 @@
         //
         //           ABILITY CHECKER CODE:              (GetAbilityRecast("") == 0) && (HasAbility(""))
         //
-        //
+        //          PIANISSIMO TIME FORMAT              SONGNUMBER_SONGSET (Example: 1_2 = Song #1 in Set #2
         //
         //
         // 
@@ -443,6 +464,16 @@
             false,
             false
         };
+
+        bool[] songCasting = new bool[]
+        {
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        };
         #endregion
 
         #region "== Auto Casting DateTime"
@@ -610,11 +641,65 @@
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0)
         };
-
-        DateTime[] playerIndi = new DateTime[]
+        DateTime[] playerSong1 = new DateTime[]
         {
             new DateTime(1970, 1, 1, 0, 0, 0)
         };
+        DateTime[] playerSong2 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+        DateTime[] playerSong3 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+        DateTime[] playerSong4 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+
+        DateTime[] playerPianissimo1_1 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+
+        DateTime[] playerPianissimo2_1 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+
+        DateTime[] playerPianissimo1_2 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+
+        DateTime[] playerPianissimo2_2 = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+
+
+
         #endregion
 
         #region "== Auto Casting TimeSpan"
@@ -751,8 +836,6 @@
             new TimeSpan()
         };
 
-
-
         TimeSpan[] playerPhalanx_IISpan = new TimeSpan[]
         {
             new TimeSpan(),
@@ -773,8 +856,6 @@
             new TimeSpan()
         };
 
-
-
         TimeSpan[] playerRefresh_Span = new TimeSpan[]
         {
             new TimeSpan(),
@@ -786,10 +867,62 @@
         };
 
 
-        TimeSpan[] playerIndi_Span = new TimeSpan[]
+        TimeSpan[] playerSong1_Span = new TimeSpan[]
         {
             new TimeSpan()
         };
+        TimeSpan[] playerSong2_Span = new TimeSpan[]
+        {
+            new TimeSpan()
+        };
+        TimeSpan[] playerSong3_Span = new TimeSpan[]
+        {
+            new TimeSpan()
+        };
+        TimeSpan[] playerSong4_Span = new TimeSpan[]
+       {
+            new TimeSpan()
+       };
+
+        TimeSpan[] pianissimo1_1_Span = new TimeSpan[]
+        {
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+        };
+
+        TimeSpan[] pianissimo2_1_Span = new TimeSpan[]
+        {
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+        };
+
+        TimeSpan[] pianissimo1_2_Span = new TimeSpan[]
+        {
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+        };
+        TimeSpan[] pianissimo2_2_Span = new TimeSpan[]
+        {
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+        };
+
         #endregion
 
         #region "== Getting POL Process and FFACE dll Check"
@@ -797,6 +930,807 @@
         public Form1()
         {
             this.InitializeComponent();
+
+            #region "== Generate Song List"
+
+            int position = 0;
+
+            // Buff lists
+            known_song_buffs.Add(197);
+            known_song_buffs.Add(198);
+            known_song_buffs.Add(195);
+            known_song_buffs.Add(199);
+            known_song_buffs.Add(200);
+            known_song_buffs.Add(215);
+            known_song_buffs.Add(196);
+            known_song_buffs.Add(214);
+            known_song_buffs.Add(216);
+            known_song_buffs.Add(218);
+            known_song_buffs.Add(222);
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minne",
+                song_name = "Knight's Minne",
+                song_position = position,
+                buff_id = 197
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minne",
+                song_name = "Knight's Minne II",
+                song_position = position,
+                buff_id = 197
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minne",
+                song_name = "Knight's Minne III",
+                song_position = position,
+                buff_id = 197
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minne",
+                song_name = "Knight's Minne IV",
+                song_position = position,
+                buff_id = 197
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minne",
+                song_name = "Knight's Minne V",
+                song_position = position,
+                buff_id = 197
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minuet",
+                song_name = "Valor Minuet",
+                song_position = position,
+                buff_id = 198
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minuet",
+                song_name = "Valor Minuet II",
+                song_position = position,
+                buff_id = 198
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minuet",
+                song_name = "Valor Minuet III",
+                song_position = position,
+                buff_id = 198
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minuet",
+                song_name = "Valor Minuet IV",
+                song_position = position,
+                buff_id = 198
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Minuet",
+                song_name = "Valor Minuet V",
+                song_position = position,
+                buff_id = 198
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Paeon",
+                song_name = "Army's Paeon",
+                song_position = position,
+                buff_id = 195
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Paeon",
+                song_name = "Army's Paeon II",
+                song_position = position,
+                buff_id = 195
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Paeon",
+                song_name = "Army's Paeon III",
+                song_position = position,
+                buff_id = 195
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Paeon",
+                song_name = "Army's Paeon IV",
+                song_position = position,
+                buff_id = 195
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Paeon",
+                song_name = "Army's Paeon V",
+                song_position = position,
+                buff_id = 195
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Paeon",
+                song_name = "Army's Paeon VI",
+                song_position = position,
+                buff_id = 195
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Madrigal",
+                song_name = "Sword Madrigal",
+                song_position = position,
+                buff_id = 199
+            }); position++;
+            SongInfo.Add(new SongData
+            {
+                song_type = "Madrigal",
+                song_name = "Blade Madrigal",
+                song_position = position,
+                buff_id = 199
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Prelude",
+                song_name = "Hunter's Prelude",
+                song_position = position,
+                buff_id = 200
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Prelude",
+                song_name = "Archer's Prelude",
+                song_position = position,
+                buff_id = 200
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Sinewy Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Dextrous Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Vivacious Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Quick Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Learned Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Spirited Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Enchanting Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Herculean Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Uncanny Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Vital Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Swift Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Sage Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Logical Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Etude",
+                song_name = "Bewitching Etude",
+                song_position = position,
+                buff_id = 215
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Mambo",
+                song_name = "Sheepfoe Maambo",
+                song_position = position,
+                buff_id = 201
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Mambo",
+                song_name = "Dragonfoe Mambo",
+                song_position = position,
+                buff_id = 201
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Ballad",
+                song_name = "Mage's Ballad",
+                song_position = position,
+                buff_id = 196
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Ballad",
+                song_name = "Mage's Ballad II",
+                song_position = position,
+                buff_id = 196
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Ballad",
+                song_name = "Mage's Ballad III",
+                song_position = position,
+                buff_id = 196
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "March",
+                song_name = "Advancing March",
+                song_position = position,
+                buff_id = 214
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "March",
+                song_name = "Victory March",
+                song_position = position,
+                buff_id = 214
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Fire Carol",
+                song_position = position
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Fire Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Ice Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Ice Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = " Wind Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Wind Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Earth Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Earth Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Lightning Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Lightning Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Water Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Water Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Light Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Light Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Dark Carol",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Carol",
+                song_name = "Dark Carol II",
+                song_position = position,
+                buff_id = 216
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Hymnus",
+                song_name = "Godess's Hymnus",
+                song_position = position,
+                buff_id = 218
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Blank",
+                song_name = "Blank",
+                song_position = position,
+                buff_id = 0
+            }); position++;
+
+            SongInfo.Add(new SongData
+            {
+                song_type = "Scherzo",
+                song_name = "Sentinel's Scherzo",
+                song_position = position,
+                buff_id = 222
+            }); position++;
+
+
+            int geo_position = 0;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Voidance",
+                geo_spell = "Geo-Voidance",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Precision",
+                geo_spell = "Geo-Precision",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Regen",
+                geo_spell = "Geo-Regen",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Haste",
+                geo_spell = "Geo-Haste",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Attunement",
+                geo_spell = "Geo-Attunement",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Focus",
+                geo_spell = "Geo-Focus",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Barrier",
+                geo_spell = "Geo-Barrier",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Refresh",
+                geo_spell = "Geo-Refresh",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-CHR",
+                geo_spell = "Geo-CHR",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-MND",
+                geo_spell = "Geo-MND",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Fury",
+                geo_spell = "Geo-Fury",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-INT",
+                geo_spell = "Geo-INT",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-AGI",
+                geo_spell = "Geo-AGI",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Fend",
+                geo_spell = "Geo-Fend",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-VIT",
+                geo_spell = "Geo-VIT",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-DEX",
+                geo_spell = "Geo-DEX",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Acumen",
+                geo_spell = "Geo-Acumen",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-STR",
+                geo_spell = "Geo-STR",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Poison",
+                geo_spell = "Geo-Poison",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Slow",
+                geo_spell = "Geo-Slow",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Torpor",
+                geo_spell = "Geo-Torpor",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Slip",
+                geo_spell = "Geo-Slip",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Langour",
+                geo_spell = "Geo-Langour",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Paralysis",
+                geo_spell = "Geo-Paralysis",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Vex",
+                geo_spell = "Geo-Vex",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Frailty",
+                geo_spell = "Geo-Frailty",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Wilt",
+                geo_spell = "Geo-Wilt",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Malaise",
+                geo_spell = "Geo-Malaise",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Gravity",
+                geo_spell = "Geo-Gravity",
+                geo_position = geo_position,
+            }); geo_position++;
+
+            GeomancerInfo.Add(new GeoData
+            {
+                indi_spell = "Indi-Fade",
+                geo_spell = "Geo-Fade",
+                geo_position = geo_position,
+            }); geo_position++;
+
+
+
+            #endregion
+
             var pol = Process.GetProcessesByName("pol");
 
             if (pol.Length < 1)
@@ -860,12 +1794,24 @@
 
             if (Settings.Default.naSpellsenable && LUA_Plugin_Loaded == 0)
             {
-                if (WindowerMode == "Windower") {
+                if (WindowerMode == "Windower")
+                {
                     _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
+                    if (Settings.Default.IpAddress != "127.0.0.1" || Settings.Default.listeningPort != "19769")
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("//cp settings " + Settings.Default.IpAddress + " " + Settings.Default.listeningPort);
+                    }
+
                 }
-                else if (WindowerMode == "Ashita") {
+                else if (WindowerMode == "Ashita")
+                {
                     _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
+                    if (Settings.Default.IpAddress != "127.0.0.1" || Settings.Default.listeningPort != "19769")
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/cp settings " + Settings.Default.IpAddress + " " + Settings.Default.listeningPort);
+                    }
                 }
+
                 LUA_Plugin_Loaded = 1;
             }
 
@@ -1769,8 +2715,24 @@
             this.playerRefresh_Span[4] = this.currentTime.Subtract(this.playerRefresh[4]);
             this.playerRefresh_Span[5] = this.currentTime.Subtract(this.playerRefresh[5]);
 
-            // Calculate time since Indi was cast on particular player
-            this.playerIndi_Span[0] = this.currentTime.Subtract(this.playerIndi[0]);
+            // Calculate time since Songs were cast on particular player
+            this.playerSong1_Span[0] = this.currentTime.Subtract(this.playerSong1[0]);
+            this.playerSong2_Span[0] = this.currentTime.Subtract(this.playerSong2[0]);
+            this.playerSong3_Span[0] = this.currentTime.Subtract(this.playerSong3[0]);
+            this.playerSong4_Span[0] = this.currentTime.Subtract(this.playerSong4[0]);
+
+
+            // Calculate time since Piannisimo Songs were cast on particular player
+            this.pianissimo1_1_Span[0] = this.currentTime.Subtract(this.playerPianissimo1_1[0]);
+            this.pianissimo2_1_Span[0] = this.currentTime.Subtract(this.playerPianissimo2_1[0]);
+            this.pianissimo1_2_Span[0] = this.currentTime.Subtract(this.playerPianissimo1_2[0]);
+            this.pianissimo2_2_Span[0] = this.currentTime.Subtract(this.playerPianissimo2_2[0]);
+
+
+
+
+
+
 
             #endregion
 
@@ -1821,6 +2783,9 @@
             #endregion
 
             #region "== Job ability Divine Seal and Convert"
+
+            int songs_currently_up1 = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 197 || b == 198 || b == 195 || b == 199 || b == 200 || b == 215 || b == 196 || b == 214 || b == 216 || b == 218 || b == 222).Count();
+
             if (Settings.Default.divineSealBox && _ELITEAPIPL.Player.MPP <= 11 && (GetAbilityRecast("Divine Seal") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
             {
                 Thread.Sleep(3000);
@@ -1867,7 +2832,8 @@
                 // When out of range Distance is 59 Yalms regardless, Must be within 15 yalms to gain the effect
 
                 //Check if "pet" is active and out of range of the monitored player
-                if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1) {
+                if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1)
+                {
                     ushort PetsIndex = _ELITEAPIPL.Player.PetIndex;
                     var PetsEntity = _ELITEAPIMonitored.Entity.GetEntity((int)PetsIndex);
 
@@ -1875,11 +2841,26 @@
                     {
                         // Wait two seconds, if still the same Full Circle the pet away
                         Thread.Sleep(2);
-                        if (PetsEntity.Distance >= 10 && GetAbilityRecast("Full Circle") == 0) {
+                        if (PetsEntity.Distance >= 10 && GetAbilityRecast("Full Circle") == 0)
+                        {
                             _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
                         }
                     }
                 }
+            }
+
+            else if ((Settings.Default.troubadour) && (GetAbilityRecast("Troubadour") == 0) && (HasAbility("Troubadour")) && songs_currently_up1 == 0 && (!this.castingLock))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ja \"Troubadour\" <me>");
+                this.ActionLockMethod();
+                Thread.Sleep(500);
+            }
+
+            else if ((Settings.Default.nightingale) && (GetAbilityRecast("Nightingale") == 0) && (HasAbility("Nightingale")) && songs_currently_up1 == 0 && (!this.castingLock))
+            {
+                _ELITEAPIPL.ThirdParty.SendString("/ja \"Nightingale\" <me>");
+                this.ActionLockMethod();
+                Thread.Sleep(500);
             }
             #endregion
 
@@ -3086,35 +4067,35 @@
                 uint targetIdx = target.TargetIndex;
                 var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
 
-                    if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                if (!this.castingLock && Settings.Default.AutoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Settings.Default.autoTargetSpell) == 0) && (HasSpell(Settings.Default.autoTargetSpell)))
+                {
+                    if (Settings.Default.Hate_SpellType == 0)
                     {
-                        if (Settings.Default.Hate_SpellType == 0)
+                        allowAutoMovement = 1;
+                        _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                        Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                        this.castSpell("<t>", Settings.Default.autoTargetSpell);
+                        Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                        allowAutoMovement = 0;
+                    }
+                    else
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                        if (Settings.Default.autoTarget_target != "")
                         {
-                            allowAutoMovement = 1;
-                            _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
                             Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                            this.castSpell("<t>", Settings.Default.autoTargetSpell);
-                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                            allowAutoMovement = 0;
+                            this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
                         }
                         else
                         {
-                            Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                            if (Settings.Default.autoTarget_target != "")
-                            {
-                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                this.castSpell(Settings.Default.autoTarget_target, Settings.Default.autoTargetSpell);
-                            }
-                            else
-                            {
-                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
-                            }
+                            Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                            this.castSpell(_ELITEAPIMonitored.Player.Name, Settings.Default.autoTargetSpell);
                         }
-                        lastTargetID = entity.TargetID;
-
                     }
-                
+                    lastTargetID = entity.TargetID;
+
+                }
+
 
 
                 #endregion
@@ -3448,41 +4429,15 @@
                             }
                             #endregion
 
-                            #region "==Geomancer Spells"
+                            #region "==Geomancer Spells"    
 
                             // FIGURE OUT WHO'S ENGAGED STATUS WE'RE CHECKING
                             int foundID_hateEstablisher2 = 0;
 
-                            // ENTRUSTED INDI SPELL CASTING
-                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
-                            {
-                                string SpellCheckedResult = ReturnGeoSpell(Settings.Default.EntrustedIndiSpell, 1);
-                                if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
-                                {
-                                    Settings.Default.EnableGeoSpells = false;
-                                    MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
-                                }
-                                else
-                                {
-                                    if (Settings.Default.Entrusted_Target == "")
-                                    {
-                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
-                                    }
-                                    else
-                                    {
-                                        this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
-                                    }
-                                }
-                            }
-
-
-                            // INDI SPELL CASTING
                             if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
                             {
-
                                 string name1_lower = "blank";
                                 string name2_lower = Settings.Default.GeoSpell_Target.ToLower();
-
 
                                 for (var x = 0; x < 2048; x++)
                                 {
@@ -3500,25 +4455,56 @@
                                 }
                             }
 
-                            if (foundID_hateEstablisher2 != 0) {
+                            // ENTRUSTED INDI SPELL CASTING, WILL BE CAST SO LONG AS ENTRUST IS ACTIVE
+                            if ((Settings.Default.EnableGeoSpells) && (this.plStatusCheck((StatusEffect)584)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                            {
+                                string SpellCheckedResult = ReturnGeoSpell(Settings.Default.EntrustedIndiSpell, 1);
+                                if (SpellCheckedResult == "SpellError_Cancel")
+                                {
+                                    Settings.Default.EnableGeoSpells = false;
+                                    MessageBox.Show("An error has occured with Entrusted INDI spell casting, please report what spell was active at the time.");
+                                }
+                                else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown") {
+
+                                }
+                                else
+                                {
+                                    if (Settings.Default.Entrusted_Target == "")
+                                    {
+                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                    }
+                                    else
+                                    {
+                                        this.castSpell(Settings.Default.Entrusted_Target, SpellCheckedResult);
+                                    }
+                                }
+                            }
+
+
+                            // CAST NON ENTRUSTED INDI SPELL
+                            if (foundID_hateEstablisher2 != 0)
+                            {
 
                                 var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher2);
 
                                 if (targetEntityH2.Status == 1 && Settings.Default.EnableGeoSpells && targetEntityH2.HealthPercent > 0 && (!BuffChecker(612, 0)) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                {
+                                    string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
+
+                                    if (SpellCheckedResult == "SpellError_Cancel")
                                     {
-                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
-                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
-                                            {
-                                                Settings.Default.EnableGeoSpells = false;
-                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
-                                            }
-                                            else
-                                            {
-                                                this.castSpell("<me>", SpellCheckedResult);
-                                                this.playerIndi[0] = DateTime.Now;
-                                            }
+                                        Settings.Default.EnableGeoSpells = false;
+                                        MessageBox.Show("An error has occured with INDI spell casting, please report what spell was active at the time.");
                                     }
-                                
+                                    else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        this.castSpell("<me>", SpellCheckedResult);
+                                    }
+                                }
                             }
                             else
                             {
@@ -3530,25 +4516,27 @@
                                         if (Settings.Default.GEO_engaged == false || _ELITEAPIMonitored.Player.Status == 1)
                                         {
                                             string SpellCheckedResult = ReturnGeoSpell(Settings.Default.IndiSpell, 1);
-                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
+                                            if (SpellCheckedResult == "SpellError_Cancel")
                                             {
                                                 Settings.Default.EnableGeoSpells = false;
-                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabled Geo spells.");
+                                                MessageBox.Show("An error has occured with INDI spell casting, please report what spell was active at the time.");
+                                            }
+                                            else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
+                                            {
+
                                             }
                                             else
                                             {
                                                 this.castSpell("<me>", SpellCheckedResult);
-                                                this.playerIndi[0] = DateTime.Now;
                                             }
                                         }
                                     }
                                 }
-
                             }
 
-                                // GEO SPELL CASTING  && (_ELITEAPIMonitored.Player.Status == 1)
-                                if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
-                                {
+                            // GEO SPELL CASTING  && (_ELITEAPIMonitored.Player.Status == 1)
+                            if ((Settings.Default.EnableGeoSpells) && (Settings.Default.EnableLuopanSpells) && (_ELITEAPIMonitored.Player.HP > 0) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                            {
 
                                 // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
                                 if ((Settings.Default.BlazeOfGlory) && (GetAbilityRecast("Blaze of Glory") == 0) && (HasAbility("Blaze of Glory")) && (_ELITEAPIMonitored.Player.Status == 1))
@@ -3560,104 +4548,91 @@
                                 else
                                 {
 
-                                    if (Settings.Default.specifiedEngageTarget == true && !String.IsNullOrEmpty(Settings.Default.GeoSpell_Target))
+                                    if (foundID_hateEstablisher2 != 0)
                                     {
-                                        string name1_lower = "blank";
-                                        string name2_lower = Settings.Default.GeoSpell_Target.ToLower();
-
-
-                                        for (var x = 0; x < 2048; x++)
+                                        string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
+                                        if (SpellCheckedResult == "SpellError_Cancel")
                                         {
-                                            var entityH2 = _ELITEAPIPL.Entity.GetEntity(x);
-                                            if (entityH2.Name != "" && entityH2.Name != null)
-                                            {
-                                                name1_lower = entityH2.Name.ToLower();
-
-                                                if (name1_lower == name2_lower)
-                                                {
-                                                    foundID_hateEstablisher2 = Convert.ToInt32(entityH2.TargetID);
-                                                    break;
-                                                }
-                                            }
+                                            Settings.Default.EnableGeoSpells = false;
+                                            MessageBox.Show("An error has occured with GEO spell casting, please report what spell was active at the time.");
                                         }
-                                    }
-                                        if (foundID_hateEstablisher2 != 0)
+                                        else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
                                         {
-                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
-                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
-                                            {
-                                                Settings.Default.EnableGeoSpells = false;
-                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
-                                            }
-                                            else
-                                            {
-                                                var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher2);
 
-                                                if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
-                                                {
-                                                    if ((targetEntityH2.Status == 1) || !Settings.Default.GeoAOE_Engaged)
-                                                    {
-                                                        if (Settings.Default.GeoSpell_Target == "")
-                                                        {
-                                                            this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
-                                                        }
-                                                        else
-                                                        {
-                                                            this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
-                                                        }
-                                                    }
-                                                }
-                                                else if (targetEntityH2.Status == 1)
-                                                {
-                                                    // Pause AutoMovement
-                                                    allowAutoMovement = 0;
-
-                                                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                                    this.castSpell("<t>", SpellCheckedResult);
-                                                    Thread.Sleep(TimeSpan.FromSeconds(2.0));
-                                                }
-
-
-                                            }
                                         }
                                         else
                                         {
-                                            string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
-                                            if (SpellCheckedResult == "SpellError_Cancel" || SpellCheckedResult == "SpellNA")
+                                            var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher2);
+
+                                            if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
                                             {
-                                                Settings.Default.EnableGeoSpells = false;
-                                                MessageBox.Show("An error has occured during the GEO spells casting, please report what spells were active when this appeared. Disabling Geo spells.");
-                                            }
-                                            else
-                                            {
-                                                if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                                if ((targetEntityH2.Status == 1) || !Settings.Default.GeoAOE_Engaged)
                                                 {
-                                                    if ((_ELITEAPIMonitored.Player.Status == 1) || !Settings.Default.GeoAOE_Engaged)
+                                                    if (Settings.Default.GeoSpell_Target == "")
                                                     {
-                                                        if (Settings.Default.GeoSpell_Target == "")
-                                                        {
-                                                            this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
-                                                        }
-                                                        else
-                                                        {
-                                                            this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
-                                                        }
+                                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                    }
+                                                    else
+                                                    {
+                                                        this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
                                                     }
                                                 }
-                                                else if (_ELITEAPIMonitored.Player.Status == 1)
-                                                {
-                                                    // Pause AutoMovement
-                                                    allowAutoMovement = 0;
+                                            }
+                                            else if (targetEntityH2.Status == 1)
+                                            {
+                                                // Pause AutoMovement
+                                                allowAutoMovement = 0;
 
-                                                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                                                    Thread.Sleep(TimeSpan.FromSeconds(1.5));
-                                                    this.castSpell("<t>", SpellCheckedResult);
-                                                    Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                                _ELITEAPIPL.ThirdParty.SendString("/assist " + Settings.Default.GeoSpell_Target);
+                                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                                this.castSpell("<t>", SpellCheckedResult);
+                                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                            }
+
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string SpellCheckedResult = ReturnGeoSpell(Settings.Default.GeoSpell, 2);
+                                        if (SpellCheckedResult == "SpellError_Cancel")
+                                        {
+                                            Settings.Default.EnableGeoSpells = false;
+                                            MessageBox.Show("An error has occured with GEO spell casting, please report what spell was active at the time.");
+                                        }
+                                        else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                            {
+                                                if ((_ELITEAPIMonitored.Player.Status == 1) || !Settings.Default.GeoAOE_Engaged)
+                                                {
+                                                    if (Settings.Default.GeoSpell_Target == "")
+                                                    {
+                                                        this.castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                    }
+                                                    else
+                                                    {
+                                                        this.castSpell(Settings.Default.GeoSpell_Target, SpellCheckedResult);
+                                                    }
                                                 }
                                             }
-                                        }
-                                    
+                                            else if (_ELITEAPIMonitored.Player.Status == 1)
+                                            {
+                                                // Pause AutoMovement
+                                                allowAutoMovement = 0;
+
+                                                _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                                                Thread.Sleep(TimeSpan.FromSeconds(1.5));
+                                                this.castSpell("<t>", SpellCheckedResult);
+                                                Thread.Sleep(TimeSpan.FromSeconds(2.0));
+                                            }
+                                        }        
+                                    }
+
                                 }
 
                                 // Restart AutoMovement
@@ -3665,7 +4640,309 @@
 
                             }
 
-                            
+
+
+                            #endregion
+
+                            #region "==Bard Songs"
+
+                            if ((Settings.Default.enableSinging) && (!this.castingLock) && _ELITEAPIPL.Player.Status != 33)
+                            {
+                                // Grab Monitored Players Distance from the PL.
+                                int distance = 0;
+
+                                for (var x = 0; x < 2048; x++)
+                                {
+                                    var entity2 = _ELITEAPIPL.Entity.GetEntity(x);
+
+                                    if (entity2.Name != null && entity2.Name.ToLower().Equals(_ELITEAPIMonitored.Player.Name.ToLower()))
+                                    {
+                                        distance = (int)entity2.Distance;
+
+                                    }
+                                }
+
+                                if (Properties.Settings.Default.SongsOnlyWhenNearEngaged == false || distance != 0 && distance <= 10)
+                                {
+
+                                    // Now quickly count how many songs are currently active so we know if a Dummy song is needed
+                                    int songs_currently_up = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == 197 || b == 198 || b == 195 || b == 199 || b == 200 || b == 215 || b == 196 || b == 214 || b == 216 || b == 218 || b == 222).Count();
+                                    int monitored_songs_currently_up = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 197 || b == 198 || b == 195 || b == 199 || b == 200 || b == 215 || b == 196 || b == 214 || b == 216 || b == 218 || b == 222).Count();
+
+                                    // Current songs active
+                                    int songs_active = 0;
+                                    int monitored_songs_active = 0;
+                                    int songs_possible = 2;
+
+                                    // First find out what buffs are currently active.
+                                    foreach (int status in _ELITEAPIPL.Player.GetPlayerInfo().Buffs)
+                                    {
+                                        if (known_song_buffs.Contains(status))
+                                        {
+                                            songs_active++;
+                                        }
+                                    }
+
+                                    foreach (int status in _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs)
+                                    {
+                                        if (known_song_buffs.Contains(status))
+                                        {
+                                            monitored_songs_active++;
+                                        }
+                                    }
+
+                                    // Now check how many songs we have enabled, and grab the songs info selected.
+                                    var song_1 = SongInfo.Where(c => c.song_position == Settings.Default.song1).FirstOrDefault();
+                                    var song_2 = SongInfo.Where(c => c.song_position == Settings.Default.song2).FirstOrDefault();
+                                    var song_3 = SongInfo.Where(c => c.song_position == Settings.Default.song3).FirstOrDefault();
+                                    var song_4 = SongInfo.Where(c => c.song_position == Settings.Default.song4).FirstOrDefault();
+
+
+                                    var dummy1_song = SongInfo.Where(c => c.song_position == Settings.Default.dummy1).FirstOrDefault();
+                                    var dummy2_song = SongInfo.Where(c => c.song_position == Settings.Default.dummy2).FirstOrDefault();
+
+                                    // List to make it easy to check how many of each buff is needed.
+                                    List<int> SongDataMax = new List<int>();
+                                    SongDataMax.Add(song_1.buff_id);
+                                    SongDataMax.Add(song_2.buff_id);
+                                    SongDataMax.Add(song_3.buff_id);
+                                    SongDataMax.Add(song_4.buff_id);
+
+                                    if (dummy1_song != null && dummy1_song.song_name != "Blank")
+                                    {
+                                        songs_possible++;
+                                    }
+                                    if (dummy2_song != null && dummy2_song.song_name != "Blank")
+                                    {
+                                        songs_possible++;
+                                    }
+
+                                    // Now that's done, we need to check what singing buffs are up and if they don't match the set ones or the timer is up then cast them starting with Song one.
+                                    int count_type = 0;
+                                    int count_needed = 0;
+                                    int block_increment = 0;
+
+                                    int new_distance = distance;
+
+                                    int monitored_count_type = 0;
+                                    int monitored_count_needed = 0;
+
+                                    this.label2.Text = "Song: " + song_casting;
+
+                                    if (song_casting == 0)
+                                    {
+                                        count_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                                        count_needed = SongDataMax.Where(c => c == song_1.buff_id).Count();
+
+                                        monitored_count_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                                        monitored_count_needed = SongDataMax.Where(c => c == song_1.buff_id).Count();
+
+                                        if (count_type < count_needed || Settings.Default.recastSongs_monitored && monitored_count_type != monitored_count_needed && (!this.castingLock) && distance > 0 && distance < 11 || this.playerSong1_Span[0].Minutes >= Settings.Default.recastSong && song_1.song_name != "Blank" && BuffChecker(song_1.buff_id, 0) && (!this.castingLock))
+                                        {
+                                            if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && (!this.castingLock))
+                                            {
+                                                if (Properties.Settings.Default.marcato && (GetAbilityRecast("Marcato") == 0) && (HasAbility("Marcato")))
+                                                {
+                                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Marcato\" <me>");
+                                                    Thread.Sleep(1000);
+                                                }
+
+                                                this.castSpell("<me>", song_1.song_name);
+
+                                                song_casting = 1;
+
+                                                this.playerSong1[0] = DateTime.Now;
+                                            }
+                                        }
+                                        song_casting = 1;
+                                    }
+                                    else if (song_casting == 1)
+                                    {
+
+                                        count_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                                        count_needed = SongDataMax.Where(c => c == song_2.buff_id).Count();
+
+                                        monitored_count_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                                        monitored_count_needed = SongDataMax.Where(c => c == song_2.buff_id).Count();
+
+                                        if (count_type < count_needed || Settings.Default.recastSongs_monitored && monitored_count_type != monitored_count_needed && (!this.castingLock) && distance > 0 && distance < 11 || this.playerSong2_Span[0].Minutes >= Settings.Default.recastSong && song_2.song_name != "Blank" && BuffChecker(song_2.buff_id, 0) && (!this.castingLock))
+                                        {
+                                            if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && (!this.castingLock))
+                                            {
+                                                this.castSpell("<me>", song_2.song_name);
+
+                                                if (songs_possible > 2)
+                                                {
+                                                    song_casting = 2;
+                                                }
+                                                else
+                                                {
+                                                    song_casting = 0;
+                                                }
+
+                                                this.playerSong2[0] = DateTime.Now;
+                                            }
+                                        }
+                                        song_casting = 2;
+                                    }
+                                    else if (song_casting == 2)
+                                    {
+                                        count_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                                        count_needed = SongDataMax.Where(c => c == song_3.buff_id).Count();
+
+                                        monitored_count_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                                        monitored_count_needed = SongDataMax.Where(c => c == song_3.buff_id).Count();
+
+                                        if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && (!this.castingLock))
+                                        {
+                                            if (Settings.Default.recastSongs_monitored && distance > 0 && distance < 11)
+                                            {
+                                                if (this.playerSong3_Span[0].Minutes >= Settings.Default.recastSong && BuffChecker(song_3.buff_id, 0))
+                                                {
+                                                    this.castSpell("<me>", song_3.song_name);
+                                                    this.playerSong3[0] = DateTime.Now;
+                                                }
+                                                else if (count_type < count_needed || monitored_count_type < monitored_count_needed)
+                                                {
+                                                    if (songs_currently_up > 2 && monitored_songs_currently_up > 2)
+                                                    {
+                                                        this.castSpell("<me>", song_3.song_name);
+                                                        block_increment = 0;
+
+                                                        if (songs_possible > 3)
+                                                            song_casting = 3;
+                                                        else
+                                                            song_casting = 0;
+
+                                                        this.playerSong3[0] = DateTime.Now;
+                                                    }
+                                                    else
+                                                    {
+                                                        block_increment = 1;
+                                                        if (CheckSpellRecast(dummy1_song.song_name) == 0 && HasSpell(dummy1_song.song_name))
+                                                        {
+                                                            this.castSpell("<me>", dummy1_song.song_name);
+                                                        }
+                                                    }
+
+                                                    if (songs_possible > 3 && block_increment != 1)
+                                                        song_casting = 3;
+                                                    else if (block_increment != 1)
+                                                        song_casting = 0;
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (this.playerSong3_Span[0].Minutes >= Settings.Default.recastSong && BuffChecker(song_3.buff_id, 0))
+                                                {
+                                                    this.castSpell("<me>", song_3.song_name);
+                                                    this.playerSong3[0] = DateTime.Now;
+                                                }
+                                                else if (count_type < count_needed)
+                                                {
+                                                    if (songs_currently_up > 2)
+                                                    {
+                                                        this.castSpell("<me>", song_3.song_name);
+                                                        block_increment = 0;
+
+                                                        if (songs_possible > 3)
+                                                            song_casting = 3;
+                                                        else
+                                                            song_casting = 0;
+
+                                                        this.playerSong3[0] = DateTime.Now;
+                                                    }
+                                                    else
+                                                    {
+                                                        block_increment = 1;
+                                                        if (CheckSpellRecast(dummy1_song.song_name) == 0 && HasSpell(dummy1_song.song_name))
+                                                        {
+                                                            this.castSpell("<me>", dummy1_song.song_name);
+                                                        }
+                                                    }
+
+                                                    if (songs_possible > 3 && block_increment != 1)
+                                                        song_casting = 3;
+                                                    else if (block_increment != 1)
+                                                        song_casting = 0;
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (song_casting == 3)
+                                    {
+                                        count_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+                                        count_needed = SongDataMax.Where(c => c == song_4.buff_id).Count();
+
+                                        monitored_count_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+                                        monitored_count_needed = SongDataMax.Where(c => c == song_4.buff_id).Count();
+
+                                        if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && (!this.castingLock))
+                                        {
+                                            if (Settings.Default.recastSongs_monitored && distance > 0 && distance < 11)
+                                            {
+                                                if (this.playerSong4_Span[0].Minutes >= Settings.Default.recastSong && BuffChecker(song_4.buff_id, 0))
+                                                {
+                                                    this.castSpell("<me>", song_4.song_name);
+                                                    this.playerSong3[0] = DateTime.Now;
+                                                }
+                                                else if (count_type < count_needed || monitored_count_type < monitored_count_needed)
+                                                {
+                                                    if (songs_currently_up > 3 && monitored_songs_currently_up > 3)
+                                                    {
+                                                        this.castSpell("<me>", song_4.song_name);
+                                                        block_increment = 0;
+                                                        song_casting = 0;
+                                                        this.playerSong4[0] = DateTime.Now;
+                                                    }
+                                                    else
+                                                    {
+                                                        block_increment = 1;
+                                                        if (CheckSpellRecast(dummy2_song.song_name) == 0 && HasSpell(dummy2_song.song_name))
+                                                        {
+                                                            this.castSpell("<me>", dummy2_song.song_name);
+                                                        }
+                                                    }
+                                                    if (block_increment != 1)
+                                                        song_casting = 0;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (this.playerSong4_Span[0].Minutes >= Settings.Default.recastSong && BuffChecker(song_4.buff_id, 0))
+                                                {
+                                                    this.castSpell("<me>", song_4.song_name);
+                                                    this.playerSong4[0] = DateTime.Now;
+                                                }
+                                                else if (count_type < count_needed)
+                                                {
+                                                    if (songs_currently_up > 3)
+                                                    {
+                                                        this.castSpell("<me>", song_4.song_name);
+                                                        block_increment = 0;
+                                                        song_casting = 0;
+                                                        this.playerSong4[0] = DateTime.Now;
+                                                    }
+                                                    else
+                                                    {
+                                                        block_increment = 1;
+                                                        if (CheckSpellRecast(dummy2_song.song_name) == 0 && HasSpell(dummy2_song.song_name))
+                                                        {
+                                                            this.castSpell("<me>", dummy2_song.song_name);
+                                                        }
+                                                    }
+
+                                                    if (block_increment != 1)
+                                                        song_casting = 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
 
                             #endregion
 
@@ -3673,6 +4950,7 @@
                             #region "== All other Job Abilities"
                             if (!this.castingLock && !this.plStatusCheck(StatusEffect.Amnesia) && _ELITEAPIPL.Player.Status != 33)
                             {
+
 
                                 if ((Settings.Default.afflatusSolice) && (!this.plStatusCheck(StatusEffect.Afflatus_Solace)) && (GetAbilityRecast("Afflatus Solace") == 0) && (HasAbility("Afflatus Solace")))
                                 {
@@ -3704,7 +4982,7 @@
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
                                     this.ActionLockMethod();
                                 }
-                                else if ((Settings.Default.sublimation) && ((_ELITEAPIPL.Player.MPMax - _ELITEAPIPL.Player.MP) > (_ELITEAPIPL.Player.HPMax * .4)) && (this.plStatusCheck(StatusEffect.Sublimation_Complete)) && (GetAbilityRecast("Sublimation") == 0) && (HasAbility("Sublimation")))
+                                else if ((Settings.Default.sublimation) && ((_ELITEAPIPL.Player.MPMax - _ELITEAPIPL.Player.MP) > Properties.Settings.Default.sublimationMP) && (this.plStatusCheck(StatusEffect.Sublimation_Complete)) && (GetAbilityRecast("Sublimation") == 0) && (HasAbility("Sublimation")))
                                 {
                                     _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
                                     this.ActionLockMethod();
@@ -3732,7 +5010,7 @@
                                     if (memberOF != 0 && memberOF != 4)
                                     {
                                         // Run through Each party member as we're looking for either a specifc name or if set otherwise anyone with the MP criteria in the current party.
-                                       foreach (var pData in cParty)
+                                        foreach (var pData in cParty)
                                         {
                                             // If party of party v1
                                             if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
@@ -3825,6 +5103,30 @@
                                         }
                                     }
                                 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             }
 
                             #endregion
@@ -3887,363 +5189,29 @@
         #region "== Geo Spell Checker"
         private string ReturnGeoSpell(int GEOSpell_ID, int GeoSpell_Type)
         {
-            if (GEOSpell_ID == 0)
+            // GRAB THE SPELL FROM THE CUSTOM LIST
+            var GeoSpell = GeomancerInfo.Where(c => c.geo_position == GEOSpell_ID).FirstOrDefault();
+
+            if (GeoSpell_Type == 1)
             {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Voidance") == 0) && (HasSpell("Indi-Voidance")))
+                if (HasSpell(GeoSpell.indi_spell))
                 {
-                    return "Indi-Voidance";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Voidance") == 0) && (HasSpell("Geo-Voidance")))
-                {
-                    return "Geo-Voidance";
+                    if (CheckSpellRecast(GeoSpell.indi_spell) == 0)
+                    {
+                        return GeoSpell.indi_spell;
+                    } else { return "SpellRecast"; }
                 }
                 else { return "SpellNA"; }
             }
-            else if (GEOSpell_ID == 1)
+            else if (GeoSpell_Type == 2)
             {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Precision") == 0) && (HasSpell("Indi-Precision")))
+                if (HasSpell(GeoSpell.geo_spell))
                 {
-                    return "Indi-Precision";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Precision") == 0) && (HasSpell("Geo-Precision")))
-                {
-                    return "Geo-Precision";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 2)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Regen") == 0) && (HasSpell("Indi-Regen")))
-                {
-                    return "Indi-Regen";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Regen") == 0) && (HasSpell("Geo-Regen")))
-                {
-                    return "Geo-Regen";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 3)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Haste") == 0) && (HasSpell("Indi-Haste")))
-                {
-                    return "Indi-Haste";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Haste") == 0) && (HasSpell("Geo-Haste")))
-                {
-                    return "Geo-Haste";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 4)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Attunement") == 0) && (HasSpell("Indi-Attunement")))
-                {
-                    return "Indi-Attunement";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Attunement") == 0) && (HasSpell("Geo-Attunement")))
-                {
-                    return "Geo-Attunement";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 5)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Focus") == 0) && (HasSpell("Indi-Focus")))
-                {
-                    return "Indi-Focus";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Focus") == 0) && (HasSpell("Geo-Focus")))
-                {
-                    return "Geo-Focus";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 6)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Barrier") == 0) && (HasSpell("Indi-Barrier")))
-                {
-                    return "Indi-Barrier";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Barrier") == 0) && (HasSpell("Geo-Barrier")))
-                {
-                    return "Geo-Barrier";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 7)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Refresh") == 0) && (HasSpell("Indi-Refresh")))
-                {
-                    return "Indi-Refresh";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Refresh") == 0) && (HasSpell("Geo-Refresh")))
-                {
-                    return "Geo-Refresh";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 8)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-CHR") == 0) && (HasSpell("Indi-CHR")))
-                {
-                    return "Indi-CHR";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-CHR") == 0) && (HasSpell("Geo-CHR")))
-                {
-                    return "Geo-CHR";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 9)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-MND") == 0) && (HasSpell("Indi-MND")))
-                {
-                    return "Indi-MND";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-MND") == 0) && (HasSpell("Geo-MND")))
-                {
-                    return "Geo-MND";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 10)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fury") == 0) && (HasSpell("Indi-Fury")))
-                {
-                    return "Indi-Fury";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Fury") == 0) && (HasSpell("Geo-Fury")))
-                {
-                    return "Geo-Fury";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 11)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-INT") == 0) && (HasSpell("Indi-INT")))
-                {
-                    return "Indi-INT";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-INT") == 0) && (HasSpell("Geo-INT")))
-                {
-                    return "Geo-INT";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 12)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-AGI") == 0) && (HasSpell("Indi-AGI")))
-                {
-                    return "Indi-AGI";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-AGI") == 0) && (HasSpell("Geo-AGI")))
-                {
-                    return "Geo-AGI";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 13)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fend") == 0) && (HasSpell("Indi-Fend")))
-                {
-                    return "Indi-Fend";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Fend") == 0) && (HasSpell("Geo-Fend")))
-                {
-                    return "Geo-Fend";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 14)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-VIT") == 0) && (HasSpell("Indi-VIT")))
-                {
-                    return "Indi-VIT";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-VIT") == 0) && (HasSpell("Geo-VIT")))
-                {
-                    return "Geo-VIT";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 15)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-DEX") == 0) && (HasSpell("Indi-DEX")))
-                {
-                    return "Indi-DEX";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-DEX") == 0) && (HasSpell("Geo-DEX")))
-                {
-                    return "Geo-DEX";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 16)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Acumen") == 0) && (HasSpell("Indi-Acumen")))
-                {
-                    return "Indi-Acumen";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Acumen") == 0) && (HasSpell("Geo-Acumen")))
-                {
-                    return "Geo-Acumen";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 17)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-STR") == 0) && (HasSpell("Indi-STR")))
-                {
-                    return "Indi-STR";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-STR") == 0) && (HasSpell("Geo-STR")))
-                {
-                    return "Geo-STR";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 18)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Poison") == 0) && (HasSpell("Indi-Poison")))
-                {
-                    return "Indi-Poison";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Poison") == 0) && (HasSpell("Geo-Poison")))
-                {
-                    return "Geo-Poison";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 19)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Slow") == 0) && (HasSpell("Indi-Slow")))
-                {
-                    return "Indi-Slow";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Slow") == 0) && (HasSpell("Geo-Slow")))
-                {
-                    return "Geo-Slow";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 20)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Torpor") == 0) && (HasSpell("Indi-Torpor")))
-                {
-                    return "Indi-Torpor";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Torpor") == 0) && (HasSpell("Geo-Torpor")))
-                {
-                    return "Geo-Torpor";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 21)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Slip") == 0) && (HasSpell("Indi-Slip")))
-                {
-                    return "Indi-Slip";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Slip") == 0) && (HasSpell("Geo-Slip")))
-                {
-                    return "Geo-Slip";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 22)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Languor") == 0) && (HasSpell("Indi-Languor")))
-                {
-                    return "Indi-Languor";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Languor") == 0) && (HasSpell("Geo-Languor")))
-                {
-                    return "Geo-Languor";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 23)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Paralysis") == 0) && (HasSpell("Indi-Paralysis")))
-                {
-                    return "Indi-Paralysis";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Paralysis") == 0) && (HasSpell("Geo-Paralysis")))
-                {
-                    return "Geo-Paralysis";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 24)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Vex") == 0) && (HasSpell("Indi-Vex")))
-                {
-                    return "Indi-Vex";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Vex") == 0) && (HasSpell("Geo-Vex")))
-                {
-                    return "Geo-Vex";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 25)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Frailty") == 0) && (HasSpell("Indi-Frailty")))
-                {
-                    return "Indi-Frailty";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Frailty") == 0) && (HasSpell("Geo-Frailty")))
-                {
-                    return "Geo-Frailty";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 26)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Wilt") == 0) && (HasSpell("Indi-Wilt")))
-                {
-                    return "Indi-Wilt";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Wilt") == 0) && (HasSpell("Geo-Wilt")))
-                {
-                    return "Geo-Wilt";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 27)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Malaise") == 0) && (HasSpell("Indi-Malaise")))
-                {
-                    return "Indi-Malaise";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Malaise") == 0) && (HasSpell("Geo-Malaise")))
-                {
-                    return "Geo-Malaise";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 28)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Gravity") == 0) && (HasSpell("Indi-Gravity")))
-                {
-                    return "Indi-Gravity";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Gravity") == 0) && (HasSpell("Geo-Gravity")))
-                {
-                    return "Geo-Gravity";
-                }
-                else { return "SpellNA"; }
-            }
-            else if (GEOSpell_ID == 29)
-            {
-                if ((GeoSpell_Type == 1) && (CheckSpellRecast("Indi-Fade") == 0) && (HasSpell("Indi-Fade")))
-                {
-                    return "Indi-Fade";
-                }
-                else if ((GeoSpell_Type == 2) && (CheckSpellRecast("Geo-Fade") == 0) && (HasSpell("Geo-Fade")))
-                {
-                    return "Geo-Fade";
+                    if (CheckSpellRecast(GeoSpell.geo_spell) == 0)
+                    {
+                        return GeoSpell.geo_spell;
+                    }
+                    else { return "SpellRecast"; }
                 }
                 else { return "SpellNA"; }
             }
@@ -4644,7 +5612,8 @@
             {
                 max_count = 5;
                 last_percent = 0.50;
-            } else
+            }
+            else
             {
                 max_count = 10;
                 last_percent = 1;
@@ -4654,7 +5623,7 @@
             {
                 Thread.Sleep(TimeSpan.FromSeconds(0.1));
 
-               // if (_ELITEAPIPL.CastBar.Percent != 1 ) { MessageBox.Show("Cast Bar @ " + _ELITEAPIPL.CastBar.Percent + " MAX @ " + max_count + " LAST @ " + last_percent); }
+                // if (_ELITEAPIPL.CastBar.Percent != 1 ) { MessageBox.Show("Cast Bar @ " + _ELITEAPIPL.CastBar.Percent + " MAX @ " + max_count + " LAST @ " + last_percent); }
                 if (lastPercent != _ELITEAPIPL.CastBar.Percent)
                 {
                     count = 0;
@@ -4665,7 +5634,7 @@
                     this.castingLockLabel.Text = "Casting was INTERRUPTED!";
                     this.castingStatusCheck.Enabled = false;
                     this.castingUnlockTimer.Enabled = true;
-                   // this.actionTimer.Enabled = true;
+                    // this.actionTimer.Enabled = true;
                     break;
                 }
                 else
@@ -4679,7 +5648,7 @@
             Thread.Sleep(500);
             this.castingStatusCheck.Enabled = false;
             this.castingUnlockTimer.Enabled = true;
-           // this.actionTimer.Enabled = true;
+            // this.actionTimer.Enabled = true;
 
         }
 
@@ -4699,7 +5668,7 @@
             {
                 this.castingLockLabel.Text = "Casting is UNLOCKED!";
                 this.castingLock = false;
-             //   this.actionTimer.Enabled = true;
+                //   this.actionTimer.Enabled = true;
                 this.castingUnlockTimer.Enabled = false;
             }
         }
@@ -4721,7 +5690,7 @@
                 this.castingLockLabel.Text = "Casting is UNLOCKED! ";
                 this.castingLock = false;
                 this.actionUnlockTimer.Enabled = false;
-            //    this.actionTimer.Enabled = true;
+                //    this.actionTimer.Enabled = true;
             }
         }
         #endregion
@@ -4937,7 +5906,7 @@
         #region "== Pause Button"
         private void button3_Click(object sender, EventArgs e)
         {
-
+            song_casting = 0;
 
             this.pauseActions = !this.pauseActions;
 
@@ -4956,12 +5925,22 @@
 
                 if (Settings.Default.naSpellsenable && LUA_Plugin_Loaded == 0)
                 {
-                    if (WindowerMode == "Windower") {
+                    if (WindowerMode == "Windower")
+                    {
                         _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
+                        if (Settings.Default.IpAddress != "127.0.0.1" || Settings.Default.listeningPort != "19769")
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString("//cp settings " + Settings.Default.IpAddress + " " + Settings.Default.listeningPort);
+                        }
+
                     }
                     else if (WindowerMode == "Ashita")
                     {
                         _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
+                        if (Settings.Default.IpAddress != "127.0.0.1" || Settings.Default.listeningPort != "19769")
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString("/cp settings " + Settings.Default.IpAddress + " " + Settings.Default.listeningPort);
+                        }
                     }
                     LUA_Plugin_Loaded = 1;
                 }
@@ -5185,6 +6164,8 @@
             {
                 bool done = false;
 
+                int listenPort = Convert.ToInt32(Properties.Settings.Default.listeningPort);
+
                 UdpClient listener = new UdpClient(listenPort);
                 IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse(Settings.Default.IpAddress), listenPort);
 
@@ -5211,7 +6192,7 @@
                         });
                     }
                 }
-                catch (Exception error)
+                catch (Exception)
                 {
 
                 }
@@ -5307,6 +6288,10 @@
 
 
                     }
+                    else
+                    {
+                        _ELITEAPIPL.Target.SetTarget(0);
+                    }
 
                 }
             }
@@ -5318,7 +6303,7 @@
         #region "== Grab Follow ID"
 
         private int followID()
-    {
+        {
             if ((setinstance2.Enabled == true) && !String.IsNullOrEmpty(Settings.Default.autoFollowName) && !pauseActions)
             {
                 for (var x = 0; x < 2048; x++)
@@ -5334,7 +6319,7 @@
             }
             else
                 return -1;
-    }
+        }
 
         #endregion
 
@@ -5353,12 +6338,13 @@
                 {
                     partyChecker++;
                 }
-                if (PTMember.Name == _ELITEAPIMonitored.Player.Name) {
+                if (PTMember.Name == _ELITEAPIMonitored.Player.Name)
+                {
                     partyChecker++;
                 }
             }
 
-          if (partyChecker >= 2)
+            if (partyChecker >= 2)
             {
 
                 int plParty = (int)_ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIPL.Player.Name).Select(p => p.MemberNumber).First();
@@ -5388,12 +6374,17 @@
 
         }
 
+        private void resetSongTimer_Tick(object sender, EventArgs e)
+        {
+            song_casting = 0;
+        }
+
         #endregion
 
 
         // END OF THE FORM SCRIPT
     }
-        // END OF THE FORM SCRIPT 
+    // END OF THE FORM SCRIPT 
 
 
     public static class RichTextBoxExtensions

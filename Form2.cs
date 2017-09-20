@@ -85,7 +85,7 @@ namespace CurePlease
                 this.plRefreshLevel3.Checked = true;
             }
 
-  
+
 
             this.plStoneskin.Checked = Properties.Settings.Default.plStoneskin;
             this.plPhalanx.Checked = Properties.Settings.Default.plPhalanx;
@@ -265,7 +265,7 @@ namespace CurePlease
             this.curagaTargetType.SelectedIndex = Properties.Settings.Default.curagaTargetType;
             this.curagaTargetName.Text = Properties.Settings.Default.curagaTargetName;
             this.requiredCuragaNumbers.Value = Properties.Settings.Default.curagaRequiredMembers;
-            
+
             // Stop on ....
             this.pauseOnZoneBox.Checked = Properties.Settings.Default.pauseOnZone;
             this.pauseOnStartBox.Checked = Properties.Settings.Default.pauseOnStartup;
@@ -299,6 +299,38 @@ namespace CurePlease
             this.ipAddress.Text = Properties.Settings.Default.IpAddress;
             // this.lowerTier_box.Checked = Properties.Settings.Default.lowerTier;
 
+
+            // 16.August.2017 Additions
+            this.penury.Checked = Properties.Settings.Default.penury;
+            this.perpetuance.Checked = Properties.Settings.Default.perpetuance;
+            this.accession.Checked = Properties.Settings.Default.accession;
+            this.rapture.Checked = Properties.Settings.Default.rapture;
+            this.celerity.Checked = Properties.Settings.Default.celerity;
+
+            this.song1.SelectedIndex = Properties.Settings.Default.song1;
+            this.song2.SelectedIndex = Properties.Settings.Default.song2;
+            this.song3.SelectedIndex = Properties.Settings.Default.song3;
+            this.song4.SelectedIndex = Properties.Settings.Default.song4;
+
+            this.dummy1.SelectedIndex = Properties.Settings.Default.dummy1;
+            this.dummy2.SelectedIndex = Properties.Settings.Default.dummy2;
+
+            this.clarionSong.SelectedIndex = Properties.Settings.Default.clarionsong;
+
+            this.recastSong.Value = Properties.Settings.Default.recastSong;
+
+            this.enableSinging.Checked = Properties.Settings.Default.enableSinging;
+
+            this.listeningPort.Text = Properties.Settings.Default.listeningPort;
+
+            this.troubadour.Checked = Properties.Settings.Default.troubadour;
+            this.nightingale.Checked = Properties.Settings.Default.nightingale;
+            this.marcato.Checked = Properties.Settings.Default.marcato;
+
+            this.sublimationMP.Value = Properties.Settings.Default.sublimationMP;
+
+            this.recastSongs_monitored.Checked = Properties.Settings.Default.recastSongs_monitored;
+            this.SongsOnlyWhenNearEngaged.Checked = Properties.Settings.Default.SongsOnlyWhenNearEngaged;
 
 
         }
@@ -579,7 +611,7 @@ namespace CurePlease
 
             // Devotion
             Properties.Settings.Default.DevotionBox = this.DevotionBox.Checked;
-            Properties.Settings.Default.DevotionMP= this.DevotionMP.Value;
+            Properties.Settings.Default.DevotionMP = this.DevotionMP.Value;
             Properties.Settings.Default.DevotionTargetType = this.DevotionTargetType.SelectedIndex;
             Properties.Settings.Default.DevotionTargetName = this.DevotionTargetName.Text;
 
@@ -601,21 +633,44 @@ namespace CurePlease
             // Properties.Settings.Default.lowerTier = this.lowerTier_box.Checked;
 
 
+            // 16.August.2017 Additions
+            Properties.Settings.Default.penury = this.penury.Checked;
+            Properties.Settings.Default.perpetuance = this.perpetuance.Checked;
+            Properties.Settings.Default.accession = this.accession.Checked;
+            Properties.Settings.Default.rapture = this.rapture.Checked;
+            Properties.Settings.Default.celerity = this.celerity.Checked;
+
+            Properties.Settings.Default.enableSinging = this.enableSinging.Checked;
+
+            Properties.Settings.Default.song1 = this.song1.SelectedIndex;
+            Properties.Settings.Default.song2 = this.song2.SelectedIndex;
+            Properties.Settings.Default.song3 = this.song3.SelectedIndex;
+            Properties.Settings.Default.song4 = this.song4.SelectedIndex;
+
+            Properties.Settings.Default.dummy1 = this.dummy1.SelectedIndex;
+            Properties.Settings.Default.dummy2 = this.dummy2.SelectedIndex;
+
+            Properties.Settings.Default.clarionsong = this.clarionSong.SelectedIndex;
+
+            Properties.Settings.Default.recastSong = this.recastSong.Value;
+
+            Properties.Settings.Default.listeningPort = this.listeningPort.Text;
+
+            Properties.Settings.Default.troubadour = this.troubadour.Checked;
+            Properties.Settings.Default.nightingale = this.nightingale.Checked;
+            Properties.Settings.Default.marcato = this.marcato.Checked;
+
+            Properties.Settings.Default.sublimationMP = this.sublimationMP.Value;
+
+            Properties.Settings.Default.recastSongs_monitored = this.recastSongs_monitored.Checked;
+            Properties.Settings.Default.SongsOnlyWhenNearEngaged = this.SongsOnlyWhenNearEngaged.Checked;
 
 
 
 
-
-
-
-
-
-
-
-
-            Properties.Settings.Default.Save();            
+            Properties.Settings.Default.Save();
             this.Close();
-            //MessageBox.Show("Saved!", "All Settings");        
+            //MessageBox.Show("Saved!", "All Settings");
         }
         #endregion
 
@@ -1048,7 +1103,7 @@ namespace CurePlease
                 this.monitoredVitDown.Enabled = false;
                 this.monitoredWeight.Checked = false;
                 this.monitoredWeight.Enabled = false;
-            }        
+            }
         }
         #endregion
 
@@ -1088,18 +1143,11 @@ namespace CurePlease
 
         #endregion
 
-
-        #region "== Form Closing Settings / NO LONGER USED"
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-
-        }
-
-        private void priorityCurePercentageLabel_Click(object sender, EventArgs e)
+        private void recastSong_ValueChanged(object sender, EventArgs e)
         {
 
         }
     }
-        #endregion
 }
+
+

@@ -219,12 +219,14 @@ namespace CurePlease
             this.charselect = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.debugging_MSGBOX = new System.Windows.Forms.Label();
             this.AilmentChecker = new System.ComponentModel.BackgroundWorker();
             this.buff_checker = new System.ComponentModel.BackgroundWorker();
             this.followTimer = new System.Windows.Forms.Timer(this.components);
+            this.resetSongTimer = new System.Windows.Forms.Timer(this.components);
             this.party0.SuspendLayout();
             this.playerOptions.SuspendLayout();
             this.party2.SuspendLayout();
@@ -779,7 +781,7 @@ namespace CurePlease
             this.protectToolStripMenuItem,
             this.shellToolStripMenuItem});
             this.playerOptions.Name = "player0rightclick";
-            this.playerOptions.Size = new System.Drawing.Size(227, 728);
+            this.playerOptions.Size = new System.Drawing.Size(227, 750);
             // 
             // followToolStripMenuItem
             // 
@@ -790,7 +792,7 @@ namespace CurePlease
             // 
             // stopfollowToolStripMenuItem
             // 
-            this.stopfollowToolStripMenuItem.Name = "followToolStripMenuItem";
+            this.stopfollowToolStripMenuItem.Name = "stopfollowToolStripMenuItem";
             this.stopfollowToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.stopfollowToolStripMenuItem.Text = "Cancel /follow";
             this.stopfollowToolStripMenuItem.Click += new System.EventHandler(this.stopfollowToolStripMenuItem_Click);
@@ -2197,6 +2199,7 @@ namespace CurePlease
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox2.Location = new System.Drawing.Point(446, 316);
@@ -2205,6 +2208,15 @@ namespace CurePlease
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Item ID";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(155, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "label2";
             // 
             // groupBox3
             // 
@@ -2244,6 +2256,12 @@ namespace CurePlease
             this.followTimer.Enabled = true;
             this.followTimer.Interval = 500;
             this.followTimer.Tick += new System.EventHandler(this.followTimer_Tick);
+            // 
+            // resetSongTimer
+            // 
+            this.resetSongTimer.Enabled = true;
+            this.resetSongTimer.Interval = 60000;
+            this.resetSongTimer.Tick += new System.EventHandler(this.resetSongTimer_Tick);
             // 
             // Form1
             // 
@@ -2497,6 +2515,8 @@ namespace CurePlease
         public System.ComponentModel.BackgroundWorker AilmentChecker;
         private System.ComponentModel.BackgroundWorker buff_checker;
         private Timer followTimer;
+        private Label label2;
+        private Timer resetSongTimer;
     }
 }
 

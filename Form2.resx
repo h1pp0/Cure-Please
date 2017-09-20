@@ -147,6 +147,21 @@ Default setting: 60
 If 3 members HP is at or below 60% of their health then 
 they will be marked as needing a Cure, then a check will be the party member with the lowest HP to decide what tier is needed.</value>
   </data>
+  <data name="label50.Text" xml:space="preserve">
+    <value>Due to the way buffs work in FFXI if you have the BRD buffs from other 
+members it willl read them as being active and will not cast them. 
+
+The same is true with Dummy spells.
+If you have more than two songs active then it'll assume that is your
+Dummy spell.
+
+As such it's best to only use this when you're the only BRD in the party.
+
+IMPORTANT:
+Make sure Dummy songs are different to the ones you want to cast and
+are set in your Ashita or Gearswap file to activate the item needed to 
+activate the additional song, Ex. Daurdabla.</value>
+  </data>
   <data name="label24.Text" xml:space="preserve">
     <value>THIS IS AN EXPERIMENTAL FEATURE
 
@@ -158,7 +173,7 @@ Fact Cast in gear/traits/gifts.
 </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>41</value>
+    <value>51</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

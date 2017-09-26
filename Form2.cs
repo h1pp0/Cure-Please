@@ -2,338 +2,1046 @@
 namespace CurePlease
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
+    using System.Linq;
     using System.Windows.Forms;
+    using System.Xml.Serialization;
+
+
+
 
     #region "== Form2"
+
     public partial class Form2 : Form
     {
+        #region "== Settings Class"
+
+        public class JobTitles : List<JobTitles>
+        {
+            public int job_number { get; set; }
+            public string job_name { get; set; }
+        }
+
+        public List<JobTitles> JobNames = new List<JobTitles>();
+
+        [Serializable]
+        public class MySettings
+        {
+
+            // BASE NEEDED FOR CONFIRMATION
+            public bool settingsSet { get; set; }
+
+            // HEALING SPELLS TAB
+            public bool cure1enabled { get; set; }
+            public int cure1amount { get; set; }
+            public bool cure2enabled { get; set; }
+            public int cure2amount { get; set; }
+            public bool cure3enabled { get; set; }
+            public int cure3amount { get; set; }
+            public bool cure4enabled { get; set; }
+            public int cure4amount { get; set; }
+            public bool cure5enabled { get; set; }
+            public int cure5amount { get; set; }
+            public bool cure6enabled { get; set; }
+            public int cure6amount { get; set; }
+            public bool curagaEnabled { get; set; }
+            public int curagaAmount { get; set; }
+            public bool curaga2enabled { get; set; }
+            public int curaga2Amount { get; set; }
+            public bool curaga3enabled { get; set; }
+            public int curaga3Amount { get; set; }
+            public bool curaga4enabled { get; set; }
+            public int curaga4Amount { get; set; }
+            public bool curaga5enabled { get; set; }
+            public int curaga5Amount { get; set; }
+            public int curePercentage { get; set; }
+            public int priorityCurePercentage { get; set; }
+            public int monitoredCurePercentage { get; set; }
+            public int curagaCurePercentage { get; set; }
+            public int curagaTargetType { get; set; }
+            public string curagaTargetName { get; set; }
+            public decimal curagaRequiredMembers { get; set; }
+
+            // ENHANCING MAGIC TAB / BASIC 
+            public decimal autoHasteMinutes { get; set; }
+            public decimal autoPhalanxIIMinutes { get; set; }
+            public decimal autoRefresh_Minutes { get; set; }
+            public int autoRefresh_Spell { get; set; }
+            public decimal autoRegen_Minutes { get; set; }
+            public int autoRegen_Spell { get; set; }
+            public decimal autoProtect_Minutes { get; set; }
+            public int autoProtect_Spell { get; set; }
+            public decimal autoShellMinutes { get; set; }
+            public int autoShell_Spell { get; set; }
+            public bool plShellra { get; set; }
+            public decimal plShellra_Level { get; set; }
+            public bool plProtectra { get; set; }
+            public decimal plProtectra_Level { get; set; }
+            public bool plGainBoost { get; set; }
+            public int plGainBoost_Spell { get; set; }
+            public bool plBarElement { get; set; }
+            public int plBarElement_Spell { get; set; }
+            public bool plBarStatus { get; set; }
+            public int plBarStatus_Spell { get; set; }
+            public bool plAuspice { get; set; }
+            public bool plReraise { get; set; }
+            public int plReraise_Level { get; set; }
+            public bool plRefresh { get; set; }
+            public int plRefresh_Level { get; set; }
+            public bool plBlink { get; set; }
+            public bool plPhalanx { get; set; }
+            public bool plStoneskin { get; set; }
+            public bool plTemper { get; set; }
+            public int plTemper_Level { get; set; }
+            public bool plEnspell { get; set; }
+            public int plEnspell_Spell { get; set; }
+            public bool plStormSpell { get; set; }
+            public int plStormSpell_Spell { get; set; }
+            public bool plKlimaform { get; set; }
+            public bool plAquaveil { get; set; }
+
+            // ENHANCING MAGIC TAB / SCHOLAR
+
+            // GEOMANCY MAGIC TAB
+            public bool EnableGeoSpells { get; set; }
+            public bool IndiWhenEngaged { get; set; }
+            public bool EnableLuopanSpells { get; set; }
+            public bool GeoWhenEngaged { get; set; }
+            public bool specifiedEngageTarget { get; set; }
+            public int IndiSpell_Spell { get; set; }
+            public int GeoSpell_Spell { get; set; }
+            public int EntrustedSpell_Spell { get; set; }
+            public string LuopanSpell_Target { get; set; }
+            public string EntrustedSpell_Target { get; set; }
+
+            // SINGING MAGIC TAB
+            public bool enableSinging { get; set; }
+            public bool recastSongs_Monitored { get; set; }
+            public bool SongsOnlyWhenNear { get; set; }
+            public int song1 { get; set; }
+            public int song2 { get; set; }
+            public int song3 { get; set; }
+            public int song4 { get; set; }
+            public int dummy1 { get; set; }
+            public int dummy2 { get; set; }
+            public decimal recastSongTime { get; set; }
+
+            // JOB ABILITIES
+
+            // SCH
+            public bool LightArts { get; set; }
+            public bool Sublimation { get; set; }
+            public bool AddendumWhite { get; set; }
+            // WHM
+            public bool AfflatusSolace { get; set; }
+            public bool AfflatusMisery { get; set; }
+            public bool DivineSeal { get; set; }
+            public bool Devotion { get; set; }
+            // RDM
+            public bool Composure { get; set; }
+            public bool Convert { get; set; }
+            // GEO
+            public bool Entrust { get; set; }
+            public bool FullCircle { get; set; }
+            public bool Dematerialize { get; set; }
+            public bool BlazeOfGlory { get; set; }
+            public bool RadialArcana { get; set; }
+            public bool EclipticAttrition { get; set; }
+            // BRD
+            public bool Pianissimo { get; set; }
+            public bool Nightingale { get; set; }
+            public bool Troubadour { get; set; }
+            public bool Marcato { get; set; }
+
+            // DEBUFF REMOVAL
+            public bool plDebuffEnabled { get; set; }
+            public bool monitoredDebuffEnabled { get; set; }
+            public bool naSpellsenable { get; set; }
+            public bool plSilenceItemEnabled { get; set; }
+            public int plSilenceItem { get; set; }
+            public bool plDoomEnabled { get; set; }
+            public int plDoomitem { get; set; }
+            public bool wakeSleepEnabled { get; set; }
+            public int wakeSleepSpell { get; set; }
+
+            // PARTY DEBUFFS
+            public bool naBlindness { get; set; }
+            public bool naCurse { get; set; }
+            public bool naDisease { get; set; }
+            public bool naParalysis { get; set; }
+            public bool naPetrification { get; set; }
+            public bool naPlague { get; set; }
+            public bool naPoison { get; set; }
+            public bool naSilence { get; set; }
+            public bool naErase { get; set; }
+
+            // PL DEBUFFS
+            public bool plAgiDown { get; set; }
+            public bool plAccuracyDown { get; set; }
+            public bool plAddle { get; set; }
+            public bool plAttackDown { get; set; }
+            public bool plBane { get; set; }
+            public bool plBind { get; set; }
+            public bool plBio { get; set; }
+            public bool plBlindness { get; set; }
+            public bool plBurn { get; set; }
+            public bool plChrDown { get; set; }
+            public bool plChoke { get; set; }
+            public bool plCurse { get; set; }
+            public bool plCurse2 { get; set; }
+            public bool plDexDown { get; set; }
+            public bool plDefenseDown { get; set; }
+            public bool plDia { get; set; }
+            public bool plDisease { get; set; }
+            public bool plDoom { get; set; }
+            public bool plDrown { get; set; }
+            public bool plElegy { get; set; }
+            public bool plEvasionDown { get; set; }
+            public bool plFlash { get; set; }
+            public bool plFrost { get; set; }
+            public bool plHelix { get; set; }
+            public bool plIntDown { get; set; }
+            public bool plMndDown { get; set; }
+            public bool plMagicAccDown { get; set; }
+            public bool plMagicAtkDown { get; set; }
+            public bool plMaxHpDown { get; set; }
+            public bool plMaxMpDown { get; set; }
+            public bool plMaxTpDown { get; set; }
+            public bool plParalysis { get; set; }
+            public bool plPlague { get; set; }
+            public bool plPoison { get; set; }
+            public bool plRasp { get; set; }
+            public bool plRequiem { get; set; }
+            public bool plStrDown { get; set; }
+            public bool plShock { get; set; }
+            public bool plSilence { get; set; }
+            public bool plSlow { get; set; }
+            public bool plThrenody { get; set; }
+            public bool plVitDown { get; set; }
+            public bool plWeight { get; set; }
+
+            // MONITORED DEBUFFS
+            public bool monitoredAgiDown { get; set; }
+            public bool monitoredAccuracyDown { get; set; }
+            public bool monitoredAddle { get; set; }
+            public bool monitoredAttackDown { get; set; }
+            public bool monitoredBane { get; set; }
+            public bool monitoredBind { get; set; }
+            public bool monitoredBio { get; set; }
+            public bool monitoredBlindness { get; set; }
+            public bool monitoredBurn { get; set; }
+            public bool monitoredChrDown { get; set; }
+            public bool monitoredChoke { get; set; }
+            public bool monitoredCurse { get; set; }
+            public bool monitoredCurse2 { get; set; }
+            public bool monitoredDexDown { get; set; }
+            public bool monitoredDefenseDown { get; set; }
+            public bool monitoredDia { get; set; }
+            public bool monitoredDisease { get; set; }
+            public bool monitoredDoom { get; set; }
+            public bool monitoredDrown { get; set; }
+            public bool monitoredElegy { get; set; }
+            public bool monitoredEvasionDown { get; set; }
+            public bool monitoredFlash { get; set; }
+            public bool monitoredFrost { get; set; }
+            public bool monitoredHelix { get; set; }
+            public bool monitoredIntDown { get; set; }
+            public bool monitoredMndDown { get; set; }
+            public bool monitoredMagicAccDown { get; set; }
+            public bool monitoredMagicAtkDown { get; set; }
+            public bool monitoredMaxHpDown { get; set; }
+            public bool monitoredMaxMpDown { get; set; }
+            public bool monitoredMaxTpDown { get; set; }
+            public bool monitoredParalysis { get; set; }
+            public bool monitoredPetrification { get; set; }
+            public bool monitoredPlague { get; set; }
+            public bool monitoredPoison { get; set; }
+            public bool monitoredRasp { get; set; }
+            public bool monitoredRequiem { get; set; }
+            public bool monitoredStrDown { get; set; }
+            public bool monitoredShock { get; set; }
+            public bool monitoredSilence { get; set; }
+            public bool monitoredSleep { get; set; }
+            public bool monitoredSleep2 { get; set; }
+            public bool monitoredSlow { get; set; }
+            public bool monitoredThrenody { get; set; }
+            public bool monitoredVitDown { get; set; }
+            public bool monitoredWeight { get; set; }
+
+
+            // OTHER SETTINGS
+
+            // MP OPTIONS
+            public decimal mpMinCastValue { get; set; }
+            public bool lowMPcheckBox { get; set; }
+            public bool healLowMP { get; set; }
+            public decimal healWhenMPBelow { get; set; }
+            public bool standAtMP { get; set; }
+            public decimal standAtMP_Percentage { get; set; }
+
+            // CONVERT SETTINGS
+            public decimal convertMP { get; set; }
+
+            // SUBLIMATION SETTINGS
+            public decimal sublimationMP { get; set; }
+
+            // RADIAL ARCANA SETTINGS
+            public decimal RadialArcanaMP { get; set; }
+            public int RadialArcana_Spell { get; set; }
+
+            // DEVOTION SETTINGS
+            public decimal DevotionMP { get; set; }
+            public int DevotionTargetType { get; set; }
+            public string DevotionTargetName { get; set; }
+            public bool DevotionWhenEngaged { get; set; }
+
+            //AUTO CASTING SPELLS OPTIONS
+            public bool autoTarget { get; set; }
+            public int Hate_SpellType { get; set; }
+            public string autoTargetSpell { get; set; }
+            public string autoTarget_Target { get; set; }
+
+            // PROGRAM OPTIONS
+
+            // PAUSE OPTIONS
+            public bool pauseOnZoneBox { get; set; }
+            public bool pauseOnStartBox { get; set; }
+            // AUTO FOLLOW OPTIONS
+            public string autoFollowName { get; set; }
+            public decimal autoFollowDistance { get; set; }
+            // FAST CAST MODE
+            public bool enableFastCast_Mode { get; set; }
+            // ADD ON OPTIONS
+            public string ipAddress { get; set; }
+            public string listeningPort { get; set; }
+
+        }
+
+        #endregion
+
+        public static MySettings config = new MySettings();
+        public int runOnce = 0;
 
         public Form2()
         {
             this.InitializeComponent();
-            this.cure1enabled.Checked = Properties.Settings.Default.cure1enabled;
-            this.cure2enabled.Checked = Properties.Settings.Default.cure2enabled;
-            this.cure3enabled.Checked = Properties.Settings.Default.cure3enabled;
-            this.cure4enabled.Checked = Properties.Settings.Default.cure4enabled;
-            this.cure5enabled.Checked = Properties.Settings.Default.cure5enabled;
-            this.cure6enabled.Checked = Properties.Settings.Default.cure6enabled;
-            this.cure1amount.Value = Properties.Settings.Default.cure1amount;
-            this.cure2amount.Value = Properties.Settings.Default.cure2amount;
-            this.cure3amount.Value = Properties.Settings.Default.cure3amount;
-            this.cure4amount.Value = Properties.Settings.Default.cure4amount;
-            this.cure5amount.Value = Properties.Settings.Default.cure5amount;
-            this.cure6amount.Value = Properties.Settings.Default.cure6amount;
-            this.curePercentage.Value = Properties.Settings.Default.curePercentage;
-            this.priorityCurePercentage.Value = Properties.Settings.Default.priorityCurePercentage;
-            this.curePercentageValueLabel.Text = Properties.Settings.Default.curePercentage.ToString(CultureInfo.InvariantCulture);
-            this.priorityCurePercentageValueLabel.Text = Properties.Settings.Default.priorityCurePercentage.ToString(CultureInfo.InvariantCulture);
-            this.afflatusSolace.Checked = Properties.Settings.Default.afflatusSolice;
-            this.afflatusMisery.Checked = Properties.Settings.Default.afflatusMisery;
-            this.lightArts.Checked = Properties.Settings.Default.lightArts;
-            this.composure.Checked = Properties.Settings.Default.Composure;
-            this.convert.Checked = Properties.Settings.Default.Convert;
-            this.divineSealBox.Checked = Properties.Settings.Default.divineSealBox;
-            this.addWhite.Checked = Properties.Settings.Default.addWhite;
-            this.sublimation.Checked = Properties.Settings.Default.sublimation;
-            this.autoHasteMinutes.Value = Properties.Settings.Default.autoHasteMinutes;
-            this.autoProtect_Minutes.Value = Properties.Settings.Default.autoProtectMinutes;
-            this.autoShell_Minutes.Value = Properties.Settings.Default.autoShellMinutes;
-            this.autoPhalanxIIMinutes.Value = Properties.Settings.Default.autoPhalanxIIMinutes;
-            this.autoRefresh_Minutes.Value = Properties.Settings.Default.autoRefreshMinutes;
-            this.autoRegen_Minutes.Value = Properties.Settings.Default.autoRegenMinutes;
-            this.autoRefresh_Minutes.Value = Properties.Settings.Default.autoRefreshMinutes;
-            this.plSilenceItemEnabled.Checked = Properties.Settings.Default.plSilenceItemEnabled;
-            this.plSilenceItem.SelectedIndex = Properties.Settings.Default.plSilenceItemIndex;
-            this.wakeSleepEnabled.Checked = Properties.Settings.Default.wakeSleepEnabled;
-            this.wakeSleepSpell.SelectedIndex = Properties.Settings.Default.wakeSleepSpellIndex;
-            this.plDebuffEnabled.Checked = Properties.Settings.Default.plDebuffEnabled;
-            this.monitoredDebuffEnabled.Checked = Properties.Settings.Default.monitoredDebuffEnabled;
-            this.plBlink.Checked = Properties.Settings.Default.plBlink;
-            this.plReraise.Checked = Properties.Settings.Default.plReraise;
-            this.autoRegen.SelectedIndex = Properties.Settings.Default.AutoRegenSpell;
-            this.autoRefresh.SelectedIndex = Properties.Settings.Default.AutoRefreshSpell;
-            this.autoShell.SelectedIndex = Properties.Settings.Default.AutoShellSpell;
-            this.autoProtect.SelectedIndex = Properties.Settings.Default.AutoProtectSpell;
-            if (Properties.Settings.Default.plReraiseLevel == 1 && this.plReraise.Checked == true)
+
+            JobNames.Add(new JobTitles
+            {
+                job_number = 1,
+                job_name = "WAR",
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 2,
+                job_name = "MNK"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 3,
+                job_name = "WHM"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 4,
+                job_name = "BLM"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 5,
+                job_name = "RDM"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 6,
+                job_name = "THF"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 7,
+                job_name = "PLD"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 8,
+                job_name = "DRK"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 9,
+                job_name = "BST"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 10,
+                job_name = "BRD"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 11,
+                job_name = "RNG"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 12,
+                job_name = "SAM"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 13,
+                job_name = "NIN"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 14,
+                job_name = "DRG"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 15,
+                job_name = "SMN"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 16,
+                job_name = "BLU"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 17,
+                job_name = "COR"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 18,
+                job_name = "PUP"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 19,
+                job_name = "DNC"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 20,
+                job_name = "SCH"
+            });
+
+            JobNames.Add(new JobTitles
+            {
+                job_number = 21,
+                job_name = "GEO"
+            });
+            JobNames.Add(new JobTitles
+            {
+                job_number = 22,
+                job_name = "RUN"
+            });
+
+            if (config.settingsSet != true)
+            {
+
+                // HEALING MAGIC
+                config.cure1enabled = false;
+                config.cure2enabled = false;
+                config.cure3enabled = true;
+                config.cure4enabled = true;
+                config.cure5enabled = true;
+                config.cure6enabled = true;
+                config.cure1amount = 100;
+                config.cure2amount = 200;
+                config.cure3amount = 400;
+                config.cure4amount = 800;
+                config.cure5amount = 1200;
+                config.cure6amount = 1600;
+                config.curePercentage = 75;
+                config.monitoredCurePercentage = 85;
+                config.priorityCurePercentage = 95;
+
+                config.curagaEnabled = false;
+                config.curaga2enabled = false;
+                config.curaga3enabled = false;
+                config.curaga4enabled = false;
+                config.curaga5enabled = false;
+                config.curagaAmount = 100;
+                config.curaga2Amount = 300;
+                config.curaga3Amount = 600;
+                config.curaga4Amount = 1000;
+                config.curaga5Amount = 1200;
+                config.curagaCurePercentage = 75;
+                config.curagaTargetType = 1;
+                config.curagaTargetName = "";
+                config.curagaRequiredMembers = 3;
+
+                // ENHANCING MAGIC
+
+                // BASIC ENHANCING
+                config.autoHasteMinutes = 2;
+                config.autoProtect_Minutes = 29;
+                config.autoShellMinutes = 29;
+                config.autoPhalanxIIMinutes = 2;
+                config.autoRefresh_Minutes = 2;
+                config.autoRegen_Minutes = 1;
+                config.autoRefresh_Minutes = 2;
+                config.plBlink = false;
+                config.plReraise = false;
+                config.autoRegen_Spell = 3;
+                config.autoRefresh_Spell = 1;
+                config.autoShell_Spell = 4;
+                config.autoProtect_Spell = 4;
+                config.plReraise = false;
+                config.plReraise_Level = 0;
+                config.plRefresh = false;
+                config.plRefresh_Level = 0;
+                config.plStoneskin = false;
+                config.plPhalanx = false;
+                config.plProtectra = false;
+                config.plShellra = false;
+                config.plProtectra_Level = 5;
+                config.plShellra_Level = 5;
+                config.plTemper = false;
+                config.plTemper_Level = 0;
+                config.plEnspell = false;
+                config.plEnspell_Spell = 0;
+                config.plGainBoost = false;
+                config.plGainBoost_Spell = 0;
+                config.plBarElement = false;
+                config.plBarElement_Spell = 0;
+                config.plBarStatus = false;
+                config.plBarStatus_Spell = 0;
+                config.plStormSpell = false;
+                config.plKlimaform = false;
+                config.plStormSpell_Spell = 0;
+                config.plAuspice = false;
+                config.plAquaveil = false;
+
+                // SCHOLAR STRATAGEMS
+
+                // GEOMANCER
+                config.EnableGeoSpells = false;
+                config.GeoWhenEngaged = false;
+                config.GeoSpell_Spell = 0;
+                config.LuopanSpell_Target = "";
+                config.IndiSpell_Spell = 0;
+                config.EntrustedSpell_Spell = 0;
+                config.EntrustedSpell_Target = "";
+                config.EnableLuopanSpells = false;
+                config.GeoWhenEngaged = false;
+
+                config.specifiedEngageTarget = false;
+
+                // SINGING
+                config.enableSinging = false;
+                config.song1 = 0;
+                config.song2 = 0;
+                config.song3 = 0;
+                config.song4 = 0;
+                config.dummy1 = 0;
+                config.dummy2 = 0;
+                config.recastSongTime = 2;
+                config.enableSinging = false;
+                config.recastSongs_Monitored = false;
+                config.SongsOnlyWhenNear = false;
+
+                // JOB ABILITIES
+                config.AfflatusSolace = false;
+                config.AfflatusMisery = false;
+                config.LightArts = false;
+                config.Composure = false;
+                config.Convert = false;
+                config.DivineSeal = false;
+                config.AddendumWhite = false;
+                config.Sublimation = false;
+                config.EclipticAttrition = false;
+                config.Entrust = false;
+                config.Dematerialize = false;
+                config.FullCircle = false;
+                config.BlazeOfGlory = false;
+                config.RadialArcana = false;
+                config.Troubadour = false;
+                config.Nightingale = false;
+                config.Marcato = false;
+                config.Devotion = false;
+
+                // DEBUFF REMOVAL 
+                config.plSilenceItemEnabled = false;
+                config.plSilenceItem = 0;
+                config.wakeSleepEnabled = false;
+                config.wakeSleepSpell = 1;
+                config.plDoomEnabled = false;
+                config.plDoomitem = 0;
+
+                config.plDebuffEnabled = false;
+                config.plAgiDown = false;
+                config.plAccuracyDown = false;
+                config.plAddle = false;
+                config.plAttackDown = false;
+                config.plBane = false;
+                config.plBind = false;
+                config.plBio = false;
+                config.plBlindness = false;
+                config.plBurn = false;
+                config.plChrDown = false;
+                config.plChoke = false;
+                config.plCurse = false;
+                config.plCurse2 = false;
+                config.plDexDown = false;
+                config.plDefenseDown = false;
+                config.plDia = false;
+                config.plDisease = false;
+                config.plDoom = false;
+                config.plDrown = false;
+                config.plElegy = false;
+                config.plEvasionDown = false;
+                config.plFlash = false;
+                config.plFrost = false;
+                config.plHelix = false;
+                config.plIntDown = false;
+                config.plMndDown = false;
+                config.plMagicAccDown = false;
+                config.plMagicAtkDown = false;
+                config.plMaxHpDown = false;
+                config.plMaxMpDown = false;
+                config.plMaxTpDown = false;
+                config.plParalysis = false;
+                config.plPlague = false;
+                config.plPoison = false;
+                config.plRasp = false;
+                config.plRequiem = false;
+                config.plStrDown = false;
+                config.plShock = false;
+                config.plSilence = false;
+                config.plSlow = false;
+                config.plThrenody = false;
+                config.plVitDown = false;
+                config.plWeight = false;
+
+                config.naSpellsenable = false;
+                config.naBlindness = false;
+                config.naCurse = false;
+                config.naDisease = false;
+                config.naParalysis = false;
+                config.naPetrification = false;
+                config.naPlague = false;
+                config.naPoison = false;
+                config.naSilence = false;
+                config.naErase = false;
+
+                config.monitoredDebuffEnabled = false;
+                config.monitoredAgiDown = false;
+                config.monitoredAccuracyDown = false;
+                config.monitoredAddle = false;
+                config.monitoredAttackDown = false;
+                config.monitoredBane = false;
+                config.monitoredBind = false;
+                config.monitoredBio = false;
+                config.monitoredBlindness = false;
+                config.monitoredBurn = false;
+                config.monitoredChrDown = false;
+                config.monitoredChoke = false;
+                config.monitoredCurse = false;
+                config.monitoredCurse2 = false;
+                config.monitoredDexDown = false;
+                config.monitoredDefenseDown = false;
+                config.monitoredDia = false;
+                config.monitoredDisease = false;
+                config.monitoredDoom = false;
+                config.monitoredDrown = false;
+                config.monitoredElegy = false;
+                config.monitoredEvasionDown = false;
+                config.monitoredFlash = false;
+                config.monitoredFrost = false;
+                config.monitoredHelix = false;
+                config.monitoredIntDown = false;
+                config.monitoredMndDown = false;
+                config.monitoredMagicAccDown = false;
+                config.monitoredMagicAtkDown = false;
+                config.monitoredMaxHpDown = false;
+                config.monitoredMaxMpDown = false;
+                config.monitoredMaxTpDown = false;
+                config.monitoredParalysis = false;
+                config.monitoredPetrification = false;
+                config.monitoredPlague = false;
+                config.monitoredPoison = false;
+                config.monitoredRasp = false;
+                config.monitoredRequiem = false;
+                config.monitoredStrDown = false;
+                config.monitoredShock = false;
+                config.monitoredSilence = false;
+                config.monitoredSleep = false;
+                config.monitoredSleep2 = false;
+                config.monitoredSlow = false;
+                config.monitoredThrenody = false;
+                config.monitoredVitDown = false;
+                config.monitoredWeight = false;
+
+                // OTHER OPTIONS
+
+                config.lowMPcheckBox = false;
+                config.mpMinCastValue = 100;
+
+                config.autoTarget = false;
+                config.autoTargetSpell = "Dia";
+
+                config.RadialArcanaMP = 300;
+
+                config.convertMP = 300;
+
+                config.DevotionMP = 200;
+
+                config.DevotionTargetType = 1;
+                config.DevotionTargetName = "";
+                config.DevotionWhenEngaged = false;
+
+                config.Hate_SpellType = 1;
+                config.autoTarget_Target = "";
+
+
+                config.healWhenMPBelow = 5;
+                config.healLowMP = false;
+
+                config.standAtMP_Percentage = 99;
+                config.standAtMP = false;
+
+                config.sublimationMP = 100;
+
+                // PROGRAM OPTIONS
+
+                config.pauseOnZoneBox = false;
+                config.pauseOnStartBox = false;
+
+                config.autoFollowName = "";
+                config.autoFollowDistance = 3;
+
+
+                config.ipAddress = "127.0.0.1";
+                config.listeningPort = "19769";
+
+                config.enableFastCast_Mode = false;
+
+                // OTHERS
+
+                config.settingsSet = true;
+
+            }
+
+            // HEALING MAGIC
+            this.cure1enabled.Checked = config.cure1enabled;
+            this.cure2enabled.Checked = config.cure2enabled;
+            this.cure3enabled.Checked = config.cure3enabled;
+            this.cure4enabled.Checked = config.cure4enabled;
+            this.cure5enabled.Checked = config.cure5enabled;
+            this.cure6enabled.Checked = config.cure6enabled;
+            this.cure1amount.Value = config.cure1amount;
+            this.cure2amount.Value = config.cure2amount;
+            this.cure3amount.Value = config.cure3amount;
+            this.cure4amount.Value = config.cure4amount;
+            this.cure5amount.Value = config.cure5amount;
+            this.cure6amount.Value = config.cure6amount;
+            this.curePercentage.Value = config.curePercentage;
+            this.curePercentageValueLabel.Text = config.curePercentage.ToString(CultureInfo.InvariantCulture);
+            this.priorityCurePercentage.Value = config.priorityCurePercentage;
+            this.priorityCurePercentageValueLabel.Text = config.priorityCurePercentage.ToString(CultureInfo.InvariantCulture);
+            this.monitoredCurePercentage.Value = config.monitoredCurePercentage;
+            this.monitoredCurePercentageValueLabel.Text = config.monitoredCurePercentage.ToString(CultureInfo.InvariantCulture);
+
+            this.curagaEnabled.Checked = config.curagaEnabled;
+            this.curaga2Enabled.Checked = config.curaga2enabled;
+            this.curaga3Enabled.Checked = config.curaga3enabled;
+            this.curaga4Enabled.Checked = config.curaga4enabled;
+            this.curaga5Enabled.Checked = config.curaga5enabled;
+
+            this.curagaAmount.Value = config.curagaAmount;
+            this.curaga2Amount.Value = config.curaga2Amount;
+            this.curaga3Amount.Value = config.curaga3Amount;
+            this.curaga4Amount.Value = config.curaga4Amount;
+            this.curaga5Amount.Value = config.curaga5Amount;
+
+            this.curagaCurePercentage.Value = config.curagaCurePercentage;
+            this.curagaPercentageValueLabel.Text = config.curagaCurePercentage.ToString(CultureInfo.InvariantCulture);
+            this.curagaTargetType.SelectedIndex = config.curagaTargetType;
+            this.curagaTargetName.Text = config.curagaTargetName;
+            this.requiredCuragaNumbers.Value = config.curagaRequiredMembers;
+
+            // ENHANCING MAGIC
+
+            // BASIC ENHANCING
+            this.autoHasteMinutes.Value = config.autoHasteMinutes;
+            this.autoProtect_Minutes.Value = config.autoProtect_Minutes;
+            this.autoShell_Minutes.Value = config.autoShellMinutes;
+            this.autoPhalanxIIMinutes.Value = config.autoPhalanxIIMinutes;
+            this.autoRefresh_Minutes.Value = config.autoRefresh_Minutes;
+            this.autoRegen_Minutes.Value = config.autoRegen_Minutes;
+            this.autoRefresh_Minutes.Value = config.autoRefresh_Minutes;
+            this.plBlink.Checked = config.plBlink;
+            this.plReraise.Checked = config.plReraise;
+            this.autoRegen.SelectedIndex = config.autoRegen_Spell;
+            this.autoRefresh.SelectedIndex = config.autoRefresh_Spell;
+            this.autoShell.SelectedIndex = config.autoShell_Spell;
+            this.autoProtect.SelectedIndex = config.autoProtect_Spell;
+            if (config.plReraise_Level == 1 && this.plReraise.Checked == true)
             {
                 this.plReraiseLevel1.Checked = true;
             }
-            else if (Properties.Settings.Default.plReraiseLevel == 2 && this.plReraise.Checked == true)
+            else if (config.plReraise_Level == 2 && this.plReraise.Checked == true)
             {
                 this.plReraiseLevel2.Checked = true;
             }
-            else if (Properties.Settings.Default.plReraiseLevel == 3 && this.plReraise.Checked == true)
+            else if (config.plReraise_Level == 3 && this.plReraise.Checked == true)
             {
                 this.plReraiseLevel3.Checked = true;
             }
-            else if (Properties.Settings.Default.plReraiseLevel == 4 && this.plReraise.Checked == true)
+            else if (config.plReraise_Level == 4 && this.plReraise.Checked == true)
             {
                 this.plReraiseLevel4.Checked = true;
             }
-            this.plRefresh.Checked = Properties.Settings.Default.plRefresh;
-            if (Properties.Settings.Default.plRefreshLevel == 1 && this.plRefresh.Checked == true)
+            this.plRefresh.Checked = config.plRefresh;
+            if (config.plRefresh_Level == 1 && this.plRefresh.Checked == true)
             {
                 this.plRefreshLevel1.Checked = true;
             }
-            else if (Properties.Settings.Default.plRefreshLevel == 2 && this.plRefresh.Checked == true)
+            else if (config.plRefresh_Level == 2 && this.plRefresh.Checked == true)
             {
                 this.plRefreshLevel2.Checked = true;
             }
-            else if (Properties.Settings.Default.plRefreshLevel == 3 && this.plRefresh.Checked == true)
+            else if (config.plRefresh_Level == 3 && this.plRefresh.Checked == true)
             {
                 this.plRefreshLevel3.Checked = true;
             }
-
-
-
-            this.plStoneskin.Checked = Properties.Settings.Default.plStoneskin;
-            this.plPhalanx.Checked = Properties.Settings.Default.plPhalanx;
-            this.plAgiDown.Checked = Properties.Settings.Default.plAgiDown;
-            this.plAccuracyDown.Checked = Properties.Settings.Default.plAccuracyDown;
-            this.plAddle.Checked = Properties.Settings.Default.plAddle;
-            this.plAttackDown.Checked = Properties.Settings.Default.plAttackDown;
-            this.plBane.Checked = Properties.Settings.Default.plBane;
-            this.plBind.Checked = Properties.Settings.Default.plBind;
-            this.plBio.Checked = Properties.Settings.Default.plBio;
-            this.plBlindness.Checked = Properties.Settings.Default.plBlindness;
-            this.plBurn.Checked = Properties.Settings.Default.plBurn;
-            this.plChrDown.Checked = Properties.Settings.Default.plChrDown;
-            this.plChoke.Checked = Properties.Settings.Default.plChoke;
-            this.plCurse.Checked = Properties.Settings.Default.plCurse;
-            this.plCurse2.Checked = Properties.Settings.Default.plCurse2;
-            this.plDexDown.Checked = Properties.Settings.Default.plDexDown;
-            this.plDefenseDown.Checked = Properties.Settings.Default.plDefenseDown;
-            this.plDia.Checked = Properties.Settings.Default.plDia;
-            this.plDisease.Checked = Properties.Settings.Default.plDisease;
-            this.plDoom.Checked = Properties.Settings.Default.plDoom;
-            this.plDrown.Checked = Properties.Settings.Default.plDrown;
-            this.plElegy.Checked = Properties.Settings.Default.plElegy;
-            this.plEvasionDown.Checked = Properties.Settings.Default.plEvasionDown;
-            this.plFlash.Checked = Properties.Settings.Default.plFlash;
-            this.plFrost.Checked = Properties.Settings.Default.plFrost;
-            this.plHelix.Checked = Properties.Settings.Default.plHelix;
-            this.plIntDown.Checked = Properties.Settings.Default.plIntDown;
-            this.plMndDown.Checked = Properties.Settings.Default.plMndDown;
-            this.plMagicAccDown.Checked = Properties.Settings.Default.plMagicAccDown;
-            this.plMagicAtkDown.Checked = Properties.Settings.Default.plMagicAtkDown;
-            this.plMaxHpDown.Checked = Properties.Settings.Default.plMaxHpDown;
-            this.plMaxMpDown.Checked = Properties.Settings.Default.plMaxMpDown;
-            this.plMaxTpDown.Checked = Properties.Settings.Default.plMaxTpDown;
-            this.plParalysis.Checked = Properties.Settings.Default.plParalysis;
-            this.plPlague.Checked = Properties.Settings.Default.plPlague;
-            this.plPoison.Checked = Properties.Settings.Default.plPoison;
-            this.plRasp.Checked = Properties.Settings.Default.plRasp;
-            this.plRequiem.Checked = Properties.Settings.Default.plRequiem;
-            this.plStrDown.Checked = Properties.Settings.Default.plStrDown;
-            this.plShock.Checked = Properties.Settings.Default.plShock;
-            this.plSilence.Checked = Properties.Settings.Default.plSilence;
-            this.plSlow.Checked = Properties.Settings.Default.plSlow;
-            this.plThrenody.Checked = Properties.Settings.Default.plThrenody;
-            this.plVitDown.Checked = Properties.Settings.Default.plVitDown;
-            this.plWeight.Checked = Properties.Settings.Default.plWeight;
-            this.AutoCastEngageCheckBox.Checked = Properties.Settings.Default.AutoCastEngageCheckBox;
-            // New UI Elements
-            this.plDoomEnabled.Checked = Properties.Settings.Default.plDoomEnabled;
-            this.plDoomitem.SelectedIndex = Properties.Settings.Default.plDoomindex;
-            this.plDoomitem.Text = Properties.Settings.Default.PLDoomitem;
-            this.lowMPcheckBox.Checked = Properties.Settings.Default.lowMPcheckBox;
-            this.mpMinCastValue.Value = Properties.Settings.Default.mpMinCastValue;
-            this.naSpellsenable.Checked = Properties.Settings.Default.naSpellsenable;
-            this.naBlindness.Checked = Properties.Settings.Default.naBlindness;
-            this.naCurse.Checked = Properties.Settings.Default.naCurse;
-            this.naDisease.Checked = Properties.Settings.Default.naDisease;
-            this.naParalysis.Checked = Properties.Settings.Default.naParalysis;
-            this.naPetrification.Checked = Properties.Settings.Default.naPetrification;
-            this.naPlague.Checked = Properties.Settings.Default.naPlague;
-            this.naPoison.Checked = Properties.Settings.Default.naPoison;
-            this.naSilence.Checked = Properties.Settings.Default.naSilence;
-            this.naErase.Checked = Properties.Settings.Default.naErase;
-            this.plProtectra.Checked = Properties.Settings.Default.plProtectra;
-            this.plShellra.Checked = Properties.Settings.Default.plShellra;
-            this.plProtectralevel.Value = Properties.Settings.Default.plProtectralevel;
-            this.plShellralevel.Value = Properties.Settings.Default.plShellralevel;
-            this.lowMPuseitem.Checked = Properties.Settings.Default.lowMPuseitem;
-            this.mpMintempitemusage.Value = Properties.Settings.Default.mpMintempitemusage;
-            this.monitoredAgiDown.Checked = Properties.Settings.Default.monitoredAgiDown;
-            this.monitoredAccuracyDown.Checked = Properties.Settings.Default.monitoredAccuracyDown;
-            this.monitoredAddle.Checked = Properties.Settings.Default.monitoredAddle;
-            this.monitoredAttackDown.Checked = Properties.Settings.Default.monitoredAttackDown;
-            this.monitoredBane.Checked = Properties.Settings.Default.monitoredBane;
-            this.monitoredBind.Checked = Properties.Settings.Default.monitoredBind;
-            this.monitoredBio.Checked = Properties.Settings.Default.monitoredBio;
-            this.monitoredBlindness.Checked = Properties.Settings.Default.monitoredBlindness;
-            this.monitoredBurn.Checked = Properties.Settings.Default.monitoredBurn;
-            this.monitoredChrDown.Checked = Properties.Settings.Default.monitoredChrDown;
-            this.monitoredChoke.Checked = Properties.Settings.Default.monitoredChoke;
-            this.monitoredCurse.Checked = Properties.Settings.Default.monitoredCurse;
-            this.monitoredCurse2.Checked = Properties.Settings.Default.monitoredCurse2;
-            this.monitoredDexDown.Checked = Properties.Settings.Default.monitoredDexDown;
-            this.monitoredDefenseDown.Checked = Properties.Settings.Default.monitoredDefenseDown;
-            this.monitoredDia.Checked = Properties.Settings.Default.monitoredDia;
-            this.monitoredDisease.Checked = Properties.Settings.Default.monitoredDisease;
-            this.monitoredDoom.Checked = Properties.Settings.Default.monitoredDoom;
-            this.monitoredDrown.Checked = Properties.Settings.Default.monitoredDrown;
-            this.monitoredElegy.Checked = Properties.Settings.Default.monitoredElegy;
-            this.monitoredEvasionDown.Checked = Properties.Settings.Default.monitoredEvasionDown;
-            this.monitoredFlash.Checked = Properties.Settings.Default.monitoredFlash;
-            this.monitoredFrost.Checked = Properties.Settings.Default.monitoredFrost;
-            this.monitoredHelix.Checked = Properties.Settings.Default.monitoredHelix;
-            this.monitoredIntDown.Checked = Properties.Settings.Default.monitoredIntDown;
-            this.monitoredMndDown.Checked = Properties.Settings.Default.monitoredMndDown;
-            this.monitoredMagicAccDown.Checked = Properties.Settings.Default.monitoredMagicAccDown;
-            this.monitoredMagicAtkDown.Checked = Properties.Settings.Default.monitoredMagicAtkDown;
-            this.monitoredMaxHpDown.Checked = Properties.Settings.Default.monitoredMaxHpDown;
-            this.monitoredMaxMpDown.Checked = Properties.Settings.Default.monitoredMaxMpDown;
-            this.monitoredMaxTpDown.Checked = Properties.Settings.Default.monitoredMaxTpDown;
-            this.monitoredParalysis.Checked = Properties.Settings.Default.monitoredParalysis;
-            this.monitoredPetrification.Checked = Properties.Settings.Default.monitoredPetrification;
-            this.monitoredPlague.Checked = Properties.Settings.Default.monitoredPlague;
-            this.monitoredPoison.Checked = Properties.Settings.Default.monitoredPoison;
-            this.monitoredRasp.Checked = Properties.Settings.Default.monitoredRasp;
-            this.monitoredRequiem.Checked = Properties.Settings.Default.monitoredRequiem;
-            this.monitoredStrDown.Checked = Properties.Settings.Default.monitoredStrDown;
-            this.monitoredShock.Checked = Properties.Settings.Default.monitoredShock;
-            this.monitoredSilence.Checked = Properties.Settings.Default.monitoredSilence;
-            this.monitoredSleep.Checked = Properties.Settings.Default.monitoredSleep;
-            this.monitoredSleep2.Checked = Properties.Settings.Default.monitoredSleep2;
-            this.monitoredSlow.Checked = Properties.Settings.Default.monitoredSlow;
-            this.monitoredThrenody.Checked = Properties.Settings.Default.monitoredThrenody;
-            this.monitoredVitDown.Checked = Properties.Settings.Default.monitoredVitDown;
-            this.monitoredWeight.Checked = Properties.Settings.Default.monitoredWeight;
-
-
-            // GEOMANCER SPELLS ADDED
-            this.EnableGeoSpells.Checked = Properties.Settings.Default.EnableGeoSpells;
-            this.GEO_engaged.Checked = Properties.Settings.Default.GEO_engaged;
-            this.GEOSpell.SelectedIndex = Properties.Settings.Default.GeoSpell;
-            this.GEOSpell_target.Text = Properties.Settings.Default.GeoSpell_Target;
-            this.INDISpell.SelectedIndex = Properties.Settings.Default.IndiSpell;
-            this.entrustINDISpell.SelectedIndex = Properties.Settings.Default.EntrustedIndiSpell;
-            this.entrustSpell_target.Text = Properties.Settings.Default.Entrusted_Target;
-            this.EnableLuopanSpells.Checked = Properties.Settings.Default.EnableLuopanSpells;
-            this.BlazeOfGloryBox.Checked = Properties.Settings.Default.BlazeOfGlory;
-            this.autoTarget.Checked = Properties.Settings.Default.AutoTarget;
-            this.autoTargetSpell.Text = Properties.Settings.Default.autoTargetSpell;
-            this.RadialArcanaBox.Checked = Properties.Settings.Default.RadialArcana;
-            this.RadialArcanaMP.Value = Properties.Settings.Default.RadialArcanaMP;
-            this.FullCircleBox.Checked = Properties.Settings.Default.FullCircle;
-
-            // Additional PL cast
-            this.plTemper.Checked = Properties.Settings.Default.plTemper;
-            if (Properties.Settings.Default.plTemperLevel == 1 && this.plTemper.Checked == true)
+            this.plStoneskin.Checked = config.plStoneskin;
+            this.plPhalanx.Checked = config.plPhalanx;
+            this.plTemper.Checked = config.plTemper;
+            if (config.plTemper_Level == 1 && this.plTemper.Checked == true)
             {
                 this.plTemperLevel1.Checked = true;
             }
-            else if (Properties.Settings.Default.plTemperLevel == 2 && this.plTemper.Checked == true)
+            else if (config.plTemper_Level == 2 && this.plTemper.Checked == true)
             {
                 this.plTemperLevel2.Checked = true;
             }
-            this.plEnspell.Checked = Properties.Settings.Default.plEnspell;
-            this.plEnspell_spell.SelectedIndex = Properties.Settings.Default.plEnspell_Spell;
-            this.plGainBoost.Checked = Properties.Settings.Default.plGainBoost;
-            this.plGainBoost_spell.SelectedIndex = Properties.Settings.Default.plGainBoost_Spell;
-            this.EntrustBox.Checked = Properties.Settings.Default.Entrust;
-            this.DematerializeBox.Checked = Properties.Settings.Default.Dematerialize;
-            this.plBarElement.Checked = Properties.Settings.Default.plBarElement;
-            this.plBarElement_Spell.SelectedIndex = Properties.Settings.Default.plBarElement_Spell;
-            this.plBarStatus.Checked = Properties.Settings.Default.plBarStatus;
-            this.plBarStatus_Spell.SelectedIndex = Properties.Settings.Default.plBarStatus_Spell;
-            this.plStormSpell.Checked = Properties.Settings.Default.plStormSpell;
-            this.plKlimaform.Checked = Properties.Settings.Default.plKlimaform;
-            this.plStormSpell_Spell.SelectedIndex = Properties.Settings.Default.plStormSpell_Spell;
-            this.plAuspice.Checked = Properties.Settings.Default.plAuspice;
-            this.plAquaveil.Checked = Properties.Settings.Default.plAquaveil;
+            this.plEnspell.Checked = config.plEnspell;
+            this.plEnspell_spell.SelectedIndex = config.plEnspell_Spell;
+            this.plGainBoost.Checked = config.plGainBoost;
+            this.plGainBoost_spell.SelectedIndex = config.plGainBoost_Spell;
+            this.EntrustBox.Checked = config.Entrust;
+            this.DematerializeBox.Checked = config.Dematerialize;
+            this.plBarElement.Checked = config.plBarElement;
+            this.plBarElement_Spell.SelectedIndex = config.plBarElement_Spell;
+            this.plBarStatus.Checked = config.plBarStatus;
+            this.plBarStatus_Spell.SelectedIndex = config.plBarStatus_Spell;
+            this.plStormSpell.Checked = config.plStormSpell;
+            this.plKlimaform.Checked = config.plKlimaform;
+            this.plStormSpell_Spell.SelectedIndex = config.plStormSpell_Spell;
+            this.plAuspice.Checked = config.plAuspice;
+            this.plAquaveil.Checked = config.plAquaveil;
 
-            this.ConvertMP.Value = Properties.Settings.Default.ConvertMP;
+            // SCHOLAR STRATAGEMS
 
-            // CURAGA SPELLS 
-            this.curagaEnabled.Checked = Properties.Settings.Default.curagaEnabled;
-            this.curaga2Enabled.Checked = Properties.Settings.Default.curaga2Enabled;
-            this.curaga3Enabled.Checked = Properties.Settings.Default.curaga3Enabled;
-            this.curaga4Enabled.Checked = Properties.Settings.Default.curaga4Enabled;
-            this.curaga5Enabled.Checked = Properties.Settings.Default.curaga5Enabled;
+            // GEOMANCER
+            this.EnableGeoSpells.Checked = config.EnableGeoSpells;
+            this.GEO_engaged.Checked = config.IndiWhenEngaged;
+            this.GEOSpell.SelectedIndex = config.GeoSpell_Spell;
+            this.GEOSpell_target.Text = config.LuopanSpell_Target;
+            this.INDISpell.SelectedIndex = config.IndiSpell_Spell;
+            this.entrustINDISpell.SelectedIndex = config.EntrustedSpell_Spell;
+            this.entrustSpell_target.Text = config.EntrustedSpell_Target;
+            this.EnableLuopanSpells.Checked = config.EnableLuopanSpells;
+            this.specifiedEngageTarget.Checked = config.specifiedEngageTarget;
+            GeoAOE_Engaged.Checked = config.GeoWhenEngaged;
 
-            this.curagaAmount.Value = Properties.Settings.Default.curagaAmount;
-            this.curaga2Amount.Value = Properties.Settings.Default.curaga2Amount;
-            this.curaga3Amount.Value = Properties.Settings.Default.curaga3Amount;
-            this.curaga4Amount.Value = Properties.Settings.Default.curaga4Amount;
-            this.curaga5Amount.Value = Properties.Settings.Default.curaga5Amount;
+            // SINGING
+            this.song1.SelectedIndex = config.song1;
+            this.song2.SelectedIndex = config.song2;
+            this.song3.SelectedIndex = config.song3;
+            this.song4.SelectedIndex = config.song4;
+            this.dummy1.SelectedIndex = config.dummy1;
+            this.dummy2.SelectedIndex = config.dummy2;
+            this.recastSong.Value = config.recastSongTime;
+            this.enableSinging.Checked = config.enableSinging;
+            this.recastSongs_monitored.Checked = config.recastSongs_Monitored;
+            this.SongsOnlyWhenNearEngaged.Checked = config.SongsOnlyWhenNear;
 
-            this.curagaCurePercentage.Value = Properties.Settings.Default.curagaCurePercentage;
-            this.curagaPercentageValueLabel.Text = Properties.Settings.Default.curagaCurePercentage.ToString(CultureInfo.InvariantCulture);
-            this.curagaTargetType.SelectedIndex = Properties.Settings.Default.curagaTargetType;
-            this.curagaTargetName.Text = Properties.Settings.Default.curagaTargetName;
-            this.requiredCuragaNumbers.Value = Properties.Settings.Default.curagaRequiredMembers;
+            //JOB ABILITIES
+            this.afflatusSolace.Checked = config.AfflatusSolace;
+            this.afflatusMisery.Checked = config.AfflatusMisery;
+            this.lightArts.Checked = config.LightArts;
+            this.composure.Checked = config.Composure;
+            this.convert.Checked = config.Convert;
+            this.divineSealBox.Checked = config.DivineSeal;
+            this.addWhite.Checked = config.AddendumWhite;
+            this.sublimation.Checked = config.Sublimation;
+            this.BlazeOfGloryBox.Checked = config.BlazeOfGlory;
+            this.FullCircleBox.Checked = config.FullCircle;
+            this.troubadour.Checked = config.Troubadour;
+            this.nightingale.Checked = config.Nightingale;
+            this.marcato.Checked = config.Marcato;
+            this.EclipticAttritionBox.Checked = config.EclipticAttrition;
+            this.DevotionBox.Checked = config.Devotion;
 
-            // Stop on ....
-            this.pauseOnZoneBox.Checked = Properties.Settings.Default.pauseOnZone;
-            this.pauseOnStartBox.Checked = Properties.Settings.Default.pauseOnStartup;
+            //DEBUFF REMOVAL
+            this.plSilenceItemEnabled.Checked = config.plSilenceItemEnabled;
+            this.plSilenceItem.SelectedIndex = config.plSilenceItem;
+            this.wakeSleepEnabled.Checked = config.wakeSleepEnabled;
+            this.wakeSleepSpell.SelectedIndex = config.wakeSleepSpell;
+            this.plDoomEnabled.Checked = config.plDoomEnabled;
+            this.plDoomitem.SelectedIndex = config.plDoomitem;
 
-            // Auto Follow
-            this.autoFollowName.Text = Properties.Settings.Default.autoFollowName;
-            this.autoFollowDistance.Value = Properties.Settings.Default.autoFollowDistance;
+            this.plDebuffEnabled.Checked = config.plDebuffEnabled;
+            this.plAgiDown.Checked = config.plAgiDown;
+            this.plAccuracyDown.Checked = config.plAccuracyDown;
+            this.plAddle.Checked = config.plAddle;
+            this.plAttackDown.Checked = config.plAttackDown;
+            this.plBane.Checked = config.plBane;
+            this.plBind.Checked = config.plBind;
+            this.plBio.Checked = config.plBio;
+            this.plBlindness.Checked = config.plBlindness;
+            this.plBurn.Checked = config.plBurn;
+            this.plChrDown.Checked = config.plChrDown;
+            this.plChoke.Checked = config.plChoke;
+            this.plCurse.Checked = config.plCurse;
+            this.plCurse2.Checked = config.plCurse2;
+            this.plDexDown.Checked = config.plDexDown;
+            this.plDefenseDown.Checked = config.plDefenseDown;
+            this.plDia.Checked = config.plDia;
+            this.plDisease.Checked = config.plDisease;
+            this.plDoom.Checked = config.plDoom;
+            this.plDrown.Checked = config.plDrown;
+            this.plElegy.Checked = config.plElegy;
+            this.plEvasionDown.Checked = config.plEvasionDown;
+            this.plFlash.Checked = config.plFlash;
+            this.plFrost.Checked = config.plFrost;
+            this.plHelix.Checked = config.plHelix;
+            this.plIntDown.Checked = config.plIntDown;
+            this.plMndDown.Checked = config.plMndDown;
+            this.plMagicAccDown.Checked = config.plMagicAccDown;
+            this.plMagicAtkDown.Checked = config.plMagicAtkDown;
+            this.plMaxHpDown.Checked = config.plMaxHpDown;
+            this.plMaxMpDown.Checked = config.plMaxMpDown;
+            this.plMaxTpDown.Checked = config.plMaxTpDown;
+            this.plParalysis.Checked = config.plParalysis;
+            this.plPlague.Checked = config.plPlague;
+            this.plPoison.Checked = config.plPoison;
+            this.plRasp.Checked = config.plRasp;
+            this.plRequiem.Checked = config.plRequiem;
+            this.plStrDown.Checked = config.plStrDown;
+            this.plShock.Checked = config.plShock;
+            this.plSilence.Checked = config.plSilence;
+            this.plSlow.Checked = config.plSlow;
+            this.plThrenody.Checked = config.plThrenody;
+            this.plVitDown.Checked = config.plVitDown;
+            this.plWeight.Checked = config.plWeight;
 
-            // Devotion
-            this.DevotionBox.Checked = Properties.Settings.Default.DevotionBox;
-            this.DevotionMP.Value = Properties.Settings.Default.DevotionMP;
-            this.DevotionTargetType.SelectedIndex = Properties.Settings.Default.DevotionTargetType;
-            this.DevotionTargetName.Text = Properties.Settings.Default.DevotionTargetName;
-            this.DevotionWhenEngaged.Checked = Properties.Settings.Default.DevotionWhenEngaged;
+            this.monitoredDebuffEnabled.Checked = config.monitoredDebuffEnabled;
+            this.plProtectra.Checked = config.plProtectra;
+            this.plShellra.Checked = config.plShellra;
+            this.plProtectralevel.Value = config.plProtectra_Level;
+            this.plShellralevel.Value = config.plShellra_Level;
+            this.monitoredAgiDown.Checked = config.monitoredAgiDown;
+            this.monitoredAccuracyDown.Checked = config.monitoredAccuracyDown;
+            this.monitoredAddle.Checked = config.monitoredAddle;
+            this.monitoredAttackDown.Checked = config.monitoredAttackDown;
+            this.monitoredBane.Checked = config.monitoredBane;
+            this.monitoredBind.Checked = config.monitoredBind;
+            this.monitoredBio.Checked = config.monitoredBio;
+            this.monitoredBlindness.Checked = config.monitoredBlindness;
+            this.monitoredBurn.Checked = config.monitoredBurn;
+            this.monitoredChrDown.Checked = config.monitoredChrDown;
+            this.monitoredChoke.Checked = config.monitoredChoke;
+            this.monitoredCurse.Checked = config.monitoredCurse;
+            this.monitoredCurse2.Checked = config.monitoredCurse2;
+            this.monitoredDexDown.Checked = config.monitoredDexDown;
+            this.monitoredDefenseDown.Checked = config.monitoredDefenseDown;
+            this.monitoredDia.Checked = config.monitoredDia;
+            this.monitoredDisease.Checked = config.monitoredDisease;
+            this.monitoredDoom.Checked = config.monitoredDoom;
+            this.monitoredDrown.Checked = config.monitoredDrown;
+            this.monitoredElegy.Checked = config.monitoredElegy;
+            this.monitoredEvasionDown.Checked = config.monitoredEvasionDown;
+            this.monitoredFlash.Checked = config.monitoredFlash;
+            this.monitoredFrost.Checked = config.monitoredFrost;
+            this.monitoredHelix.Checked = config.monitoredHelix;
+            this.monitoredIntDown.Checked = config.monitoredIntDown;
+            this.monitoredMndDown.Checked = config.monitoredMndDown;
+            this.monitoredMagicAccDown.Checked = config.monitoredMagicAccDown;
+            this.monitoredMagicAtkDown.Checked = config.monitoredMagicAtkDown;
+            this.monitoredMaxHpDown.Checked = config.monitoredMaxHpDown;
+            this.monitoredMaxMpDown.Checked = config.monitoredMaxMpDown;
+            this.monitoredMaxTpDown.Checked = config.monitoredMaxTpDown;
+            this.monitoredParalysis.Checked = config.monitoredParalysis;
+            this.monitoredPetrification.Checked = config.monitoredPetrification;
+            this.monitoredPlague.Checked = config.monitoredPlague;
+            this.monitoredPoison.Checked = config.monitoredPoison;
+            this.monitoredRasp.Checked = config.monitoredRasp;
+            this.monitoredRequiem.Checked = config.monitoredRequiem;
+            this.monitoredStrDown.Checked = config.monitoredStrDown;
+            this.monitoredShock.Checked = config.monitoredShock;
+            this.monitoredSilence.Checked = config.monitoredSilence;
+            this.monitoredSleep.Checked = config.monitoredSleep;
+            this.monitoredSleep2.Checked = config.monitoredSleep2;
+            this.monitoredSlow.Checked = config.monitoredSlow;
+            this.monitoredThrenody.Checked = config.monitoredThrenody;
+            this.monitoredVitDown.Checked = config.monitoredVitDown;
+            this.monitoredWeight.Checked = config.monitoredWeight;
 
-            // 14.May.2017 Additions 
-            GeoAOE_Engaged.Checked = Properties.Settings.Default.GeoAOE_Engaged;
-            Hate_SpellType.SelectedIndex = Properties.Settings.Default.Hate_SpellType;
-            this.autoTarget_target.Text = Properties.Settings.Default.autoTarget_target;
+            this.naSpellsenable.Checked = config.naSpellsenable;
+            this.naBlindness.Checked = config.naBlindness;
+            this.naCurse.Checked = config.naCurse;
+            this.naDisease.Checked = config.naDisease;
+            this.naParalysis.Checked = config.naParalysis;
+            this.naPetrification.Checked = config.naPetrification;
+            this.naPlague.Checked = config.naPlague;
+            this.naPoison.Checked = config.naPoison;
+            this.naSilence.Checked = config.naSilence;
+            this.naErase.Checked = config.naErase;
 
-            // 15.June.2017 Additions 
-            this.healLowMP.Checked = Properties.Settings.Default.healLowMP;
-            this.standAtMP.Checked = Properties.Settings.Default.standAtMP;
-            this.specifiedEngageTarget.Checked = Properties.Settings.Default.specifiedEngageTarget;
-            this.standAtMP_Percentage.Value = Properties.Settings.Default.standAtMP_Percentage;
-            this.healWhenMPBelow.Value = Properties.Settings.Default.healWhenMPBelow;
-            this.enableFastCast_Mode.Checked = Properties.Settings.Default.enableFastCast_Mode;
+            // OTHER OPTIONS
+            this.lowMPcheckBox.Checked = config.lowMPcheckBox;
+            this.mpMinCastValue.Value = config.mpMinCastValue;
 
+            this.autoTarget.Checked = config.autoTarget;
+            this.autoTargetSpell.Text = config.autoTargetSpell;
+            Hate_SpellType.SelectedIndex = config.Hate_SpellType;
+            this.autoTarget_target.Text = config.autoTarget_Target;
 
-            // 27.July.2017 Additions
-            this.ipAddress.Text = Properties.Settings.Default.IpAddress;
-            // this.lowerTier_box.Checked = Properties.Settings.Default.lowerTier;
+            this.RadialArcanaBox.Checked = config.RadialArcana;
+            this.RadialArcanaMP.Value = config.RadialArcanaMP;
 
+            this.ConvertMP.Value = config.convertMP;
 
-            // 16.August.2017 Additions
-            this.penury.Checked = Properties.Settings.Default.penury;
-            this.perpetuance.Checked = Properties.Settings.Default.perpetuance;
-            this.accession.Checked = Properties.Settings.Default.accession;
-            this.rapture.Checked = Properties.Settings.Default.rapture;
-            this.celerity.Checked = Properties.Settings.Default.celerity;
+            this.DevotionMP.Value = config.DevotionMP;
+            this.DevotionTargetType.SelectedIndex = config.DevotionTargetType;
+            this.DevotionTargetName.Text = config.DevotionTargetName;
+            this.DevotionWhenEngaged.Checked = config.DevotionWhenEngaged;
 
-            this.song1.SelectedIndex = Properties.Settings.Default.song1;
-            this.song2.SelectedIndex = Properties.Settings.Default.song2;
-            this.song3.SelectedIndex = Properties.Settings.Default.song3;
-            this.song4.SelectedIndex = Properties.Settings.Default.song4;
+            this.sublimationMP.Value = config.sublimationMP;
 
-            this.dummy1.SelectedIndex = Properties.Settings.Default.dummy1;
-            this.dummy2.SelectedIndex = Properties.Settings.Default.dummy2;
+            this.healLowMP.Checked = config.healLowMP;
+            this.healWhenMPBelow.Value = config.healWhenMPBelow;
 
-            this.clarionSong.SelectedIndex = Properties.Settings.Default.clarionsong;
+            this.standAtMP.Checked = config.standAtMP;
+            this.standAtMP_Percentage.Value = config.standAtMP_Percentage;
 
-            this.recastSong.Value = Properties.Settings.Default.recastSong;
+            // PROGRAM OPTIONS
 
-            this.enableSinging.Checked = Properties.Settings.Default.enableSinging;
+            this.pauseOnZoneBox.Checked = config.pauseOnZoneBox;
+            this.pauseOnStartBox.Checked = config.pauseOnStartBox;
 
-            this.listeningPort.Text = Properties.Settings.Default.listeningPort;
+            this.autoFollowName.Text = config.autoFollowName;
+            this.autoFollowDistance.Value = config.autoFollowDistance;
 
-            this.troubadour.Checked = Properties.Settings.Default.troubadour;
-            this.nightingale.Checked = Properties.Settings.Default.nightingale;
-            this.marcato.Checked = Properties.Settings.Default.marcato;
+            this.ipAddress.Text = config.ipAddress;
+            this.listeningPort.Text = config.listeningPort;
 
-            this.sublimationMP.Value = Properties.Settings.Default.sublimationMP;
-
-            this.recastSongs_monitored.Checked = Properties.Settings.Default.recastSongs_monitored;
-            this.SongsOnlyWhenNearEngaged.Checked = Properties.Settings.Default.SongsOnlyWhenNearEngaged;
+            this.enableFastCast_Mode.Checked = config.enableFastCast_Mode;
 
 
         }
+
+        #endregion
+
+        #region "== Cure Percentage's Changed"
 
         private void curePercentage_ValueChanged(object sender, EventArgs e)
         {
@@ -348,327 +1056,317 @@ namespace CurePlease
         {
             this.curagaPercentageValueLabel.Text = this.curagaCurePercentage.Value.ToString();
         }
-        #endregion        
+
+        private void monitoredPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            this.monitoredCurePercentageValueLabel.Text = this.monitoredCurePercentage.Value.ToString();
+        }
+        #endregion
 
         #region "== All Settings Saved"
         private void button4_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.cure1enabled = this.cure1enabled.Checked;
-            Properties.Settings.Default.cure2enabled = this.cure2enabled.Checked;
-            Properties.Settings.Default.cure3enabled = this.cure3enabled.Checked;
-            Properties.Settings.Default.cure4enabled = this.cure4enabled.Checked;
-            Properties.Settings.Default.cure5enabled = this.cure5enabled.Checked;
-            Properties.Settings.Default.cure6enabled = this.cure6enabled.Checked;
-            Properties.Settings.Default.cure1amount = Convert.ToInt32(this.cure1amount.Value);
-            Properties.Settings.Default.cure2amount = Convert.ToInt32(this.cure2amount.Value);
-            Properties.Settings.Default.cure3amount = Convert.ToInt32(this.cure3amount.Value);
-            Properties.Settings.Default.cure4amount = Convert.ToInt32(this.cure4amount.Value);
-            Properties.Settings.Default.cure5amount = Convert.ToInt32(this.cure5amount.Value);
-            Properties.Settings.Default.cure6amount = Convert.ToInt32(this.cure6amount.Value);
-            Properties.Settings.Default.curePercentage = this.curePercentage.Value;
-            Properties.Settings.Default.priorityCurePercentage = this.priorityCurePercentage.Value;
-            Properties.Settings.Default.afflatusSolice = this.afflatusSolace.Checked;
-            Properties.Settings.Default.afflatusMisery = this.afflatusMisery.Checked;
-            Properties.Settings.Default.lightArts = this.lightArts.Checked;
-            Properties.Settings.Default.Composure = this.composure.Checked;
-            Properties.Settings.Default.Convert = this.convert.Checked;
-            Properties.Settings.Default.divineSealBox = this.divineSealBox.Checked;
-            Properties.Settings.Default.addWhite = this.addWhite.Checked;
-            Properties.Settings.Default.sublimation = this.sublimation.Checked;
-            Properties.Settings.Default.autoHasteMinutes = this.autoHasteMinutes.Value;
-            Properties.Settings.Default.autoProtectMinutes = this.autoProtect_Minutes.Value;
-            Properties.Settings.Default.autoShellMinutes = this.autoShell_Minutes.Value;
-            Properties.Settings.Default.autoPhalanxIIMinutes = this.autoPhalanxIIMinutes.Value;
-            Properties.Settings.Default.autoRegenMinutes = this.autoRegen_Minutes.Value;
-            Properties.Settings.Default.autoRefreshMinutes = this.autoRefresh_Minutes.Value;
-            Properties.Settings.Default.AutoRegenSpell = this.autoRegen.SelectedIndex;
-            Properties.Settings.Default.AutoRefreshSpell = this.autoRefresh.SelectedIndex;
-            Properties.Settings.Default.AutoShellSpell = this.autoShell.SelectedIndex;
-            Properties.Settings.Default.AutoProtectSpell = this.autoProtect.SelectedIndex;
-            Properties.Settings.Default.plSilenceItemEnabled = this.plSilenceItemEnabled.Checked;
-            Properties.Settings.Default.plSilenceItemIndex = this.plSilenceItem.SelectedIndex;
-            Properties.Settings.Default.wakeSleepEnabled = this.wakeSleepEnabled.Checked;
-            Properties.Settings.Default.wakeSleepSpellIndex = this.wakeSleepSpell.SelectedIndex;
-            Properties.Settings.Default.wakeSleepSpellString = this.wakeSleepSpell.Items[this.wakeSleepSpell.SelectedIndex].ToString();
-            Properties.Settings.Default.plDebuffEnabled = this.plDebuffEnabled.Checked;
-            Properties.Settings.Default.monitoredDebuffEnabled = this.monitoredDebuffEnabled.Checked;
-            Properties.Settings.Default.plSilenceItemString = this.plSilenceItem.Items[this.plSilenceItem.SelectedIndex].ToString();
-            Properties.Settings.Default.plBlink = this.plBlink.Checked;
-            Properties.Settings.Default.plReraise = this.plReraise.Checked;
+
+            config.cure1enabled = this.cure1enabled.Checked;
+            config.cure2enabled = this.cure2enabled.Checked;
+            config.cure3enabled = this.cure3enabled.Checked;
+            config.cure4enabled = this.cure4enabled.Checked;
+            config.cure5enabled = this.cure5enabled.Checked;
+            config.cure6enabled = this.cure6enabled.Checked;
+            config.cure1amount = Convert.ToInt32(this.cure1amount.Value);
+            config.cure2amount = Convert.ToInt32(this.cure2amount.Value);
+            config.cure3amount = Convert.ToInt32(this.cure3amount.Value);
+            config.cure4amount = Convert.ToInt32(this.cure4amount.Value);
+            config.cure5amount = Convert.ToInt32(this.cure5amount.Value);
+            config.cure6amount = Convert.ToInt32(this.cure6amount.Value);
+            config.curePercentage = this.curePercentage.Value;
+            config.priorityCurePercentage = this.priorityCurePercentage.Value;
+            config.AfflatusSolace = this.afflatusSolace.Checked;
+            config.AfflatusMisery = this.afflatusMisery.Checked;
+            config.LightArts = this.lightArts.Checked;
+            config.Composure = this.composure.Checked;
+            config.Convert = this.convert.Checked;
+            config.DivineSeal = this.divineSealBox.Checked;
+            config.AddendumWhite = this.addWhite.Checked;
+            config.Sublimation = this.sublimation.Checked;
+            config.autoHasteMinutes = this.autoHasteMinutes.Value;
+            config.autoProtect_Minutes = this.autoProtect_Minutes.Value;
+            config.autoShellMinutes = this.autoShell_Minutes.Value;
+            config.autoPhalanxIIMinutes = this.autoPhalanxIIMinutes.Value;
+            config.autoRegen_Minutes = this.autoRegen_Minutes.Value;
+            config.autoRefresh_Minutes = this.autoRefresh_Minutes.Value;
+            config.autoRegen_Spell = this.autoRegen.SelectedIndex;
+            config.autoRefresh_Spell = this.autoRefresh.SelectedIndex;
+            config.autoShell_Spell = this.autoShell.SelectedIndex;
+            config.autoProtect_Spell = this.autoProtect.SelectedIndex;
+            config.plSilenceItemEnabled = this.plSilenceItemEnabled.Checked;
+            config.plSilenceItem = this.plSilenceItem.SelectedIndex;
+            config.wakeSleepEnabled = this.wakeSleepEnabled.Checked;
+            config.wakeSleepSpell = this.wakeSleepSpell.SelectedIndex;
+            config.plDebuffEnabled = this.plDebuffEnabled.Checked;
+            config.monitoredDebuffEnabled = this.monitoredDebuffEnabled.Checked;
+            config.plBlink = this.plBlink.Checked;
+            config.plReraise = this.plReraise.Checked;
             if (this.plReraiseLevel1.Checked)
             {
-                Properties.Settings.Default.plReraiseLevel = 1;
+                config.plReraise_Level = 1;
             }
             else if (this.plReraiseLevel2.Checked)
             {
-                Properties.Settings.Default.plReraiseLevel = 2;
+                config.plReraise_Level = 2;
             }
             else if (this.plReraiseLevel3.Checked)
             {
-                Properties.Settings.Default.plReraiseLevel = 3;
+                config.plReraise_Level = 3;
             }
             else if (this.plReraiseLevel4.Checked)
             {
-                Properties.Settings.Default.plReraiseLevel = 4;
+                config.plReraise_Level = 4;
             }
-            Properties.Settings.Default.plRefresh = this.plRefresh.Checked;
+            config.plRefresh = this.plRefresh.Checked;
             if (this.plRefreshLevel1.Checked)
             {
-                Properties.Settings.Default.plRefreshLevel = 1;
+                config.plRefresh_Level = 1;
             }
             else if (this.plRefreshLevel2.Checked)
             {
-                Properties.Settings.Default.plRefreshLevel = 2;
+                config.plRefresh_Level = 2;
             }
             else if (this.plRefreshLevel3.Checked)
             {
-                Properties.Settings.Default.plRefreshLevel = 3;
+                config.plRefresh_Level = 3;
             }
-            Properties.Settings.Default.plStoneskin = this.plStoneskin.Checked;
-            Properties.Settings.Default.plPhalanx = this.plPhalanx.Checked;
-            Properties.Settings.Default.plShellra = this.plShellra.Checked;
-            Properties.Settings.Default.plProtectra = this.plProtectra.Checked;
-            Properties.Settings.Default.plProtectralevel = this.plProtectralevel.Value;
-            Properties.Settings.Default.plShellralevel = this.plShellralevel.Value;
-            Properties.Settings.Default.plAgiDown = this.plAgiDown.Checked;
-            Properties.Settings.Default.plAccuracyDown = this.plAccuracyDown.Checked;
-            Properties.Settings.Default.plAddle = this.plAddle.Checked;
-            Properties.Settings.Default.plAttackDown = this.plAttackDown.Checked;
-            Properties.Settings.Default.plBane = this.plBane.Checked;
-            Properties.Settings.Default.plBind = this.plBind.Checked;
-            Properties.Settings.Default.plBio = this.plBio.Checked;
-            Properties.Settings.Default.plBlindness = this.plBlindness.Checked;
-            Properties.Settings.Default.plBurn = this.plBurn.Checked;
-            Properties.Settings.Default.plChrDown = this.plChrDown.Checked;
-            Properties.Settings.Default.plChoke = this.plChoke.Checked;
-            Properties.Settings.Default.plCurse = this.plCurse.Checked;
-            Properties.Settings.Default.plCurse2 = this.plCurse2.Checked;
-            Properties.Settings.Default.plDexDown = this.plDexDown.Checked;
-            Properties.Settings.Default.plDefenseDown = this.plDefenseDown.Checked;
-            Properties.Settings.Default.plDia = this.plDia.Checked;
-            Properties.Settings.Default.plDisease = this.plDisease.Checked;
-            Properties.Settings.Default.plDoom = this.plDoom.Checked;
-            Properties.Settings.Default.plDrown = this.plDrown.Checked;
-            Properties.Settings.Default.plElegy = this.plElegy.Checked;
-            Properties.Settings.Default.plEvasionDown = this.plEvasionDown.Checked;
-            Properties.Settings.Default.plFlash = this.plFlash.Checked;
-            Properties.Settings.Default.plFrost = this.plFrost.Checked;
-            Properties.Settings.Default.plHelix = this.plHelix.Checked;
-            Properties.Settings.Default.plIntDown = this.plIntDown.Checked;
-            Properties.Settings.Default.plMndDown = this.plMndDown.Checked;
-            Properties.Settings.Default.plMagicAccDown = this.plMagicAccDown.Checked;
-            Properties.Settings.Default.plMagicAtkDown = this.plMagicAtkDown.Checked;
-            Properties.Settings.Default.plMaxHpDown = this.plMaxHpDown.Checked;
-            Properties.Settings.Default.plMaxMpDown = this.plMaxMpDown.Checked;
-            Properties.Settings.Default.plMaxTpDown = this.plMaxTpDown.Checked;
-            Properties.Settings.Default.plParalysis = this.plParalysis.Checked;
-            Properties.Settings.Default.plPlague = this.plPlague.Checked;
-            Properties.Settings.Default.plPoison = this.plPoison.Checked;
-            Properties.Settings.Default.plRasp = this.plRasp.Checked;
-            Properties.Settings.Default.plRequiem = this.plRequiem.Checked;
-            Properties.Settings.Default.plStrDown = this.plStrDown.Checked;
-            Properties.Settings.Default.plShock = this.plShock.Checked;
-            Properties.Settings.Default.plSilence = this.plSilence.Checked;
-            Properties.Settings.Default.plSlow = this.plSlow.Checked;
-            Properties.Settings.Default.plThrenody = this.plThrenody.Checked;
-            Properties.Settings.Default.plVitDown = this.plVitDown.Checked;
-            Properties.Settings.Default.plWeight = this.plWeight.Checked;
+            config.plStoneskin = this.plStoneskin.Checked;
+            config.plPhalanx = this.plPhalanx.Checked;
+            config.plShellra = this.plShellra.Checked;
+            config.plProtectra = this.plProtectra.Checked;
+            config.plProtectra_Level = this.plProtectralevel.Value;
+            config.plShellra_Level = this.plShellralevel.Value;
+            config.plAgiDown = this.plAgiDown.Checked;
+            config.plAccuracyDown = this.plAccuracyDown.Checked;
+            config.plAddle = this.plAddle.Checked;
+            config.plAttackDown = this.plAttackDown.Checked;
+            config.plBane = this.plBane.Checked;
+            config.plBind = this.plBind.Checked;
+            config.plBio = this.plBio.Checked;
+            config.plBlindness = this.plBlindness.Checked;
+            config.plBurn = this.plBurn.Checked;
+            config.plChrDown = this.plChrDown.Checked;
+            config.plChoke = this.plChoke.Checked;
+            config.plCurse = this.plCurse.Checked;
+            config.plCurse2 = this.plCurse2.Checked;
+            config.plDexDown = this.plDexDown.Checked;
+            config.plDefenseDown = this.plDefenseDown.Checked;
+            config.plDia = this.plDia.Checked;
+            config.plDisease = this.plDisease.Checked;
+            config.plDoom = this.plDoom.Checked;
+            config.plDrown = this.plDrown.Checked;
+            config.plElegy = this.plElegy.Checked;
+            config.plEvasionDown = this.plEvasionDown.Checked;
+            config.plFlash = this.plFlash.Checked;
+            config.plFrost = this.plFrost.Checked;
+            config.plHelix = this.plHelix.Checked;
+            config.plIntDown = this.plIntDown.Checked;
+            config.plMndDown = this.plMndDown.Checked;
+            config.plMagicAccDown = this.plMagicAccDown.Checked;
+            config.plMagicAtkDown = this.plMagicAtkDown.Checked;
+            config.plMaxHpDown = this.plMaxHpDown.Checked;
+            config.plMaxMpDown = this.plMaxMpDown.Checked;
+            config.plMaxTpDown = this.plMaxTpDown.Checked;
+            config.plParalysis = this.plParalysis.Checked;
+            config.plPlague = this.plPlague.Checked;
+            config.plPoison = this.plPoison.Checked;
+            config.plRasp = this.plRasp.Checked;
+            config.plRequiem = this.plRequiem.Checked;
+            config.plStrDown = this.plStrDown.Checked;
+            config.plShock = this.plShock.Checked;
+            config.plSilence = this.plSilence.Checked;
+            config.plSlow = this.plSlow.Checked;
+            config.plThrenody = this.plThrenody.Checked;
+            config.plVitDown = this.plVitDown.Checked;
+            config.plWeight = this.plWeight.Checked;
             // New UI Elements
-            Properties.Settings.Default.plDoomEnabled = this.plDoomEnabled.Checked;
-            Properties.Settings.Default.plDoomindex = this.plDoomitem.SelectedIndex;
-            Properties.Settings.Default.PLDoomitem = this.plDoomitem.Items[Properties.Settings.Default.plDoomindex].ToString();
-            Properties.Settings.Default.lowMPcheckBox = this.lowMPcheckBox.Checked;
-            Properties.Settings.Default.mpMinCastValue = this.mpMinCastValue.Value;
-            Properties.Settings.Default.naSpellsenable = this.naSpellsenable.Checked;
-            Properties.Settings.Default.naBlindness = this.naBlindness.Checked;
-            Properties.Settings.Default.naCurse = this.naCurse.Checked;
-            Properties.Settings.Default.naDisease = this.naDisease.Checked;
-            Properties.Settings.Default.naParalysis = this.naParalysis.Checked;
-            Properties.Settings.Default.naPetrification = this.naPetrification.Checked;
-            Properties.Settings.Default.naPlague = this.naPlague.Checked;
-            Properties.Settings.Default.naPoison = this.naPoison.Checked;
-            Properties.Settings.Default.naSilence = this.naSilence.Checked;
-            Properties.Settings.Default.naErase = this.naErase.Checked;
-            Properties.Settings.Default.lowMPuseitem = this.lowMPuseitem.Checked;
-            Properties.Settings.Default.mpMintempitemusage = this.mpMintempitemusage.Value;
-            Properties.Settings.Default.monitoredAgiDown = this.monitoredAgiDown.Checked;
-            Properties.Settings.Default.monitoredAccuracyDown = this.monitoredAccuracyDown.Checked;
-            Properties.Settings.Default.monitoredAddle = this.monitoredAddle.Checked;
-            Properties.Settings.Default.monitoredAttackDown = this.monitoredAttackDown.Checked;
-            Properties.Settings.Default.monitoredBane = this.monitoredBane.Checked;
-            Properties.Settings.Default.monitoredBind = this.monitoredBind.Checked;
-            Properties.Settings.Default.monitoredBio = this.monitoredBio.Checked;
-            Properties.Settings.Default.monitoredBlindness = this.monitoredBlindness.Checked;
-            Properties.Settings.Default.monitoredBurn = this.monitoredBurn.Checked;
-            Properties.Settings.Default.monitoredChrDown = this.monitoredChrDown.Checked;
-            Properties.Settings.Default.monitoredChoke = this.monitoredChoke.Checked;
-            Properties.Settings.Default.monitoredCurse = this.monitoredCurse.Checked;
-            Properties.Settings.Default.monitoredCurse2 = this.monitoredCurse2.Checked;
-            Properties.Settings.Default.monitoredDexDown = this.monitoredDexDown.Checked;
-            Properties.Settings.Default.monitoredDefenseDown = this.monitoredDefenseDown.Checked;
-            Properties.Settings.Default.monitoredDia = this.monitoredDia.Checked;
-            Properties.Settings.Default.monitoredDisease = this.monitoredDisease.Checked;
-            Properties.Settings.Default.monitoredDoom = this.monitoredDoom.Checked;
-            Properties.Settings.Default.monitoredDrown = this.monitoredDrown.Checked;
-            Properties.Settings.Default.monitoredElegy = this.monitoredElegy.Checked;
-            Properties.Settings.Default.monitoredEvasionDown = this.monitoredEvasionDown.Checked;
-            Properties.Settings.Default.monitoredFlash = this.monitoredFlash.Checked;
-            Properties.Settings.Default.monitoredFrost = this.monitoredFrost.Checked;
-            Properties.Settings.Default.monitoredHelix = this.monitoredHelix.Checked;
-            Properties.Settings.Default.monitoredIntDown = this.monitoredIntDown.Checked;
-            Properties.Settings.Default.monitoredMndDown = this.monitoredMndDown.Checked;
-            Properties.Settings.Default.monitoredMagicAccDown = this.monitoredMagicAccDown.Checked;
-            Properties.Settings.Default.monitoredMagicAtkDown = this.monitoredMagicAtkDown.Checked;
-            Properties.Settings.Default.monitoredMaxHpDown = this.monitoredMaxHpDown.Checked;
-            Properties.Settings.Default.monitoredMaxMpDown = this.monitoredMaxMpDown.Checked;
-            Properties.Settings.Default.monitoredMaxTpDown = this.monitoredMaxTpDown.Checked;
-            Properties.Settings.Default.monitoredParalysis = this.monitoredParalysis.Checked;
-            Properties.Settings.Default.monitoredPetrification = this.monitoredPetrification.Checked;
-            Properties.Settings.Default.monitoredPlague = this.monitoredPlague.Checked;
-            Properties.Settings.Default.monitoredPoison = this.monitoredPoison.Checked;
-            Properties.Settings.Default.monitoredRasp = this.monitoredRasp.Checked;
-            Properties.Settings.Default.monitoredRequiem = this.monitoredRequiem.Checked;
-            Properties.Settings.Default.monitoredStrDown = this.monitoredStrDown.Checked;
-            Properties.Settings.Default.monitoredShock = this.monitoredShock.Checked;
-            Properties.Settings.Default.monitoredSilence = this.monitoredSilence.Checked;
-            Properties.Settings.Default.monitoredSleep = this.monitoredSleep.Checked;
-            Properties.Settings.Default.monitoredSleep2 = this.monitoredSleep2.Checked;
-            Properties.Settings.Default.monitoredSlow = this.monitoredSlow.Checked;
-            Properties.Settings.Default.monitoredThrenody = this.monitoredThrenody.Checked;
-            Properties.Settings.Default.monitoredVitDown = this.monitoredVitDown.Checked;
-            Properties.Settings.Default.monitoredWeight = this.monitoredWeight.Checked;
-            Properties.Settings.Default.AutoCastEngageCheckBox = this.AutoCastEngageCheckBox.Checked;
+            config.plDoomEnabled = this.plDoomEnabled.Checked;
+            config.plDoomitem = this.plDoomitem.SelectedIndex;
+            config.lowMPcheckBox = this.lowMPcheckBox.Checked;
+            config.mpMinCastValue = this.mpMinCastValue.Value;
+            config.naSpellsenable = this.naSpellsenable.Checked;
+            config.naBlindness = this.naBlindness.Checked;
+            config.naCurse = this.naCurse.Checked;
+            config.naDisease = this.naDisease.Checked;
+            config.naParalysis = this.naParalysis.Checked;
+            config.naPetrification = this.naPetrification.Checked;
+            config.naPlague = this.naPlague.Checked;
+            config.naPoison = this.naPoison.Checked;
+            config.naSilence = this.naSilence.Checked;
+            config.naErase = this.naErase.Checked;
+            config.monitoredAgiDown = this.monitoredAgiDown.Checked;
+            config.monitoredAccuracyDown = this.monitoredAccuracyDown.Checked;
+            config.monitoredAddle = this.monitoredAddle.Checked;
+            config.monitoredAttackDown = this.monitoredAttackDown.Checked;
+            config.monitoredBane = this.monitoredBane.Checked;
+            config.monitoredBind = this.monitoredBind.Checked;
+            config.monitoredBio = this.monitoredBio.Checked;
+            config.monitoredBlindness = this.monitoredBlindness.Checked;
+            config.monitoredBurn = this.monitoredBurn.Checked;
+            config.monitoredChrDown = this.monitoredChrDown.Checked;
+            config.monitoredChoke = this.monitoredChoke.Checked;
+            config.monitoredCurse = this.monitoredCurse.Checked;
+            config.monitoredCurse2 = this.monitoredCurse2.Checked;
+            config.monitoredDexDown = this.monitoredDexDown.Checked;
+            config.monitoredDefenseDown = this.monitoredDefenseDown.Checked;
+            config.monitoredDia = this.monitoredDia.Checked;
+            config.monitoredDisease = this.monitoredDisease.Checked;
+            config.monitoredDoom = this.monitoredDoom.Checked;
+            config.monitoredDrown = this.monitoredDrown.Checked;
+            config.monitoredElegy = this.monitoredElegy.Checked;
+            config.monitoredEvasionDown = this.monitoredEvasionDown.Checked;
+            config.monitoredFlash = this.monitoredFlash.Checked;
+            config.monitoredFrost = this.monitoredFrost.Checked;
+            config.monitoredHelix = this.monitoredHelix.Checked;
+            config.monitoredIntDown = this.monitoredIntDown.Checked;
+            config.monitoredMndDown = this.monitoredMndDown.Checked;
+            config.monitoredMagicAccDown = this.monitoredMagicAccDown.Checked;
+            config.monitoredMagicAtkDown = this.monitoredMagicAtkDown.Checked;
+            config.monitoredMaxHpDown = this.monitoredMaxHpDown.Checked;
+            config.monitoredMaxMpDown = this.monitoredMaxMpDown.Checked;
+            config.monitoredMaxTpDown = this.monitoredMaxTpDown.Checked;
+            config.monitoredParalysis = this.monitoredParalysis.Checked;
+            config.monitoredPetrification = this.monitoredPetrification.Checked;
+            config.monitoredPlague = this.monitoredPlague.Checked;
+            config.monitoredPoison = this.monitoredPoison.Checked;
+            config.monitoredRasp = this.monitoredRasp.Checked;
+            config.monitoredRequiem = this.monitoredRequiem.Checked;
+            config.monitoredStrDown = this.monitoredStrDown.Checked;
+            config.monitoredShock = this.monitoredShock.Checked;
+            config.monitoredSilence = this.monitoredSilence.Checked;
+            config.monitoredSleep = this.monitoredSleep.Checked;
+            config.monitoredSleep2 = this.monitoredSleep2.Checked;
+            config.monitoredSlow = this.monitoredSlow.Checked;
+            config.monitoredThrenody = this.monitoredThrenody.Checked;
+            config.monitoredVitDown = this.monitoredVitDown.Checked;
+            config.monitoredWeight = this.monitoredWeight.Checked;
 
 
             // New Spells
-            Properties.Settings.Default.EnableGeoSpells = this.EnableGeoSpells.Checked;
-            Properties.Settings.Default.GEO_engaged = this.GEO_engaged.Checked;
-            Properties.Settings.Default.GeoSpell = this.GEOSpell.SelectedIndex;
-            Properties.Settings.Default.GeoSpell_Target = this.GEOSpell_target.Text;
-            Properties.Settings.Default.IndiSpell = this.INDISpell.SelectedIndex;
-            Properties.Settings.Default.EntrustedIndiSpell = this.entrustINDISpell.SelectedIndex;
-            Properties.Settings.Default.Entrusted_Target = this.entrustSpell_target.Text;
-            Properties.Settings.Default.Entrust = this.EntrustBox.Checked;
-            Properties.Settings.Default.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
-            Properties.Settings.Default.Dematerialize = this.DematerializeBox.Checked;
-            Properties.Settings.Default.BlazeOfGlory = this.BlazeOfGloryBox.Checked;
-            Properties.Settings.Default.AutoTarget = this.autoTarget.Checked;
-            Properties.Settings.Default.autoTargetSpell = this.autoTargetSpell.Text;
-            Properties.Settings.Default.RadialArcana = this.RadialArcanaBox.Checked;
-            Properties.Settings.Default.FullCircle = this.FullCircleBox.Checked;
-            Properties.Settings.Default.RadialArcanaMP = this.RadialArcanaMP.Value;
-            Properties.Settings.Default.plTemper = this.plTemper.Checked;
+            config.EnableGeoSpells = this.EnableGeoSpells.Checked;
+            config.IndiWhenEngaged = this.GEO_engaged.Checked;
+            config.GeoSpell_Spell = this.GEOSpell.SelectedIndex;
+            config.LuopanSpell_Target = this.GEOSpell_target.Text;
+            config.IndiSpell_Spell = this.INDISpell.SelectedIndex;
+            config.EntrustedSpell_Spell = this.entrustINDISpell.SelectedIndex;
+            config.EntrustedSpell_Target = this.entrustSpell_target.Text;
+            config.Entrust = this.EntrustBox.Checked;
+            config.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
+            config.Dematerialize = this.DematerializeBox.Checked;
+            config.BlazeOfGlory = this.BlazeOfGloryBox.Checked;
+            config.autoTarget = this.autoTarget.Checked;
+            config.autoTargetSpell = this.autoTargetSpell.Text;
+            config.RadialArcana = this.RadialArcanaBox.Checked;
+            config.FullCircle = this.FullCircleBox.Checked;
+            config.RadialArcanaMP = this.RadialArcanaMP.Value;
+            config.plTemper = this.plTemper.Checked;
             if (this.plTemperLevel1.Checked)
             {
-                Properties.Settings.Default.plTemperLevel = 2;
+                config.plTemper_Level = 2;
             }
             else if (this.plTemperLevel2.Checked)
             {
-                Properties.Settings.Default.plTemperLevel = 2;
+                config.plTemper_Level = 2;
             }
-            Properties.Settings.Default.plEnspell = this.plEnspell.Checked;
-            Properties.Settings.Default.plEnspell_Spell = this.plEnspell_spell.SelectedIndex;
-            Properties.Settings.Default.plGainBoost = this.plGainBoost.Checked;
-            Properties.Settings.Default.plGainBoost_Spell = this.plGainBoost_spell.SelectedIndex;
-            Properties.Settings.Default.plBarElement = this.plBarElement.Checked;
-            Properties.Settings.Default.plBarElement_Spell = this.plBarElement_Spell.SelectedIndex;
-            Properties.Settings.Default.plBarStatus = this.plBarStatus.Checked;
-            Properties.Settings.Default.plBarStatus_Spell = this.plBarStatus_Spell.SelectedIndex;
-            Properties.Settings.Default.plStormSpell = this.plStormSpell.Checked;
-            Properties.Settings.Default.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
-            Properties.Settings.Default.plKlimaform = this.plKlimaform.Checked;
-            Properties.Settings.Default.plAuspice = this.plAuspice.Checked;
-            Properties.Settings.Default.plAquaveil = this.plAquaveil.Checked;
+            config.plEnspell = this.plEnspell.Checked;
+            config.plEnspell_Spell = this.plEnspell_spell.SelectedIndex;
+            config.plGainBoost = this.plGainBoost.Checked;
+            config.plGainBoost_Spell = this.plGainBoost_spell.SelectedIndex;
+            config.plBarElement = this.plBarElement.Checked;
+            config.plBarElement_Spell = this.plBarElement_Spell.SelectedIndex;
+            config.plBarStatus = this.plBarStatus.Checked;
+            config.plBarStatus_Spell = this.plBarStatus_Spell.SelectedIndex;
+            config.plStormSpell = this.plStormSpell.Checked;
+            config.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
+            config.plKlimaform = this.plKlimaform.Checked;
+            config.plAuspice = this.plAuspice.Checked;
+            config.plAquaveil = this.plAquaveil.Checked;
 
-            Properties.Settings.Default.ConvertMP = this.ConvertMP.Value;
+            config.convertMP = this.ConvertMP.Value;
 
             // CURAGA SPELLS 
-            Properties.Settings.Default.curagaEnabled = this.curagaEnabled.Checked;
-            Properties.Settings.Default.curaga2Enabled = this.curaga2Enabled.Checked;
-            Properties.Settings.Default.curaga3Enabled = this.curaga3Enabled.Checked;
-            Properties.Settings.Default.curaga4Enabled = this.curaga4Enabled.Checked;
-            Properties.Settings.Default.curaga5Enabled = this.curaga5Enabled.Checked;
+            config.curagaEnabled = this.curagaEnabled.Checked;
+            config.curaga2enabled = this.curaga2Enabled.Checked;
+            config.curaga3enabled = this.curaga3Enabled.Checked;
+            config.curaga4enabled = this.curaga4Enabled.Checked;
+            config.curaga5enabled = this.curaga5Enabled.Checked;
 
-            Properties.Settings.Default.curagaAmount = Convert.ToInt32(this.curagaAmount.Value);
-            Properties.Settings.Default.curaga2Amount = Convert.ToInt32(this.curaga2Amount.Value);
-            Properties.Settings.Default.curaga3Amount = Convert.ToInt32(this.curaga3Amount.Value);
-            Properties.Settings.Default.curaga4Amount = Convert.ToInt32(this.curaga4Amount.Value);
-            Properties.Settings.Default.curaga5Amount = Convert.ToInt32(this.curaga5Amount.Value);
+            config.curagaAmount = Convert.ToInt32(this.curagaAmount.Value);
+            config.curaga2Amount = Convert.ToInt32(this.curaga2Amount.Value);
+            config.curaga3Amount = Convert.ToInt32(this.curaga3Amount.Value);
+            config.curaga4Amount = Convert.ToInt32(this.curaga4Amount.Value);
+            config.curaga5Amount = Convert.ToInt32(this.curaga5Amount.Value);
 
-            Properties.Settings.Default.curagaCurePercentage = this.curagaCurePercentage.Value;
+            config.curagaCurePercentage = this.curagaCurePercentage.Value;
 
-            Properties.Settings.Default.curagaTargetType = this.curagaTargetType.SelectedIndex;
-            Properties.Settings.Default.curagaTargetName = this.curagaTargetName.Text;
-            Properties.Settings.Default.curagaRequiredMembers = this.requiredCuragaNumbers.Value;
+            config.curagaTargetType = this.curagaTargetType.SelectedIndex;
+            config.curagaTargetName = this.curagaTargetName.Text;
+            config.curagaRequiredMembers = this.requiredCuragaNumbers.Value;
 
             // Stop on ....
-            Properties.Settings.Default.pauseOnZone = this.pauseOnZoneBox.Checked;
-            Properties.Settings.Default.pauseOnStartup = this.pauseOnStartBox.Checked;
+            config.pauseOnZoneBox = this.pauseOnZoneBox.Checked;
+            config.pauseOnStartBox = this.pauseOnStartBox.Checked;
 
             // Auto Follow
-            Properties.Settings.Default.autoFollowName = this.autoFollowName.Text;
-            Properties.Settings.Default.autoFollowDistance = this.autoFollowDistance.Value;
+            config.autoFollowName = this.autoFollowName.Text;
+            config.autoFollowDistance = this.autoFollowDistance.Value;
 
             // Devotion
-            Properties.Settings.Default.DevotionBox = this.DevotionBox.Checked;
-            Properties.Settings.Default.DevotionMP = this.DevotionMP.Value;
-            Properties.Settings.Default.DevotionTargetType = this.DevotionTargetType.SelectedIndex;
-            Properties.Settings.Default.DevotionTargetName = this.DevotionTargetName.Text;
+            config.Devotion = this.DevotionBox.Checked;
+            config.DevotionMP = this.DevotionMP.Value;
+            config.DevotionTargetType = this.DevotionTargetType.SelectedIndex;
+            config.DevotionTargetName = this.DevotionTargetName.Text;
 
             // 14.May.2017 Additions 
-            Properties.Settings.Default.GeoAOE_Engaged = this.GeoAOE_Engaged.Checked;
-            Properties.Settings.Default.Hate_SpellType = this.Hate_SpellType.SelectedIndex;
-            Properties.Settings.Default.autoTarget_target = this.autoTarget_target.Text;
+            config.GeoWhenEngaged = this.GeoAOE_Engaged.Checked;
+            config.Hate_SpellType = this.Hate_SpellType.SelectedIndex;
+            config.autoTarget_Target = this.autoTarget_target.Text;
 
             // 15.June.2017 Additions 
-            Properties.Settings.Default.healLowMP = this.healLowMP.Checked;
-            Properties.Settings.Default.standAtMP = this.standAtMP.Checked;
-            Properties.Settings.Default.specifiedEngageTarget = this.specifiedEngageTarget.Checked;
-            Properties.Settings.Default.standAtMP_Percentage = this.standAtMP_Percentage.Value;
-            Properties.Settings.Default.healWhenMPBelow = this.healWhenMPBelow.Value;
-            Properties.Settings.Default.enableFastCast_Mode = this.enableFastCast_Mode.Checked;
+            config.healLowMP = this.healLowMP.Checked;
+            config.standAtMP = this.standAtMP.Checked;
+            config.specifiedEngageTarget = this.specifiedEngageTarget.Checked;
+            config.standAtMP_Percentage = this.standAtMP_Percentage.Value;
+            config.healWhenMPBelow = this.healWhenMPBelow.Value;
+            config.enableFastCast_Mode = this.enableFastCast_Mode.Checked;
 
             // 27.July.2017 Additions
-            Properties.Settings.Default.IpAddress = this.ipAddress.Text;
-            // Properties.Settings.Default.lowerTier = this.lowerTier_box.Checked;
+            config.ipAddress = this.ipAddress.Text;
+            // config.lowerTier = this.lowerTier_box.Checked;
 
 
             // 16.August.2017 Additions
-            Properties.Settings.Default.penury = this.penury.Checked;
-            Properties.Settings.Default.perpetuance = this.perpetuance.Checked;
-            Properties.Settings.Default.accession = this.accession.Checked;
-            Properties.Settings.Default.rapture = this.rapture.Checked;
-            Properties.Settings.Default.celerity = this.celerity.Checked;
+            config.enableSinging = this.enableSinging.Checked;
 
-            Properties.Settings.Default.enableSinging = this.enableSinging.Checked;
+            config.song1 = this.song1.SelectedIndex;
+            config.song2 = this.song2.SelectedIndex;
+            config.song3 = this.song3.SelectedIndex;
+            config.song4 = this.song4.SelectedIndex;
 
-            Properties.Settings.Default.song1 = this.song1.SelectedIndex;
-            Properties.Settings.Default.song2 = this.song2.SelectedIndex;
-            Properties.Settings.Default.song3 = this.song3.SelectedIndex;
-            Properties.Settings.Default.song4 = this.song4.SelectedIndex;
+            config.dummy1 = this.dummy1.SelectedIndex;
+            config.dummy2 = this.dummy2.SelectedIndex;
 
-            Properties.Settings.Default.dummy1 = this.dummy1.SelectedIndex;
-            Properties.Settings.Default.dummy2 = this.dummy2.SelectedIndex;
+            config.recastSongTime = this.recastSong.Value;
 
-            Properties.Settings.Default.clarionsong = this.clarionSong.SelectedIndex;
+            config.listeningPort = this.listeningPort.Text;
 
-            Properties.Settings.Default.recastSong = this.recastSong.Value;
+            config.Troubadour = this.troubadour.Checked;
+            config.Nightingale = this.nightingale.Checked;
+            config.Marcato = this.marcato.Checked;
 
-            Properties.Settings.Default.listeningPort = this.listeningPort.Text;
+            config.sublimationMP = this.sublimationMP.Value;
 
-            Properties.Settings.Default.troubadour = this.troubadour.Checked;
-            Properties.Settings.Default.nightingale = this.nightingale.Checked;
-            Properties.Settings.Default.marcato = this.marcato.Checked;
+            config.recastSongs_Monitored = this.recastSongs_monitored.Checked;
+            config.SongsOnlyWhenNear = this.SongsOnlyWhenNearEngaged.Checked;
 
-            Properties.Settings.Default.sublimationMP = this.sublimationMP.Value;
+            config.EclipticAttrition = this.EclipticAttritionBox.Checked;
 
-            Properties.Settings.Default.recastSongs_monitored = this.recastSongs_monitored.Checked;
-            Properties.Settings.Default.SongsOnlyWhenNearEngaged = this.SongsOnlyWhenNearEngaged.Checked;
-
-
-
-
-            Properties.Settings.Default.Save();
             this.Close();
             //MessageBox.Show("Saved!", "All Settings");
         }
@@ -1141,12 +1839,349 @@ namespace CurePlease
         }
 
 
+
         #endregion
 
-        private void recastSong_ValueChanged(object sender, EventArgs e)
+        private void saveAsButton_Click(object sender, EventArgs e)
         {
 
+            button4_Click(sender, e);
+
+            SaveFileDialog savefile = new SaveFileDialog();
+
+            if (Form1._ELITEAPIPL != null)
+            {
+                if (Form1._ELITEAPIPL.Player.MainJob != 0)
+                {
+                    if (Form1._ELITEAPIPL.Player.SubJob != 0)
+                    {
+                        var mainJob = JobNames.Where(c => c.job_number == Form1._ELITEAPIPL.Player.MainJob).FirstOrDefault();
+                        var subJob = JobNames.Where(c => c.job_number == Form1._ELITEAPIPL.Player.SubJob).FirstOrDefault();
+                        savefile.FileName = mainJob.job_name + "_" + subJob.job_name + ".xml";
+                    }
+                    else
+                    {
+                        var mainJob = JobNames.Where(c => c.job_number == Form1._ELITEAPIPL.Player.MainJob).FirstOrDefault();
+                        savefile.FileName = mainJob + ".xml";
+                    }
+                }
+            }
+            else
+            {
+                savefile.FileName = "Settings.xml";
+            }
+            savefile.Filter = " Extensible Markup Language (*.xml)|*.xml";
+            savefile.FilterIndex = 2;
+            savefile.InitialDirectory = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings");
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MySettings));
+                StreamWriter myWriter = new StreamWriter(savefile.FileName);
+                mySerializer.Serialize(myWriter, config);
+                myWriter.Close();
+
+            }
         }
+
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = " Extensible Markup Language (*.xml)|*.xml";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.InitialDirectory = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings");
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                MySettings up;
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MySettings));
+                FileStream myFileStream = new FileStream(openFileDialog1.FileName, FileMode.Open);
+                up = (MySettings)mySerializer.Deserialize(myFileStream);
+
+                this.cure1enabled.Checked = up.cure1enabled;
+                this.cure2enabled.Checked = up.cure2enabled;
+                this.cure3enabled.Checked = up.cure3enabled;
+                this.cure4enabled.Checked = up.cure4enabled;
+                this.cure5enabled.Checked = up.cure5enabled;
+                this.cure6enabled.Checked = up.cure6enabled;
+                this.cure1amount.Value = up.cure1amount;
+                this.cure2amount.Value = up.cure2amount;
+                this.cure3amount.Value = up.cure3amount;
+                this.cure4amount.Value = up.cure4amount;
+                this.cure5amount.Value = up.cure5amount;
+                this.cure6amount.Value = up.cure6amount;
+                this.curePercentage.Value = up.curePercentage;
+                this.priorityCurePercentage.Value = up.priorityCurePercentage;
+                this.curePercentageValueLabel.Text = up.curePercentage.ToString(CultureInfo.InvariantCulture);
+                this.priorityCurePercentageValueLabel.Text = up.priorityCurePercentage.ToString(CultureInfo.InvariantCulture);
+                this.afflatusSolace.Checked = up.AfflatusSolace;
+                this.afflatusMisery.Checked = up.AfflatusMisery;
+                this.lightArts.Checked = up.LightArts;
+                this.composure.Checked = up.Composure;
+                this.convert.Checked = up.Convert;
+                this.divineSealBox.Checked = up.DivineSeal;
+                this.addWhite.Checked = up.AddendumWhite;
+                this.sublimation.Checked = up.Sublimation;
+                this.autoHasteMinutes.Value = up.autoHasteMinutes;
+                this.autoProtect_Minutes.Value = up.autoProtect_Minutes;
+                this.autoShell_Minutes.Value = up.autoShellMinutes;
+                this.autoPhalanxIIMinutes.Value = up.autoPhalanxIIMinutes;
+                this.autoRefresh_Minutes.Value = up.autoRefresh_Minutes;
+                this.autoRegen_Minutes.Value = up.autoRegen_Minutes;
+                this.autoRefresh_Minutes.Value = up.autoRefresh_Minutes;
+                this.plSilenceItemEnabled.Checked = up.plSilenceItemEnabled;
+                this.plSilenceItem.SelectedIndex = up.plSilenceItem;
+                this.wakeSleepEnabled.Checked = up.wakeSleepEnabled;
+                this.wakeSleepSpell.SelectedIndex = up.wakeSleepSpell;
+                this.plDebuffEnabled.Checked = up.plDebuffEnabled;
+                this.monitoredDebuffEnabled.Checked = up.monitoredDebuffEnabled;
+                this.plBlink.Checked = up.plBlink;
+                this.plReraise.Checked = up.plReraise;
+                this.autoRegen.SelectedIndex = up.autoRegen_Spell;
+                this.autoRefresh.SelectedIndex = up.autoRefresh_Spell;
+                this.autoShell.SelectedIndex = up.autoShell_Spell;
+                this.autoProtect.SelectedIndex = up.autoProtect_Spell;
+                if (up.plReraise_Level == 1 && this.plReraise.Checked == true)
+                {
+                    this.plReraiseLevel1.Checked = true;
+                }
+                else if (up.plReraise_Level == 2 && this.plReraise.Checked == true)
+                {
+                    this.plReraiseLevel2.Checked = true;
+                }
+                else if (up.plReraise_Level == 3 && this.plReraise.Checked == true)
+                {
+                    this.plReraiseLevel3.Checked = true;
+                }
+                else if (up.plReraise_Level == 4 && this.plReraise.Checked == true)
+                {
+                    this.plReraiseLevel4.Checked = true;
+                }
+                this.plRefresh.Checked = up.plRefresh;
+                if (up.plRefresh_Level == 1 && this.plRefresh.Checked == true)
+                {
+                    this.plRefreshLevel1.Checked = true;
+                }
+                else if (up.plRefresh_Level == 2 && this.plRefresh.Checked == true)
+                {
+                    this.plRefreshLevel2.Checked = true;
+                }
+                else if (up.plRefresh_Level == 3 && this.plRefresh.Checked == true)
+                {
+                    this.plRefreshLevel3.Checked = true;
+                }
+                this.plStoneskin.Checked = up.plStoneskin;
+                this.plPhalanx.Checked = up.plPhalanx;
+                this.plAgiDown.Checked = up.plAgiDown;
+                this.plAccuracyDown.Checked = up.plAccuracyDown;
+                this.plAddle.Checked = up.plAddle;
+                this.plAttackDown.Checked = up.plAttackDown;
+                this.plBane.Checked = up.plBane;
+                this.plBind.Checked = up.plBind;
+                this.plBio.Checked = up.plBio;
+                this.plBlindness.Checked = up.plBlindness;
+                this.plBurn.Checked = up.plBurn;
+                this.plChrDown.Checked = up.plChrDown;
+                this.plChoke.Checked = up.plChoke;
+                this.plCurse.Checked = up.plCurse;
+                this.plCurse2.Checked = up.plCurse2;
+                this.plDexDown.Checked = up.plDexDown;
+                this.plDefenseDown.Checked = up.plDefenseDown;
+                this.plDia.Checked = up.plDia;
+                this.plDisease.Checked = up.plDisease;
+                this.plDoom.Checked = up.plDoom;
+                this.plDrown.Checked = up.plDrown;
+                this.plElegy.Checked = up.plElegy;
+                this.plEvasionDown.Checked = up.plEvasionDown;
+                this.plFlash.Checked = up.plFlash;
+                this.plFrost.Checked = up.plFrost;
+                this.plHelix.Checked = up.plHelix;
+                this.plIntDown.Checked = up.plIntDown;
+                this.plMndDown.Checked = up.plMndDown;
+                this.plMagicAccDown.Checked = up.plMagicAccDown;
+                this.plMagicAtkDown.Checked = up.plMagicAtkDown;
+                this.plMaxHpDown.Checked = up.plMaxHpDown;
+                this.plMaxMpDown.Checked = up.plMaxMpDown;
+                this.plMaxTpDown.Checked = up.plMaxTpDown;
+                this.plParalysis.Checked = up.plParalysis;
+                this.plPlague.Checked = up.plPlague;
+                this.plPoison.Checked = up.plPoison;
+                this.plRasp.Checked = up.plRasp;
+                this.plRequiem.Checked = up.plRequiem;
+                this.plStrDown.Checked = up.plStrDown;
+                this.plShock.Checked = up.plShock;
+                this.plSilence.Checked = up.plSilence;
+                this.plSlow.Checked = up.plSlow;
+                this.plThrenody.Checked = up.plThrenody;
+                this.plVitDown.Checked = up.plVitDown;
+                this.plWeight.Checked = up.plWeight;
+                this.AutoCastEngageCheckBox.Checked = up.specifiedEngageTarget;
+                // New UI Elements
+                this.plDoomEnabled.Checked = up.plDoomEnabled;
+                this.plDoomitem.SelectedIndex = up.plDoomitem;
+                this.lowMPcheckBox.Checked = up.lowMPcheckBox;
+                this.mpMinCastValue.Value = up.mpMinCastValue;
+                this.naSpellsenable.Checked = up.naSpellsenable;
+                this.naBlindness.Checked = up.naBlindness;
+                this.naCurse.Checked = up.naCurse;
+                this.naDisease.Checked = up.naDisease;
+                this.naParalysis.Checked = up.naParalysis;
+                this.naPetrification.Checked = up.naPetrification;
+                this.naPlague.Checked = up.naPlague;
+                this.naPoison.Checked = up.naPoison;
+                this.naSilence.Checked = up.naSilence;
+                this.naErase.Checked = up.naErase;
+                this.plProtectra.Checked = up.plProtectra;
+                this.plShellra.Checked = up.plShellra;
+                this.plProtectralevel.Value = up.plProtectra_Level;
+                this.plShellralevel.Value = up.plShellra_Level;
+                this.monitoredAgiDown.Checked = up.monitoredAgiDown;
+                this.monitoredAccuracyDown.Checked = up.monitoredAccuracyDown;
+                this.monitoredAddle.Checked = up.monitoredAddle;
+                this.monitoredAttackDown.Checked = up.monitoredAttackDown;
+                this.monitoredBane.Checked = up.monitoredBane;
+                this.monitoredBind.Checked = up.monitoredBind;
+                this.monitoredBio.Checked = up.monitoredBio;
+                this.monitoredBlindness.Checked = up.monitoredBlindness;
+                this.monitoredBurn.Checked = up.monitoredBurn;
+                this.monitoredChrDown.Checked = up.monitoredChrDown;
+                this.monitoredChoke.Checked = up.monitoredChoke;
+                this.monitoredCurse.Checked = up.monitoredCurse;
+                this.monitoredCurse2.Checked = up.monitoredCurse2;
+                this.monitoredDexDown.Checked = up.monitoredDexDown;
+                this.monitoredDefenseDown.Checked = up.monitoredDefenseDown;
+                this.monitoredDia.Checked = up.monitoredDia;
+                this.monitoredDisease.Checked = up.monitoredDisease;
+                this.monitoredDoom.Checked = up.monitoredDoom;
+                this.monitoredDrown.Checked = up.monitoredDrown;
+                this.monitoredElegy.Checked = up.monitoredElegy;
+                this.monitoredEvasionDown.Checked = up.monitoredEvasionDown;
+                this.monitoredFlash.Checked = up.monitoredFlash;
+                this.monitoredFrost.Checked = up.monitoredFrost;
+                this.monitoredHelix.Checked = up.monitoredHelix;
+                this.monitoredIntDown.Checked = up.monitoredIntDown;
+                this.monitoredMndDown.Checked = up.monitoredMndDown;
+                this.monitoredMagicAccDown.Checked = up.monitoredMagicAccDown;
+                this.monitoredMagicAtkDown.Checked = up.monitoredMagicAtkDown;
+                this.monitoredMaxHpDown.Checked = up.monitoredMaxHpDown;
+                this.monitoredMaxMpDown.Checked = up.monitoredMaxMpDown;
+                this.monitoredMaxTpDown.Checked = up.monitoredMaxTpDown;
+                this.monitoredParalysis.Checked = up.monitoredParalysis;
+                this.monitoredPetrification.Checked = up.monitoredPetrification;
+                this.monitoredPlague.Checked = up.monitoredPlague;
+                this.monitoredPoison.Checked = up.monitoredPoison;
+                this.monitoredRasp.Checked = up.monitoredRasp;
+                this.monitoredRequiem.Checked = up.monitoredRequiem;
+                this.monitoredStrDown.Checked = up.monitoredStrDown;
+                this.monitoredShock.Checked = up.monitoredShock;
+                this.monitoredSilence.Checked = up.monitoredSilence;
+                this.monitoredSleep.Checked = up.monitoredSleep;
+                this.monitoredSleep2.Checked = up.monitoredSleep2;
+                this.monitoredSlow.Checked = up.monitoredSlow;
+                this.monitoredThrenody.Checked = up.monitoredThrenody;
+                this.monitoredVitDown.Checked = up.monitoredVitDown;
+                this.monitoredWeight.Checked = up.monitoredWeight;
+                this.EnableGeoSpells.Checked = up.EnableGeoSpells;
+                this.GEO_engaged.Checked = up.GeoWhenEngaged;
+                this.GEOSpell.SelectedIndex = up.GeoSpell_Spell;
+                this.GEOSpell_target.Text = up.LuopanSpell_Target;
+                this.INDISpell.SelectedIndex = up.IndiSpell_Spell;
+                this.entrustINDISpell.SelectedIndex = up.EntrustedSpell_Spell;
+                this.entrustSpell_target.Text = up.EntrustedSpell_Target;
+                this.EnableLuopanSpells.Checked = up.EnableLuopanSpells;
+                this.BlazeOfGloryBox.Checked = up.BlazeOfGlory;
+                this.autoTarget.Checked = up.autoTarget;
+                this.autoTargetSpell.Text = up.autoTargetSpell;
+                this.RadialArcanaBox.Checked = up.RadialArcana;
+                this.RadialArcanaMP.Value = up.RadialArcanaMP;
+                this.FullCircleBox.Checked = up.FullCircle;
+                this.plTemper.Checked = up.plTemper;
+                if (up.plTemper_Level == 1 && this.plTemper.Checked == true)
+                {
+                    this.plTemperLevel1.Checked = true;
+                }
+                else if (up.plTemper_Level == 2 && this.plTemper.Checked == true)
+                {
+                    this.plTemperLevel2.Checked = true;
+                }
+                this.plEnspell.Checked = up.plEnspell;
+                this.plEnspell_spell.SelectedIndex = up.plEnspell_Spell;
+                this.plGainBoost.Checked = up.plGainBoost;
+                this.plGainBoost_spell.SelectedIndex = up.plGainBoost_Spell;
+                this.EntrustBox.Checked = up.Entrust;
+                this.DematerializeBox.Checked = up.Dematerialize;
+                this.plBarElement.Checked = up.plBarElement;
+                this.plBarElement_Spell.SelectedIndex = up.plBarElement_Spell;
+                this.plBarStatus.Checked = up.plBarStatus;
+                this.plBarStatus_Spell.SelectedIndex = up.plBarStatus_Spell;
+                this.plStormSpell.Checked = up.plStormSpell;
+                this.plKlimaform.Checked = up.plKlimaform;
+                this.plStormSpell_Spell.SelectedIndex = up.plStormSpell_Spell;
+                this.plAuspice.Checked = up.plAuspice;
+                this.plAquaveil.Checked = up.plAquaveil;
+
+                this.ConvertMP.Value = up.convertMP;
+
+                // CURAGA SPELLS 
+                this.curagaEnabled.Checked = up.curagaEnabled;
+                this.curaga2Enabled.Checked = up.curaga2enabled;
+                this.curaga3Enabled.Checked = up.curaga3enabled;
+                this.curaga4Enabled.Checked = up.curaga4enabled;
+                this.curaga5Enabled.Checked = up.curaga5enabled;
+
+                this.curagaAmount.Value = up.curagaAmount;
+                this.curaga2Amount.Value = up.curaga2Amount;
+                this.curaga3Amount.Value = up.curaga3Amount;
+                this.curaga4Amount.Value = up.curaga4Amount;
+                this.curaga5Amount.Value = up.curaga5Amount;
+                this.curagaCurePercentage.Value = up.curagaCurePercentage;
+                this.curagaPercentageValueLabel.Text = up.curagaCurePercentage.ToString(CultureInfo.InvariantCulture);
+                this.curagaTargetType.SelectedIndex = up.curagaTargetType;
+                this.curagaTargetName.Text = up.curagaTargetName;
+                this.requiredCuragaNumbers.Value = up.curagaRequiredMembers;
+                this.pauseOnZoneBox.Checked = up.pauseOnZoneBox;
+                this.pauseOnStartBox.Checked = up.pauseOnStartBox;
+                this.autoFollowName.Text = up.autoFollowName;
+                this.autoFollowDistance.Value = up.autoFollowDistance;
+                this.DevotionBox.Checked = up.Devotion;
+                this.DevotionMP.Value = up.DevotionMP;
+                this.DevotionTargetType.SelectedIndex = up.DevotionTargetType;
+                this.DevotionTargetName.Text = up.DevotionTargetName;
+                this.DevotionWhenEngaged.Checked = up.DevotionWhenEngaged;
+                this.GeoAOE_Engaged.Checked = up.GeoWhenEngaged;
+                this.Hate_SpellType.SelectedIndex = up.Hate_SpellType;
+                this.autoTarget_target.Text = up.autoTarget_Target;
+                this.healLowMP.Checked = up.healLowMP;
+                this.standAtMP.Checked = up.standAtMP;
+                this.specifiedEngageTarget.Checked = up.specifiedEngageTarget;
+                this.standAtMP_Percentage.Value = up.standAtMP_Percentage;
+                this.healWhenMPBelow.Value = up.healWhenMPBelow;
+                this.enableFastCast_Mode.Checked = up.enableFastCast_Mode;
+                this.ipAddress.Text = up.ipAddress;
+                this.song1.SelectedIndex = up.song1;
+                this.song2.SelectedIndex = up.song2;
+                this.song3.SelectedIndex = up.song3;
+                this.song4.SelectedIndex = up.song4;
+                this.dummy1.SelectedIndex = up.dummy1;
+                this.dummy2.SelectedIndex = up.dummy2;
+                this.recastSong.Value = up.recastSongTime;
+                this.enableSinging.Checked = up.enableSinging;
+                this.listeningPort.Text = up.listeningPort;
+                this.troubadour.Checked = up.Troubadour;
+                this.nightingale.Checked = up.Nightingale;
+                this.marcato.Checked = up.Marcato;
+                this.sublimationMP.Value = up.sublimationMP;
+                this.recastSongs_monitored.Checked = up.recastSongs_Monitored;
+                this.SongsOnlyWhenNearEngaged.Checked = up.SongsOnlyWhenNear;
+                this.EclipticAttritionBox.Checked = up.EclipticAttrition;
+
+                button4_Click(sender, e);
+
+            }
+        }
+
+
     }
 }
 

@@ -30,7 +30,7 @@
             {
 
                 // Create the required List
-                
+
 
                 // Read the Buffs file a generate a List to call.
                 foreach (XElement BuffElement in XElement.Load("Resources/Buffs.xml").Elements("o"))
@@ -50,7 +50,7 @@
         {
             ailment_list.Text = "";
 
-            if (Properties.Settings.Default.naSpellsenable)
+            if (Form2.config.naSpellsenable)
             {
                 // Search through current active party buffs
                 foreach (BuffStorage ailment in f1.ActiveBuffs)
@@ -65,24 +65,25 @@
                     int count = named_buffs.Count();
 
                     foreach (string acBuff in named_buffs)
+                    {
+                        i++;
+
+                        var found_Buff = XMLBuffList.Find(r => r.ID == acBuff);
+
+                        if (found_Buff != null)
                         {
-                            i++;
-
-                            var found_Buff = XMLBuffList.Find(r => r.ID == acBuff);
-
-                            if (found_Buff != null)
+                            if (i == count)
                             {
-                                if (i == count)
-                                {
-                                    ailment_list.AppendText(found_Buff.Name + " ");
-                                } else
-                                {
-                                    ailment_list.AppendText(found_Buff.Name + ", ");
-                                }
+                                ailment_list.AppendText(found_Buff.Name + " ");
+                            }
+                            else
+                            {
+                                ailment_list.AppendText(found_Buff.Name + ", ");
                             }
                         }
+                    }
 
-                    
+
                     ailment_list.AppendText("\n\n");
 
                 }

@@ -219,7 +219,6 @@ namespace CurePlease
             this.charselect = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.debugging_MSGBOX = new System.Windows.Forms.Label();
@@ -227,6 +226,7 @@ namespace CurePlease
             this.buff_checker = new System.ComponentModel.BackgroundWorker();
             this.followTimer = new System.Windows.Forms.Timer(this.components);
             this.resetSongTimer = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.party0.SuspendLayout();
             this.playerOptions.SuspendLayout();
             this.party2.SuspendLayout();
@@ -2106,7 +2106,6 @@ namespace CurePlease
             this.button1.TabIndex = 11;
             this.button1.Text = "Player (debug)";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // castingStatusCheck
@@ -2199,7 +2198,6 @@ namespace CurePlease
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox2.Location = new System.Drawing.Point(446, 316);
@@ -2208,15 +2206,6 @@ namespace CurePlease
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Item ID";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(155, 12);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "label2";
             // 
             // groupBox3
             // 
@@ -2289,8 +2278,6 @@ namespace CurePlease
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(670, 397);
-            this.MinimumSize = new System.Drawing.Size(16, 39);
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Cure Please v. 2.0.0.5";
@@ -2515,8 +2502,8 @@ namespace CurePlease
         public System.ComponentModel.BackgroundWorker AilmentChecker;
         private System.ComponentModel.BackgroundWorker buff_checker;
         private Timer followTimer;
-        private Label label2;
         private Timer resetSongTimer;
+        private Timer timer1;
     }
 }
 

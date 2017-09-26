@@ -1,0 +1,44 @@
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.exe.config
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.exe
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.pdb
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\bin\Debug\EliteMMO.API.dll
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form1.resources
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form2.resources
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form3.resources
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form4.resources
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.PartyBuffs.resources
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Properties.Resources.resources
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csproj.GenerateResource.Cache
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\Cure Please.exe
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\Cure Please.pdb
+C:\Users\Daniel\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csproj.CoreCompileInputs.cache
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.exe.config
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.exe
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.pdb
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\bin\Debug\EliteMMO.API.dll
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csprojResolveAssemblyReference.cache
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form1.resources
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form2.resources
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form3.resources
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form4.resources
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.PartyBuffs.resources
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Properties.Resources.resources
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csproj.GenerateResource.Cache
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csproj.CoreCompileInputs.cache
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\Cure Please.exe
+C:\Users\Default User.DESKTOP-D469CJV\Desktop\GitHub\Cure-Please\obj\x86\Debug\Cure Please.pdb
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.exe
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\bin\Debug\Cure Please.pdb
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\bin\Debug\EliteMMO.API.dll
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form1.resources
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form2.resources
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form3.resources
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Form4.resources
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.PartyBuffs.resources
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.Properties.Resources.resources
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csproj.GenerateResource.Cache
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csproj.CoreCompileInputs.cache
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\Cure Please.exe
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\Cure Please.pdb
+C:\Users\Daniel Hatcher\Desktop\GitHub\Cure-Please\obj\x86\Debug\CurePlease.csprojResolveAssemblyReference.cache

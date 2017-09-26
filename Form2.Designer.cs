@@ -101,6 +101,7 @@ namespace CurePlease
             this.label48 = new System.Windows.Forms.Label();
             this.ipAddress = new System.Windows.Forms.TextBox();
             this.label38 = new System.Windows.Forms.Label();
+            this.recastSongs_monitored = new System.Windows.Forms.CheckBox();
             this.penury = new System.Windows.Forms.CheckBox();
             this.celerity = new System.Windows.Forms.CheckBox();
             this.accession = new System.Windows.Forms.CheckBox();
@@ -250,6 +251,7 @@ namespace CurePlease
             this.nightingale = new System.Windows.Forms.CheckBox();
             this.pianissimo = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.EclipticAttritionBox = new System.Windows.Forms.CheckBox();
             this.RadialArcanaBox = new System.Windows.Forms.CheckBox();
             this.BlazeOfGloryBox = new System.Windows.Forms.CheckBox();
             this.rdmJAgroup = new System.Windows.Forms.GroupBox();
@@ -413,7 +415,12 @@ namespace CurePlease
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.pauseOnStartBox = new System.Windows.Forms.CheckBox();
             this.pauseOnZoneBox = new System.Windows.Forms.CheckBox();
-            this.recastSongs_monitored = new System.Windows.Forms.CheckBox();
+            this.saveAsButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.monitoredCurePercentage = new System.Windows.Forms.TrackBar();
+            this.label55 = new System.Windows.Forms.Label();
+            this.monitoredCurePercentageValueLabel = new System.Windows.Forms.Label();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -503,13 +510,14 @@ namespace CurePlease
             this.groupBox14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).BeginInit();
             this.groupBox13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(651, 576);
+            this.button4.Location = new System.Drawing.Point(635, 581);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(121, 23);
+            this.button4.Size = new System.Drawing.Size(147, 23);
             this.button4.TabIndex = 2;
             this.button4.Text = "Save All Settings";
             this.toolTip1.SetToolTip(this.button4, "Click here or Close to Save Settings!");
@@ -627,7 +635,7 @@ namespace CurePlease
             // DematerializeBox
             // 
             this.DematerializeBox.AutoSize = true;
-            this.DematerializeBox.Location = new System.Drawing.Point(20, 69);
+            this.DematerializeBox.Location = new System.Drawing.Point(20, 73);
             this.DematerializeBox.Name = "DematerializeBox";
             this.DematerializeBox.Size = new System.Drawing.Size(103, 19);
             this.DematerializeBox.TabIndex = 4;
@@ -638,7 +646,7 @@ namespace CurePlease
             // FullCircleBox
             // 
             this.FullCircleBox.AutoSize = true;
-            this.FullCircleBox.Location = new System.Drawing.Point(20, 46);
+            this.FullCircleBox.Location = new System.Drawing.Point(20, 48);
             this.FullCircleBox.Name = "FullCircleBox";
             this.FullCircleBox.Size = new System.Drawing.Size(80, 19);
             this.FullCircleBox.TabIndex = 5;
@@ -782,7 +790,7 @@ namespace CurePlease
             // priorityCurePercentageValueLabel
             // 
             this.priorityCurePercentageValueLabel.AutoSize = true;
-            this.priorityCurePercentageValueLabel.Location = new System.Drawing.Point(405, 88);
+            this.priorityCurePercentageValueLabel.Location = new System.Drawing.Point(405, 90);
             this.priorityCurePercentageValueLabel.Name = "priorityCurePercentageValueLabel";
             this.priorityCurePercentageValueLabel.Size = new System.Drawing.Size(14, 15);
             this.priorityCurePercentageValueLabel.TabIndex = 2;
@@ -1306,6 +1314,18 @@ namespace CurePlease
             this.label38.TabIndex = 0;
             this.label38.Text = "IP Address:";
             this.toolTip1.SetToolTip(this.label38, "Defaults:\r\n\r\nIP Address: 127.0.0.1\r\nPort: 19769");
+            // 
+            // recastSongs_monitored
+            // 
+            this.recastSongs_monitored.AutoSize = true;
+            this.recastSongs_monitored.Location = new System.Drawing.Point(20, 408);
+            this.recastSongs_monitored.Name = "recastSongs_monitored";
+            this.recastSongs_monitored.Size = new System.Drawing.Size(177, 19);
+            this.recastSongs_monitored.TabIndex = 11;
+            this.recastSongs_monitored.Text = "Recast on Monitored Player";
+            this.toolTip1.SetToolTip(this.recastSongs_monitored, "Recast all the songs including the dummy songs if the monitored player is missing" +
+        " them and is close.\r\n\r\nUseful for monsters with Full Dispel.");
+            this.recastSongs_monitored.UseVisualStyleBackColor = true;
             // 
             // penury
             // 
@@ -3177,7 +3197,7 @@ namespace CurePlease
             this.groupBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox24.Location = new System.Drawing.Point(561, 5);
             this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(201, 375);
+            this.groupBox24.Size = new System.Drawing.Size(201, 410);
             this.groupBox24.TabIndex = 3;
             this.groupBox24.TabStop = false;
             this.groupBox24.Text = "Bard";
@@ -3215,6 +3235,7 @@ namespace CurePlease
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.EclipticAttritionBox);
             this.groupBox8.Controls.Add(this.FullCircleBox);
             this.groupBox8.Controls.Add(this.RadialArcanaBox);
             this.groupBox8.Controls.Add(this.BlazeOfGloryBox);
@@ -3223,15 +3244,25 @@ namespace CurePlease
             this.groupBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox8.Location = new System.Drawing.Point(240, 207);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(315, 173);
+            this.groupBox8.Size = new System.Drawing.Size(315, 208);
             this.groupBox8.TabIndex = 2;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Geomancer";
             // 
+            // EclipticAttritionBox
+            // 
+            this.EclipticAttritionBox.AutoSize = true;
+            this.EclipticAttritionBox.Location = new System.Drawing.Point(20, 148);
+            this.EclipticAttritionBox.Name = "EclipticAttritionBox";
+            this.EclipticAttritionBox.Size = new System.Drawing.Size(108, 19);
+            this.EclipticAttritionBox.TabIndex = 6;
+            this.EclipticAttritionBox.Text = "Ecliptic Attrition";
+            this.EclipticAttritionBox.UseVisualStyleBackColor = true;
+            // 
             // RadialArcanaBox
             // 
             this.RadialArcanaBox.AutoSize = true;
-            this.RadialArcanaBox.Location = new System.Drawing.Point(20, 115);
+            this.RadialArcanaBox.Location = new System.Drawing.Point(20, 123);
             this.RadialArcanaBox.Name = "RadialArcanaBox";
             this.RadialArcanaBox.Size = new System.Drawing.Size(106, 19);
             this.RadialArcanaBox.TabIndex = 1;
@@ -3241,7 +3272,7 @@ namespace CurePlease
             // BlazeOfGloryBox
             // 
             this.BlazeOfGloryBox.AutoSize = true;
-            this.BlazeOfGloryBox.Location = new System.Drawing.Point(20, 92);
+            this.BlazeOfGloryBox.Location = new System.Drawing.Point(20, 98);
             this.BlazeOfGloryBox.Name = "BlazeOfGloryBox";
             this.BlazeOfGloryBox.Size = new System.Drawing.Size(103, 19);
             this.BlazeOfGloryBox.TabIndex = 3;
@@ -3283,7 +3314,7 @@ namespace CurePlease
             this.schJAgroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.schJAgroup.Location = new System.Drawing.Point(3, 3);
             this.schJAgroup.Name = "schJAgroup";
-            this.schJAgroup.Size = new System.Drawing.Size(231, 376);
+            this.schJAgroup.Size = new System.Drawing.Size(231, 412);
             this.schJAgroup.TabIndex = 1;
             this.schJAgroup.TabStop = false;
             this.schJAgroup.Text = "Scholar";
@@ -4498,7 +4529,7 @@ namespace CurePlease
             this.groupBox12.Controls.Add(this.curagaEnabled);
             this.groupBox12.Controls.Add(this.curaga2Enabled);
             this.groupBox12.Controls.Add(this.curaga3Enabled);
-            this.groupBox12.Location = new System.Drawing.Point(5, 197);
+            this.groupBox12.Location = new System.Drawing.Point(5, 306);
             this.groupBox12.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox12.Name = "groupBox12";
             this.groupBox12.Padding = new System.Windows.Forms.Padding(2);
@@ -4632,6 +4663,9 @@ namespace CurePlease
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.monitoredCurePercentage);
+            this.groupBox2.Controls.Add(this.label55);
+            this.groupBox2.Controls.Add(this.monitoredCurePercentageValueLabel);
             this.groupBox2.Controls.Add(this.fullCureenabled);
             this.groupBox2.Controls.Add(this.fullCureamount);
             this.groupBox2.Controls.Add(this.priorityCurePercentage);
@@ -4654,7 +4688,7 @@ namespace CurePlease
             this.groupBox2.Controls.Add(this.cure1amount);
             this.groupBox2.Location = new System.Drawing.Point(6, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(760, 189);
+            this.groupBox2.Size = new System.Drawing.Size(760, 269);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Healing Options";
@@ -4878,6 +4912,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -4970,6 +5005,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5049,7 +5085,6 @@ namespace CurePlease
             0,
             0,
             0});
-            this.recastSong.ValueChanged += new System.EventHandler(this.recastSong_ValueChanged);
             // 
             // label39
             // 
@@ -5138,6 +5173,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5274,6 +5310,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5375,6 +5412,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5490,6 +5528,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5591,6 +5630,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5706,6 +5746,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5798,6 +5839,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -5920,6 +5962,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -6033,6 +6076,7 @@ namespace CurePlease
                 "---------------------------------",
             "Advancing March ",
             "Victory March ",
+            "Honor March",
             "---------------------------------------------------------------------------------" +
                 "---------------------------------",
             "Fire Carol",
@@ -6235,31 +6279,86 @@ namespace CurePlease
             this.pauseOnZoneBox.Text = "Pause when character zones";
             this.pauseOnZoneBox.UseVisualStyleBackColor = true;
             // 
-            // recastSongs_monitored
+            // saveAsButton
             // 
-            this.recastSongs_monitored.AutoSize = true;
-            this.recastSongs_monitored.Location = new System.Drawing.Point(20, 408);
-            this.recastSongs_monitored.Name = "recastSongs_monitored";
-            this.recastSongs_monitored.Size = new System.Drawing.Size(177, 19);
-            this.recastSongs_monitored.TabIndex = 11;
-            this.recastSongs_monitored.Text = "Recast on Monitored Player";
-            this.toolTip1.SetToolTip(this.recastSongs_monitored, "Recast all the songs including the dummy songs if the monitored player is missing" +
-        " them and is close.\r\n\r\nUseful for monsters with Full Dispel.");
-            this.recastSongs_monitored.UseVisualStyleBackColor = true;
+            this.saveAsButton.Location = new System.Drawing.Point(554, 581);
+            this.saveAsButton.Name = "saveAsButton";
+            this.saveAsButton.Size = new System.Drawing.Size(75, 23);
+            this.saveAsButton.TabIndex = 3;
+            this.saveAsButton.Text = "Save as...";
+            this.saveAsButton.UseVisualStyleBackColor = true;
+            this.saveAsButton.Click += new System.EventHandler(this.saveAsButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(473, 581);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(75, 23);
+            this.loadButton.TabIndex = 4;
+            this.loadButton.Text = "Load from...";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
+            // monitoredCurePercentage
+            // 
+            this.monitoredCurePercentage.Location = new System.Drawing.Point(256, 190);
+            this.monitoredCurePercentage.Maximum = 100;
+            this.monitoredCurePercentage.Name = "monitoredCurePercentage";
+            this.monitoredCurePercentage.Size = new System.Drawing.Size(323, 45);
+            this.monitoredCurePercentage.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.monitoredCurePercentage, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
+            this.monitoredCurePercentage.Value = 75;
+            this.monitoredCurePercentage.ValueChanged += new System.EventHandler(this.monitoredPercentage_ValueChanged);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(220, 166);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(164, 15);
+            this.label55.TabIndex = 9;
+            this.label55.Text = "Monitored Priority Threshold:";
+            this.toolTip1.SetToolTip(this.label55, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
+            // 
+            // monitoredCurePercentageValueLabel
+            // 
+            this.monitoredCurePercentageValueLabel.AutoSize = true;
+            this.monitoredCurePercentageValueLabel.Location = new System.Drawing.Point(405, 166);
+            this.monitoredCurePercentageValueLabel.Name = "monitoredCurePercentageValueLabel";
+            this.monitoredCurePercentageValueLabel.Size = new System.Drawing.Size(14, 15);
+            this.monitoredCurePercentageValueLabel.TabIndex = 10;
+            this.monitoredCurePercentageValueLabel.Text = "0";
+            this.toolTip1.SetToolTip(this.monitoredCurePercentageValueLabel, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(260, 585);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(207, 17);
+            this.checkBox5.TabIndex = 5;
+            this.checkBox5.Text = "Automatically load Job_SubJob.xml file";
+            this.checkBox5.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(784, 611);
+            this.ClientSize = new System.Drawing.Size(789, 616);
+            this.Controls.Add(this.checkBox5);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.saveAsButton);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.tabControl1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(800, 650);
-            this.MinimumSize = new System.Drawing.Size(800, 650);
             this.Name = "Form2";
             this.Text = " ";
             this.TopMost = true;
@@ -6394,7 +6493,9 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).EndInit();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -6781,5 +6882,12 @@ namespace CurePlease
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.CheckBox SongsOnlyWhenNearEngaged;
         private System.Windows.Forms.CheckBox recastSongs_monitored;
+        private System.Windows.Forms.CheckBox EclipticAttritionBox;
+        private System.Windows.Forms.Button saveAsButton;
+        private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.TrackBar monitoredCurePercentage;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label monitoredCurePercentageValueLabel;
+        private System.Windows.Forms.CheckBox checkBox5;
     }
 }

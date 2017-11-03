@@ -1,5 +1,4 @@
-﻿
-namespace CurePlease
+﻿namespace CurePlease
 {
     using System.Windows.Forms;
 
@@ -13,6 +12,7 @@ namespace CurePlease
         }
 
         #region "== Form About"
+
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/atom0s/Cure-Please");
@@ -28,5 +28,6 @@ namespace CurePlease
             System.Diagnostics.Process.Start("http://ext.elitemmonetwork.com/downloads/elitemmo_api/");
         }
     }
-        #endregion
+
+    #endregion "== Form About"
 }

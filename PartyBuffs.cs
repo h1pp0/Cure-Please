@@ -1,12 +1,11 @@
 ﻿namespace CurePlease
 {
     using System;
-    using System.Windows.Forms;
-    using static Form1;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Forms;
     using System.Xml.Linq;
-    using System.Drawing;
+    using static Form1;
 
     public partial class PartyBuffs : Form
     {
@@ -28,72 +27,58 @@
 
             if (f1.setinstance2.Enabled == true)
             {
-
                 // Create the required List
-
 
                 // Read the Buffs file a generate a List to call.
                 foreach (XElement BuffElement in XElement.Load("Resources/Buffs.xml").Elements("o"))
                 {
                     XMLBuffList.Add(new BuffList() { ID = BuffElement.Attribute("id").Value, Name = BuffElement.Attribute("en").Value });
-
                 }
             }
             else
             {
                 MessageBox.Show("No character was selected as the power leveler, close this window and select one.");
-            }
 
+            }
         }
 
         private void update_effects_Tick(object sender, EventArgs e)
         {
             ailment_list.Text = "";
 
-            if (Form2.config.naSpellsenable)
+            // Search through current active party buffs
+            foreach (BuffStorage ailment in f1.ActiveBuffs)
             {
-                // Search through current active party buffs
-                foreach (BuffStorage ailment in f1.ActiveBuffs)
+                // First add Character name and a Line Break.
+                ailment_list.AppendText(ailment.CharacterName.ToUpper() + "\n");
+
+                // Now create a list and loop through each buff and name them
+                List<string> named_buffs = ailment.CharacterBuffs.Split(',').ToList();
+
+                int i = 1;
+                int count = named_buffs.Count();
+
+                foreach (string acBuff in named_buffs)
                 {
-                    // First add Character name and a Line Break.
-                    ailment_list.AppendText(ailment.CharacterName.ToUpper() + "\n");
+                    i++;
 
-                    // Now create a list and loop through each buff and name them
-                    List<string> named_buffs = ailment.CharacterBuffs.Split(',').ToList();
+                    var found_Buff = XMLBuffList.Find(r => r.ID == acBuff);
 
-                    int i = 1;
-                    int count = named_buffs.Count();
-
-                    foreach (string acBuff in named_buffs)
+                    if (found_Buff != null)
                     {
-                        i++;
-
-                        var found_Buff = XMLBuffList.Find(r => r.ID == acBuff);
-
-                        if (found_Buff != null)
+                        if (i == count)
                         {
-                            if (i == count)
-                            {
-                                ailment_list.AppendText(found_Buff.Name + " ");
-                            }
-                            else
-                            {
-                                ailment_list.AppendText(found_Buff.Name + ", ");
-                            }
+                            ailment_list.AppendText(found_Buff.Name + " ("+acBuff+") ");
+                        }
+                        else
+                        {
+                            ailment_list.AppendText(found_Buff.Name + " (" + acBuff + "), ");
                         }
                     }
-
-
-                    ailment_list.AppendText("\n\n");
-
                 }
 
+                ailment_list.AppendText("\n\n");
             }
         }
-
-
-
-
-
     }
 }

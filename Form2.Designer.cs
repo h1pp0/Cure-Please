@@ -34,7 +34,6 @@ namespace CurePlease
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.button4 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lowMPuseitem = new System.Windows.Forms.CheckBox();
             this.mpMintempitemusage = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -85,7 +84,6 @@ namespace CurePlease
             this.healLowMP = new System.Windows.Forms.CheckBox();
             this.healWhenMPBelow = new System.Windows.Forms.NumericUpDown();
             this.autoCastCheckBox = new System.Windows.Forms.CheckBox();
-            this.AutoCastEngageCheckBox = new System.Windows.Forms.CheckBox();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -95,19 +93,27 @@ namespace CurePlease
             this.label10 = new System.Windows.Forms.Label();
             this.autoRefreshLabel = new System.Windows.Forms.Label();
             this.marcato = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.accessionProShell = new System.Windows.Forms.CheckBox();
+            this.accessionPerpRegen = new System.Windows.Forms.CheckBox();
             this.listeningPort = new System.Windows.Forms.TextBox();
             this.label48 = new System.Windows.Forms.Label();
             this.ipAddress = new System.Windows.Forms.TextBox();
             this.label38 = new System.Windows.Forms.Label();
             this.recastSongs_monitored = new System.Windows.Forms.CheckBox();
+            this.monitoredCurePercentage = new System.Windows.Forms.TrackBar();
+            this.label55 = new System.Windows.Forms.Label();
+            this.monitoredCurePercentageValueLabel = new System.Windows.Forms.Label();
+            this.Overcure = new System.Windows.Forms.CheckBox();
+            this.Undercure = new System.Windows.Forms.CheckBox();
+            this.enableMonitoredPriority = new System.Windows.Forms.CheckBox();
             this.penury = new System.Windows.Forms.CheckBox();
             this.celerity = new System.Windows.Forms.CheckBox();
             this.accession = new System.Windows.Forms.CheckBox();
             this.rapture = new System.Windows.Forms.CheckBox();
             this.perpetuance = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox32 = new System.Windows.Forms.GroupBox();
+            this.OvercureOnHighPriority = new System.Windows.Forms.CheckBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.label51 = new System.Windows.Forms.Label();
             this.sublimationMP = new System.Windows.Forms.NumericUpDown();
@@ -118,8 +124,6 @@ namespace CurePlease
             this.DevotionWhenEngaged = new System.Windows.Forms.CheckBox();
             this.label35 = new System.Windows.Forms.Label();
             this.DevotionMP = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.MPItems = new System.Windows.Forms.ListBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.label26 = new System.Windows.Forms.Label();
             this.ConvertMP = new System.Windows.Forms.NumericUpDown();
@@ -338,9 +342,27 @@ namespace CurePlease
             this.plStoneskin = new System.Windows.Forms.CheckBox();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.groupBox27 = new System.Windows.Forms.GroupBox();
+            this.barstatusPerpetuance = new System.Windows.Forms.CheckBox();
+            this.barspellPerpetuance = new System.Windows.Forms.CheckBox();
+            this.aquaveilPerpetuance = new System.Windows.Forms.CheckBox();
+            this.stormspellPerpetuance = new System.Windows.Forms.CheckBox();
+            this.enspellPerpetuance = new System.Windows.Forms.CheckBox();
+            this.stoneskinPerpetuance = new System.Windows.Forms.CheckBox();
+            this.phalanxPerpetuance = new System.Windows.Forms.CheckBox();
+            this.blinkPerpetuance = new System.Windows.Forms.CheckBox();
+            this.refreshPerpetuance = new System.Windows.Forms.CheckBox();
+            this.barstatusAccession = new System.Windows.Forms.CheckBox();
+            this.barspellAccession = new System.Windows.Forms.CheckBox();
+            this.refreshAccession = new System.Windows.Forms.CheckBox();
+            this.aquaveilAccession = new System.Windows.Forms.CheckBox();
+            this.stormspellAccession = new System.Windows.Forms.CheckBox();
+            this.enspellAccession = new System.Windows.Forms.CheckBox();
+            this.phalanxAccession = new System.Windows.Forms.CheckBox();
+            this.blinkAccession = new System.Windows.Forms.CheckBox();
+            this.stoneskinAccession = new System.Windows.Forms.CheckBox();
             this.groupBox26 = new System.Windows.Forms.GroupBox();
             this.groupBox25 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.accessionCure = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.requiredCuragaNumbers = new System.Windows.Forms.NumericUpDown();
@@ -407,6 +429,7 @@ namespace CurePlease
             this.label24 = new System.Windows.Forms.Label();
             this.enableFastCast_Mode = new System.Windows.Forms.CheckBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.autoFollow_Warning = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.autoFollowName = new System.Windows.Forms.TextBox();
             this.autoFollowDistance = new System.Windows.Forms.NumericUpDown();
@@ -417,10 +440,9 @@ namespace CurePlease
             this.pauseOnZoneBox = new System.Windows.Forms.CheckBox();
             this.saveAsButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
-            this.monitoredCurePercentage = new System.Windows.Forms.TrackBar();
-            this.label55 = new System.Windows.Forms.Label();
-            this.monitoredCurePercentageValueLabel = new System.Windows.Forms.Label();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.loadJobSettings = new System.Windows.Forms.CheckBox();
+            this.plShell = new System.Windows.Forms.CheckBox();
+            this.plProtect = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -439,7 +461,9 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.curagaCurePercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.standAtMP_Percentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.healWhenMPBelow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).BeginInit();
             this.tabPage5.SuspendLayout();
+            this.groupBox32.SuspendLayout();
             this.groupBox29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sublimationMP)).BeginInit();
             this.groupBox16.SuspendLayout();
@@ -486,6 +510,7 @@ namespace CurePlease
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.tabPage10.SuspendLayout();
+            this.groupBox27.SuspendLayout();
             this.groupBox25.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -510,7 +535,6 @@ namespace CurePlease
             this.groupBox14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).BeginInit();
             this.groupBox13.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // button4
@@ -523,18 +547,6 @@ namespace CurePlease
             this.toolTip1.SetToolTip(this.button4, "Click here or Close to Save Settings!");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // lowMPuseitem
-            // 
-            this.lowMPuseitem.AutoSize = true;
-            this.lowMPuseitem.Enabled = false;
-            this.lowMPuseitem.Location = new System.Drawing.Point(6, 146);
-            this.lowMPuseitem.Name = "lowMPuseitem";
-            this.lowMPuseitem.Size = new System.Drawing.Size(227, 19);
-            this.lowMPuseitem.TabIndex = 9;
-            this.lowMPuseitem.Text = "Use temp items when below min MP";
-            this.toolTip1.SetToolTip(this.lowMPuseitem, "\"Not Implemented\"");
-            this.lowMPuseitem.UseVisualStyleBackColor = true;
             // 
             // mpMintempitemusage
             // 
@@ -658,9 +670,9 @@ namespace CurePlease
             // GEOSpell_target
             // 
             this.GEOSpell_target.Enabled = false;
-            this.GEOSpell_target.Location = new System.Drawing.Point(88, 449);
+            this.GEOSpell_target.Location = new System.Drawing.Point(144, 449);
             this.GEOSpell_target.Name = "GEOSpell_target";
-            this.GEOSpell_target.Size = new System.Drawing.Size(161, 21);
+            this.GEOSpell_target.Size = new System.Drawing.Size(105, 21);
             this.GEOSpell_target.TabIndex = 3;
             this.toolTip1.SetToolTip(this.GEOSpell_target, "Input the name of the character you want GEO buffs to target");
             // 
@@ -1144,7 +1156,7 @@ namespace CurePlease
             // 
             this.autoCastCheckBox.AutoSize = true;
             this.autoCastCheckBox.Enabled = false;
-            this.autoCastCheckBox.Location = new System.Drawing.Point(8, 34);
+            this.autoCastCheckBox.Location = new System.Drawing.Point(8, 20);
             this.autoCastCheckBox.Name = "autoCastCheckBox";
             this.autoCastCheckBox.Size = new System.Drawing.Size(144, 19);
             this.autoCastCheckBox.TabIndex = 1;
@@ -1152,18 +1164,6 @@ namespace CurePlease
             this.toolTip1.SetToolTip(this.autoCastCheckBox, "Auto Casts buffs as defined in AutoBuffs.xml");
             this.autoCastCheckBox.UseVisualStyleBackColor = true;
             this.autoCastCheckBox.Visible = false;
-            // 
-            // AutoCastEngageCheckBox
-            // 
-            this.AutoCastEngageCheckBox.AutoSize = true;
-            this.AutoCastEngageCheckBox.Location = new System.Drawing.Point(8, 16);
-            this.AutoCastEngageCheckBox.Name = "AutoCastEngageCheckBox";
-            this.AutoCastEngageCheckBox.Size = new System.Drawing.Size(205, 19);
-            this.AutoCastEngageCheckBox.TabIndex = 0;
-            this.AutoCastEngageCheckBox.Text = "Auto Casts Spells when engaged";
-            this.toolTip1.SetToolTip(this.AutoCastEngageCheckBox, "Auto Casts Protect IV & V, Shell IV & V, Regen IV & V, Haste, Flurry on Monitored" +
-        " Player while engaged");
-            this.AutoCastEngageCheckBox.UseVisualStyleBackColor = true;
             // 
             // label22
             // 
@@ -1257,27 +1257,27 @@ namespace CurePlease
         "he 1.5 potency.");
             this.marcato.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // accessionProShell
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(7, 44);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(400, 19);
-            this.checkBox3.TabIndex = 2;
-            this.checkBox3.Text = "Accession \"Protect\" and \"Shell\" in replacement of their \'ga\' equivelant";
-            this.toolTip1.SetToolTip(this.checkBox3, "This will disable time based Protect and Shell recast on all characters.");
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.accessionProShell.AutoSize = true;
+            this.accessionProShell.Location = new System.Drawing.Point(7, 44);
+            this.accessionProShell.Name = "accessionProShell";
+            this.accessionProShell.Size = new System.Drawing.Size(400, 19);
+            this.accessionProShell.TabIndex = 2;
+            this.accessionProShell.Text = "Accession \"Protect\" and \"Shell\" in replacement of their \'ga\' equivelant";
+            this.toolTip1.SetToolTip(this.accessionProShell, "This will disable time based Protect and Shell recast on all characters.");
+            this.accessionProShell.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // accessionPerpRegen
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(7, 67);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(371, 19);
-            this.checkBox2.TabIndex = 1;
-            this.checkBox2.Text = "Accession / Perpetuance \"Regen\"  on surrounding PT members";
-            this.toolTip1.SetToolTip(this.checkBox2, "This will disable time based Regen recast on all characters.");
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.accessionPerpRegen.AutoSize = true;
+            this.accessionPerpRegen.Location = new System.Drawing.Point(7, 67);
+            this.accessionPerpRegen.Name = "accessionPerpRegen";
+            this.accessionPerpRegen.Size = new System.Drawing.Size(371, 19);
+            this.accessionPerpRegen.TabIndex = 1;
+            this.accessionPerpRegen.Text = "Accession / Perpetuance \"Regen\"  on surrounding PT members";
+            this.toolTip1.SetToolTip(this.accessionPerpRegen, "This will disable time based Regen recast on all characters.");
+            this.accessionPerpRegen.UseVisualStyleBackColor = true;
             // 
             // listeningPort
             // 
@@ -1327,9 +1327,81 @@ namespace CurePlease
         " them and is close.\r\n\r\nUseful for monsters with Full Dispel.");
             this.recastSongs_monitored.UseVisualStyleBackColor = true;
             // 
+            // monitoredCurePercentage
+            // 
+            this.monitoredCurePercentage.Location = new System.Drawing.Point(256, 190);
+            this.monitoredCurePercentage.Maximum = 100;
+            this.monitoredCurePercentage.Name = "monitoredCurePercentage";
+            this.monitoredCurePercentage.Size = new System.Drawing.Size(323, 45);
+            this.monitoredCurePercentage.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.monitoredCurePercentage, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
+            this.monitoredCurePercentage.Value = 75;
+            this.monitoredCurePercentage.ValueChanged += new System.EventHandler(this.monitoredPercentage_ValueChanged);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(220, 166);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(164, 15);
+            this.label55.TabIndex = 9;
+            this.label55.Text = "Monitored Priority Threshold:";
+            this.toolTip1.SetToolTip(this.label55, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
+            // 
+            // monitoredCurePercentageValueLabel
+            // 
+            this.monitoredCurePercentageValueLabel.AutoSize = true;
+            this.monitoredCurePercentageValueLabel.Location = new System.Drawing.Point(405, 166);
+            this.monitoredCurePercentageValueLabel.Name = "monitoredCurePercentageValueLabel";
+            this.monitoredCurePercentageValueLabel.Size = new System.Drawing.Size(14, 15);
+            this.monitoredCurePercentageValueLabel.TabIndex = 10;
+            this.monitoredCurePercentageValueLabel.Text = "0";
+            this.toolTip1.SetToolTip(this.monitoredCurePercentageValueLabel, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
+        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
+        "t that tier if available.\r\n\r\n\r\n");
+            // 
+            // Overcure
+            // 
+            this.Overcure.AutoSize = true;
+            this.Overcure.Location = new System.Drawing.Point(7, 20);
+            this.Overcure.Name = "Overcure";
+            this.Overcure.Size = new System.Drawing.Size(135, 19);
+            this.Overcure.TabIndex = 0;
+            this.Overcure.Text = "Enable OVERCURE";
+            this.toolTip1.SetToolTip(this.Overcure, resources.GetString("Overcure.ToolTip"));
+            this.Overcure.UseVisualStyleBackColor = true;
+            // 
+            // Undercure
+            // 
+            this.Undercure.AutoSize = true;
+            this.Undercure.Location = new System.Drawing.Point(7, 65);
+            this.Undercure.Name = "Undercure";
+            this.Undercure.Size = new System.Drawing.Size(146, 19);
+            this.Undercure.TabIndex = 1;
+            this.Undercure.Text = "Enable UNDERCURE";
+            this.toolTip1.SetToolTip(this.Undercure, resources.GetString("Undercure.ToolTip"));
+            this.Undercure.UseVisualStyleBackColor = true;
+            // 
+            // enableMonitoredPriority
+            // 
+            this.enableMonitoredPriority.AutoSize = true;
+            this.enableMonitoredPriority.Location = new System.Drawing.Point(7, 87);
+            this.enableMonitoredPriority.Name = "enableMonitoredPriority";
+            this.enableMonitoredPriority.Size = new System.Drawing.Size(164, 19);
+            this.enableMonitoredPriority.TabIndex = 2;
+            this.enableMonitoredPriority.Text = "Enable Monitored Priority";
+            this.toolTip1.SetToolTip(this.enableMonitoredPriority, "When enabled this will place the minotired target at maximum priority over the HP" +
+        " and Normal PT members.");
+            this.enableMonitoredPriority.UseVisualStyleBackColor = true;
+            // 
             // penury
             // 
             this.penury.AutoSize = true;
+            this.penury.Enabled = false;
             this.penury.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.penury.Location = new System.Drawing.Point(22, 157);
             this.penury.Name = "penury";
@@ -1337,11 +1409,11 @@ namespace CurePlease
             this.penury.TabIndex = 0;
             this.penury.Text = "Penury (50% MP Cost)";
             this.penury.UseVisualStyleBackColor = true;
-            this.penury.Visible = false;
             // 
             // celerity
             // 
             this.celerity.AutoSize = true;
+            this.celerity.Enabled = false;
             this.celerity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.celerity.Location = new System.Drawing.Point(22, 88);
             this.celerity.Name = "celerity";
@@ -1349,7 +1421,6 @@ namespace CurePlease
             this.celerity.TabIndex = 0;
             this.celerity.Text = "Celerity (Lower Cast Time)";
             this.celerity.UseVisualStyleBackColor = true;
-            this.celerity.Visible = false;
             // 
             // accession
             // 
@@ -1361,11 +1432,11 @@ namespace CurePlease
             this.accession.TabIndex = 0;
             this.accession.Text = "Accession (AOE)";
             this.accession.UseVisualStyleBackColor = true;
-            this.accession.Visible = false;
             // 
             // rapture
             // 
             this.rapture.AutoSize = true;
+            this.rapture.Enabled = false;
             this.rapture.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rapture.Location = new System.Drawing.Point(22, 180);
             this.rapture.Name = "rapture";
@@ -1373,7 +1444,6 @@ namespace CurePlease
             this.rapture.TabIndex = 0;
             this.rapture.Text = "Rapture (Added Potency)";
             this.rapture.UseVisualStyleBackColor = true;
-            this.rapture.Visible = false;
             // 
             // perpetuance
             // 
@@ -1385,15 +1455,13 @@ namespace CurePlease
             this.perpetuance.TabIndex = 0;
             this.perpetuance.Text = "Purpetuance (+Duration)";
             this.perpetuance.UseVisualStyleBackColor = true;
-            this.perpetuance.Visible = false;
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.groupBox32);
             this.tabPage5.Controls.Add(this.groupBox29);
             this.tabPage5.Controls.Add(this.groupBox16);
             this.tabPage5.Controls.Add(this.groupBox15);
-            this.tabPage5.Controls.Add(this.label25);
-            this.tabPage5.Controls.Add(this.MPItems);
             this.tabPage5.Controls.Add(this.groupBox11);
             this.tabPage5.Controls.Add(this.groupBox10);
             this.tabPage5.Controls.Add(this.groupBox4);
@@ -1404,6 +1472,29 @@ namespace CurePlease
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Other Options";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox32
+            // 
+            this.groupBox32.Controls.Add(this.OvercureOnHighPriority);
+            this.groupBox32.Controls.Add(this.enableMonitoredPriority);
+            this.groupBox32.Controls.Add(this.Undercure);
+            this.groupBox32.Controls.Add(this.Overcure);
+            this.groupBox32.Location = new System.Drawing.Point(6, 190);
+            this.groupBox32.Name = "groupBox32";
+            this.groupBox32.Size = new System.Drawing.Size(341, 156);
+            this.groupBox32.TabIndex = 41;
+            this.groupBox32.TabStop = false;
+            this.groupBox32.Text = "Cure Settings";
+            // 
+            // OvercureOnHighPriority
+            // 
+            this.OvercureOnHighPriority.AutoSize = true;
+            this.OvercureOnHighPriority.Location = new System.Drawing.Point(7, 42);
+            this.OvercureOnHighPriority.Name = "OvercureOnHighPriority";
+            this.OvercureOnHighPriority.Size = new System.Drawing.Size(296, 19);
+            this.OvercureOnHighPriority.TabIndex = 3;
+            this.OvercureOnHighPriority.Text = "Enable OVERCURE on High Priority targets ONLY";
+            this.OvercureOnHighPriority.UseVisualStyleBackColor = true;
             // 
             // groupBox29
             // 
@@ -1453,7 +1544,7 @@ namespace CurePlease
             this.groupBox16.Controls.Add(this.autoTargetSpell);
             this.groupBox16.Location = new System.Drawing.Point(356, 377);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(409, 107);
+            this.groupBox16.Size = new System.Drawing.Size(409, 156);
             this.groupBox16.TabIndex = 39;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Auto Casting Spells";
@@ -1524,35 +1615,6 @@ namespace CurePlease
             this.DevotionMP.Name = "DevotionMP";
             this.DevotionMP.Size = new System.Drawing.Size(84, 21);
             this.DevotionMP.TabIndex = 12;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(8, 220);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(326, 30);
-            this.label25.TabIndex = 12;
-            this.label25.Text = "Select as many or as few items you\'d like to use on low MP\r\nEach item is used in " +
-    "the order defined below.";
-            // 
-            // MPItems
-            // 
-            this.MPItems.FormattingEnabled = true;
-            this.MPItems.ItemHeight = 15;
-            this.MPItems.Items.AddRange(new object[] {
-            "Lucid Ether I",
-            "Lucid Ether II",
-            "Lucid Ether III",
-            "Lucid Elixir I",
-            "Lucid Elixir II",
-            "Mana Powder",
-            "Mana Mist",
-            "Megalixir"});
-            this.MPItems.Location = new System.Drawing.Point(11, 253);
-            this.MPItems.Name = "MPItems";
-            this.MPItems.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.MPItems.Size = new System.Drawing.Size(339, 229);
-            this.MPItems.TabIndex = 0;
             // 
             // groupBox11
             // 
@@ -1676,16 +1738,15 @@ namespace CurePlease
             this.groupBox4.Controls.Add(this.healLowMP);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.mpMintempitemusage);
-            this.groupBox4.Controls.Add(this.lowMPuseitem);
             this.groupBox4.Controls.Add(this.lowMPcheckBox);
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.mpMinCastValue);
             this.groupBox4.Location = new System.Drawing.Point(6, 6);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(341, 206);
+            this.groupBox4.Size = new System.Drawing.Size(341, 178);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "MP Options";
+            this.groupBox4.Text = "MP Settings";
             // 
             // lowMPcheckBox
             // 
@@ -3426,9 +3487,9 @@ namespace CurePlease
             this.EnableLuopanSpells.AutoSize = true;
             this.EnableLuopanSpells.Location = new System.Drawing.Point(240, 17);
             this.EnableLuopanSpells.Name = "EnableLuopanSpells";
-            this.EnableLuopanSpells.Size = new System.Drawing.Size(133, 19);
+            this.EnableLuopanSpells.Size = new System.Drawing.Size(166, 19);
             this.EnableLuopanSpells.TabIndex = 4;
-            this.EnableLuopanSpells.Text = "Enable GEO- spells";
+            this.EnableLuopanSpells.Text = "Enable GEO based spells";
             this.EnableLuopanSpells.UseVisualStyleBackColor = true;
             this.EnableLuopanSpells.CheckedChanged += new System.EventHandler(this.EnableLuopanSpells_CheckedChanged);
             // 
@@ -3437,9 +3498,9 @@ namespace CurePlease
             this.EnableGeoSpells.AutoSize = true;
             this.EnableGeoSpells.Location = new System.Drawing.Point(8, 16);
             this.EnableGeoSpells.Name = "EnableGeoSpells";
-            this.EnableGeoSpells.Size = new System.Drawing.Size(170, 19);
+            this.EnableGeoSpells.Size = new System.Drawing.Size(166, 19);
             this.EnableGeoSpells.TabIndex = 2;
-            this.EnableGeoSpells.Text = "Enable Geomancer Spells";
+            this.EnableGeoSpells.Text = "Enable INDI based Spells";
             this.EnableGeoSpells.UseVisualStyleBackColor = true;
             this.EnableGeoSpells.CheckedChanged += new System.EventHandler(this.EnableGeoSpells_CheckedChanged);
             // 
@@ -3522,9 +3583,9 @@ namespace CurePlease
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 452);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(76, 15);
+            this.label6.Size = new System.Drawing.Size(132, 15);
             this.label6.TabIndex = 4;
-            this.label6.Text = "Spell Target:";
+            this.label6.Text = "PT Based Spell Target:";
             // 
             // GEOSpell
             // 
@@ -3835,13 +3896,13 @@ namespace CurePlease
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.autoCastCheckBox);
-            this.groupBox3.Controls.Add(this.AutoCastEngageCheckBox);
-            this.groupBox3.Location = new System.Drawing.Point(471, 302);
+            this.groupBox3.Location = new System.Drawing.Point(471, 361);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(271, 74);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Auto Casting Spells: Monitored Player";
+            this.groupBox3.Visible = false;
             // 
             // groupBox1
             // 
@@ -4146,6 +4207,8 @@ namespace CurePlease
             // 
             // plBuffGroup
             // 
+            this.plBuffGroup.Controls.Add(this.plShell);
+            this.plBuffGroup.Controls.Add(this.plProtect);
             this.plBuffGroup.Controls.Add(this.plAquaveil);
             this.plBuffGroup.Controls.Add(this.plStormSpell_Spell);
             this.plBuffGroup.Controls.Add(this.plStormSpell);
@@ -4160,7 +4223,7 @@ namespace CurePlease
             this.plBuffGroup.Controls.Add(this.plStoneskin);
             this.plBuffGroup.Location = new System.Drawing.Point(471, 6);
             this.plBuffGroup.Name = "plBuffGroup";
-            this.plBuffGroup.Size = new System.Drawing.Size(271, 290);
+            this.plBuffGroup.Size = new System.Drawing.Size(271, 349);
             this.plBuffGroup.TabIndex = 13;
             this.plBuffGroup.TabStop = false;
             this.plBuffGroup.Text = "   PL Buffs";
@@ -4168,7 +4231,7 @@ namespace CurePlease
             // plAquaveil
             // 
             this.plAquaveil.AutoSize = true;
-            this.plAquaveil.Location = new System.Drawing.Point(8, 235);
+            this.plAquaveil.Location = new System.Drawing.Point(11, 287);
             this.plAquaveil.Name = "plAquaveil";
             this.plAquaveil.Size = new System.Drawing.Size(72, 19);
             this.plAquaveil.TabIndex = 18;
@@ -4196,7 +4259,7 @@ namespace CurePlease
             "Thunderstorm II",
             "Voidstorm II",
             "Aurorastorm II"});
-            this.plStormSpell_Spell.Location = new System.Drawing.Point(91, 185);
+            this.plStormSpell_Spell.Location = new System.Drawing.Point(94, 237);
             this.plStormSpell_Spell.Name = "plStormSpell_Spell";
             this.plStormSpell_Spell.Size = new System.Drawing.Size(174, 23);
             this.plStormSpell_Spell.TabIndex = 17;
@@ -4204,7 +4267,7 @@ namespace CurePlease
             // plStormSpell
             // 
             this.plStormSpell.AutoSize = true;
-            this.plStormSpell.Location = new System.Drawing.Point(7, 189);
+            this.plStormSpell.Location = new System.Drawing.Point(10, 241);
             this.plStormSpell.Name = "plStormSpell";
             this.plStormSpell.Size = new System.Drawing.Size(62, 19);
             this.plStormSpell.TabIndex = 16;
@@ -4214,7 +4277,7 @@ namespace CurePlease
             // plKlimaform
             // 
             this.plKlimaform.AutoSize = true;
-            this.plKlimaform.Location = new System.Drawing.Point(8, 212);
+            this.plKlimaform.Location = new System.Drawing.Point(11, 264);
             this.plKlimaform.Name = "plKlimaform";
             this.plKlimaform.Size = new System.Drawing.Size(83, 19);
             this.plKlimaform.TabIndex = 15;
@@ -4238,7 +4301,7 @@ namespace CurePlease
             "Enaero II",
             "Enblizzard II",
             "Enthunder II"});
-            this.plEnspell_spell.Location = new System.Drawing.Point(91, 160);
+            this.plEnspell_spell.Location = new System.Drawing.Point(94, 212);
             this.plEnspell_spell.Name = "plEnspell_spell";
             this.plEnspell_spell.Size = new System.Drawing.Size(174, 23);
             this.plEnspell_spell.TabIndex = 14;
@@ -4246,7 +4309,7 @@ namespace CurePlease
             // plEnspell
             // 
             this.plEnspell.AutoSize = true;
-            this.plEnspell.Location = new System.Drawing.Point(7, 164);
+            this.plEnspell.Location = new System.Drawing.Point(10, 216);
             this.plEnspell.Name = "plEnspell";
             this.plEnspell.Size = new System.Drawing.Size(70, 19);
             this.plEnspell.TabIndex = 13;
@@ -4258,7 +4321,7 @@ namespace CurePlease
             this.panel5.Controls.Add(this.plTemper);
             this.panel5.Controls.Add(this.plTemperLevel1);
             this.panel5.Controls.Add(this.plTemperLevel2);
-            this.panel5.Location = new System.Drawing.Point(6, 135);
+            this.panel5.Location = new System.Drawing.Point(9, 187);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(259, 23);
             this.panel5.TabIndex = 9;
@@ -4301,7 +4364,7 @@ namespace CurePlease
             this.panel4.Controls.Add(this.plRefreshLevel3);
             this.panel4.Controls.Add(this.plRefreshLevel1);
             this.panel4.Controls.Add(this.plRefreshLevel2);
-            this.panel4.Location = new System.Drawing.Point(5, 42);
+            this.panel4.Location = new System.Drawing.Point(8, 94);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(260, 23);
             this.panel4.TabIndex = 8;
@@ -4352,7 +4415,7 @@ namespace CurePlease
             // plPhalanx
             // 
             this.plPhalanx.AutoSize = true;
-            this.plPhalanx.Location = new System.Drawing.Point(7, 91);
+            this.plPhalanx.Location = new System.Drawing.Point(10, 143);
             this.plPhalanx.Name = "plPhalanx";
             this.plPhalanx.Size = new System.Drawing.Size(71, 19);
             this.plPhalanx.TabIndex = 11;
@@ -4366,7 +4429,7 @@ namespace CurePlease
             this.panel3.Controls.Add(this.plReraiseLevel4);
             this.panel3.Controls.Add(this.plReraiseLevel2);
             this.panel3.Controls.Add(this.plReraiseLevel3);
-            this.panel3.Location = new System.Drawing.Point(5, 13);
+            this.panel3.Location = new System.Drawing.Point(8, 65);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(260, 23);
             this.panel3.TabIndex = 12;
@@ -4428,7 +4491,7 @@ namespace CurePlease
             // plBlink
             // 
             this.plBlink.AutoSize = true;
-            this.plBlink.Location = new System.Drawing.Point(7, 68);
+            this.plBlink.Location = new System.Drawing.Point(10, 120);
             this.plBlink.Name = "plBlink";
             this.plBlink.Size = new System.Drawing.Size(53, 19);
             this.plBlink.TabIndex = 4;
@@ -4438,7 +4501,7 @@ namespace CurePlease
             // plStoneskin
             // 
             this.plStoneskin.AutoSize = true;
-            this.plStoneskin.Location = new System.Drawing.Point(7, 114);
+            this.plStoneskin.Location = new System.Drawing.Point(10, 166);
             this.plStoneskin.Name = "plStoneskin";
             this.plStoneskin.Size = new System.Drawing.Size(80, 19);
             this.plStoneskin.TabIndex = 4;
@@ -4460,25 +4523,215 @@ namespace CurePlease
             // 
             // groupBox27
             // 
+            this.groupBox27.Controls.Add(this.barstatusPerpetuance);
+            this.groupBox27.Controls.Add(this.barspellPerpetuance);
+            this.groupBox27.Controls.Add(this.aquaveilPerpetuance);
+            this.groupBox27.Controls.Add(this.stormspellPerpetuance);
+            this.groupBox27.Controls.Add(this.enspellPerpetuance);
+            this.groupBox27.Controls.Add(this.stoneskinPerpetuance);
+            this.groupBox27.Controls.Add(this.phalanxPerpetuance);
+            this.groupBox27.Controls.Add(this.blinkPerpetuance);
+            this.groupBox27.Controls.Add(this.refreshPerpetuance);
+            this.groupBox27.Controls.Add(this.barstatusAccession);
+            this.groupBox27.Controls.Add(this.barspellAccession);
+            this.groupBox27.Controls.Add(this.refreshAccession);
+            this.groupBox27.Controls.Add(this.aquaveilAccession);
+            this.groupBox27.Controls.Add(this.stormspellAccession);
+            this.groupBox27.Controls.Add(this.enspellAccession);
+            this.groupBox27.Controls.Add(this.phalanxAccession);
+            this.groupBox27.Controls.Add(this.blinkAccession);
+            this.groupBox27.Controls.Add(this.stoneskinAccession);
             this.groupBox27.Location = new System.Drawing.Point(441, 7);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(301, 217);
+            this.groupBox27.Size = new System.Drawing.Size(301, 522);
             this.groupBox27.TabIndex = 2;
             this.groupBox27.TabStop = false;
+            this.groupBox27.Text = "Perpetuance / Accession PL spells";
+            // 
+            // barstatusPerpetuance
+            // 
+            this.barstatusPerpetuance.AutoSize = true;
+            this.barstatusPerpetuance.Location = new System.Drawing.Point(40, 234);
+            this.barstatusPerpetuance.Name = "barstatusPerpetuance";
+            this.barstatusPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.barstatusPerpetuance.TabIndex = 42;
+            this.barstatusPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // barspellPerpetuance
+            // 
+            this.barspellPerpetuance.AutoSize = true;
+            this.barspellPerpetuance.Location = new System.Drawing.Point(40, 209);
+            this.barspellPerpetuance.Name = "barspellPerpetuance";
+            this.barspellPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.barspellPerpetuance.TabIndex = 41;
+            this.barspellPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // aquaveilPerpetuance
+            // 
+            this.aquaveilPerpetuance.AutoSize = true;
+            this.aquaveilPerpetuance.Location = new System.Drawing.Point(40, 184);
+            this.aquaveilPerpetuance.Name = "aquaveilPerpetuance";
+            this.aquaveilPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.aquaveilPerpetuance.TabIndex = 40;
+            this.aquaveilPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // stormspellPerpetuance
+            // 
+            this.stormspellPerpetuance.AutoSize = true;
+            this.stormspellPerpetuance.Location = new System.Drawing.Point(40, 159);
+            this.stormspellPerpetuance.Name = "stormspellPerpetuance";
+            this.stormspellPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.stormspellPerpetuance.TabIndex = 38;
+            this.stormspellPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // enspellPerpetuance
+            // 
+            this.enspellPerpetuance.AutoSize = true;
+            this.enspellPerpetuance.Location = new System.Drawing.Point(40, 134);
+            this.enspellPerpetuance.Name = "enspellPerpetuance";
+            this.enspellPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.enspellPerpetuance.TabIndex = 37;
+            this.enspellPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // stoneskinPerpetuance
+            // 
+            this.stoneskinPerpetuance.AutoSize = true;
+            this.stoneskinPerpetuance.Location = new System.Drawing.Point(40, 109);
+            this.stoneskinPerpetuance.Name = "stoneskinPerpetuance";
+            this.stoneskinPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.stoneskinPerpetuance.TabIndex = 35;
+            this.stoneskinPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // phalanxPerpetuance
+            // 
+            this.phalanxPerpetuance.AutoSize = true;
+            this.phalanxPerpetuance.Location = new System.Drawing.Point(40, 84);
+            this.phalanxPerpetuance.Name = "phalanxPerpetuance";
+            this.phalanxPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.phalanxPerpetuance.TabIndex = 34;
+            this.phalanxPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // blinkPerpetuance
+            // 
+            this.blinkPerpetuance.AutoSize = true;
+            this.blinkPerpetuance.Location = new System.Drawing.Point(40, 59);
+            this.blinkPerpetuance.Name = "blinkPerpetuance";
+            this.blinkPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.blinkPerpetuance.TabIndex = 33;
+            this.blinkPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // refreshPerpetuance
+            // 
+            this.refreshPerpetuance.AutoSize = true;
+            this.refreshPerpetuance.Location = new System.Drawing.Point(40, 34);
+            this.refreshPerpetuance.Name = "refreshPerpetuance";
+            this.refreshPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.refreshPerpetuance.TabIndex = 32;
+            this.refreshPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // barstatusAccession
+            // 
+            this.barstatusAccession.AutoSize = true;
+            this.barstatusAccession.Location = new System.Drawing.Point(89, 232);
+            this.barstatusAccession.Name = "barstatusAccession";
+            this.barstatusAccession.Size = new System.Drawing.Size(77, 19);
+            this.barstatusAccession.TabIndex = 30;
+            this.barstatusAccession.Text = "Barstatus";
+            this.barstatusAccession.UseVisualStyleBackColor = true;
+            // 
+            // barspellAccession
+            // 
+            this.barspellAccession.AutoSize = true;
+            this.barspellAccession.Location = new System.Drawing.Point(89, 207);
+            this.barspellAccession.Name = "barspellAccession";
+            this.barspellAccession.Size = new System.Drawing.Size(71, 19);
+            this.barspellAccession.TabIndex = 29;
+            this.barspellAccession.Text = "Barspell";
+            this.barspellAccession.UseVisualStyleBackColor = true;
+            // 
+            // refreshAccession
+            // 
+            this.refreshAccession.AutoSize = true;
+            this.refreshAccession.Location = new System.Drawing.Point(89, 32);
+            this.refreshAccession.Name = "refreshAccession";
+            this.refreshAccession.Size = new System.Drawing.Size(69, 19);
+            this.refreshAccession.TabIndex = 4;
+            this.refreshAccession.Text = "Refresh";
+            this.refreshAccession.UseVisualStyleBackColor = true;
+            // 
+            // aquaveilAccession
+            // 
+            this.aquaveilAccession.AutoSize = true;
+            this.aquaveilAccession.Location = new System.Drawing.Point(89, 182);
+            this.aquaveilAccession.Name = "aquaveilAccession";
+            this.aquaveilAccession.Size = new System.Drawing.Size(72, 19);
+            this.aquaveilAccession.TabIndex = 28;
+            this.aquaveilAccession.Text = "Aquaveil";
+            this.aquaveilAccession.UseVisualStyleBackColor = true;
+            // 
+            // stormspellAccession
+            // 
+            this.stormspellAccession.AutoSize = true;
+            this.stormspellAccession.Location = new System.Drawing.Point(89, 157);
+            this.stormspellAccession.Name = "stormspellAccession";
+            this.stormspellAccession.Size = new System.Drawing.Size(90, 19);
+            this.stormspellAccession.TabIndex = 27;
+            this.stormspellAccession.Text = "Storm Spell";
+            this.stormspellAccession.UseVisualStyleBackColor = true;
+            // 
+            // enspellAccession
+            // 
+            this.enspellAccession.AutoSize = true;
+            this.enspellAccession.Location = new System.Drawing.Point(89, 132);
+            this.enspellAccession.Name = "enspellAccession";
+            this.enspellAccession.Size = new System.Drawing.Size(67, 19);
+            this.enspellAccession.TabIndex = 25;
+            this.enspellAccession.Text = "Enspell";
+            this.enspellAccession.UseVisualStyleBackColor = true;
+            // 
+            // phalanxAccession
+            // 
+            this.phalanxAccession.AutoSize = true;
+            this.phalanxAccession.Location = new System.Drawing.Point(89, 82);
+            this.phalanxAccession.Name = "phalanxAccession";
+            this.phalanxAccession.Size = new System.Drawing.Size(71, 19);
+            this.phalanxAccession.TabIndex = 23;
+            this.phalanxAccession.Text = "Phalanx";
+            this.phalanxAccession.UseVisualStyleBackColor = true;
+            // 
+            // blinkAccession
+            // 
+            this.blinkAccession.AutoSize = true;
+            this.blinkAccession.Location = new System.Drawing.Point(89, 57);
+            this.blinkAccession.Name = "blinkAccession";
+            this.blinkAccession.Size = new System.Drawing.Size(53, 19);
+            this.blinkAccession.TabIndex = 19;
+            this.blinkAccession.Text = "Blink";
+            this.blinkAccession.UseVisualStyleBackColor = true;
+            // 
+            // stoneskinAccession
+            // 
+            this.stoneskinAccession.AutoSize = true;
+            this.stoneskinAccession.Location = new System.Drawing.Point(89, 107);
+            this.stoneskinAccession.Name = "stoneskinAccession";
+            this.stoneskinAccession.Size = new System.Drawing.Size(80, 19);
+            this.stoneskinAccession.TabIndex = 20;
+            this.stoneskinAccession.Text = "Stoneskin";
+            this.stoneskinAccession.UseVisualStyleBackColor = true;
             // 
             // groupBox26
             // 
             this.groupBox26.Location = new System.Drawing.Point(7, 230);
             this.groupBox26.Name = "groupBox26";
-            this.groupBox26.Size = new System.Drawing.Size(735, 299);
+            this.groupBox26.Size = new System.Drawing.Size(427, 299);
             this.groupBox26.TabIndex = 1;
             this.groupBox26.TabStop = false;
             // 
             // groupBox25
             // 
-            this.groupBox25.Controls.Add(this.checkBox3);
-            this.groupBox25.Controls.Add(this.checkBox2);
-            this.groupBox25.Controls.Add(this.checkBox1);
+            this.groupBox25.Controls.Add(this.accessionProShell);
+            this.groupBox25.Controls.Add(this.accessionPerpRegen);
+            this.groupBox25.Controls.Add(this.accessionCure);
             this.groupBox25.Location = new System.Drawing.Point(7, 7);
             this.groupBox25.Name = "groupBox25";
             this.groupBox25.Size = new System.Drawing.Size(427, 216);
@@ -4486,15 +4739,15 @@ namespace CurePlease
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "Pre Defined Strategems";
             // 
-            // checkBox1
+            // accessionCure
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(7, 20);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(376, 19);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Accession \"Cure\" when the party meets the Curaga requirements";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.accessionCure.AutoSize = true;
+            this.accessionCure.Location = new System.Drawing.Point(7, 20);
+            this.accessionCure.Name = "accessionCure";
+            this.accessionCure.Size = new System.Drawing.Size(376, 19);
+            this.accessionCure.TabIndex = 0;
+            this.accessionCure.Text = "Accession \"Cure\" when the party meets the Curaga requirements";
+            this.accessionCure.UseVisualStyleBackColor = true;
             // 
             // tabPage1
             // 
@@ -6148,7 +6401,7 @@ namespace CurePlease
             this.groupBox17.Controls.Add(this.label24);
             this.groupBox17.Controls.Add(this.enableFastCast_Mode);
             this.groupBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox17.Location = new System.Drawing.Point(6, 227);
+            this.groupBox17.Location = new System.Drawing.Point(6, 92);
             this.groupBox17.Name = "groupBox17";
             this.groupBox17.Size = new System.Drawing.Size(393, 194);
             this.groupBox17.TabIndex = 17;
@@ -6158,7 +6411,7 @@ namespace CurePlease
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(38, 55);
+            this.label24.Location = new System.Drawing.Point(27, 62);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(338, 105);
             this.label24.TabIndex = 1;
@@ -6176,24 +6429,35 @@ namespace CurePlease
             // 
             // groupBox14
             // 
+            this.groupBox14.Controls.Add(this.autoFollow_Warning);
             this.groupBox14.Controls.Add(this.checkBox4);
             this.groupBox14.Controls.Add(this.autoFollowName);
             this.groupBox14.Controls.Add(this.autoFollowDistance);
             this.groupBox14.Controls.Add(this.label33);
             this.groupBox14.Controls.Add(this.label32);
             this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox14.Location = new System.Drawing.Point(6, 92);
+            this.groupBox14.Location = new System.Drawing.Point(6, 292);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(393, 129);
+            this.groupBox14.Size = new System.Drawing.Size(393, 139);
             this.groupBox14.TabIndex = 16;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "PL Follow Options";
+            // 
+            // autoFollow_Warning
+            // 
+            this.autoFollow_Warning.AutoSize = true;
+            this.autoFollow_Warning.Location = new System.Drawing.Point(6, 86);
+            this.autoFollow_Warning.Name = "autoFollow_Warning";
+            this.autoFollow_Warning.Size = new System.Drawing.Size(197, 19);
+            this.autoFollow_Warning.TabIndex = 5;
+            this.autoFollow_Warning.Text = "/tell when not in targeting range";
+            this.autoFollow_Warning.UseVisualStyleBackColor = true;
             // 
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
             this.checkBox4.Enabled = false;
-            this.checkBox4.Location = new System.Drawing.Point(9, 90);
+            this.checkBox4.Location = new System.Drawing.Point(6, 112);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(189, 19);
             this.checkBox4.TabIndex = 4;
@@ -6299,52 +6563,35 @@ namespace CurePlease
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
-            // monitoredCurePercentage
+            // loadJobSettings
             // 
-            this.monitoredCurePercentage.Location = new System.Drawing.Point(256, 190);
-            this.monitoredCurePercentage.Maximum = 100;
-            this.monitoredCurePercentage.Name = "monitoredCurePercentage";
-            this.monitoredCurePercentage.Size = new System.Drawing.Size(323, 45);
-            this.monitoredCurePercentage.TabIndex = 8;
-            this.toolTip1.SetToolTip(this.monitoredCurePercentage, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
-        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
-        "t that tier if available.\r\n\r\n\r\n");
-            this.monitoredCurePercentage.Value = 75;
-            this.monitoredCurePercentage.ValueChanged += new System.EventHandler(this.monitoredPercentage_ValueChanged);
+            this.loadJobSettings.AutoSize = true;
+            this.loadJobSettings.Location = new System.Drawing.Point(260, 585);
+            this.loadJobSettings.Name = "loadJobSettings";
+            this.loadJobSettings.Size = new System.Drawing.Size(207, 17);
+            this.loadJobSettings.TabIndex = 5;
+            this.loadJobSettings.Text = "Automatically load Job_SubJob.xml file";
+            this.loadJobSettings.UseVisualStyleBackColor = true;
             // 
-            // label55
+            // plShell
             // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(220, 166);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(164, 15);
-            this.label55.TabIndex = 9;
-            this.label55.Text = "Monitored Priority Threshold:";
-            this.toolTip1.SetToolTip(this.label55, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
-        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
-        "t that tier if available.\r\n\r\n\r\n");
+            this.plShell.AutoSize = true;
+            this.plShell.Location = new System.Drawing.Point(11, 43);
+            this.plShell.Name = "plShell";
+            this.plShell.Size = new System.Drawing.Size(54, 19);
+            this.plShell.TabIndex = 20;
+            this.plShell.Text = "Shell";
+            this.plShell.UseVisualStyleBackColor = true;
             // 
-            // monitoredCurePercentageValueLabel
+            // plProtect
             // 
-            this.monitoredCurePercentageValueLabel.AutoSize = true;
-            this.monitoredCurePercentageValueLabel.Location = new System.Drawing.Point(405, 166);
-            this.monitoredCurePercentageValueLabel.Name = "monitoredCurePercentageValueLabel";
-            this.monitoredCurePercentageValueLabel.Size = new System.Drawing.Size(14, 15);
-            this.monitoredCurePercentageValueLabel.TabIndex = 10;
-            this.monitoredCurePercentageValueLabel.Text = "0";
-            this.toolTip1.SetToolTip(this.monitoredCurePercentageValueLabel, "EXAMPLE:\r\n\r\nDefault settings: 85%\r\nWill only mark as needing a cure if their HP i" +
-        "s lower than 60% it will then perform a check to see what tier is needed and cas" +
-        "t that tier if available.\r\n\r\n\r\n");
-            // 
-            // checkBox5
-            // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(260, 585);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(207, 17);
-            this.checkBox5.TabIndex = 5;
-            this.checkBox5.Text = "Automatically load Job_SubJob.xml file";
-            this.checkBox5.UseVisualStyleBackColor = true;
+            this.plProtect.AutoSize = true;
+            this.plProtect.Location = new System.Drawing.Point(11, 20);
+            this.plProtect.Name = "plProtect";
+            this.plProtect.Size = new System.Drawing.Size(64, 19);
+            this.plProtect.TabIndex = 19;
+            this.plProtect.Text = "Protect";
+            this.plProtect.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -6352,7 +6599,7 @@ namespace CurePlease
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(789, 616);
-            this.Controls.Add(this.checkBox5);
+            this.Controls.Add(this.loadJobSettings);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveAsButton);
             this.Controls.Add(this.button4);
@@ -6380,8 +6627,10 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.curagaCurePercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.standAtMP_Percentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.healWhenMPBelow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).EndInit();
             this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
+            this.groupBox32.ResumeLayout(false);
+            this.groupBox32.PerformLayout();
             this.groupBox29.ResumeLayout(false);
             this.groupBox29.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sublimationMP)).EndInit();
@@ -6453,6 +6702,8 @@ namespace CurePlease
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.tabPage10.ResumeLayout(false);
+            this.groupBox27.ResumeLayout(false);
+            this.groupBox27.PerformLayout();
             this.groupBox25.ResumeLayout(false);
             this.groupBox25.PerformLayout();
             this.tabPage1.ResumeLayout(false);
@@ -6493,7 +6744,6 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).EndInit();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6503,8 +6753,6 @@ namespace CurePlease
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.ListBox MPItems;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.NumericUpDown ConvertMP;
@@ -6516,7 +6764,6 @@ namespace CurePlease
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown mpMintempitemusage;
-        private System.Windows.Forms.CheckBox lowMPuseitem;
         private System.Windows.Forms.CheckBox lowMPcheckBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown mpMinCastValue;
@@ -6797,7 +7044,6 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox plProtectra;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox autoCastCheckBox;
-        private System.Windows.Forms.CheckBox AutoCastEngageCheckBox;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ComboBox autoRegen;
@@ -6852,15 +7098,14 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox plStoneskin;
         private System.Windows.Forms.TabPage tabPage10;
         private System.Windows.Forms.GroupBox groupBox25;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox accessionCure;
+        private System.Windows.Forms.CheckBox accessionProShell;
+        private System.Windows.Forms.CheckBox accessionPerpRegen;
         private System.Windows.Forms.CheckBox enableSinging;
         private System.Windows.Forms.CheckBox marcato;
         private System.Windows.Forms.CheckBox troubadour;
         private System.Windows.Forms.CheckBox nightingale;
         private System.Windows.Forms.CheckBox pianissimo;
-        private System.Windows.Forms.GroupBox groupBox27;
         private System.Windows.Forms.GroupBox groupBox26;
         private System.Windows.Forms.TextBox listeningPort;
         private System.Windows.Forms.Label label48;
@@ -6888,6 +7133,33 @@ namespace CurePlease
         private System.Windows.Forms.TrackBar monitoredCurePercentage;
         private System.Windows.Forms.Label label55;
         private System.Windows.Forms.Label monitoredCurePercentageValueLabel;
-        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox loadJobSettings;
+        private System.Windows.Forms.GroupBox groupBox32;
+        private System.Windows.Forms.CheckBox Undercure;
+        private System.Windows.Forms.CheckBox Overcure;
+        private System.Windows.Forms.CheckBox autoFollow_Warning;
+        private System.Windows.Forms.CheckBox enableMonitoredPriority;
+        private System.Windows.Forms.CheckBox OvercureOnHighPriority;
+        private System.Windows.Forms.GroupBox groupBox27;
+        private System.Windows.Forms.CheckBox barstatusPerpetuance;
+        private System.Windows.Forms.CheckBox barspellPerpetuance;
+        private System.Windows.Forms.CheckBox aquaveilPerpetuance;
+        private System.Windows.Forms.CheckBox stormspellPerpetuance;
+        private System.Windows.Forms.CheckBox enspellPerpetuance;
+        private System.Windows.Forms.CheckBox stoneskinPerpetuance;
+        private System.Windows.Forms.CheckBox phalanxPerpetuance;
+        private System.Windows.Forms.CheckBox blinkPerpetuance;
+        private System.Windows.Forms.CheckBox refreshPerpetuance;
+        private System.Windows.Forms.CheckBox barstatusAccession;
+        private System.Windows.Forms.CheckBox barspellAccession;
+        private System.Windows.Forms.CheckBox refreshAccession;
+        private System.Windows.Forms.CheckBox aquaveilAccession;
+        private System.Windows.Forms.CheckBox stormspellAccession;
+        private System.Windows.Forms.CheckBox enspellAccession;
+        private System.Windows.Forms.CheckBox phalanxAccession;
+        private System.Windows.Forms.CheckBox blinkAccession;
+        private System.Windows.Forms.CheckBox stoneskinAccession;
+        private System.Windows.Forms.CheckBox plShell;
+        private System.Windows.Forms.CheckBox plProtect;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-using CurePlease.Properties;
+﻿using System.Windows.Forms;
 
 namespace CurePlease
 {
@@ -226,7 +224,7 @@ namespace CurePlease
             this.buff_checker = new System.ComponentModel.BackgroundWorker();
             this.followTimer = new System.Windows.Forms.Timer(this.components);
             this.resetSongTimer = new System.Windows.Forms.Timer(this.components);
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.checkSCHCharges = new System.Windows.Forms.Timer(this.components);
             this.party0.SuspendLayout();
             this.playerOptions.SuspendLayout();
             this.party2.SuspendLayout();
@@ -242,6 +240,7 @@ namespace CurePlease
             // 
             // party0
             // 
+            this.party0.BackColor = System.Drawing.Color.Transparent;
             this.party0.Controls.Add(this.player5buffsButton);
             this.party0.Controls.Add(this.player4buffsButton);
             this.party0.Controls.Add(this.player3buffsButton);
@@ -1134,6 +1133,7 @@ namespace CurePlease
             // 
             // party2
             // 
+            this.party2.BackColor = System.Drawing.Color.Transparent;
             this.party2.Controls.Add(this.player17optionsButton);
             this.party2.Controls.Add(this.player17priority);
             this.party2.Controls.Add(this.player17enabled);
@@ -1525,16 +1525,17 @@ namespace CurePlease
             // partyMembersUpdate
             // 
             this.partyMembersUpdate.Interval = 1000;
-            this.partyMembersUpdate.Tick += new System.EventHandler(this.partyMembersUpdate_Tick);
+            this.partyMembersUpdate.Tick += new System.EventHandler(this.partyMembersUpdate_TickAsync);
             // 
             // actionTimer
             // 
             this.actionTimer.Interval = 500;
-            this.actionTimer.Tick += new System.EventHandler(this.actionTimer_Tick);
+            this.actionTimer.Tick += new System.EventHandler(this.actionTimer_TickAsync);
             // 
             // player6
             // 
             this.player6.AutoSize = true;
+            this.player6.BackColor = System.Drawing.Color.Transparent;
             this.player6.Enabled = false;
             this.player6.ForeColor = System.Drawing.SystemColors.MenuText;
             this.player6.Location = new System.Drawing.Point(46, 14);
@@ -1672,6 +1673,7 @@ namespace CurePlease
             // 
             // party1
             // 
+            this.party1.BackColor = System.Drawing.Color.Transparent;
             this.party1.Controls.Add(this.player11optionsButton);
             this.party1.Controls.Add(this.player11priority);
             this.party1.Controls.Add(this.player10optionsButton);
@@ -2111,7 +2113,7 @@ namespace CurePlease
             // castingStatusCheck
             // 
             this.castingStatusCheck.Interval = 500;
-            this.castingStatusCheck.Tick += new System.EventHandler(this.castingStatusCheck_Tick);
+            this.castingStatusCheck.Tick += new System.EventHandler(this.castingStatusCheck_TickAsync);
             // 
             // castingLockLabel
             // 
@@ -2171,6 +2173,7 @@ namespace CurePlease
             // 
             // charselect
             // 
+            this.charselect.BackColor = System.Drawing.Color.Transparent;
             this.charselect.Controls.Add(this.POLID2);
             this.charselect.Controls.Add(this.monitoredLabel);
             this.charselect.Controls.Add(this.plLabel);
@@ -2187,6 +2190,7 @@ namespace CurePlease
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox1.Location = new System.Drawing.Point(124, 316);
@@ -2198,6 +2202,7 @@ namespace CurePlease
             // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.Color.Transparent;
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox2.Location = new System.Drawing.Point(446, 316);
@@ -2209,6 +2214,7 @@ namespace CurePlease
             // 
             // groupBox3
             // 
+            this.groupBox3.BackColor = System.Drawing.Color.Transparent;
             this.groupBox3.Controls.Add(this.trackBar1);
             this.groupBox3.ForeColor = System.Drawing.SystemColors.GrayText;
             this.groupBox3.Location = new System.Drawing.Point(12, 316);
@@ -2238,19 +2244,24 @@ namespace CurePlease
             this.buff_checker.WorkerReportsProgress = true;
             this.buff_checker.WorkerSupportsCancellation = true;
             this.buff_checker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.buff_checker_DoWork);
-            this.buff_checker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.buff_checker_RunWorkerCompleted);
+            this.buff_checker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.buff_checker_RunWorkerCompletedAsync);
             // 
             // followTimer
             // 
             this.followTimer.Enabled = true;
             this.followTimer.Interval = 500;
-            this.followTimer.Tick += new System.EventHandler(this.followTimer_Tick);
+            this.followTimer.Tick += new System.EventHandler(this.followTimer_TickAsync);
             // 
             // resetSongTimer
             // 
             this.resetSongTimer.Enabled = true;
             this.resetSongTimer.Interval = 60000;
             this.resetSongTimer.Tick += new System.EventHandler(this.resetSongTimer_Tick);
+            // 
+            // checkSCHCharges
+            // 
+            this.checkSCHCharges.Enabled = true;
+            this.checkSCHCharges.Tick += new System.EventHandler(this.checkSCHCharges_Tick);
             // 
             // Form1
             // 
@@ -2304,9 +2315,9 @@ namespace CurePlease
             this.ResumeLayout(false);
             this.PerformLayout();
 
-        }       
+        }
 
-        
+
 
 
         #endregion
@@ -2503,7 +2514,6 @@ namespace CurePlease
         private System.ComponentModel.BackgroundWorker buff_checker;
         private Timer followTimer;
         private Timer resetSongTimer;
-        private Timer timer1;
+        private Timer checkSCHCharges;
     }
 }
-

@@ -20,6 +20,7 @@
             {
                 get; set;
             }
+
             public string job_name
             {
                 get; set;
@@ -45,110 +46,137 @@
             {
                 get; set;
             }
+
             public bool cure2enabled
             {
                 get; set;
             }
+
             public int cure2amount
             {
                 get; set;
             }
+
             public bool cure3enabled
             {
                 get; set;
             }
+
             public int cure3amount
             {
                 get; set;
             }
+
             public bool cure4enabled
             {
                 get; set;
             }
+
             public int cure4amount
             {
                 get; set;
             }
+
             public bool cure5enabled
             {
                 get; set;
             }
+
             public int cure5amount
             {
                 get; set;
             }
+
             public bool cure6enabled
             {
                 get; set;
             }
+
             public int cure6amount
             {
                 get; set;
             }
+
             public bool curagaEnabled
             {
                 get; set;
             }
+
             public int curagaAmount
             {
                 get; set;
             }
+
             public bool curaga2enabled
             {
                 get; set;
             }
+
             public int curaga2Amount
             {
                 get; set;
             }
+
             public bool curaga3enabled
             {
                 get; set;
             }
+
             public int curaga3Amount
             {
                 get; set;
             }
+
             public bool curaga4enabled
             {
                 get; set;
             }
+
             public int curaga4Amount
             {
                 get; set;
             }
+
             public bool curaga5enabled
             {
                 get; set;
             }
+
             public int curaga5Amount
             {
                 get; set;
             }
+
             public int curePercentage
             {
                 get; set;
             }
+
             public int priorityCurePercentage
             {
                 get; set;
             }
+
             public int monitoredCurePercentage
             {
                 get; set;
             }
+
             public int curagaCurePercentage
             {
                 get; set;
             }
+
             public int curagaTargetType
             {
                 get; set;
             }
+
             public string curagaTargetName
             {
                 get; set;
             }
+
             public decimal curagaRequiredMembers
             {
                 get; set;
@@ -164,146 +192,182 @@
             {
                 get; set;
             }
+
             public decimal autoRefresh_Minutes
             {
                 get; set;
             }
+
             public int autoRefresh_Spell
             {
                 get; set;
             }
+
             public decimal autoRegen_Minutes
             {
                 get; set;
             }
+
             public int autoRegen_Spell
             {
                 get; set;
             }
+
             public decimal autoProtect_Minutes
             {
                 get; set;
             }
+
             public int autoProtect_Spell
             {
                 get; set;
             }
+
             public decimal autoShellMinutes
             {
                 get; set;
             }
+
             public int autoShell_Spell
             {
                 get; set;
             }
+
             public bool plShellra
             {
                 get; set;
             }
+
             public decimal plShellra_Level
             {
                 get; set;
             }
+
             public bool plProtectra
             {
                 get; set;
             }
+
             public decimal plProtectra_Level
             {
                 get; set;
             }
+
             public bool plGainBoost
             {
                 get; set;
             }
+
             public int plGainBoost_Spell
             {
                 get; set;
             }
+
             public bool plBarElement
             {
                 get; set;
             }
+
             public int plBarElement_Spell
             {
                 get; set;
             }
+
             public bool plBarStatus
             {
                 get; set;
             }
+
             public int plBarStatus_Spell
             {
                 get; set;
             }
+
             public bool plAuspice
             {
                 get; set;
             }
+
             public bool plReraise
             {
                 get; set;
             }
+
             public int plReraise_Level
             {
                 get; set;
             }
+
             public bool plRefresh
             {
                 get; set;
             }
+
             public int plRefresh_Level
             {
                 get; set;
             }
+
             public bool plProtect
             {
                 get; set;
             }
+
             public bool plShell
             {
                 get; set;
             }
+
             public bool plBlink
             {
                 get; set;
             }
+
             public bool plPhalanx
             {
                 get; set;
             }
+
             public bool plStoneskin
             {
                 get; set;
             }
+
             public bool plTemper
             {
                 get; set;
             }
+
             public int plTemper_Level
             {
                 get; set;
             }
+
             public bool plEnspell
             {
                 get; set;
             }
+
             public int plEnspell_Spell
             {
                 get; set;
             }
+
             public bool plStormSpell
             {
                 get; set;
             }
+
             public int plStormSpell_Spell
             {
                 get; set;
             }
+
             public bool plKlimaform
             {
                 get; set;
             }
+
             public bool plAquaveil
             {
                 get; set;
@@ -315,66 +379,82 @@
             {
                 get; set;
             }
+
             public bool accessionProShell
             {
                 get; set;
             }
+
             public bool accessionPerpRegen
             {
                 get; set;
             }
+
             public bool refreshPerpetuance
             {
                 get; set;
             }
+
             public bool refreshAccession
             {
                 get; set;
             }
+
             public bool blinkPerpetuance
             {
                 get; set;
             }
+
             public bool blinkAccession
             {
                 get; set;
             }
+
             public bool phalanxPerpetuance
             {
                 get; set;
             }
+
             public bool phalanxAccession
             {
                 get; set;
             }
+
             public bool stoneskinPerpetuance
             {
                 get; set;
             }
+
             public bool stoneskinAccession
             {
                 get; set;
             }
+
             public bool enspellPerpetuance
             {
                 get; set;
             }
+
             public bool enspellAccession
             {
                 get; set;
             }
+
             public bool stormspellPerpetuance
             {
                 get; set;
             }
+
             public bool stormspellAccession
             {
                 get; set;
             }
+
             public bool aquaveilPerpetuance
             {
                 get; set;
             }
+
             public bool aquaveilAccession
             {
                 get; set;
@@ -410,34 +490,42 @@
             {
                 get; set;
             }
+
             public bool EnableLuopanSpells
             {
                 get; set;
             }
+
             public bool GeoWhenEngaged
             {
                 get; set;
             }
+
             public bool specifiedEngageTarget
             {
                 get; set;
             }
+
             public int IndiSpell_Spell
             {
                 get; set;
             }
+
             public int GeoSpell_Spell
             {
                 get; set;
             }
+
             public int EntrustedSpell_Spell
             {
                 get; set;
             }
+
             public string LuopanSpell_Target
             {
                 get; set;
             }
+
             public string EntrustedSpell_Target
             {
                 get; set;
@@ -453,34 +541,42 @@
             {
                 get; set;
             }
+
             public bool SongsOnlyWhenNear
             {
                 get; set;
             }
+
             public int song1
             {
                 get; set;
             }
+
             public int song2
             {
                 get; set;
             }
+
             public int song3
             {
                 get; set;
             }
+
             public int song4
             {
                 get; set;
             }
+
             public int dummy1
             {
                 get; set;
             }
+
             public int dummy2
             {
                 get; set;
             }
+
             public decimal recastSongTime
             {
                 get; set;
@@ -498,31 +594,36 @@
             {
                 get; set;
             }
+
             public bool AddendumWhite
             {
                 get; set;
             }
+
             public bool Celerity
             {
                 get; set;
             }
+
             public bool Accession
             {
                 get; set;
             }
+
             public bool Perpetuance
             {
                 get; set;
             }
+
             public bool Penury
             {
                 get; set;
             }
+
             public bool Rapture
             {
                 get; set;
             }
-
 
             // WHM
             public bool AfflatusSolace
@@ -534,10 +635,12 @@
             {
                 get; set;
             }
+
             public bool DivineSeal
             {
                 get; set;
             }
+
             public bool Devotion
             {
                 get; set;
@@ -564,18 +667,22 @@
             {
                 get; set;
             }
+
             public bool Dematerialize
             {
                 get; set;
             }
+
             public bool BlazeOfGlory
             {
                 get; set;
             }
+
             public bool RadialArcana
             {
                 get; set;
             }
+
             public bool EclipticAttrition
             {
                 get; set;
@@ -591,10 +698,12 @@
             {
                 get; set;
             }
+
             public bool Troubadour
             {
                 get; set;
             }
+
             public bool Marcato
             {
                 get; set;
@@ -610,30 +719,42 @@
             {
                 get; set;
             }
+
             public bool enablePartyDebuffRemoval
             {
                 get; set;
             }
+
+            public bool SpecifiednaSpellsenable
+            {
+                get; set;
+            }
+
             public bool plSilenceItemEnabled
             {
                 get; set;
             }
+
             public int plSilenceItem
             {
                 get; set;
             }
+
             public bool plDoomEnabled
             {
                 get; set;
             }
+
             public int plDoomitem
             {
                 get; set;
             }
+
             public bool wakeSleepEnabled
             {
                 get; set;
             }
+
             public int wakeSleepSpell
             {
                 get; set;
@@ -649,30 +770,37 @@
             {
                 get; set;
             }
+
             public bool naDisease
             {
                 get; set;
             }
+
             public bool naParalysis
             {
                 get; set;
             }
+
             public bool naPetrification
             {
                 get; set;
             }
+
             public bool naPlague
             {
                 get; set;
             }
+
             public bool naPoison
             {
                 get; set;
             }
+
             public bool naSilence
             {
                 get; set;
             }
+
             public bool naErase
             {
                 get; set;
@@ -688,166 +816,207 @@
             {
                 get; set;
             }
+
             public bool plAddle
             {
                 get; set;
             }
+
             public bool plAttackDown
             {
                 get; set;
             }
+
             public bool plBane
             {
                 get; set;
             }
+
             public bool plBind
             {
                 get; set;
             }
+
             public bool plBio
             {
                 get; set;
             }
+
             public bool plBlindness
             {
                 get; set;
             }
+
             public bool plBurn
             {
                 get; set;
             }
+
             public bool plChrDown
             {
                 get; set;
             }
+
             public bool plChoke
             {
                 get; set;
             }
+
             public bool plCurse
             {
                 get; set;
             }
+
             public bool plCurse2
             {
                 get; set;
             }
+
             public bool plDexDown
             {
                 get; set;
             }
+
             public bool plDefenseDown
             {
                 get; set;
             }
+
             public bool plDia
             {
                 get; set;
             }
+
             public bool plDisease
             {
                 get; set;
             }
+
             public bool plDoom
             {
                 get; set;
             }
+
             public bool plDrown
             {
                 get; set;
             }
+
             public bool plElegy
             {
                 get; set;
             }
+
             public bool plEvasionDown
             {
                 get; set;
             }
+
             public bool plFlash
             {
                 get; set;
             }
+
             public bool plFrost
             {
                 get; set;
             }
+
             public bool plHelix
             {
                 get; set;
             }
+
             public bool plIntDown
             {
                 get; set;
             }
+
             public bool plMndDown
             {
                 get; set;
             }
+
             public bool plMagicAccDown
             {
                 get; set;
             }
+
             public bool plMagicAtkDown
             {
                 get; set;
             }
+
             public bool plMaxHpDown
             {
                 get; set;
             }
+
             public bool plMaxMpDown
             {
                 get; set;
             }
+
             public bool plMaxTpDown
             {
                 get; set;
             }
+
             public bool plParalysis
             {
                 get; set;
             }
+
             public bool plPlague
             {
                 get; set;
             }
+
             public bool plPoison
             {
                 get; set;
             }
+
             public bool plRasp
             {
                 get; set;
             }
+
             public bool plRequiem
             {
                 get; set;
             }
+
             public bool plStrDown
             {
                 get; set;
             }
+
             public bool plShock
             {
                 get; set;
             }
+
             public bool plSilence
             {
                 get; set;
             }
+
             public bool plSlow
             {
                 get; set;
             }
+
             public bool plThrenody
             {
                 get; set;
             }
+
             public bool plVitDown
             {
                 get; set;
             }
+
             public bool plWeight
             {
                 get; set;
@@ -863,178 +1032,222 @@
             {
                 get; set;
             }
+
             public bool monitoredAddle
             {
                 get; set;
             }
+
             public bool monitoredAttackDown
             {
                 get; set;
             }
+
             public bool monitoredBane
             {
                 get; set;
             }
+
             public bool monitoredBind
             {
                 get; set;
             }
+
             public bool monitoredBio
             {
                 get; set;
             }
+
             public bool monitoredBlindness
             {
                 get; set;
             }
+
             public bool monitoredBurn
             {
                 get; set;
             }
+
             public bool monitoredChrDown
             {
                 get; set;
             }
+
             public bool monitoredChoke
             {
                 get; set;
             }
+
             public bool monitoredCurse
             {
                 get; set;
             }
+
             public bool monitoredCurse2
             {
                 get; set;
             }
+
             public bool monitoredDexDown
             {
                 get; set;
             }
+
             public bool monitoredDefenseDown
             {
                 get; set;
             }
+
             public bool monitoredDia
             {
                 get; set;
             }
+
             public bool monitoredDisease
             {
                 get; set;
             }
+
             public bool monitoredDoom
             {
                 get; set;
             }
+
             public bool monitoredDrown
             {
                 get; set;
             }
+
             public bool monitoredElegy
             {
                 get; set;
             }
+
             public bool monitoredEvasionDown
             {
                 get; set;
             }
+
             public bool monitoredFlash
             {
                 get; set;
             }
+
             public bool monitoredFrost
             {
                 get; set;
             }
+
             public bool monitoredHelix
             {
                 get; set;
             }
+
             public bool monitoredIntDown
             {
                 get; set;
             }
+
             public bool monitoredMndDown
             {
                 get; set;
             }
+
             public bool monitoredMagicAccDown
             {
                 get; set;
             }
+
             public bool monitoredMagicAtkDown
             {
                 get; set;
             }
+
             public bool monitoredMaxHpDown
             {
                 get; set;
             }
+
             public bool monitoredMaxMpDown
             {
                 get; set;
             }
+
             public bool monitoredMaxTpDown
             {
                 get; set;
             }
+
             public bool monitoredParalysis
             {
                 get; set;
             }
+
             public bool monitoredPetrification
             {
                 get; set;
             }
+
             public bool monitoredPlague
             {
                 get; set;
             }
+
             public bool monitoredPoison
             {
                 get; set;
             }
+
             public bool monitoredRasp
             {
                 get; set;
             }
+
             public bool monitoredRequiem
             {
                 get; set;
             }
+
             public bool monitoredStrDown
             {
                 get; set;
             }
+
             public bool monitoredShock
             {
                 get; set;
             }
+
             public bool monitoredSilence
             {
                 get; set;
             }
+
             public bool monitoredSleep
             {
                 get; set;
             }
+
             public bool monitoredSleep2
             {
                 get; set;
             }
+
             public bool monitoredSlow
             {
                 get; set;
             }
+
             public bool monitoredThrenody
             {
                 get; set;
             }
+
             public bool monitoredVitDown
             {
                 get; set;
             }
+
             public bool monitoredWeight
             {
                 get; set;
@@ -1052,18 +1265,22 @@
             {
                 get; set;
             }
+
             public bool healLowMP
             {
                 get; set;
             }
+
             public decimal healWhenMPBelow
             {
                 get; set;
             }
+
             public bool standAtMP
             {
                 get; set;
             }
+
             public decimal standAtMP_Percentage
             {
                 get; set;
@@ -1102,10 +1319,12 @@
             {
                 get; set;
             }
+
             public string DevotionTargetName
             {
                 get; set;
             }
+
             public bool DevotionWhenEngaged
             {
                 get; set;
@@ -1121,10 +1340,12 @@
             {
                 get; set;
             }
+
             public string autoTargetSpell
             {
                 get; set;
             }
+
             public string autoTarget_Target
             {
                 get; set;
@@ -1140,6 +1361,7 @@
             {
                 get; set;
             }
+
             public bool enableMonitoredPriority
             {
                 get; set;
@@ -1173,6 +1395,7 @@
             {
                 get; set;
             }
+
             public bool autoFollow_Warning
             {
                 get; set;
@@ -1525,6 +1748,7 @@
                 config.plWeight = false;
 
                 config.enablePartyDebuffRemoval = false;
+                config.SpecifiednaSpellsenable = false;
                 config.naBlindness = false;
                 config.naCurse = false;
                 config.naDisease = false;
@@ -1749,7 +1973,7 @@
             config.plTemper = this.plTemper.Checked;
             if (this.plTemperLevel1.Checked)
             {
-                config.plTemper_Level = 2;
+                config.plTemper_Level = 1;
             }
             else if (this.plTemperLevel2.Checked)
             {
@@ -1806,7 +2030,7 @@
             config.barstatusPerpetuance = this.barstatusPerpetuance.Checked;
             config.barstatusAccession = this.barstatusAccession.Checked;
 
-            // GEOMANCER 
+            // GEOMANCER
             config.EnableGeoSpells = this.EnableGeoSpells.Checked;
             config.IndiWhenEngaged = this.GEO_engaged.Checked;
             config.EnableLuopanSpells = this.EnableLuopanSpells.Checked;
@@ -1920,6 +2144,7 @@
             config.plDoomitem = this.plDoomitem.SelectedIndex;
 
             config.enablePartyDebuffRemoval = this.naSpellsenable.Checked;
+            config.SpecifiednaSpellsenable = this.SpecifiednaSpellsenable.Checked;
             config.naBlindness = this.naBlindness.Checked;
             config.naCurse = this.naCurse.Checked;
             config.naDisease = this.naDisease.Checked;
@@ -2585,7 +2810,6 @@
                 reader.Dispose();
                 updateForm(config);
                 button4_Click(sender, e);
-
             }
         }
 
@@ -2776,8 +3000,6 @@
             this.nightingale.Checked = config.Nightingale;
             this.marcato.Checked = config.Marcato;
 
-
-
             //DEBUFF REMOVAL
             this.plSilenceItemEnabled.Checked = config.plSilenceItemEnabled;
             this.plSilenceItem.SelectedIndex = config.plSilenceItem;
@@ -2884,6 +3106,7 @@
             this.monitoredWeight.Checked = config.monitoredWeight;
 
             this.naSpellsenable.Checked = config.enablePartyDebuffRemoval;
+            this.SpecifiednaSpellsenable.Checked = config.SpecifiednaSpellsenable;
             this.naBlindness.Checked = config.naBlindness;
             this.naCurse.Checked = config.naCurse;
             this.naDisease.Checked = config.naDisease;

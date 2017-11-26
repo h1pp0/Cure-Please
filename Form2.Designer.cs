@@ -106,6 +106,9 @@ namespace CurePlease
             this.Overcure = new System.Windows.Forms.CheckBox();
             this.Undercure = new System.Windows.Forms.CheckBox();
             this.enableMonitoredPriority = new System.Windows.Forms.CheckBox();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.autoTarget_target = new System.Windows.Forms.TextBox();
             this.penury = new System.Windows.Forms.CheckBox();
             this.celerity = new System.Windows.Forms.CheckBox();
             this.accession = new System.Windows.Forms.CheckBox();
@@ -117,9 +120,6 @@ namespace CurePlease
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.label51 = new System.Windows.Forms.Label();
             this.sublimationMP = new System.Windows.Forms.NumericUpDown();
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.autoTarget_target = new System.Windows.Forms.TextBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.DevotionWhenEngaged = new System.Windows.Forms.CheckBox();
             this.label35 = new System.Windows.Forms.Label();
@@ -137,6 +137,7 @@ namespace CurePlease
             this.label4 = new System.Windows.Forms.Label();
             this.mpMinCastValue = new System.Windows.Forms.NumericUpDown();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.SpecifiednaSpellsenable = new System.Windows.Forms.CheckBox();
             this.panel6 = new System.Windows.Forms.Panel();
             this.naBlindness = new System.Windows.Forms.CheckBox();
             this.naPoison = new System.Windows.Forms.CheckBox();
@@ -316,6 +317,8 @@ namespace CurePlease
             this.autoPhalanxIILabel = new System.Windows.Forms.Label();
             this.autoHasteLabel = new System.Windows.Forms.Label();
             this.plBuffGroup = new System.Windows.Forms.GroupBox();
+            this.plShell = new System.Windows.Forms.CheckBox();
+            this.plProtect = new System.Windows.Forms.CheckBox();
             this.plAquaveil = new System.Windows.Forms.CheckBox();
             this.plStormSpell_Spell = new System.Windows.Forms.ComboBox();
             this.plStormSpell = new System.Windows.Forms.CheckBox();
@@ -441,8 +444,6 @@ namespace CurePlease
             this.saveAsButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.loadJobSettings = new System.Windows.Forms.CheckBox();
-            this.plShell = new System.Windows.Forms.CheckBox();
-            this.plProtect = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -462,11 +463,11 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.standAtMP_Percentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.healWhenMPBelow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).BeginInit();
+            this.groupBox16.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.groupBox32.SuspendLayout();
             this.groupBox29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sublimationMP)).BeginInit();
-            this.groupBox16.SuspendLayout();
             this.groupBox15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DevotionMP)).BeginInit();
             this.groupBox11.SuspendLayout();
@@ -587,7 +588,7 @@ namespace CurePlease
             // 
             this.naSpellsenable.AutoSize = true;
             this.naSpellsenable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.naSpellsenable.Location = new System.Drawing.Point(9, 98);
+            this.naSpellsenable.Location = new System.Drawing.Point(9, 87);
             this.naSpellsenable.Name = "naSpellsenable";
             this.naSpellsenable.Size = new System.Drawing.Size(165, 19);
             this.naSpellsenable.TabIndex = 9;
@@ -1398,6 +1399,40 @@ namespace CurePlease
         " and Normal PT members.");
             this.enableMonitoredPriority.UseVisualStyleBackColor = true;
             // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.label8);
+            this.groupBox16.Controls.Add(this.autoTarget_target);
+            this.groupBox16.Controls.Add(this.label37);
+            this.groupBox16.Controls.Add(this.label36);
+            this.groupBox16.Controls.Add(this.Hate_SpellType);
+            this.groupBox16.Controls.Add(this.autoTarget);
+            this.groupBox16.Controls.Add(this.autoTargetSpell);
+            this.groupBox16.Location = new System.Drawing.Point(356, 377);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(409, 156);
+            this.groupBox16.TabIndex = 39;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Auto Casting Spells";
+            this.toolTip1.SetToolTip(this.groupBox16, "PLEASE NOTE:\r\n\r\nThis will only work when the MONITORED PLAYER is engaged in comba" +
+        "t. ");
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(212, 77);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(45, 15);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Target:";
+            // 
+            // autoTarget_target
+            // 
+            this.autoTarget_target.Location = new System.Drawing.Point(260, 74);
+            this.autoTarget_target.Name = "autoTarget_target";
+            this.autoTarget_target.Size = new System.Drawing.Size(124, 21);
+            this.autoTarget_target.TabIndex = 15;
+            // 
             // penury
             // 
             this.penury.AutoSize = true;
@@ -1532,38 +1567,6 @@ namespace CurePlease
             this.sublimationMP.Name = "sublimationMP";
             this.sublimationMP.Size = new System.Drawing.Size(84, 21);
             this.sublimationMP.TabIndex = 16;
-            // 
-            // groupBox16
-            // 
-            this.groupBox16.Controls.Add(this.label8);
-            this.groupBox16.Controls.Add(this.autoTarget_target);
-            this.groupBox16.Controls.Add(this.label37);
-            this.groupBox16.Controls.Add(this.label36);
-            this.groupBox16.Controls.Add(this.Hate_SpellType);
-            this.groupBox16.Controls.Add(this.autoTarget);
-            this.groupBox16.Controls.Add(this.autoTargetSpell);
-            this.groupBox16.Location = new System.Drawing.Point(356, 377);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(409, 156);
-            this.groupBox16.TabIndex = 39;
-            this.groupBox16.TabStop = false;
-            this.groupBox16.Text = "Auto Casting Spells";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(212, 77);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(45, 15);
-            this.label8.TabIndex = 16;
-            this.label8.Text = "Target:";
-            // 
-            // autoTarget_target
-            // 
-            this.autoTarget_target.Location = new System.Drawing.Point(260, 74);
-            this.autoTarget_target.Name = "autoTarget_target";
-            this.autoTarget_target.Size = new System.Drawing.Size(124, 21);
-            this.autoTarget_target.TabIndex = 15;
             // 
             // groupBox15
             // 
@@ -1781,6 +1784,7 @@ namespace CurePlease
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.SpecifiednaSpellsenable);
             this.tabPage4.Controls.Add(this.panel6);
             this.tabPage4.Controls.Add(this.naSpellsenable);
             this.tabPage4.Controls.Add(this.label3);
@@ -1802,6 +1806,16 @@ namespace CurePlease
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Debuff Removal";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // SpecifiednaSpellsenable
+            // 
+            this.SpecifiednaSpellsenable.AutoSize = true;
+            this.SpecifiednaSpellsenable.Location = new System.Drawing.Point(9, 112);
+            this.SpecifiednaSpellsenable.Name = "SpecifiednaSpellsenable";
+            this.SpecifiednaSpellsenable.Size = new System.Drawing.Size(216, 19);
+            this.SpecifiednaSpellsenable.TabIndex = 12;
+            this.SpecifiednaSpellsenable.Text = "Remove from selected players only";
+            this.SpecifiednaSpellsenable.UseVisualStyleBackColor = true;
             // 
             // panel6
             // 
@@ -4228,6 +4242,26 @@ namespace CurePlease
             this.plBuffGroup.TabStop = false;
             this.plBuffGroup.Text = "   PL Buffs";
             // 
+            // plShell
+            // 
+            this.plShell.AutoSize = true;
+            this.plShell.Location = new System.Drawing.Point(11, 43);
+            this.plShell.Name = "plShell";
+            this.plShell.Size = new System.Drawing.Size(54, 19);
+            this.plShell.TabIndex = 20;
+            this.plShell.Text = "Shell";
+            this.plShell.UseVisualStyleBackColor = true;
+            // 
+            // plProtect
+            // 
+            this.plProtect.AutoSize = true;
+            this.plProtect.Location = new System.Drawing.Point(11, 20);
+            this.plProtect.Name = "plProtect";
+            this.plProtect.Size = new System.Drawing.Size(64, 19);
+            this.plProtect.TabIndex = 19;
+            this.plProtect.Text = "Protect";
+            this.plProtect.UseVisualStyleBackColor = true;
+            // 
             // plAquaveil
             // 
             this.plAquaveil.AutoSize = true;
@@ -6573,26 +6607,6 @@ namespace CurePlease
             this.loadJobSettings.Text = "Automatically load Job_SubJob.xml file";
             this.loadJobSettings.UseVisualStyleBackColor = true;
             // 
-            // plShell
-            // 
-            this.plShell.AutoSize = true;
-            this.plShell.Location = new System.Drawing.Point(11, 43);
-            this.plShell.Name = "plShell";
-            this.plShell.Size = new System.Drawing.Size(54, 19);
-            this.plShell.TabIndex = 20;
-            this.plShell.Text = "Shell";
-            this.plShell.UseVisualStyleBackColor = true;
-            // 
-            // plProtect
-            // 
-            this.plProtect.AutoSize = true;
-            this.plProtect.Location = new System.Drawing.Point(11, 20);
-            this.plProtect.Name = "plProtect";
-            this.plProtect.Size = new System.Drawing.Size(64, 19);
-            this.plProtect.TabIndex = 19;
-            this.plProtect.Text = "Protect";
-            this.plProtect.UseVisualStyleBackColor = true;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -6628,14 +6642,14 @@ namespace CurePlease
             ((System.ComponentModel.ISupportInitialize)(this.standAtMP_Percentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.healWhenMPBelow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.monitoredCurePercentage)).EndInit();
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.groupBox32.ResumeLayout(false);
             this.groupBox32.PerformLayout();
             this.groupBox29.ResumeLayout(false);
             this.groupBox29.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sublimationMP)).EndInit();
-            this.groupBox16.ResumeLayout(false);
-            this.groupBox16.PerformLayout();
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DevotionMP)).EndInit();
@@ -7161,5 +7175,6 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox stoneskinAccession;
         private System.Windows.Forms.CheckBox plShell;
         private System.Windows.Forms.CheckBox plProtect;
+        private System.Windows.Forms.CheckBox SpecifiednaSpellsenable;
     }
 }

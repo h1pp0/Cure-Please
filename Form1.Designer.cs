@@ -84,12 +84,15 @@ namespace CurePlease
             this.autoFlurryIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoShellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoProtectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeperator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.enableDebuffRemovalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.hasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sneakToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.invisibleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshIIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.phalanxIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.regenIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -755,11 +758,14 @@ namespace CurePlease
             this.autoShellToolStripMenuItem,
             this.autoProtectToolStripMenuItem,
             this.toolStripMenuItem1,
+            this.enableDebuffRemovalToolStripMenuItem,
+            this.toolStripSeperator13,
             this.hasteToolStripMenuItem,
             this.sneakToolStripMenuItem,
             this.invisibleToolStripMenuItem,
             this.refreshToolStripMenuItem,
             this.refreshIIToolStripMenuItem,
+            this.refreshIIIToolStripMenuItem,
             this.phalanxIIToolStripMenuItem,
             this.toolStripMenuItem5,
             this.regenIIToolStripMenuItem,
@@ -880,11 +886,20 @@ namespace CurePlease
             this.autoProtectToolStripMenuItem.Text = "Auto Protect";
             this.autoProtectToolStripMenuItem.Click += new System.EventHandler(this.autoProtectToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // toolStripSeperator13
+            // 
+            this.toolStripSeperator13.Name = "toolStripSeperator13";
+            this.toolStripSeperator13.Size = new System.Drawing.Size(223, 6);
+            // 
+            //
+            // enableDebuffRemovalToolStripMenuItem
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(223, 6);
-            // 
+            this.enableDebuffRemovalToolStripMenuItem.Name = "enableDebuffRemovalToolStripMenuItem";
+            this.enableDebuffRemovalToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.enableDebuffRemovalToolStripMenuItem.Text = "Enable Debuff Removal";
+            this.enableDebuffRemovalToolStripMenuItem.Click += new System.EventHandler(this.enableDebuffRemovalToolStripMenuItem_Click);
             // hasteToolStripMenuItem
             // 
             this.hasteToolStripMenuItem.Name = "hasteToolStripMenuItem";
@@ -919,6 +934,13 @@ namespace CurePlease
             this.refreshIIToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.refreshIIToolStripMenuItem.Text = "Refresh II";
             this.refreshIIToolStripMenuItem.Click += new System.EventHandler(this.refreshIIToolStripMenuItem_Click);
+            // 
+            // refreshIIToolStripMenuItem
+            // 
+            this.refreshIIIToolStripMenuItem.Name = "refreshIIIToolStripMenuItem";
+            this.refreshIIIToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.refreshIIIToolStripMenuItem.Text = "Refresh III";
+            this.refreshIIIToolStripMenuItem.Click += new System.EventHandler(this.refreshIIIToolStripMenuItem_Click);
             // 
             // phalanxIIToolStripMenuItem
             // 
@@ -2471,6 +2493,7 @@ namespace CurePlease
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ToolStripMenuItem refreshIIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshIIIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem regenIIToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem protectToolStripMenuItem;
@@ -2486,6 +2509,8 @@ namespace CurePlease
         private System.Windows.Forms.ToolStripMenuItem regenIIIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoProtectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoProtectIVToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem enableDebuffRemovalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeperator13;
         private System.Windows.Forms.ToolStripMenuItem autoProtectVToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem autoShellToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoShellIVToolStripMenuItem;

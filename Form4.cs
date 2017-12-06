@@ -1,8 +1,8 @@
 ﻿namespace CurePlease
 {
-    using EliteMMO.API;
     using System;
     using System.Windows.Forms;
+    using EliteMMO.API;
     using static Form1;
 
     public partial class Form4 : Form
@@ -11,6 +11,8 @@
 
         public Form4(Form1 f)
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             InitializeComponent();
 
             f1 = f;

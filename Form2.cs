@@ -1400,6 +1400,10 @@
             {
                 get; set;
             }
+            public bool FFXIDefaultAutoFollow
+            {
+                get; set;
+            }
 
             // FAST CAST MODE
             public bool enableFastCast_Mode
@@ -1427,6 +1431,9 @@
 
         public Form2()
         {
+
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             this.InitializeComponent();
 
             JobNames.Add(new JobTitles
@@ -1849,6 +1856,7 @@
                 config.autoFollowName = "";
                 config.autoFollowDistance = 5;
                 config.autoFollow_Warning = false;
+                config.FFXIDefaultAutoFollow = false;
 
                 config.ipAddress = "127.0.0.1";
                 config.listeningPort = "19769";
@@ -2242,6 +2250,7 @@
             config.autoFollowName = this.autoFollowName.Text;
             config.autoFollowDistance = this.autoFollowDistance.Value;
             config.autoFollow_Warning = this.autoFollow_Warning.Checked;
+            config.FFXIDefaultAutoFollow = this.FFXIDefaultAutoFollow.Checked;
 
             config.ipAddress = this.ipAddress.Text;
             config.listeningPort = this.listeningPort.Text;
@@ -3157,6 +3166,7 @@
             this.autoFollowName.Text = config.autoFollowName;
             this.autoFollowDistance.Value = config.autoFollowDistance;
             this.autoFollow_Warning.Checked = config.autoFollow_Warning;
+            this.FFXIDefaultAutoFollow.Checked = config.FFXIDefaultAutoFollow;
 
             this.ipAddress.Text = config.ipAddress;
             this.listeningPort.Text = config.listeningPort;

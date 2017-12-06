@@ -444,6 +444,7 @@ namespace CurePlease
             this.saveAsButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.loadJobSettings = new System.Windows.Forms.CheckBox();
+            this.FFXIDefaultAutoFollow = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -6463,6 +6464,7 @@ namespace CurePlease
             // 
             // groupBox14
             // 
+            this.groupBox14.Controls.Add(this.FFXIDefaultAutoFollow);
             this.groupBox14.Controls.Add(this.autoFollow_Warning);
             this.groupBox14.Controls.Add(this.checkBox4);
             this.groupBox14.Controls.Add(this.autoFollowName);
@@ -6472,7 +6474,7 @@ namespace CurePlease
             this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox14.Location = new System.Drawing.Point(6, 292);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(393, 139);
+            this.groupBox14.Size = new System.Drawing.Size(393, 183);
             this.groupBox14.TabIndex = 16;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "PL Follow Options";
@@ -6606,6 +6608,18 @@ namespace CurePlease
             this.loadJobSettings.TabIndex = 5;
             this.loadJobSettings.Text = "Automatically load Job_SubJob.xml file";
             this.loadJobSettings.UseVisualStyleBackColor = true;
+            // 
+            // FFXIDefaultAutoFollow
+            // 
+            this.FFXIDefaultAutoFollow.AutoSize = true;
+            this.FFXIDefaultAutoFollow.Location = new System.Drawing.Point(6, 138);
+            this.FFXIDefaultAutoFollow.Name = "FFXIDefaultAutoFollow";
+            this.FFXIDefaultAutoFollow.Size = new System.Drawing.Size(181, 19);
+            this.FFXIDefaultAutoFollow.TabIndex = 6;
+            this.FFXIDefaultAutoFollow.Text = "Use FFXI Default AutoFollow";
+            this.toolTip1.SetToolTip(this.FFXIDefaultAutoFollow, "This will just TARGET LOCK and /autofollow when the specified target is within 20" +
+        " yalms and no action is being performed.");
+            this.FFXIDefaultAutoFollow.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -7176,5 +7190,6 @@ namespace CurePlease
         private System.Windows.Forms.CheckBox plShell;
         private System.Windows.Forms.CheckBox plProtect;
         private System.Windows.Forms.CheckBox SpecifiednaSpellsenable;
+        private System.Windows.Forms.CheckBox FFXIDefaultAutoFollow;
     }
 }

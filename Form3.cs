@@ -6,6 +6,8 @@
     {
         public Form3()
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             this.InitializeComponent();
 
             this.label2.Text = Application.ProductVersion;

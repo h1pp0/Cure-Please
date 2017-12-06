@@ -21,6 +21,8 @@
 
         public PartyBuffs(Form1 f)
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             InitializeComponent();
 
             f1 = f;
@@ -68,7 +70,7 @@
                     {
                         if (i == count)
                         {
-                            ailment_list.AppendText(found_Buff.Name + " ("+acBuff+") ");
+                            ailment_list.AppendText(found_Buff.Name + " (" + acBuff + ") ");
                         }
                         else
                         {

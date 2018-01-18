@@ -6,10 +6,7 @@
 
     public class NewProgressBar : ProgressBar
     {
-        public NewProgressBar()
-        {
-            this.SetStyle(ControlStyles.UserPaint, true);
-        }
+        public NewProgressBar() => this.SetStyle(ControlStyles.UserPaint, true);
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
@@ -29,11 +26,11 @@
                     if (ProgressBarRenderer.IsSupported)
                         ProgressBarRenderer.DrawHorizontalBar(offscreen, rect);
 
-                    rect.Inflate(new Size(-inset, -inset)); // Deflate inner rect.
+                    rect.Inflate(new Size(-inset, -inset)); // Deflate inner rect.q
                     rect.Width = (int)(rect.Width * ((double)this.Value / this.Maximum));
                     if (rect.Width == 0) rect.Width = 1; // Can't draw rec with width of 0.
 
-                    var brush = new LinearGradientBrush(rect, this.BackColor, this.ForeColor, LinearGradientMode.Vertical);
+                    var brush = new LinearGradientBrush(rect, Color.DeepSkyBlue, Color.DeepSkyBlue, LinearGradientMode.Vertical);
                     offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
 
                     e.Graphics.DrawImage(offscreenImage, 0, 0);

@@ -172,7 +172,6 @@ namespace CurePlease
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.refreshCharactersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chatLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.partyBuffsdebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -211,6 +210,8 @@ namespace CurePlease
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.currentAction = new System.Windows.Forms.Label();
             this.debug = new System.Windows.Forms.Button();
+            this.chatLog_reader = new System.Windows.Forms.Timer(this.components);
+            this.updateInstances = new System.Windows.Forms.Timer(this.components);
             this.player17HP = new CurePlease.NewProgressBar();
             this.player16HP = new CurePlease.NewProgressBar();
             this.player15HP = new CurePlease.NewProgressBar();
@@ -1095,11 +1096,12 @@ namespace CurePlease
             // plLabel
             // 
             this.plLabel.AutoSize = true;
+            this.plLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.plLabel.ForeColor = System.Drawing.SystemColors.MenuText;
             this.plLabel.Location = new System.Drawing.Point(5, 16);
             this.plLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.plLabel.Name = "plLabel";
-            this.plLabel.Size = new System.Drawing.Size(102, 13);
+            this.plLabel.Size = new System.Drawing.Size(119, 13);
             this.plLabel.TabIndex = 5;
             this.plLabel.Text = "Selected PL: NONE";
             // 
@@ -1805,7 +1807,6 @@ namespace CurePlease
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
-            this.refreshCharactersToolStripMenuItem,
             this.chatLogToolStripMenuItem,
             this.partyBuffsdebugToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
@@ -1815,28 +1816,21 @@ namespace CurePlease
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.settingsToolStripMenuItem.Text = "Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // refreshCharactersToolStripMenuItem
-            // 
-            this.refreshCharactersToolStripMenuItem.Name = "refreshCharactersToolStripMenuItem";
-            this.refreshCharactersToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.refreshCharactersToolStripMenuItem.Text = "Reload monitored characters";
-            this.refreshCharactersToolStripMenuItem.Click += new System.EventHandler(this.refreshCharactersToolStripMenuItem_Click);
             // 
             // chatLogToolStripMenuItem
             // 
             this.chatLogToolStripMenuItem.Name = "chatLogToolStripMenuItem";
-            this.chatLogToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.chatLogToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.chatLogToolStripMenuItem.Text = "Chat Log";
             this.chatLogToolStripMenuItem.Click += new System.EventHandler(this.chatLogToolStripMenuItem_Click);
             // 
             // partyBuffsdebugToolStripMenuItem
             // 
             this.partyBuffsdebugToolStripMenuItem.Name = "partyBuffsdebugToolStripMenuItem";
-            this.partyBuffsdebugToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.partyBuffsdebugToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.partyBuffsdebugToolStripMenuItem.Text = "Party Buffs (debug)";
             this.partyBuffsdebugToolStripMenuItem.Click += new System.EventHandler(this.partyBuffsdebugToolStripMenuItem_Click);
             // 
@@ -1887,11 +1881,12 @@ namespace CurePlease
             // monitoredLabel
             // 
             this.monitoredLabel.AutoSize = true;
+            this.monitoredLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.monitoredLabel.ForeColor = System.Drawing.SystemColors.MenuText;
             this.monitoredLabel.Location = new System.Drawing.Point(4, 38);
             this.monitoredLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.monitoredLabel.Name = "monitoredLabel";
-            this.monitoredLabel.Size = new System.Drawing.Size(123, 13);
+            this.monitoredLabel.Size = new System.Drawing.Size(145, 13);
             this.monitoredLabel.TabIndex = 5;
             this.monitoredLabel.Text = "Monitored Player: NONE";
             // 
@@ -2095,7 +2090,7 @@ namespace CurePlease
             // AutomaticChecks
             // 
             this.AutomaticChecks.Enabled = true;
-            this.AutomaticChecks.Interval = 1000;
+            this.AutomaticChecks.Interval = 500;
             this.AutomaticChecks.Tick += new System.EventHandler(this.AutomaticChecks_Tick);
             // 
             // groupBox2
@@ -2133,6 +2128,18 @@ namespace CurePlease
             this.debug.UseVisualStyleBackColor = false;
             this.debug.Visible = false;
             this.debug.Click += new System.EventHandler(this.Debug_Click);
+            // 
+            // chatLog_reader
+            // 
+            this.chatLog_reader.Enabled = true;
+            this.chatLog_reader.Interval = 2000;
+            this.chatLog_reader.Tick += new System.EventHandler(this.chatLog_reader_Tick);
+            // 
+            // updateInstances
+            // 
+            this.updateInstances.Enabled = true;
+            this.updateInstances.Interval = 60000;
+            this.updateInstances.Tick += new System.EventHandler(this.updateInstances_Tick);
             // 
             // player17HP
             // 
@@ -2326,6 +2333,8 @@ namespace CurePlease
             this.Text = "Cure Please v. 2.0.0.5";
             this.TransparencyKey = System.Drawing.Color.Silver;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.party0.ResumeLayout(false);
             this.party0.PerformLayout();
             this.playerOptions.ResumeLayout(false);
@@ -2540,7 +2549,6 @@ namespace CurePlease
         public Button setinstance;
         public Button setinstance2;
         public Label debugging_MSGBOX;
-        private ToolStripMenuItem refreshCharactersToolStripMenuItem;
         private ToolStripMenuItem partyBuffsdebugToolStripMenuItem;
         public System.ComponentModel.BackgroundWorker AilmentChecker;
         private System.ComponentModel.BackgroundWorker buff_checker;
@@ -2551,5 +2559,7 @@ namespace CurePlease
         private GroupBox groupBox2;
         private Label currentAction;
         private Button debug;
+        private Timer chatLog_reader;
+        private Timer updateInstances;
     }
 }

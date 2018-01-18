@@ -272,6 +272,11 @@
             {
                 get; set;
             }
+            public bool AOE_Barelemental
+            {
+                get; set;
+            }
+
 
             public bool plBarStatus
             {
@@ -279,6 +284,10 @@
             }
 
             public int plBarStatus_Spell
+            {
+                get; set;
+            }
+            public bool AOE_Barstatus
             {
                 get; set;
             }
@@ -645,6 +654,10 @@
             {
                 get; set;
             }
+            public bool DivineCaress
+            {
+                get; set;
+            }
 
             // RDM
             public bool Composure
@@ -684,6 +697,10 @@
             }
 
             public bool EclipticAttrition
+            {
+                get; set;
+            }
+            public bool LifeCycle
             {
                 get; set;
             }
@@ -1371,6 +1388,10 @@
             {
                 get; set;
             }
+            public bool EnableAddOn
+            {
+                get; set;
+            }
 
             // PROGRAM OPTIONS
 
@@ -1618,8 +1639,10 @@
                 config.plGainBoost_Spell = 0;
                 config.plBarElement = false;
                 config.plBarElement_Spell = 0;
+                config.AOE_Barelemental = false;
                 config.plBarStatus = false;
                 config.plBarStatus_Spell = 0;
+                config.AOE_Barstatus = false;
                 config.plStormSpell = false;
                 config.plKlimaform = false;
                 config.plStormSpell_Spell = 0;
@@ -1691,6 +1714,7 @@
                 config.Penury = false;
                 config.Rapture = false;
                 config.EclipticAttrition = false;
+                config.LifeCycle = false;
                 config.Entrust = false;
                 config.Dematerialize = false;
                 config.FullCircle = false;
@@ -1700,6 +1724,7 @@
                 config.Nightingale = false;
                 config.Marcato = false;
                 config.Devotion = false;
+                config.DivineCaress = false;
 
                 // DEBUFF REMOVAL
                 config.plSilenceItemEnabled = false;
@@ -1845,6 +1870,8 @@
                 config.Undercure = true;
                 config.enableMonitoredPriority = false;
                 config.OvercureOnHighPriority = false;
+
+                config.EnableAddOn = false;
 
                 config.sublimationMP = 100;
 
@@ -1993,9 +2020,11 @@
             config.plGainBoost_Spell = this.plGainBoost_spell.SelectedIndex;
             config.plBarElement = this.plBarElement.Checked;
             config.plBarElement_Spell = this.plBarElement_Spell.SelectedIndex;
+            config.AOE_Barelemental = this.AOE_Barelemental.Checked;
             config.plBarStatus = this.plBarStatus.Checked;
             config.plBarStatus_Spell = this.plBarStatus_Spell.SelectedIndex;
             config.plStormSpell = this.plStormSpell.Checked;
+            config.AOE_Barstatus = this.AOE_Barstatus.Checked;
             config.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
             config.plKlimaform = this.plKlimaform.Checked;
             config.plAuspice = this.plAuspice.Checked;
@@ -2085,6 +2114,7 @@
 
             config.DivineSeal = this.divineSealBox.Checked;
             config.Devotion = this.DevotionBox.Checked;
+            config.DivineCaress = this.DivineCaressBox.Checked;
 
             config.Entrust = this.EntrustBox.Checked;
             config.Dematerialize = this.DematerializeBox.Checked;
@@ -2092,6 +2122,7 @@
             config.RadialArcana = this.RadialArcanaBox.Checked;
             config.FullCircle = this.FullCircleBox.Checked;
             config.EclipticAttrition = this.EclipticAttritionBox.Checked;
+            config.LifeCycle = this.LifeCycleBox.Checked;
 
             config.Troubadour = this.troubadour.Checked;
             config.Nightingale = this.nightingale.Checked;
@@ -2241,6 +2272,7 @@
             config.Undercure = this.Undercure.Checked;
             config.enableMonitoredPriority = this.enableMonitoredPriority.Checked;
             config.OvercureOnHighPriority = this.OvercureOnHighPriority.Checked;
+            config.EnableAddOn = this.enableAddOn.Checked;
 
             // PROGRAM OPTIONS
 
@@ -2928,8 +2960,10 @@
             this.DematerializeBox.Checked = config.Dematerialize;
             this.plBarElement.Checked = config.plBarElement;
             this.plBarElement_Spell.SelectedIndex = config.plBarElement_Spell;
+            this.AOE_Barelemental.Checked = config.AOE_Barelemental;
             this.plBarStatus.Checked = config.plBarStatus;
             this.plBarStatus_Spell.SelectedIndex = config.plBarStatus_Spell;
+            this.AOE_Barstatus.Checked = config.AOE_Barstatus;
             this.plStormSpell.Checked = config.plStormSpell;
             this.plKlimaform.Checked = config.plKlimaform;
             this.plStormSpell_Spell.SelectedIndex = config.plStormSpell_Spell;
@@ -2988,6 +3022,7 @@
             this.afflatusMisery.Checked = config.AfflatusMisery;
             this.divineSealBox.Checked = config.DivineSeal;
             this.DevotionBox.Checked = config.Devotion;
+            this.DivineCaressBox.Checked = config.DivineCaress;
 
             this.lightArts.Checked = config.LightArts;
             this.addWhite.Checked = config.AddendumWhite;
@@ -3004,6 +3039,7 @@
             this.BlazeOfGloryBox.Checked = config.BlazeOfGlory;
             this.FullCircleBox.Checked = config.FullCircle;
             this.EclipticAttritionBox.Checked = config.EclipticAttrition;
+            this.LifeCycleBox.Checked = config.LifeCycle;
 
             this.troubadour.Checked = config.Troubadour;
             this.nightingale.Checked = config.Nightingale;
@@ -3157,6 +3193,8 @@
             this.Undercure.Checked = config.Undercure;
             this.enableMonitoredPriority.Checked = config.enableMonitoredPriority;
             this.OvercureOnHighPriority.Checked = config.OvercureOnHighPriority;
+
+            this.enableAddOn.Checked = config.EnableAddOn;
 
             // PROGRAM OPTIONS
 

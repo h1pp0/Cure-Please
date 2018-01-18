@@ -1,8 +1,8 @@
 ﻿namespace CurePlease
 {
+    using EliteMMO.API;
     using System;
     using System.Windows.Forms;
-    using EliteMMO.API;
     using static Form1;
 
     public partial class Form4 : Form
@@ -21,7 +21,7 @@
             {
                 #region "== First generate all current chat entries."
 
-                _ELITEAPIPL = new EliteAPI((int)f1.processids.SelectedItem);
+                _ELITEAPIPL = new EliteAPI((int)f1.activeprocessids.SelectedItem);
                 characterNamed_label.Text = "Chatlog for character: " + _ELITEAPIPL.Player.Name + "\n";
 
                 EliteAPI.ChatEntry cl = new EliteAPI.ChatEntry();

@@ -39,8 +39,9 @@
             }
             else
             {
-                chatlog_box.Text = "No character was selected as the power leveler, close this window and select one.";
                 chatlogscan_timer.Enabled = false;
+                MessageBox.Show("No character was selected as the power leveler, this can not be opened yet.");
+
             }
         }
 

@@ -14,6 +14,34 @@
     {
         #region "== Settings Class"
 
+        public class SkillCaps : List<SkillCaps>
+        {
+            public string Job
+            {
+                get; set;
+            }
+
+            public int Level
+            {
+                get; set;
+            }
+
+            public int Skill
+            {
+                get; set;
+            }
+
+            public int Vit
+            {
+                get; set;
+            }
+
+            public int Mnd
+            {
+                get; set;
+            }
+        }
+
         public class JobTitles : List<JobTitles>
         {
             public int job_number
@@ -193,6 +221,11 @@
                 get; set;
             }
 
+            public decimal autoStormspellMinutes
+            {
+                get; set;
+            }
+
             public decimal autoRefresh_Minutes
             {
                 get; set;
@@ -272,11 +305,11 @@
             {
                 get; set;
             }
+
             public bool AOE_Barelemental
             {
                 get; set;
             }
-
 
             public bool plBarStatus
             {
@@ -287,6 +320,7 @@
             {
                 get; set;
             }
+
             public bool AOE_Barstatus
             {
                 get; set;
@@ -372,12 +406,22 @@
                 get; set;
             }
 
+            public bool plAdloquium
+            {
+                get; set;
+            }
+
             public bool plKlimaform
             {
                 get; set;
             }
 
             public bool plAquaveil
+            {
+                get; set;
+            }
+
+            public bool plUtsusemi
             {
                 get; set;
             }
@@ -394,7 +438,12 @@
                 get; set;
             }
 
-            public bool accessionPerpRegen
+            public bool AccessionRegen
+            {
+                get; set;
+            }
+
+            public bool PerpetuanceRegen
             {
                 get; set;
             }
@@ -455,6 +504,16 @@
             }
 
             public bool stormspellAccession
+            {
+                get; set;
+            }
+
+            public bool adloquiumPerpetuance
+            {
+                get; set;
+            }
+
+            public bool adloquiumAccession
             {
                 get; set;
             }
@@ -654,6 +713,7 @@
             {
                 get; set;
             }
+
             public bool DivineCaress
             {
                 get; set;
@@ -700,6 +760,7 @@
             {
                 get; set;
             }
+
             public bool LifeCycle
             {
                 get; set;
@@ -743,6 +804,11 @@
             }
 
             public bool SpecifiednaSpellsenable
+            {
+                get; set;
+            }
+
+            public bool PrioritiseOverLowerTier
             {
                 get; set;
             }
@@ -1270,6 +1336,173 @@
                 get; set;
             }
 
+            // NA SPECIFICATION CHECKBOXES
+
+            public bool na_Weight
+            {
+                get; set;
+            }
+
+            public bool na_VitDown
+            {
+                get; set;
+            }
+
+            public bool na_Threnody
+            {
+                get; set;
+            }
+
+            public bool na_Slow
+            {
+                get; set;
+            }
+
+            public bool na_Shock
+            {
+                get; set;
+            }
+
+            public bool na_StrDown
+            {
+                get; set;
+            }
+
+            public bool na_Requiem
+            {
+                get; set;
+            }
+
+            public bool na_Rasp
+            {
+                get; set;
+            }
+
+            public bool na_MaxTpDown
+            {
+                get; set;
+            }
+
+            public bool na_MaxMpDown
+            {
+                get; set;
+            }
+
+            public bool na_MaxHpDown
+            {
+                get; set;
+            }
+
+            public bool na_MagicAttackDown
+            {
+                get; set;
+            }
+
+            public bool na_MagicAccDown
+            {
+                get; set;
+            }
+
+            public bool na_MagicDefenseDown
+            {
+                get; set;
+            }
+
+            public bool na_MndDown
+            {
+                get; set;
+            }
+
+            public bool na_IntDown
+            {
+                get; set;
+            }
+
+            public bool na_Helix
+            {
+                get; set;
+            }
+
+            public bool na_Frost
+            {
+                get; set;
+            }
+
+            public bool na_EvasionDown
+            {
+                get; set;
+            }
+
+            public bool na_Elegy
+            {
+                get; set;
+            }
+
+            public bool na_Drown
+            {
+                get; set;
+            }
+
+            public bool na_Dia
+            {
+                get; set;
+            }
+
+            public bool na_DefenseDown
+            {
+                get; set;
+            }
+
+            public bool na_DexDown
+            {
+                get; set;
+            }
+
+            public bool na_Choke
+            {
+                get; set;
+            }
+
+            public bool na_ChrDown
+            {
+                get; set;
+            }
+
+            public bool na_Burn
+            {
+                get; set;
+            }
+
+            public bool na_Bio
+            {
+                get; set;
+            }
+
+            public bool na_Bind
+            {
+                get; set;
+            }
+
+            public bool na_AttackDown
+            {
+                get; set;
+            }
+
+            public bool na_Addle
+            {
+                get; set;
+            }
+
+            public bool na_AccuracyDown
+            {
+                get; set;
+            }
+
+            public bool na_AgiDown
+            {
+                get; set;
+            }
+
             // OTHER SETTINGS
 
             // MP OPTIONS
@@ -1368,6 +1601,17 @@
                 get; set;
             }
 
+            // RAISE SETTINGS
+            public bool AcceptRaise
+            {
+                get; set;
+            }
+
+            public bool AcceptRaiseOnlyWhenNotInCombat
+            {
+                get; set;
+            }
+
             // CURING OPTIONS
             public bool Overcure
             {
@@ -1388,6 +1632,7 @@
             {
                 get; set;
             }
+
             public bool EnableAddOn
             {
                 get; set;
@@ -1402,6 +1647,11 @@
             }
 
             public bool pauseOnStartBox
+            {
+                get; set;
+            }
+
+            public bool MinimiseonStart
             {
                 get; set;
             }
@@ -1421,6 +1671,7 @@
             {
                 get; set;
             }
+
             public bool FFXIDefaultAutoFollow
             {
                 get; set;
@@ -1428,6 +1679,12 @@
 
             // FAST CAST MODE
             public bool enableFastCast_Mode
+            {
+                get; set;
+            }
+
+            // trackCastingPacketsMODE
+            public bool trackCastingPackets
             {
                 get; set;
             }
@@ -1452,7 +1709,6 @@
 
         public Form2()
         {
-
             this.StartPosition = FormStartPosition.CenterScreen;
 
             this.InitializeComponent();
@@ -1578,12 +1834,12 @@
                 config.cure4enabled = true;
                 config.cure5enabled = true;
                 config.cure6enabled = true;
-                config.cure1amount = 100;
-                config.cure2amount = 200;
-                config.cure3amount = 400;
-                config.cure4amount = 800;
-                config.cure5amount = 1200;
-                config.cure6amount = 1600;
+                config.cure1amount = 10;
+                config.cure2amount = 60;
+                config.cure3amount = 130;
+                config.cure4amount = 270;
+                config.cure5amount = 4500;
+                config.cure6amount = 600;
                 config.curePercentage = 75;
                 config.monitoredCurePercentage = 85;
                 config.priorityCurePercentage = 95;
@@ -1593,11 +1849,11 @@
                 config.curaga3enabled = false;
                 config.curaga4enabled = false;
                 config.curaga5enabled = false;
-                config.curagaAmount = 100;
-                config.curaga2Amount = 300;
-                config.curaga3Amount = 600;
-                config.curaga4Amount = 1000;
-                config.curaga5Amount = 1200;
+                config.curagaAmount = 20;
+                config.curaga2Amount = 70;
+                config.curaga3Amount = 165;
+                config.curaga4Amount = 330;
+                config.curaga5Amount = 570;
                 config.curagaCurePercentage = 75;
                 config.curagaTargetType = 0;
                 config.curagaTargetName = "";
@@ -1610,6 +1866,7 @@
                 config.autoProtect_Minutes = 29;
                 config.autoShellMinutes = 29;
                 config.autoPhalanxIIMinutes = 2;
+                config.autoStormspellMinutes = 3;
                 config.autoRefresh_Minutes = 2;
                 config.autoRegen_Minutes = 1;
                 config.autoRefresh_Minutes = 2;
@@ -1644,13 +1901,16 @@
                 config.plBarStatus_Spell = 0;
                 config.AOE_Barstatus = false;
                 config.plStormSpell = false;
+                config.plAdloquium = false;
                 config.plKlimaform = false;
                 config.plStormSpell_Spell = 0;
                 config.plAuspice = false;
                 config.plAquaveil = false;
+                config.plUtsusemi = false;
 
                 // SCHOLAR STRATAGEMS
-                config.accessionPerpRegen = false;
+                config.AccessionRegen = false;
+                config.PerpetuanceRegen = false;
                 config.accessionCure = false;
                 config.accessionProShell = false;
 
@@ -1666,6 +1926,8 @@
                 config.enspellAccession = false;
                 config.stormspellPerpetuance = false;
                 config.stormspellAccession = false;
+                config.adloquiumPerpetuance = false;
+                config.adloquiumAccession = false;
                 config.aquaveilPerpetuance = false;
                 config.aquaveilAccession = false;
                 config.barspellPerpetuance = false;
@@ -1791,6 +2053,8 @@
                 config.naSilence = false;
                 config.naErase = false;
 
+                config.PrioritiseOverLowerTier = false;
+
                 config.monitoredDebuffEnabled = false;
                 config.monitoredAgiDown = false;
                 config.monitoredAccuracyDown = false;
@@ -1839,6 +2103,40 @@
                 config.monitoredVitDown = false;
                 config.monitoredWeight = false;
 
+                config.na_Weight = false;
+                config.na_VitDown = false;
+                config.na_Threnody = false;
+                config.na_Slow = false;
+                config.na_Shock = false;
+                config.na_StrDown = false;
+                config.na_Requiem = false;
+                config.na_Rasp = false;
+                config.na_MaxTpDown = false;
+                config.na_MaxMpDown = false;
+                config.na_MaxHpDown = false;
+                config.na_MagicAttackDown = false;
+                config.na_MagicDefenseDown = false;
+                config.na_MagicAccDown = false;
+                config.na_MndDown = false;
+                config.na_IntDown = false;
+                config.na_Helix = false;
+                config.na_Frost = false;
+                config.na_EvasionDown = false;
+                config.na_Elegy = false;
+                config.na_Drown = false;
+                config.na_Dia = false;
+                config.na_DefenseDown = false;
+                config.na_DexDown = false;
+                config.na_Choke = false;
+                config.na_ChrDown = false;
+                config.na_Burn = false;
+                config.na_Bio = false;
+                config.na_Bind = false;
+                config.na_AttackDown = false;
+                config.na_Addle = false;
+                config.na_AccuracyDown = false;
+                config.na_AgiDown = false;
+
                 // OTHER OPTIONS
 
                 config.lowMPcheckBox = false;
@@ -1846,6 +2144,9 @@
 
                 config.autoTarget = false;
                 config.autoTargetSpell = "Dia";
+
+                config.AcceptRaise = false;
+                config.AcceptRaiseOnlyWhenNotInCombat = false;
 
                 config.RadialArcanaMP = 300;
 
@@ -1879,6 +2180,7 @@
 
                 config.pauseOnZoneBox = false;
                 config.pauseOnStartBox = false;
+                config.MinimiseonStart = false;
 
                 config.autoFollowName = "";
                 config.autoFollowDistance = 5;
@@ -1889,6 +2191,7 @@
                 config.listeningPort = "19769";
 
                 config.enableFastCast_Mode = false;
+                config.trackCastingPackets = false;
 
                 // OTHERS
 
@@ -1973,6 +2276,7 @@
             config.autoProtect_Minutes = this.autoProtect_Minutes.Value;
             config.autoShellMinutes = this.autoShell_Minutes.Value;
             config.autoPhalanxIIMinutes = this.autoPhalanxIIMinutes.Value;
+            config.autoStormspellMinutes = this.autoStormspellMinutes.Value;
             config.autoRegen_Minutes = this.autoRegen_Minutes.Value;
             config.autoRefresh_Minutes = this.autoRefresh_Minutes.Value;
             config.plProtect = this.plProtect.Checked;
@@ -2024,11 +2328,13 @@
             config.plBarStatus = this.plBarStatus.Checked;
             config.plBarStatus_Spell = this.plBarStatus_Spell.SelectedIndex;
             config.plStormSpell = this.plStormSpell.Checked;
+            config.plAdloquium = this.plAdloquium.Checked;
             config.AOE_Barstatus = this.AOE_Barstatus.Checked;
             config.plStormSpell_Spell = this.plStormSpell_Spell.SelectedIndex;
             config.plKlimaform = this.plKlimaform.Checked;
             config.plAuspice = this.plAuspice.Checked;
             config.plAquaveil = this.plAquaveil.Checked;
+            config.plUtsusemi = this.plUtsusemi.Checked;
             config.plRefresh = this.plRefresh.Checked;
             if (this.plRefreshLevel1.Checked)
             {
@@ -2045,7 +2351,8 @@
 
             // SCHOLAR STRATAGEMS
             config.accessionCure = this.accessionCure.Checked;
-            config.accessionPerpRegen = this.accessionPerpRegen.Checked;
+            config.AccessionRegen = this.accessionRegen.Checked;
+            config.PerpetuanceRegen = this.perpetuanceRegen.Checked;
             config.accessionProShell = this.accessionProShell.Checked;
 
             config.refreshPerpetuance = this.refreshPerpetuance.Checked;
@@ -2060,6 +2367,8 @@
             config.enspellAccession = this.enspellAccession.Checked;
             config.stormspellPerpetuance = this.stormspellPerpetuance.Checked;
             config.stormspellAccession = this.stormspellAccession.Checked;
+            config.adloquiumPerpetuance = this.adloquiumPerpetuance.Checked;
+            config.adloquiumAccession = this.adloquiumAccession.Checked;
             config.aquaveilPerpetuance = this.aquaveilPerpetuance.Checked;
             config.aquaveilAccession = this.aquaveilAccession.Checked;
             config.barspellPerpetuance = this.barspellPerpetuance.Checked;
@@ -2184,6 +2493,7 @@
 
             config.enablePartyDebuffRemoval = this.naSpellsenable.Checked;
             config.SpecifiednaSpellsenable = this.SpecifiednaSpellsenable.Checked;
+            config.PrioritiseOverLowerTier = this.PrioritiseOverLowerTier.Checked;
             config.naBlindness = this.naBlindness.Checked;
             config.naCurse = this.naCurse.Checked;
             config.naDisease = this.naDisease.Checked;
@@ -2193,6 +2503,40 @@
             config.naPoison = this.naPoison.Checked;
             config.naSilence = this.naSilence.Checked;
             config.naErase = this.naErase.Checked;
+
+            config.na_Weight = this.na_Weight.Checked;
+            config.na_VitDown = this.na_VitDown.Checked;
+            config.na_Threnody = this.na_Threnody.Checked;
+            config.na_Slow = this.na_Slow.Checked;
+            config.na_Shock = this.na_Shock.Checked;
+            config.na_StrDown = this.na_StrDown.Checked;
+            config.na_Requiem = this.na_Requiem.Checked;
+            config.na_Rasp = this.na_Rasp.Checked;
+            config.na_MaxTpDown = this.na_MaxTpDown.Checked;
+            config.na_MaxMpDown = this.na_MaxMpDown.Checked;
+            config.na_MaxHpDown = this.na_MaxHpDown.Checked;
+            config.na_MagicAttackDown = this.na_MagicAttackDown.Checked;
+            config.na_MagicDefenseDown = this.na_MagicDefenseDown.Checked;
+            config.na_MagicAccDown = this.na_MagicAccDown.Checked;
+            config.na_MndDown = this.na_MndDown.Checked;
+            config.na_IntDown = this.na_IntDown.Checked;
+            config.na_Helix = this.na_Helix.Checked;
+            config.na_Frost = this.na_Frost.Checked;
+            config.na_EvasionDown = this.na_EvasionDown.Checked;
+            config.na_Elegy = this.na_Elegy.Checked;
+            config.na_Drown = this.na_Drown.Checked;
+            config.na_Dia = this.na_Dia.Checked;
+            config.na_DefenseDown = this.na_DefenseDown.Checked;
+            config.na_DexDown = this.na_DexDown.Checked;
+            config.na_Choke = this.na_Choke.Checked;
+            config.na_ChrDown = this.na_ChrDown.Checked;
+            config.na_Burn = this.na_Burn.Checked;
+            config.na_Bio = this.na_Bio.Checked;
+            config.na_Bind = this.na_Bind.Checked;
+            config.na_AttackDown = this.na_AttackDown.Checked;
+            config.na_Addle = this.na_Addle.Checked;
+            config.na_AccuracyDown = this.na_AccuracyDown.Checked;
+            config.na_AgiDown = this.na_AgiDown.Checked;
 
             config.monitoredAgiDown = this.monitoredAgiDown.Checked;
             config.monitoredAccuracyDown = this.monitoredAccuracyDown.Checked;
@@ -2251,6 +2595,9 @@
             config.Hate_SpellType = this.Hate_SpellType.SelectedIndex;
             config.autoTarget_Target = this.autoTarget_target.Text;
 
+            config.AcceptRaise = this.acceptRaise.Checked;
+            config.AcceptRaiseOnlyWhenNotInCombat = this.acceptRaiseOnlyWhenNotInCombat.Checked;
+
             config.RadialArcanaMP = this.RadialArcanaMP.Value;
 
             config.convertMP = this.ConvertMP.Value;
@@ -2278,6 +2625,7 @@
 
             config.pauseOnZoneBox = this.pauseOnZoneBox.Checked;
             config.pauseOnStartBox = this.pauseOnStartBox.Checked;
+            config.MinimiseonStart = this.MinimiseonStart.Checked;
 
             config.autoFollowName = this.autoFollowName.Text;
             config.autoFollowDistance = this.autoFollowDistance.Value;
@@ -2288,6 +2636,7 @@
             config.listeningPort = this.listeningPort.Text;
 
             config.enableFastCast_Mode = this.enableFastCast_Mode.Checked;
+            config.trackCastingPackets = this.trackCastingPackets.Checked;
 
             // OTHERS
 
@@ -2901,6 +3250,14 @@
             this.autoProtect_Minutes.Value = config.autoProtect_Minutes;
             this.autoShell_Minutes.Value = config.autoShellMinutes;
             this.autoPhalanxIIMinutes.Value = config.autoPhalanxIIMinutes;
+            if (config.autoStormspellMinutes == 0)
+            {
+                this.autoStormspellMinutes.Value = 3;
+            }
+            else
+            {
+                this.autoStormspellMinutes.Value = config.autoStormspellMinutes;
+            }
             this.autoRefresh_Minutes.Value = config.autoRefresh_Minutes;
             this.autoRegen_Minutes.Value = config.autoRegen_Minutes;
             this.autoRefresh_Minutes.Value = config.autoRefresh_Minutes;
@@ -2959,21 +3316,40 @@
             this.EntrustBox.Checked = config.Entrust;
             this.DematerializeBox.Checked = config.Dematerialize;
             this.plBarElement.Checked = config.plBarElement;
-            this.plBarElement_Spell.SelectedIndex = config.plBarElement_Spell;
+            if (config.plBarElement_Spell > 5)
+            {
+                this.plBarElement_Spell.SelectedIndex = 0;
+                config.plBarElement_Spell = 0; ;
+            }
+            else
+            {
+                this.plBarElement_Spell.SelectedIndex = config.plBarElement_Spell;
+            }
             this.AOE_Barelemental.Checked = config.AOE_Barelemental;
             this.plBarStatus.Checked = config.plBarStatus;
-            this.plBarStatus_Spell.SelectedIndex = config.plBarStatus_Spell;
+            if (config.plBarStatus_Spell > 8)
+            {
+                this.plBarStatus_Spell.SelectedIndex = 0;
+                config.plBarStatus_Spell = 0; ;
+            }
+            else
+            {
+                this.plBarStatus_Spell.SelectedIndex = config.plBarStatus_Spell;
+            }
             this.AOE_Barstatus.Checked = config.AOE_Barstatus;
             this.plStormSpell.Checked = config.plStormSpell;
             this.plKlimaform.Checked = config.plKlimaform;
             this.plStormSpell_Spell.SelectedIndex = config.plStormSpell_Spell;
+            this.plAdloquium.Checked = config.plAdloquium;
             this.plAuspice.Checked = config.plAuspice;
             this.plAquaveil.Checked = config.plAquaveil;
+            this.plUtsusemi.Checked = config.plUtsusemi;
 
             // SCHOLAR STRATAGEMS
             this.accessionCure.Checked = config.accessionCure;
             this.accessionProShell.Checked = config.accessionProShell;
-            this.accessionPerpRegen.Checked = config.accessionPerpRegen;
+            this.perpetuanceRegen.Checked = config.PerpetuanceRegen;
+            this.accessionRegen.Checked = config.AccessionRegen;
             this.refreshPerpetuance.Checked = config.refreshPerpetuance;
             this.refreshAccession.Checked = config.refreshAccession;
             this.blinkPerpetuance.Checked = config.blinkPerpetuance;
@@ -2984,8 +3360,10 @@
             this.stoneskinAccession.Checked = config.stoneskinAccession;
             this.enspellPerpetuance.Checked = config.enspellPerpetuance;
             this.enspellAccession.Checked = config.enspellAccession;
-            this.stormspellPerpetuance.Checked = config.stoneskinPerpetuance;
+            this.stormspellPerpetuance.Checked = config.stormspellPerpetuance;
             this.stormspellAccession.Checked = config.stormspellAccession;
+            this.adloquiumAccession.Checked = config.adloquiumAccession;
+            this.adloquiumPerpetuance.Checked = config.adloquiumPerpetuance;
             this.aquaveilPerpetuance.Checked = config.aquaveilPerpetuance;
             this.aquaveilAccession.Checked = config.aquaveilAccession;
             this.barspellPerpetuance.Checked = config.barspellPerpetuance;
@@ -3152,6 +3530,7 @@
 
             this.naSpellsenable.Checked = config.enablePartyDebuffRemoval;
             this.SpecifiednaSpellsenable.Checked = config.SpecifiednaSpellsenable;
+            this.PrioritiseOverLowerTier.Checked = config.PrioritiseOverLowerTier;
             this.naBlindness.Checked = config.naBlindness;
             this.naCurse.Checked = config.naCurse;
             this.naDisease.Checked = config.naDisease;
@@ -3162,6 +3541,40 @@
             this.naSilence.Checked = config.naSilence;
             this.naErase.Checked = config.naErase;
 
+            this.na_Weight.Checked = config.na_Weight;
+            this.na_VitDown.Checked = config.na_VitDown;
+            this.na_Threnody.Checked = config.na_Threnody;
+            this.na_Slow.Checked = config.na_Slow;
+            this.na_Shock.Checked = config.na_Shock;
+            this.na_StrDown.Checked = config.na_StrDown;
+            this.na_Requiem.Checked = config.na_Requiem;
+            this.na_Rasp.Checked = config.na_Rasp;
+            this.na_MaxTpDown.Checked = config.na_MaxTpDown;
+            this.na_MaxMpDown.Checked = config.na_MaxMpDown;
+            this.na_MaxHpDown.Checked = config.na_MaxHpDown;
+            this.na_MagicAttackDown.Checked = config.na_MagicAttackDown;
+            this.na_MagicDefenseDown.Checked = config.na_MagicDefenseDown;
+            this.na_MagicAccDown.Checked = config.na_MagicAccDown;
+            this.na_MndDown.Checked = config.na_MndDown;
+            this.na_IntDown.Checked = config.na_IntDown;
+            this.na_Helix.Checked = config.na_Helix;
+            this.na_Frost.Checked = config.na_Frost;
+            this.na_EvasionDown.Checked = config.na_EvasionDown;
+            this.na_Elegy.Checked = config.na_Elegy;
+            this.na_Drown.Checked = config.na_Drown;
+            this.na_Dia.Checked = config.na_Dia;
+            this.na_DefenseDown.Checked = config.na_DefenseDown;
+            this.na_DexDown.Checked = config.na_DexDown;
+            this.na_Choke.Checked = config.na_Choke;
+            this.na_ChrDown.Checked = config.na_ChrDown;
+            this.na_Burn.Checked = config.na_Burn;
+            this.na_Bio.Checked = config.na_Bio;
+            this.na_Bind.Checked = config.na_Bind;
+            this.na_AttackDown.Checked = config.na_AttackDown;
+            this.na_Addle.Checked = config.na_Addle;
+            this.na_AccuracyDown.Checked = config.na_AccuracyDown;
+            this.na_AgiDown.Checked = config.na_AgiDown;
+
             // OTHER OPTIONS
             this.lowMPcheckBox.Checked = config.lowMPcheckBox;
             this.mpMinCastValue.Value = config.mpMinCastValue;
@@ -3170,6 +3583,9 @@
             this.autoTargetSpell.Text = config.autoTargetSpell;
             Hate_SpellType.SelectedIndex = config.Hate_SpellType;
             this.autoTarget_target.Text = config.autoTarget_Target;
+
+            this.acceptRaise.Checked = config.AcceptRaise;
+            this.acceptRaiseOnlyWhenNotInCombat.Checked = config.AcceptRaiseOnlyWhenNotInCombat;
 
             this.RadialArcanaBox.Checked = config.RadialArcana;
             this.RadialArcanaMP.Value = config.RadialArcanaMP;
@@ -3200,6 +3616,7 @@
 
             this.pauseOnZoneBox.Checked = config.pauseOnZoneBox;
             this.pauseOnStartBox.Checked = config.pauseOnStartBox;
+            this.MinimiseonStart.Checked = config.MinimiseonStart;
 
             this.autoFollowName.Text = config.autoFollowName;
             this.autoFollowDistance.Value = config.autoFollowDistance;
@@ -3210,6 +3627,466 @@
             this.listeningPort.Text = config.listeningPort;
 
             this.enableFastCast_Mode.Checked = config.enableFastCast_Mode;
+            this.trackCastingPackets.Checked = config.trackCastingPackets;
+        }
+
+        private void autoAdjust_Cure_Click(object sender, EventArgs e)
+        {
+            //decimal level = this.cureLevel.Value;
+            double potency = System.Convert.ToDouble(curePotency.Value);
+
+            List<SkillCaps> caps = new List<SkillCaps>();
+
+            // WHM A+
+            // SCH B+
+            // RDM C-
+
+            if (Form1._ELITEAPIPL != null)
+            {
+                // First calculate default potency
+
+                double MND = Form1._ELITEAPIPL.Player.Stats.Mind;
+                double VIT = Form1._ELITEAPIPL.Player.Stats.Vitality;
+
+                var Healing = Form1._ELITEAPIPL.Player.CombatSkills.Healing.Skill;
+
+                // Now grab calculations for each tier
+
+                double MND_B = Math.Floor(MND / 2);
+                double VIT_B = Math.Floor(VIT / 4);
+
+                double Power = MND_B + VIT_B + Healing;
+
+                double Cure = 0;
+
+                if (Power >= 0 && Power < 20)
+                {
+                    Cure = (0 + Power) - 0;
+                    Cure = Cure / 1;
+                    Cure = Math.Floor(Cure + 10);
+                }
+                else if (Power >= 20 && Power < 40)
+                {
+                    Cure = (0 + Power) - 20;
+                    Cure = Cure / 1.33;
+                    Cure = Math.Floor(Cure + 15);
+                }
+                else if (Power >= 40 && Power < 125)
+                {
+                    Cure = (0 + Power) - 40;
+                    Cure = Cure / 8.5;
+                    Cure = Math.Floor(Cure + 30);
+                }
+                else if (Power >= 125 && Power < 200)
+                {
+                    Cure = (0 + Power) - 125;
+                    Cure = Cure / 8.5;
+                    Cure = Math.Floor(Cure + 40);
+                }
+                else if (Power >= 200 && Power < 600)
+                {
+                    Cure = (0 + Power) - 200;
+                    Cure = Cure / 20;
+                    Cure = Math.Floor(Cure + 45);
+                }
+                else if (Power >= 600)
+                {
+                    Cure = 65;
+                }
+
+                double Cure_pot = Cure * 00.01;
+                Cure_pot = Cure_pot * potency;
+
+                double Cure_mathed = Math.Round(Cure + Cure_pot);
+                Cure_mathed = Cure_mathed - (Cure_mathed * 0.10);
+
+                double Cure2 = 0;
+
+                if (Power >= 40 && Power < 70)
+                {
+                    Cure2 = (0 + Power) - 40;
+                    Cure2 = Cure2 / 1;
+                    Cure2 = Math.Floor(Cure2 + 60);
+                }
+                else if (Power >= 70 && Power < 125)
+                {
+                    Cure2 = (0 + Power) - 70;
+                    Cure2 = Cure2 / 5.5;
+                    Cure2 = Math.Floor(Cure2 + 90);
+                }
+                else if (Power >= 125 && Power < 200)
+                {
+                    Cure2 = (0 + Power) - 125;
+                    Cure2 = Cure2 / 7.5;
+                    Cure2 = Math.Floor(Cure2 + 100);
+                }
+                else if (Power >= 200 && Power < 400)
+                {
+                    Cure2 = (0 + Power) - 200;
+                    Cure2 = Cure2 / 10;
+                    Cure2 = Math.Floor(Cure2 + 110);
+                }
+                else if (Power >= 400 && Power < 700)
+                {
+                    Cure2 = (0 + Power) - 400;
+                    Cure2 = Cure2 / 20;
+                    Cure2 = Math.Floor(Cure2 + 130);
+                }
+                else if (Power >= 700)
+                {
+                    Cure2 = 145;
+                }
+
+                double Cure2_pot = Cure2 * 00.01;
+                Cure2_pot = Cure2_pot * potency;
+
+                double Cure2_mathed = Math.Round(Cure2 + Cure2_pot);
+                Cure2_mathed = Cure2_mathed - (Cure2_mathed * 0.10);
+
+                double Cure3 = 0;
+
+                if (Power >= 70 && Power < 125)
+                {
+                    Cure3 = (0 + Power) - 70;
+                    Cure3 = Cure3 / 2.2;
+                    Cure3 = Math.Floor(Cure3 + 130);
+                }
+                else if (Power >= 125 && Power < 200)
+                {
+                    Cure3 = (0 + Power) - 125;
+                    Cure3 = Cure3 / 1.15;
+                    Cure3 = Math.Floor(Cure3 + 155);
+                }
+                else if (Power >= 200 && Power < 300)
+                {
+                    Cure3 = (0 + Power) - 200;
+                    Cure3 = Cure3 / 2.5;
+                    Cure3 = Math.Floor(Cure3 + 220);
+                }
+                else if (Power >= 300 && Power < 700)
+                {
+                    Cure3 = (0 + Power) - 300;
+                    Cure3 = Cure3 / 5;
+                    Cure3 = Math.Floor(Cure3 + 260);
+                }
+                else if (Power >= 700)
+                {
+                    Cure3 = 340;
+                }
+
+                double Cure3_pot = Cure3 * 00.01;
+                Cure3_pot = Cure3_pot * potency;
+
+                double Cure3_mathed = Math.Round(Cure3 + Cure3_pot);
+                Cure3_mathed = Cure3_mathed - (Cure3_mathed * 0.10);
+
+                double Cure4 = 0;
+
+                if (Power >= 70 && Power < 200)
+                {
+                    Cure4 = (0 + Power) - 70;
+                    Cure4 = Cure4 / 1;
+                    Cure4 = Math.Floor(Cure4 + 270);
+                }
+                else if (Power >= 200 && Power < 300)
+                {
+                    Cure4 = (0 + Power) - 200;
+                    Cure4 = Cure4 / 2;
+                    Cure4 = Math.Floor(Cure4 + 400);
+                }
+                else if (Power >= 300 && Power < 400)
+                {
+                    Cure4 = (0 + Power) - 300;
+                    Cure4 = Cure4 / 1.43;
+                    Cure4 = Math.Floor(Cure4 + 450);
+                }
+                else if (Power >= 400 && Power < 700)
+                {
+                    Cure4 = (0 + Power) - 400;
+                    Cure4 = Cure4 / 2.5;
+                    Cure4 = Math.Floor(Cure4 + 520);
+                }
+                else if (Power >= 700)
+                {
+                    Cure4 = 640;
+                }
+
+                double Cure4_pot = Cure4 * 00.01;
+                Cure4_pot = Cure4_pot * potency;
+
+                double Cure4_mathed = Math.Round(Cure4 + Cure4_pot);
+                Cure4_mathed = Cure4_mathed - (Cure4_mathed * 0.10);
+
+                double Cure5 = 0;
+
+                if (Power >= 80 && Power < 150)
+                {
+                    Cure5 = (0 + Power) - 80;
+                    Cure5 = Cure5 / 0.7;
+                    Cure5 = Math.Floor(Cure5 + 450);
+                }
+                else if (Power >= 150 && Power < 190)
+                {
+                    Cure5 = (0 + Power) - 150;
+                    Cure5 = Cure5 / 1.25;
+                    Cure5 = Math.Floor(Cure5 + 550);
+                }
+                else if (Power >= 190 && Power < 260)
+                {
+                    Cure5 = (0 + Power) - 190;
+                    Cure5 = Cure5 / 1.84;
+                    Cure5 = Math.Floor(Cure5 + 582);
+                }
+                else if (Power >= 260 && Power < 300)
+                {
+                    Cure5 = (0 + Power) - 260;
+                    Cure5 = Cure5 / 2;
+                    Cure5 = Math.Floor(Cure5 + 620);
+                }
+                else if (Power >= 300 && Power < 500)
+                {
+                    Cure5 = (0 + Power) - 300;
+                    Cure5 = Cure5 / 2.5;
+                    Cure5 = Math.Floor(Cure5 + 640);
+                }
+                else if (Power >= 500 && Power < 700)
+                {
+                    Cure5 = (0 + Power) - 500;
+                    Cure5 = Cure5 / 3.33;
+                    Cure5 = Math.Floor(Cure5 + 720);
+                }
+                else if (Power >= 700)
+                {
+                    Cure5 = 780;
+                }
+
+                double Cure5_pot = Cure5 * 00.01;
+                Cure5_pot = Cure5_pot * potency;
+
+                double Cure5_mathed = Math.Round(Cure5 + Cure5_pot);
+                Cure5_mathed = Cure5_mathed - (Cure5_mathed * 0.10);
+
+                double Cure6 = 0;
+
+                if (Power >= 90 && Power < 210)
+                {
+                    Cure6 = (0 + Power) - 90;
+                    Cure6 = Cure6 / 1.5;
+                    Cure6 = Math.Floor(Cure6 + 600);
+                }
+                else if (Power >= 210 && Power < 300)
+                {
+                    Cure6 = (0 + Power) - 210;
+                    Cure6 = Cure6 / 0.9;
+                    Cure6 = Math.Floor(Cure6 + 680);
+                }
+                else if (Power >= 300 && Power < 400)
+                {
+                    Cure6 = (0 + Power) - 300;
+                    Cure6 = Cure6 / 1.43;
+                    Cure6 = Math.Floor(Cure6 + 780);
+                }
+                else if (Power >= 400 && Power < 500)
+                {
+                    Cure6 = (0 + Power) - 400;
+                    Cure6 = Cure6 / 2.5;
+                    Cure6 = Math.Floor(Cure6 + 850);
+                }
+                else if (Power >= 500 && Power < 700)
+                {
+                    Cure6 = (0 + Power) - 500;
+                    Cure6 = Cure6 / 1.67;
+                    Cure6 = Math.Floor(Cure6 + 890);
+                }
+                else if (Power >= 700)
+                {
+                    Cure6 = 1010;
+                }
+
+                double Cure6_pot = Cure6 * 00.01;
+                Cure6_pot = Cure6_pot * potency;
+
+                double Cure6_mathed = Math.Round(Cure6 + Cure6_pot);
+                Cure6_mathed = Cure6_mathed - (Cure6_mathed * 0.10);
+
+                this.cure1amount.Value = Convert.ToDecimal(Cure_mathed);
+                this.cure2amount.Value = Convert.ToDecimal(Cure2_mathed);
+                this.cure3amount.Value = Convert.ToDecimal(Cure3_mathed);
+                this.cure4amount.Value = Convert.ToDecimal(Cure4_mathed);
+                this.cure5amount.Value = Convert.ToDecimal(Cure5_mathed);
+                this.cure6amount.Value = Convert.ToDecimal(Cure6_mathed);
+
+                this.curagaAmount.Value = Convert.ToDecimal(Cure2_mathed);
+                this.curaga2Amount.Value = Convert.ToDecimal(Cure3_mathed);
+                curaga3Amount.Value = Convert.ToDecimal(Cure4_mathed);
+                curaga4Amount.Value = Convert.ToDecimal(Cure5_mathed);
+                this.curaga5Amount.Value = Convert.ToDecimal(Cure6_mathed);
+            }
+            else
+            {
+                MessageBox.Show("Select a PL from the main screen before running this.");
+            }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.S))
+            {
+                loadButton.PerformClick();
+            }
+            else if (keyData == (Keys.Control | Keys.O))
+            {
+                saveAsButton.PerformClick();
+            }
+            else if (keyData == (Keys.Escape))
+            {
+                button4.PerformClick();
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void naErase_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.naErase.Checked == true)
+            {
+                this.na_Weight.Enabled = true;
+                this.na_VitDown.Enabled = true;
+                this.na_Threnody.Enabled = true;
+                this.na_Slow.Enabled = true;
+                this.na_Shock.Enabled = true;
+                this.na_StrDown.Enabled = true;
+                this.na_Requiem.Enabled = true;
+                this.na_Rasp.Enabled = true;
+                this.na_MaxTpDown.Enabled = true;
+                this.na_MaxMpDown.Enabled = true;
+                this.na_MaxHpDown.Enabled = true;
+                this.na_MagicAttackDown.Enabled = true;
+                this.na_MagicDefenseDown.Enabled = true;
+                this.na_MagicAccDown.Enabled = true;
+                this.na_MndDown.Enabled = true;
+                this.na_IntDown.Enabled = true;
+                this.na_Helix.Enabled = true;
+                this.na_Frost.Enabled = true;
+                this.na_EvasionDown.Enabled = true;
+                this.na_Elegy.Enabled = true;
+                this.na_Drown.Enabled = true;
+                this.na_Dia.Enabled = true;
+                this.na_DefenseDown.Enabled = true;
+                this.na_DexDown.Enabled = true;
+                this.na_Choke.Enabled = true;
+                this.na_ChrDown.Enabled = true;
+                this.na_Burn.Enabled = true;
+                this.na_Bio.Enabled = true;
+                this.na_Bind.Enabled = true;
+                this.na_AttackDown.Enabled = true;
+                this.na_Addle.Enabled = true;
+                this.na_AccuracyDown.Enabled = true;
+                this.na_AgiDown.Enabled = true;
+
+                this.na_Weight.Checked = true;
+                this.na_VitDown.Checked = true;
+                this.na_Threnody.Checked = true;
+                this.na_Slow.Checked = true;
+                this.na_Shock.Checked = true;
+                this.na_StrDown.Checked = true;
+                this.na_Requiem.Checked = true;
+                this.na_Rasp.Checked = true;
+                this.na_MaxTpDown.Checked = true;
+                this.na_MaxMpDown.Checked = true;
+                this.na_MaxHpDown.Checked = true;
+                this.na_MagicAttackDown.Checked = true;
+                this.na_MagicDefenseDown.Checked = true;
+                this.na_MagicAccDown.Checked = true;
+                this.na_MndDown.Checked = true;
+                this.na_IntDown.Checked = true;
+                this.na_Helix.Checked = true;
+                this.na_Frost.Checked = true;
+                this.na_EvasionDown.Checked = true;
+                this.na_Elegy.Checked = true;
+                this.na_Drown.Checked = true;
+                this.na_Dia.Checked = true;
+                this.na_DefenseDown.Checked = true;
+                this.na_DexDown.Checked = true;
+                this.na_Choke.Checked = true;
+                this.na_ChrDown.Checked = true;
+                this.na_Burn.Checked = true;
+                this.na_Bio.Checked = true;
+                this.na_Bind.Checked = true;
+                this.na_AttackDown.Checked = true;
+                this.na_Addle.Checked = true;
+                this.na_AccuracyDown.Checked = true;
+                this.na_AgiDown.Checked = true;
+            }
+            else
+            {
+                this.na_Weight.Checked = false;
+                this.na_VitDown.Checked = false;
+                this.na_Threnody.Checked = false;
+                this.na_Slow.Checked = false;
+                this.na_Shock.Checked = false;
+                this.na_StrDown.Checked = false;
+                this.na_Requiem.Checked = false;
+                this.na_Rasp.Checked = false;
+                this.na_MaxTpDown.Checked = false;
+                this.na_MaxMpDown.Checked = false;
+                this.na_MaxHpDown.Checked = false;
+                this.na_MagicAttackDown.Checked = false;
+                this.na_MagicDefenseDown.Checked = false;
+                this.na_MagicAccDown.Checked = false;
+                this.na_MndDown.Checked = false;
+                this.na_IntDown.Checked = false;
+                this.na_Helix.Checked = false;
+                this.na_Frost.Checked = false;
+                this.na_EvasionDown.Checked = false;
+                this.na_Elegy.Checked = false;
+                this.na_Drown.Checked = false;
+                this.na_Dia.Checked = false;
+                this.na_DefenseDown.Checked = false;
+                this.na_DexDown.Checked = false;
+                this.na_Choke.Checked = false;
+                this.na_ChrDown.Checked = false;
+                this.na_Burn.Checked = false;
+                this.na_Bio.Checked = false;
+                this.na_Bind.Checked = false;
+                this.na_AttackDown.Checked = false;
+                this.na_Addle.Checked = false;
+                this.na_AccuracyDown.Checked = false;
+                this.na_AgiDown.Checked = false;
+
+                this.na_Weight.Enabled = false;
+                this.na_VitDown.Enabled = false;
+                this.na_Threnody.Enabled = false;
+                this.na_Slow.Enabled = false;
+                this.na_Shock.Enabled = false;
+                this.na_StrDown.Enabled = false;
+                this.na_Requiem.Enabled = false;
+                this.na_Rasp.Enabled = false;
+                this.na_MaxTpDown.Enabled = false;
+                this.na_MaxMpDown.Enabled = false;
+                this.na_MaxHpDown.Enabled = false;
+                this.na_MagicAttackDown.Enabled = false;
+                this.na_MagicDefenseDown.Enabled = false;
+                this.na_MagicAccDown.Enabled = false;
+                this.na_MndDown.Enabled = false;
+                this.na_IntDown.Enabled = false;
+                this.na_Helix.Enabled = false;
+                this.na_Frost.Enabled = false;
+                this.na_EvasionDown.Enabled = false;
+                this.na_Elegy.Enabled = false;
+                this.na_Drown.Enabled = false;
+                this.na_Dia.Enabled = false;
+                this.na_DefenseDown.Enabled = false;
+                this.na_DexDown.Enabled = false;
+                this.na_Choke.Enabled = false;
+                this.na_ChrDown.Enabled = false;
+                this.na_Burn.Enabled = false;
+                this.na_Bio.Enabled = false;
+                this.na_Bind.Enabled = false;
+                this.na_AttackDown.Enabled = false;
+                this.na_Addle.Enabled = false;
+                this.na_AccuracyDown.Enabled = false;
+                this.na_AgiDown.Enabled = false;
+            }
         }
     }
 }

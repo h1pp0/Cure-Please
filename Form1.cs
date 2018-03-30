@@ -14,13 +14,11 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using System.Windows.Threading;
     using System.Xml.Serialization;
-
-    //TODO: Add a checker to block recasting a song again if it was previously cast in the last minute to reduce repeated casting.
 
     public partial class Form1 : Form
     {
-
         private Form2 Form2 = new CurePlease.Form2();
 
         public class BuffStorage : List<BuffStorage>
@@ -50,7 +48,6 @@
 
         public class SpellsData : List<SpellsData>
         {
-
             public string Spell_Name { get; set; }
 
             public int spell_position { get; set; }
@@ -73,7 +70,6 @@
 
         public class JobTitles : List<JobTitles>
         {
-
             public int job_number { get; set; }
 
             public string job_name { get; set; }
@@ -81,18 +77,21 @@
 
         private uint lastTargetID = 0;
 
-        private int blockBuffs = 0;
-
         private int currentSCHCharges = 0;
 
-        private string debug_MSG_show = "";
+        private string debug_MSG_show = String.Empty;
+
+        private int lastCommand = 0;
+
+
 
         // BARD SONG VARIABLES
         private int song_casting = 0;
+
         private int PL_BRDCount = 0;
         private bool ForceSongRecast = false;
         private int Monitored_BRDCount = 0;
-        private string Last_Song_Cast = "";
+        private string Last_Song_Cast = String.Empty;
 
         // GEO ENGAGED CHECK
         public bool targetEngaged = false;
@@ -193,15 +192,25 @@
 
         public ListBox activeprocessids = new ListBox();
 
-        public int max_count = 10;
-
         public double last_percent = 1;
 
-        public string castingSpell = "";
+        public string castingSpell = String.Empty;
+
+        public int max_count = 10;
+        public int spell_delay_count = 0;
 
         public int geo_step = 0;
 
         public int followWarning = 0;
+
+        public bool stuckWarning = false;
+        public int stuckCount = 0;
+
+        public int protectionCount = 0;
+
+        public float lastZ;
+        public float lastX;
+        public float lastY;
 
         // Stores the previously-colored button, if any
         public List<BuffStorage> ActiveBuffs = new List<BuffStorage>();
@@ -255,8 +264,13 @@
             return 0;
         }
 
-        public int CheckSpellRecast(string checked_recastspellName)
+        public int CheckSpellRecast(string checked_recastspellName) 
         {
+            if (checked_recastspellName == "Honor March")
+            {
+                return 1;
+            }
+
             if (checked_recastspellName.ToLower() != "blank")
             {
                 var magic = _ELITEAPIPL.Resources.GetSpell(checked_recastspellName, 0);
@@ -286,7 +300,7 @@
 
         public static bool HasAbility(string checked_abilityName)
         {
-            if (_ELITEAPIPL.Player.GetPlayerInfo().Buffs.Any(b => b == 261)) // IF YOU HAVE INPAIRMENT THEN BLOCK JOB ABILITY CASTING
+            if (_ELITEAPIPL.Player.GetPlayerInfo().Buffs.Any(b => b == 261) || _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Any(b => b == 16)) // IF YOU HAVE INPAIRMENT/AMNESIA THEN BLOCK JOB ABILITY CASTING
             {
                 return false;
             }
@@ -302,13 +316,19 @@
 
         public static bool HasSpell(string checked_spellName)
         {
+
+            if (checked_spellName == "Honor March")
+            {
+                return true;
+            }
+
             var magic = _ELITEAPIPL.Resources.GetSpell(checked_spellName, 0);
 
             if (_ELITEAPIPL.Player.GetPlayerInfo().Buffs.Any(b => b == 262)) // IF YOU HAVE OMERTA THEN BLOCK MAGIC CASTING
             {
                 return false;
             }
-            else if (_ELITEAPIPL.Player.HasSpell(magic.Index))
+            else if (_ELITEAPIPL.Player.HasSpell(magic.Index) && JobChecker(checked_spellName) == true)
             {
                 return true;
             }
@@ -320,6 +340,12 @@
 
         public static bool JobChecker(string SpellName)
         {
+
+            if (SpellName == "Honor March")
+            {
+                return true;
+            }
+
             var magic = _ELITEAPIPL.Resources.GetSpell(SpellName, 0);
 
             int mainjobLevelRequired = magic.LevelRequired[(_ELITEAPIPL.Player.MainJob)];
@@ -572,6 +598,358 @@
             false
         };
 
+        private bool[] autoSandstormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoRainstormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoWindstormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoFirestormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoHailstormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoThunderstormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoVoidstormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoAurorastormEnabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoSandstorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoRainstorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoWindstorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoFirestorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoHailstorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoThunderstorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoVoidstorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
+        private bool[] autoAurorastorm2Enabled = new bool[]
+{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+};
+
         private bool[] autoRefreshEnabled = new bool[]
         {
             false,
@@ -629,6 +1007,28 @@
         };
 
         private DateTime[] playerHaste_II = new DateTime[]
+        {
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0),
+            new DateTime(1970, 1, 1, 0, 0, 0)
+        };
+
+        private DateTime[] playerStormspell = new DateTime[]
         {
             new DateTime(1970, 1, 1, 0, 0, 0),
             new DateTime(1970, 1, 1, 0, 0, 0),
@@ -855,6 +1255,28 @@
             new TimeSpan()
         };
 
+        private TimeSpan[] playerStormspellSpan = new TimeSpan[]
+        {
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan(),
+            new TimeSpan()
+        };
+
         private TimeSpan[] playerHaste_IISpan = new TimeSpan[]
         {
             new TimeSpan(),
@@ -1020,7 +1442,6 @@
             new TimeSpan()
        };
 
-
         private TimeSpan[] pianissimo1_1_Span = new TimeSpan[]
         {
             new TimeSpan(),
@@ -1061,14 +1482,59 @@
             new TimeSpan(),
         };
 
+        private void PaintBorderlessGroupBox(object sender, PaintEventArgs e)
+        {
+            GroupBox box = sender as GroupBox;
+            DrawGroupBox(box, e.Graphics, Color.Black, Color.Gray);
+        }
+
+        private void DrawGroupBox(GroupBox box, Graphics g, Color textColor, Color borderColor)
+        {
+            if (box != null)
+            {
+                Brush textBrush = new SolidBrush(textColor);
+                Brush borderBrush = new SolidBrush(borderColor);
+                Pen borderPen = new Pen(borderBrush);
+                SizeF strSize = g.MeasureString(box.Text, box.Font);
+                Rectangle rect = new Rectangle(box.ClientRectangle.X,
+                                               box.ClientRectangle.Y + (int)(strSize.Height / 2),
+                                               box.ClientRectangle.Width - 1,
+                                               box.ClientRectangle.Height - (int)(strSize.Height / 2) - 1);
+
+                // Clear text and border
+                g.Clear(this.BackColor);
+
+                // Draw text
+                g.DrawString(box.Text, box.Font, textBrush, box.Padding.Left, 0);
+
+                // Drawing Border
+                //Left
+                g.DrawLine(borderPen, rect.Location, new Point(rect.X, rect.Y + rect.Height));
+                //Right
+                g.DrawLine(borderPen, new Point(rect.X + rect.Width, rect.Y), new Point(rect.X + rect.Width, rect.Y + rect.Height));
+                //Bottom
+                g.DrawLine(borderPen, new Point(rect.X, rect.Y + rect.Height), new Point(rect.X + rect.Width, rect.Y + rect.Height));
+                //Top1
+                g.DrawLine(borderPen, new Point(rect.X, rect.Y), new Point(rect.X + box.Padding.Left, rect.Y));
+                //Top2
+                g.DrawLine(borderPen, new Point(rect.X + box.Padding.Left + (int)(strSize.Width), rect.Y), new Point(rect.X + rect.Width, rect.Y));
+            }
+        }
+
+        private void PaintButton(object sender, PaintEventArgs e)
+        {
+            Button button = sender as Button;
+
+            button.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+        }
+
         public Form1()
         {
-
             this.StartPosition = FormStartPosition.CenterScreen;
 
             InitializeComponent();
 
-            this.currentAction.Text = "";
+            this.currentAction.Text = String.Empty;
 
             if (System.IO.File.Exists("debug"))
             {
@@ -1186,8 +1652,6 @@
                 job_number = 22,
                 job_name = "RUN"
             });
-
-
 
             int position = 0;
 
@@ -1850,8 +2314,6 @@
             });
             position++;
 
-
-
             int geo_position = 0;
 
             GeomancerInfo.Add(new GeoData
@@ -2094,7 +2556,6 @@
             });
             geo_position++;
 
-
             barspells.Add(new SpellsData
             {
                 Spell_Name = "Barfire",
@@ -2307,7 +2768,6 @@
                 aoe_version = true,
             });
 
-
             enspells.Add(new SpellsData
             {
                 Spell_Name = "Enfire",
@@ -2393,7 +2853,6 @@
                 spell_position = 11,
                 buffID = 281
             });
-
 
             stormspells.Add(new SpellsData
             {
@@ -2509,26 +2968,25 @@
                 buffID = 595
             });
 
-            var pol = Process.GetProcessesByName("pol");
+            var pol = Process.GetProcessesByName("pol").Union(Process.GetProcessesByName("xiloader"));
 
-            if (pol.Length < 1)
+            if (pol.Count() < 1)
             {
                 MessageBox.Show("FFXI not found");
             }
             else
             {
-                for (var i = 0; i < pol.Length; i++)
+                for (var i = 0; i < pol.Count(); i++)
                 {
-                    POLID.Items.Add(pol[i].MainWindowTitle);
-                    POLID2.Items.Add(pol[i].MainWindowTitle);
-                    processids.Items.Add(pol[i].Id);
-                    activeprocessids.Items.Add(pol[i].Id);
+                    POLID.Items.Add(pol.ElementAt(i).MainWindowTitle);
+                    POLID2.Items.Add(pol.ElementAt(i).MainWindowTitle);
+                    processids.Items.Add(pol.ElementAt(i).Id);
+                    activeprocessids.Items.Add(pol.ElementAt(i).Id);
                 }
                 POLID.SelectedIndex = 0;
                 POLID2.SelectedIndex = 0;
                 processids.SelectedIndex = 0;
                 activeprocessids.SelectedIndex = 0;
-
             }
             // Show the current version number..
             Text = notifyIcon1.Text = "Cure Please v" + Application.ProductVersion;
@@ -2536,8 +2994,6 @@
             notifyIcon1.BalloonTipTitle = "Cure Please v" + Application.ProductVersion;
             notifyIcon1.BalloonTipText = "CurePlease has been minimized.";
             notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-
-
         }
 
         private void setinstance_Click(object sender, EventArgs e)
@@ -2560,11 +3016,11 @@
             POLID.BackColor = Color.White;
             plPosition.Enabled = true;
             setinstance2.Enabled = true;
-            Form2.config.autoFollowName = "";
+            Form2.config.autoFollowName = String.Empty;
 
             ForceSongRecast = true;
 
-            foreach (var dats in Process.GetProcessesByName("pol").Where(dats => POLID.Text == dats.MainWindowTitle))
+            foreach (var dats in Process.GetProcessesByName("pol").Union(Process.GetProcessesByName("xiloader")).Where(dats => POLID.Text == dats.MainWindowTitle))
             {
                 for (int i = 0; i < dats.Modules.Count; i++)
                 {
@@ -2582,6 +3038,7 @@
             if (firstTime_Pause == 0)
             {
                 buff_checker.RunWorkerAsync();
+                followBGWorker.RunWorkerAsync();
                 firstTime_Pause = 1;
             }
 
@@ -2618,7 +3075,6 @@
 
             if (LUA_Plugin_Loaded == 0 && !Form2.config.pauseOnStartBox && _ELITEAPIMonitored != null)
             {
-
                 // Wait a milisecond and then load and set the config.
                 Thread.Sleep(500);
 
@@ -2626,28 +3082,19 @@
                 {
                     _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
                     Thread.Sleep(500);
-                    _ELITEAPIPL.ThirdParty.SendString("//cp settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
+                    _ELITEAPIPL.ThirdParty.SendString("//cpaddon settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
                 }
                 else if (WindowerMode == "Ashita")
                 {
                     _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
                     Thread.Sleep(500);
-                    _ELITEAPIPL.ThirdParty.SendString("/cp settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
+                    _ELITEAPIPL.ThirdParty.SendString("/cpaddon settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
                 }
 
                 currentAction.Text = "LUA Addon loaded. ( " + Form2.config.ipAddress + " - " + Form2.config.listeningPort + " )";
 
                 LUA_Plugin_Loaded = 1;
             }
-
-
-
-
-
-
-
-
-
         }
 
         private void setinstance2_Click(object sender, EventArgs e)
@@ -2676,6 +3123,13 @@
                 pauseButton.ForeColor = Color.Red;
                 actionTimer.Enabled = false;
             }
+            else
+            {
+                if (Form2.config.MinimiseonStart == true && this.WindowState != FormWindowState.Minimized)
+                {
+                    this.WindowState = FormWindowState.Minimized;
+                }
+            }
 
             followTimer.Enabled = true;
 
@@ -2683,10 +3137,8 @@
             EliteAPI.ChatEntry cl = new EliteAPI.ChatEntry();
             while ((cl = _ELITEAPIPL.Chat.GetNextChatLine()) != null) { }
 
-
             if (LUA_Plugin_Loaded == 0 && !Form2.config.pauseOnStartBox && _ELITEAPIPL != null)
             {
-
                 // Wait a milisecond and then load and set the config.
                 Thread.Sleep(500);
 
@@ -2694,20 +3146,21 @@
                 {
                     _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
                     Thread.Sleep(500);
-                    _ELITEAPIPL.ThirdParty.SendString("//cp settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
+                    _ELITEAPIPL.ThirdParty.SendString("//cpaddon settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
                 }
                 else if (WindowerMode == "Ashita")
                 {
                     _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
                     Thread.Sleep(500);
-                    _ELITEAPIPL.ThirdParty.SendString("/cp settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
+                    _ELITEAPIPL.ThirdParty.SendString("/cpaddon settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
                 }
 
                 currentAction.Text = "LUA Addon loaded. ( " + Form2.config.ipAddress + " - " + Form2.config.listeningPort + " )";
 
                 LUA_Plugin_Loaded = 1;
-            }
 
+                lastCommand = _ELITEAPIMonitored.ThirdParty.ConsoleIsNewCommand();
+            }
         }
 
         private bool CheckForDLLFiles()
@@ -2948,8 +3401,6 @@
                 }
                 lastTargetID = 0;
                 ActiveBuffs.Clear();
-
-
             }
 
             if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || _ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
@@ -3276,13 +3727,25 @@
         {
             playerHP.Value = CurrentHPP;
             if (CurrentHPP >= 75)
-                playerHP.ForeColor = Color.Green;
+            {
+                playerHP.ForeColor = Color.DarkGreen;
+                playerHP.BackColor = Color.LawnGreen;
+            }
             else if (CurrentHPP > 50 && CurrentHPP < 75)
-                playerHP.ForeColor = Color.Yellow;
+            {
+                playerHP.ForeColor = Color.LightGoldenrodYellow;
+                playerHP.BackColor = Color.Yellow;
+            }
             else if (CurrentHPP > 25 && CurrentHPP < 50)
-                playerHP.ForeColor = Color.Orange;
+            {
+                playerHP.ForeColor = Color.DarkOrange;
+                playerHP.BackColor = Color.Orange;
+            }
             else if (CurrentHPP < 25)
-                playerHP.ForeColor = Color.Red;
+            {
+                playerHP.ForeColor = Color.DarkRed;
+                playerHP.BackColor = Color.Red;
+            }
         }
 
         private void plPosition_Tick(object sender, EventArgs e)
@@ -3323,26 +3786,6 @@
             }
         }
 
-        private void CastLockMethod()
-        {
-            castingLock = true;
-            castingLockLabel.Text = "Casting is LOCKED";
-            castingLockTimer.Enabled = true;
-        }
-
-        private async Task ActionLockMethodAsync()
-        {
-            castingLock = true;
-            castingLockLabel.Text = "Casting is LOCKED";
-
-            await Task.Delay(1000);
-
-            actionUnlockTimer.Enabled = true;
-
-            if (!pauseActions)
-                this.actionTimer.Enabled = true;
-        }
-
         private void CureCalculator(byte partyMemberId, bool HP)
         {
             // FIRST GET HOW MUCH HP IS MISSING FROM THE CURRENT PARTY MEMBER
@@ -3356,7 +3799,6 @@
                     if (cureSpell != "false")
                     {
                         castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name, cureSpell);
-
                     }
                 }
                 else if (Form2.config.cure5enabled && HP_Loss >= Form2.config.cure5amount && _ELITEAPIPL.Player.MP > 125 && HasSpell("Cure V") && JobChecker("Cure V") == true)
@@ -3377,6 +3819,8 @@
                 }
                 else if (Form2.config.cure3enabled && HP_Loss >= Form2.config.cure3amount && _ELITEAPIPL.Player.MP > 46 && HasSpell("Cure III") && JobChecker("Cure III") == true)
                 {
+                    if (Form2.config.PrioritiseOverLowerTier == true) { runDebuffCheckerAsync(); }
+
                     string cureSpell = CureTiers("Cure III", HP);
                     if (cureSpell != "false")
                     {
@@ -3385,6 +3829,8 @@
                 }
                 else if (Form2.config.cure2enabled && HP_Loss >= Form2.config.cure2amount && _ELITEAPIPL.Player.MP > 24 && HasSpell("Cure II") && JobChecker("Cure II") == true)
                 {
+                    if (Form2.config.PrioritiseOverLowerTier == true) { runDebuffCheckerAsync(); }
+
                     string cureSpell = CureTiers("Cure II", HP);
                     if (cureSpell != "false")
                     {
@@ -3393,12 +3839,866 @@
                 }
                 else if (Form2.config.cure1enabled && HP_Loss >= Form2.config.cure1amount && _ELITEAPIPL.Player.MP > 8 && HasSpell("Cure") && JobChecker("Cure") == true)
                 {
+                    if (Form2.config.PrioritiseOverLowerTier == true) { runDebuffCheckerAsync(); }
+
                     string cureSpell = CureTiers("Cure", HP);
                     if (cureSpell != "false")
                     {
                         castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name, cureSpell);
                     }
                 }
+            }
+        }
+
+        private async void runDebuffCheckerAsync()
+        {
+            // PL and Monitored Player Debuff Removal Starting with PL
+            if (_ELITEAPIPL.Player.Status != 33 && !castingLock)
+            {
+                if (Form2.config.plSilenceItem == 0)
+                {
+                    plSilenceitemName = "Catholicon";
+                }
+                else if (Form2.config.plSilenceItem == 1)
+                {
+                    plSilenceitemName = "Echo Drops";
+                }
+                else if (Form2.config.plSilenceItem == 2)
+                {
+                    plSilenceitemName = "Remedy";
+                }
+                else if (Form2.config.plSilenceItem == 3)
+                {
+                    plSilenceitemName = "Remedy Ointment";
+                }
+                else if (Form2.config.plSilenceItem == 4)
+                {
+                    plSilenceitemName = "Vicar's Drink";
+                }
+
+                if (Form2.config.plDoomitem == 0)
+                {
+                    plDoomItemName = "Holy Water";
+                }
+                else if (Form2.config.plDoomitem == 1)
+                {
+                    plDoomItemName = "Hallowed Water";
+                }
+
+                if (Form2.config.wakeSleepSpell == 0)
+                {
+                    wakeSleepSpellName = "Cure";
+                }
+                else if (Form2.config.wakeSleepSpell == 1)
+                {
+                    wakeSleepSpellName = "Cura";
+                }
+                else if (Form2.config.wakeSleepSpell == 2)
+                {
+                    wakeSleepSpellName = "Curaga";
+                }
+
+                foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
+                {
+                    if ((plEffect == StatusEffect.Silence) && (Form2.config.plSilenceItemEnabled))
+                    {
+                        // Check to make sure we have echo drops
+                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(plSilenceitemName)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(plSilenceitemName)) > 0)
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", plSilenceitemName));
+                            await Task.Delay(4000);
+                        }
+                    }
+                    if ((plEffect == StatusEffect.Doom && Form2.config.plDoomEnabled) /* Add more options from UI HERE*/)
+                    {
+                        // Check to make sure we have holy water
+                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(plDoomItemName)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(plDoomItemName)) > 0)
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", plDoomItemName));
+                            await Task.Delay(2000);
+                        }
+                    }
+                    else if ((plEffect == StatusEffect.Doom) && (Form2.config.plDoom) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Paralysis) && (Form2.config.plParalysis) && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")) && JobChecker("Paralyna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Paralyna");
+                    }
+                    else if ((plEffect == StatusEffect.Poison) && (Form2.config.plPoison) && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")) && JobChecker("Poisona") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Poisona");
+                    }
+                    else if ((plEffect == StatusEffect.Attack_Down) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Blindness) && (Form2.config.plBlindness) && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")) && JobChecker("Blindna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Blindna");
+                    }
+                    else if ((plEffect == StatusEffect.Bind) && (Form2.config.plBind) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Weight) && (Form2.config.plWeight) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Slow) && (Form2.config.plSlow) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Curse) && (Form2.config.plCurse) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Curse2) && (Form2.config.plCurse2) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Addle) && (Form2.config.plAddle) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Bane) && (Form2.config.plBane) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Cursna");
+                    }
+                    else if ((plEffect == StatusEffect.Plague) && (Form2.config.plPlague) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Viruna");
+                    }
+                    else if ((plEffect == StatusEffect.Disease) && (Form2.config.plDisease) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Viruna");
+                    }
+                    else if ((plEffect == StatusEffect.Burn) && (Form2.config.plBurn) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Frost) && (Form2.config.plFrost) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Choke) && (Form2.config.plChoke) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Rasp) && (Form2.config.plRasp) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Shock) && (Form2.config.plShock) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Drown) && (Form2.config.plDrown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Dia) && (Form2.config.plDia) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Bio) && (Form2.config.plBio) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.STR_Down) && (Form2.config.plStrDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.DEX_Down) && (Form2.config.plDexDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.VIT_Down) && (Form2.config.plVitDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.AGI_Down) && (Form2.config.plAgiDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.INT_Down) && (Form2.config.plIntDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.MND_Down) && (Form2.config.plMndDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.CHR_Down) && (Form2.config.plChrDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Max_HP_Down) && (Form2.config.plMaxHpDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Max_MP_Down) && (Form2.config.plMaxMpDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Accuracy_Down) && (Form2.config.plAccuracyDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Evasion_Down) && (Form2.config.plEvasionDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Defense_Down) && (Form2.config.plDefenseDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Flash) && (Form2.config.plFlash) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Magic_Acc_Down) && (Form2.config.plMagicAccDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Magic_Atk_Down) && (Form2.config.plMagicAtkDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Helix) && (Form2.config.plHelix) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Max_TP_Down) && (Form2.config.plMaxTpDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Requiem) && (Form2.config.plRequiem) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Elegy) && (Form2.config.plElegy) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                    else if ((plEffect == StatusEffect.Threnody) && (Form2.config.plThrenody) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIPL.Player.Name, "Erase");
+                    }
+                }
+            }
+
+            // Next, we check monitored player
+            if ((_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (_ELITEAPIMonitored.Player.HP > 0) && _ELITEAPIPL.Player.Status != 33 && !castingLock)
+            {
+                foreach (StatusEffect monitoredEffect in _ELITEAPIMonitored.Player.Buffs)
+                {
+                    if ((monitoredEffect == StatusEffect.Doom) && (Form2.config.monitoredDoom) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Sleep) && (Form2.config.monitoredSleep) && (Form2.config.wakeSleepEnabled))
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, wakeSleepSpellName);
+                    }
+                    else if ((monitoredEffect == StatusEffect.Sleep2) && (Form2.config.monitoredSleep2) && (Form2.config.wakeSleepEnabled))
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, wakeSleepSpellName);
+                    }
+                    else if ((monitoredEffect == StatusEffect.Silence) && (Form2.config.monitoredSilence) && (CheckSpellRecast("Silena") == 0) && (HasSpell("Silena")) && JobChecker("Silena") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Silena");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Petrification) && (Form2.config.monitoredPetrification) && (CheckSpellRecast("Stona") == 0) && (HasSpell("Stona")) && JobChecker("Stona") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Stona");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Paralysis) && (Form2.config.monitoredParalysis) && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")) && JobChecker("Paralyna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Paralyna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Poison) && (Form2.config.monitoredPoison) && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")) && JobChecker("Erase") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Poisona");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Attack_Down) && (Form2.config.monitoredAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Blindness) && (Form2.config.monitoredBlindness) && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")) && JobChecker("Blindna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Blindna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Bind) && (Form2.config.monitoredBind) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Weight) && (Form2.config.monitoredWeight) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Slow) && (Form2.config.monitoredSlow) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Curse) && (Form2.config.monitoredCurse) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Curse2) && (Form2.config.monitoredCurse2) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Addle) && (Form2.config.monitoredAddle) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Bane) && (Form2.config.monitoredBane) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Plague) && (Form2.config.monitoredPlague) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Viruna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Disease) && (Form2.config.monitoredDisease) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Viruna");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Burn) && (Form2.config.monitoredBurn) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Frost) && (Form2.config.monitoredFrost) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Choke) && (Form2.config.monitoredChoke) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Rasp) && (Form2.config.monitoredRasp) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Shock) && (Form2.config.monitoredShock) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Drown) && (Form2.config.monitoredDrown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Dia) && (Form2.config.monitoredDia) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Bio) && (Form2.config.monitoredBio) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.STR_Down) && (Form2.config.monitoredStrDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.DEX_Down) && (Form2.config.monitoredDexDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.VIT_Down) && (Form2.config.monitoredVitDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.AGI_Down) && (Form2.config.monitoredAgiDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.INT_Down) && (Form2.config.monitoredIntDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.MND_Down) && (Form2.config.monitoredMndDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.CHR_Down) && (Form2.config.monitoredChrDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Max_HP_Down) && (Form2.config.monitoredMaxHpDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Max_MP_Down) && (Form2.config.monitoredMaxMpDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Accuracy_Down) && (Form2.config.monitoredAccuracyDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Evasion_Down) && (Form2.config.monitoredEvasionDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Defense_Down) && (Form2.config.monitoredDefenseDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Flash) && (Form2.config.monitoredFlash) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Magic_Acc_Down) && (Form2.config.monitoredMagicAccDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Magic_Atk_Down) && (Form2.config.monitoredMagicAtkDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Helix) && (Form2.config.monitoredHelix) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Max_TP_Down) && (Form2.config.monitoredMaxTpDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Requiem) && (Form2.config.monitoredRequiem) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Elegy) && (Form2.config.monitoredElegy) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                    else if ((monitoredEffect == StatusEffect.Threnody) && (Form2.config.monitoredThrenody) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
+                    {
+                        castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
+                    }
+                }
+            }
+            // End Debuff Removal
+
+            /* DEBUFF ORDER: DOOM, Sleep, Petrification, Silence, Paralysis, Disease, Curse, Blindness, Poison, Slow, Bio, Bind, Gravity, Accuracy Down, Defense Down, Magic Def. Down, Attack Down, HP Down */
+
+            if (Form2.config.EnableAddOn)
+            {
+                int BreakOut = 0;
+                var partyMembers = _ELITEAPIPL.Party.GetPartyMembers();
+
+                foreach (BuffStorage ailment in ActiveBuffs.ToList())
+                {
+                    foreach (var ptMember in partyMembers)
+                    {
+                        if (ailment.CharacterName.ToLower() == ptMember.Name.ToLower())
+                        {
+                            List<string> named_Debuffs = ailment.CharacterBuffs.Split(',').ToList();
+
+                            // IF SLOW IS NOT ACTIVE, YET NEITHER IS HASTE DESPITE BEING ENABLED
+                            // RESET THE TIMER TO FORCE IT TO BE CAST
+                            if (!DebuffContains(named_Debuffs, "13") && !DebuffContains(named_Debuffs, "33") && !DebuffContains(named_Debuffs, "265"))
+                            {
+                                if (autoHasteEnabled[ptMember.MemberNumber] || autoHaste_IIEnabled[ptMember.MemberNumber])
+                                {
+                                    playerHaste[ptMember.MemberNumber] = DateTime.MinValue;
+                                    playerHaste_II[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF SLOW IS NOT ACTIVE, YET NEITHER IS FLURRY DESPITE BEING ENABLED
+                            // RESET THE TIMER TO FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "13") && !DebuffContains(named_Debuffs, "265") && !DebuffContains(named_Debuffs, "33"))
+                            {
+                                if (autoFlurryEnabled[ptMember.MemberNumber] || autoFlurry_IIEnabled[ptMember.MemberNumber])
+                                {
+                                    playerFlurry[ptMember.MemberNumber] = DateTime.MinValue;
+                                    playerFlurry_II[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF SUBLIMATION IS NOT ACTIVE, YET NEITHER IS REFRESH DESPITE BEING
+                            // ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "187") && !DebuffContains(named_Debuffs, "188") && !DebuffContains(named_Debuffs, "43"))
+                            {
+                                if (autoRefreshEnabled[ptMember.MemberNumber])
+                                {
+                                    playerRefresh[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF REGEN IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO
+                            // FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "42"))
+                            {
+                                if (autoRegen_Enabled[ptMember.MemberNumber])
+                                {
+                                    playerRegen[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF PROTECT IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO
+                            // FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "40"))
+                            {
+                                if (autoProtect_Enabled[ptMember.MemberNumber])
+                                {
+                                    playerProtect[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF SHELL IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO
+                            // FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "41"))
+                            {
+                                if (autoShell_Enabled[ptMember.MemberNumber])
+                                {
+                                    playerShell[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF PHALANX II IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER
+                            // TO FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "116"))
+                            {
+                                if (autoPhalanx_IIEnabled[ptMember.MemberNumber])
+                                {
+                                    playerPhalanx_II[ptMember.MemberNumber] = DateTime.MinValue;
+                                }
+                            }
+                            // IF NO STORM SPELL IS ACTIVE DESPITE BEING ENABLED RESET THE TIMER
+                            // TO FORCE IT TO BE CAST
+                            else if (!DebuffContains(named_Debuffs, "178") && !DebuffContains(named_Debuffs, "179") && !DebuffContains(named_Debuffs, "180") && !DebuffContains(named_Debuffs, "181") && !DebuffContains(named_Debuffs, "182") && !DebuffContains(named_Debuffs, "183") && !DebuffContains(named_Debuffs, "184") && !DebuffContains(named_Debuffs, "185") && !DebuffContains(named_Debuffs, "589") && !DebuffContains(named_Debuffs, "590") && !DebuffContains(named_Debuffs, "591") && !DebuffContains(named_Debuffs, "592") && !DebuffContains(named_Debuffs, "593") && !DebuffContains(named_Debuffs, "594") && !DebuffContains(named_Debuffs, "595") && !DebuffContains(named_Debuffs, "596"))
+                            {
+                                playerStormspell[ptMember.MemberNumber] = DateTime.MinValue;
+                            }
+
+                            if (Form2.config.enablePartyDebuffRemoval && !castingLock && (characterNames_naRemoval.Contains(ailment.CharacterName.ToLower()) || Form2.config.SpecifiednaSpellsenable == false))
+                            {
+                                //DOOM
+                                if (Form2.config.naCurse && DebuffContains(named_Debuffs, "15") && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                                {
+                                    castSpell(ptMember.Name, "Cursna");
+                                    BreakOut = 1;
+                                }
+                                //SLEEP
+                                else if (DebuffContains(named_Debuffs, "2") && (CheckSpellRecast(wakeSleepSpellName) == 0) && (HasSpell(wakeSleepSpellName)))
+                                {
+                                    castSpell(ptMember.Name, wakeSleepSpellName);
+                                    removeDebuff(ptMember.Name, 2);
+                                    BreakOut = 1;
+                                }
+                                //SLEEP 2
+                                else if (DebuffContains(named_Debuffs, "19") && (CheckSpellRecast(wakeSleepSpellName) == 0) && (HasSpell(wakeSleepSpellName)))
+                                {
+                                    castSpell(ptMember.Name, wakeSleepSpellName);
+                                    removeDebuff(ptMember.Name, 19);
+                                    BreakOut = 1;
+                                }
+                                //PETRIFICATION
+                                else if (Form2.config.naPetrification && DebuffContains(named_Debuffs, "7") && (CheckSpellRecast("Stona") == 0) && (HasSpell("Stona")) && JobChecker("Stona") == true)
+                                {
+                                    castSpell(ptMember.Name, "Stona");
+                                    removeDebuff(ptMember.Name, 7);
+                                    BreakOut = 1;
+                                }
+                                //SILENCE
+                                else if (Form2.config.naSilence && DebuffContains(named_Debuffs, "6") && (CheckSpellRecast("Silena") == 0) && (HasSpell("Silena")) && JobChecker("Silena") == true)
+                                {
+                                    castSpell(ptMember.Name, "Silena");
+                                    removeDebuff(ptMember.Name, 6);
+                                    BreakOut = 1;
+                                }
+                                //PARALYSIS
+                                else if (Form2.config.naParalysis && DebuffContains(named_Debuffs, "4") && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")) && JobChecker("Paralyna") == true)
+                                {
+                                    castSpell(ptMember.Name, "Paralyna");
+                                    removeDebuff(ptMember.Name, 4);
+                                    BreakOut = 1;
+                                }
+                                // PLAGUE
+                                else if (Form2.config.naDisease && DebuffContains(named_Debuffs, "31") && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
+                                {
+                                    castSpell(ptMember.Name, "Viruna");
+                                    removeDebuff(ptMember.Name, 31);
+                                    BreakOut = 1;
+                                }
+                                //DISEASE
+                                else if (Form2.config.naDisease && DebuffContains(named_Debuffs, "8") && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
+                                {
+                                    castSpell(ptMember.Name, "Viruna");
+                                    removeDebuff(ptMember.Name, 8);
+                                    BreakOut = 1;
+                                }
+                                //CURSE
+                                else if (Form2.config.naCurse && DebuffContains(named_Debuffs, "9") && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
+                                {
+                                    castSpell(ptMember.Name, "Cursna");
+                                    removeDebuff(ptMember.Name, 9);
+                                    BreakOut = 1;
+                                }
+                                //BLINDNESS
+                                else if (Form2.config.naBlindness && DebuffContains(named_Debuffs, "5") && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")) && JobChecker("Blindna") == true)
+                                {
+                                    castSpell(ptMember.Name, "Blindna");
+                                    removeDebuff(ptMember.Name, 5);
+                                    BreakOut = 1;
+                                }
+                                //POISON
+                                else if (Form2.config.naPoison && DebuffContains(named_Debuffs, "3") && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")) && JobChecker("Poisona") == true)
+                                {
+                                    castSpell(ptMember.Name, "Poisona");
+                                    removeDebuff(ptMember.Name, 3);
+                                    BreakOut = 1;
+                                }
+                                // SLOW
+                                else if (Form2.config.naErase == true && Form2.config.na_Slow && DebuffContains(named_Debuffs, "13") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 13);
+                                    BreakOut = 1;
+                                }
+                                // BIO
+                                else if (Form2.config.naErase == true && Form2.config.na_Bio && DebuffContains(named_Debuffs, "135") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 135);
+                                    BreakOut = 1;
+                                }
+                                // BIND
+                                else if (Form2.config.naErase == true && Form2.config.na_Bind && DebuffContains(named_Debuffs, "11") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 11);
+                                    BreakOut = 1;
+                                }
+                                // GRAVITY
+                                else if (Form2.config.naErase == true && Form2.config.na_Weight && DebuffContains(named_Debuffs, "12") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 12);
+                                    BreakOut = 1;
+                                }
+                                // ACCURACY DOWN
+                                else if (Form2.config.naErase == true && Form2.config.na_AccuracyDown && DebuffContains(named_Debuffs, "146") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 146);
+                                    BreakOut = 1;
+                                }
+                                // DEFENSE DOWN
+                                else if (Form2.config.naErase == true && Form2.config.na_DefenseDown && DebuffContains(named_Debuffs, "149") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 149);
+                                    BreakOut = 1;
+                                }
+                                // MAGIC DEF DOWN
+                                else if (Form2.config.naErase == true && Form2.config.na_MagicDefenseDown && DebuffContains(named_Debuffs, "167") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 167);
+                                    BreakOut = 1;
+                                }
+                                // ATTACK DOWN
+                                else if (Form2.config.naErase == true && Form2.config.na_AttackDown && DebuffContains(named_Debuffs, "147") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 147);
+                                    BreakOut = 1;
+                                }
+                                // HP DOWN
+                                else if (Form2.config.naErase == true && Form2.config.na_MaxHpDown && DebuffContains(named_Debuffs, "144") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 144);
+                                    BreakOut = 1;
+                                }
+                                // VIT Down
+                                else if (Form2.config.naErase == true && Form2.config.na_VitDown && DebuffContains(named_Debuffs, "138") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 138);
+                                    BreakOut = 1;
+                                }
+                                // Threnody
+                                else if (Form2.config.naErase == true && Form2.config.na_Threnody && DebuffContains(named_Debuffs, "217") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 217);
+                                    BreakOut = 1;
+                                }
+                                // Shock
+                                else if (Form2.config.naErase == true && Form2.config.na_Shock && DebuffContains(named_Debuffs, "132") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 132);
+                                    BreakOut = 1;
+                                }
+                                // StrDown
+                                else if (Form2.config.naErase == true && Form2.config.na_StrDown && DebuffContains(named_Debuffs, "136") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 136);
+                                    BreakOut = 1;
+                                }
+                                // Requiem
+                                else if (Form2.config.naErase == true && Form2.config.na_Requiem && DebuffContains(named_Debuffs, "192") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 192);
+                                    BreakOut = 1;
+                                }
+                                // Rasp
+                                else if (Form2.config.naErase == true && Form2.config.na_Rasp && DebuffContains(named_Debuffs, "131") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 131);
+                                    BreakOut = 1;
+                                }
+                                // Max TP Down
+                                else if (Form2.config.naErase == true && Form2.config.na_MaxTpDown && DebuffContains(named_Debuffs, "189") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 189);
+                                    BreakOut = 1;
+                                }
+                                // Max MP Down
+                                else if (Form2.config.naErase == true && Form2.config.na_MaxMpDown && DebuffContains(named_Debuffs, "89") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 89);
+                                    BreakOut = 1;
+                                }
+                                // Magic Attack Down
+                                else if (Form2.config.naErase == true && Form2.config.na_MagicAttackDown && DebuffContains(named_Debuffs, "175") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 175);
+                                    BreakOut = 1;
+                                }
+                                // Magic Acc Down
+                                else if (Form2.config.naErase == true && Form2.config.na_MagicAccDown && DebuffContains(named_Debuffs, "174") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 174);
+                                    BreakOut = 1;
+                                }
+                                // Mind Down
+                                else if (Form2.config.naErase == true && Form2.config.na_MndDown && DebuffContains(named_Debuffs, "141") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 141);
+                                    BreakOut = 1;
+                                }
+                                // IntDown
+                                else if (Form2.config.naErase == true && Form2.config.na_IntDown && DebuffContains(named_Debuffs, "140") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 140);
+                                    BreakOut = 1;
+                                }
+                                // Helix
+                                else if (Form2.config.naErase == true && Form2.config.na_Helix && DebuffContains(named_Debuffs, "186") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 186);
+                                    BreakOut = 1;
+                                }
+                                // Frost
+                                else if (Form2.config.naErase == true && Form2.config.na_Frost && DebuffContains(named_Debuffs, "129") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 129);
+                                    BreakOut = 1;
+                                }
+                                // EvasionDown
+                                else if (Form2.config.naErase == true && Form2.config.na_EvasionDown && DebuffContains(named_Debuffs, "148") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 148);
+                                    BreakOut = 1;
+                                }
+                                //
+                                else if (Form2.config.naErase == true && Form2.config.na_Elegy && DebuffContains(named_Debuffs, "194") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 194);
+                                    BreakOut = 1;
+                                }
+                                // Drown
+                                else if (Form2.config.naErase == true && Form2.config.na_Drown && DebuffContains(named_Debuffs, "133") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 133);
+                                    BreakOut = 1;
+                                }
+                                // Dia
+                                else if (Form2.config.naErase == true && Form2.config.na_Dia && DebuffContains(named_Debuffs, "134") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 134);
+                                    BreakOut = 1;
+                                }
+                                // DexDown
+                                else if (Form2.config.naErase == true && Form2.config.na_DexDown && DebuffContains(named_Debuffs, "137") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 137);
+                                    BreakOut = 1;
+                                }
+                                // Choke
+                                else if (Form2.config.naErase == true && Form2.config.na_Choke && DebuffContains(named_Debuffs, "130") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 130);
+                                    BreakOut = 1;
+                                }
+                                // ChrDown
+                                else if (Form2.config.naErase == true && Form2.config.na_ChrDown && DebuffContains(named_Debuffs, "142") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 142);
+                                    BreakOut = 1;
+                                }
+                                // Burn
+                                else if (Form2.config.naErase == true && Form2.config.na_Burn && DebuffContains(named_Debuffs, "128") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 128);
+                                    BreakOut = 1;
+                                }
+                                // Addle
+                                else if (Form2.config.naErase == true && Form2.config.na_Addle && DebuffContains(named_Debuffs, "21") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 21);
+                                    BreakOut = 1;
+                                }
+                                // AGI Down
+                                else if (Form2.config.naErase == true && Form2.config.na_AgiDown && DebuffContains(named_Debuffs, "139") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
+                                {
+                                    castSpell(ptMember.Name, "Erase");
+                                    removeDebuff(ptMember.Name, 139);
+                                    BreakOut = 1;
+                                }
+                            }
+                        }
+
+                        if (BreakOut == 1)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool DebuffContains(List<string> Debuff_list, string Checked_id)
+        {
+            if (Debuff_list.Any(x => x == Checked_id))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -3425,7 +4725,7 @@
                 }
                 else if (((Form2.config.curaga4enabled && HasSpell("Curaga IV") && JobChecker("Curaga IV") == true) || (Form2.config.Accession && Form2.config.accessionCure && HasSpell("Cure IV") && JobChecker("Cure IV") == true)) && ((((_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Form2.config.curaga4Amount) && (_ELITEAPIPL.Player.MP > 260))
                 {
-                    string cureSpell = "";
+                    string cureSpell = String.Empty;
                     if (HasSpell("Curaga IV"))
                     {
                         cureSpell = CureTiers("Curaga IV", false);
@@ -3435,7 +4735,7 @@
                         cureSpell = CureTiers("Cure IV", false);
                     }
 
-                    if (cureSpell != "false" && cureSpell != "")
+                    if (cureSpell != "false" && cureSpell != String.Empty)
                     {
                         if (cureSpell.StartsWith("Cure") && (plStatusCheck(StatusEffect.Light_Arts) || plStatusCheck(StatusEffect.Addendum_White)))
                         {
@@ -3459,7 +4759,7 @@
                 }
                 else if (((Form2.config.curaga3enabled && HasSpell("Curaga III") && JobChecker("Curaga III") == true) || (Form2.config.Accession && Form2.config.accessionCure && HasSpell("Cure III") && JobChecker("Cure III") == true)) && ((((_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Form2.config.curaga3Amount) && (_ELITEAPIPL.Player.MP > 180))
                 {
-                    string cureSpell = "";
+                    string cureSpell = String.Empty;
                     if (HasSpell("Curaga III"))
                     {
                         cureSpell = CureTiers("Curaga III", false);
@@ -3469,7 +4769,7 @@
                         cureSpell = CureTiers("Cure III", false);
                     }
 
-                    if (cureSpell != "false" && cureSpell != "")
+                    if (cureSpell != "false" && cureSpell != String.Empty)
                     {
                         if (cureSpell.StartsWith("Cure") && (plStatusCheck(StatusEffect.Light_Arts) || plStatusCheck(StatusEffect.Addendum_White)))
                         {
@@ -3493,7 +4793,7 @@
                 }
                 else if (((Form2.config.curaga2enabled && HasSpell("Curaga II") && JobChecker("Curaga II") == true) || (Form2.config.Accession && Form2.config.accessionCure && HasSpell("Cure II") && JobChecker("Cure II") == true)) && ((((_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Form2.config.curaga2Amount) && (_ELITEAPIPL.Player.MP > 120))
                 {
-                    string cureSpell = "";
+                    string cureSpell = String.Empty;
                     if (HasSpell("Curaga II"))
                     {
                         cureSpell = CureTiers("Curaga II", false);
@@ -3502,7 +4802,7 @@
                     {
                         cureSpell = CureTiers("Cure II", false);
                     }
-                    if (cureSpell != "false" && cureSpell != "")
+                    if (cureSpell != "false" && cureSpell != String.Empty)
                     {
                         if (cureSpell.StartsWith("Cure") && (plStatusCheck(StatusEffect.Light_Arts) || plStatusCheck(StatusEffect.Addendum_White)))
                         {
@@ -3526,7 +4826,7 @@
                 }
                 else if (((Form2.config.curagaEnabled && HasSpell("Curaga") && JobChecker("Curaga") == true) || (Form2.config.Accession && Form2.config.accessionCure && HasSpell("Cure") && JobChecker("Cure") == true)) && ((((_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP * 100) / _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHPP) - _ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].CurrentHP) >= Form2.config.curagaAmount) && (_ELITEAPIPL.Player.MP > 60))
                 {
-                    string cureSpell = "";
+                    string cureSpell = String.Empty;
                     if (HasSpell("Curaga"))
                     {
                         cureSpell = CureTiers("Curaga", false);
@@ -3536,7 +4836,7 @@
                         cureSpell = CureTiers("Cure", false);
                     }
 
-                    if (cureSpell != "false" && cureSpell != "")
+                    if (cureSpell != "false" && cureSpell != String.Empty)
                     {
                         if (cureSpell.StartsWith("Cure") && (plStatusCheck(StatusEffect.Light_Arts) || plStatusCheck(StatusEffect.Addendum_White)))
                         {
@@ -3618,10 +4918,28 @@
 
         private void castSpell(string partyMemberName, string spellName)
         {
-            CastLockMethod();
-            castingSpell = spellName;
-            _ELITEAPIPL.ThirdParty.SendString("/ma \"" + spellName + "\" " + partyMemberName);
-            this.currentAction.Text = "Casting: " + spellName;
+            if (castingLock == false)
+            {
+                castingLock = true;
+
+                castingLockLabel.Text = "Casting is LOCKED";
+
+                var magic = _ELITEAPIPL.Resources.GetSpell(spellName, 0);
+                castingSpell = magic.Name[0];
+                this.currentAction.Text = "Casting: " + spellName;
+
+                _ELITEAPIPL.ThirdParty.SendString("/ma \"" + spellName + "\" " + partyMemberName);
+                this.currentAction.Text = "Casting: " + spellName;
+
+                if (Form2.config.trackCastingPackets == false)
+                {
+                    castingStatus_Checker();
+                }
+                else
+                {
+                    protectCountTimer.Enabled = true;
+                }
+            }
         }
 
         private void ShowStatus(string MessageToShow)
@@ -3631,14 +4949,12 @@
 
         private void hastePlayer(byte partyMemberId)
         {
-            CastLockMethod();
             castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name, "Haste");
             playerHaste[partyMemberId] = DateTime.Now;
         }
 
         private void haste_IIPlayer(byte partyMemberId)
         {
-            CastLockMethod();
             castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name, "Haste II");
             playerHaste_II[partyMemberId] = DateTime.Now;
         }
@@ -3659,6 +4975,12 @@
         {
             castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name, "Phalanx II");
             playerPhalanx_II[partyMemberId] = DateTime.Now;
+        }
+
+        private void StormSpellPlayer(byte partyMemberId, string Spell)
+        {
+            castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[partyMemberId].Name, Spell);
+            playerStormspell[partyMemberId] = DateTime.Now;
         }
 
         private void Regen_Player(byte partyMemberId)
@@ -3689,6 +5011,7 @@
             playerShell[partyMemberId] = DateTime.Now;
         }
 
+
         private async void actionTimer_TickAsync(object sender, EventArgs e)
         {
             if (_ELITEAPIPL == null || _ELITEAPIMonitored == null)
@@ -3701,453 +5024,355 @@
                 return;
             }
 
-            // Grab current time for calculations below
-
-            currentTime = DateTime.Now;
-            // Calculate time since haste was cast on particular player
-            playerHasteSpan[0] = currentTime.Subtract(playerHaste[0]);
-            playerHasteSpan[1] = currentTime.Subtract(playerHaste[1]);
-            playerHasteSpan[2] = currentTime.Subtract(playerHaste[2]);
-            playerHasteSpan[3] = currentTime.Subtract(playerHaste[3]);
-            playerHasteSpan[4] = currentTime.Subtract(playerHaste[4]);
-            playerHasteSpan[5] = currentTime.Subtract(playerHaste[5]);
-            playerHasteSpan[6] = currentTime.Subtract(playerHaste[6]);
-            playerHasteSpan[7] = currentTime.Subtract(playerHaste[7]);
-            playerHasteSpan[8] = currentTime.Subtract(playerHaste[8]);
-            playerHasteSpan[9] = currentTime.Subtract(playerHaste[9]);
-            playerHasteSpan[10] = currentTime.Subtract(playerHaste[10]);
-            playerHasteSpan[11] = currentTime.Subtract(playerHaste[11]);
-            playerHasteSpan[12] = currentTime.Subtract(playerHaste[12]);
-            playerHasteSpan[13] = currentTime.Subtract(playerHaste[13]);
-            playerHasteSpan[14] = currentTime.Subtract(playerHaste[14]);
-            playerHasteSpan[15] = currentTime.Subtract(playerHaste[15]);
-            playerHasteSpan[16] = currentTime.Subtract(playerHaste[16]);
-            playerHasteSpan[17] = currentTime.Subtract(playerHaste[17]);
-
-            playerHaste_IISpan[0] = currentTime.Subtract(playerHaste_II[0]);
-            playerHaste_IISpan[1] = currentTime.Subtract(playerHaste_II[1]);
-            playerHaste_IISpan[2] = currentTime.Subtract(playerHaste_II[2]);
-            playerHaste_IISpan[3] = currentTime.Subtract(playerHaste_II[3]);
-            playerHaste_IISpan[4] = currentTime.Subtract(playerHaste_II[4]);
-            playerHaste_IISpan[5] = currentTime.Subtract(playerHaste_II[5]);
-            playerHaste_IISpan[6] = currentTime.Subtract(playerHaste_II[6]);
-            playerHaste_IISpan[7] = currentTime.Subtract(playerHaste_II[7]);
-            playerHaste_IISpan[8] = currentTime.Subtract(playerHaste_II[8]);
-            playerHaste_IISpan[9] = currentTime.Subtract(playerHaste_II[9]);
-            playerHaste_IISpan[10] = currentTime.Subtract(playerHaste_II[10]);
-            playerHaste_IISpan[11] = currentTime.Subtract(playerHaste_II[11]);
-            playerHaste_IISpan[12] = currentTime.Subtract(playerHaste_II[12]);
-            playerHaste_IISpan[13] = currentTime.Subtract(playerHaste_II[13]);
-            playerHaste_IISpan[14] = currentTime.Subtract(playerHaste_II[14]);
-            playerHaste_IISpan[15] = currentTime.Subtract(playerHaste_II[15]);
-            playerHaste_IISpan[16] = currentTime.Subtract(playerHaste_II[16]);
-            playerHaste_IISpan[17] = currentTime.Subtract(playerHaste_II[17]);
-
-            playerFlurrySpan[0] = currentTime.Subtract(playerFlurry[0]);
-            playerFlurrySpan[1] = currentTime.Subtract(playerFlurry[1]);
-            playerFlurrySpan[2] = currentTime.Subtract(playerFlurry[2]);
-            playerFlurrySpan[3] = currentTime.Subtract(playerFlurry[3]);
-            playerFlurrySpan[4] = currentTime.Subtract(playerFlurry[4]);
-            playerFlurrySpan[5] = currentTime.Subtract(playerFlurry[5]);
-            playerFlurrySpan[6] = currentTime.Subtract(playerFlurry[6]);
-            playerFlurrySpan[7] = currentTime.Subtract(playerFlurry[7]);
-            playerFlurrySpan[8] = currentTime.Subtract(playerFlurry[8]);
-            playerFlurrySpan[9] = currentTime.Subtract(playerFlurry[9]);
-            playerFlurrySpan[10] = currentTime.Subtract(playerFlurry[10]);
-            playerFlurrySpan[11] = currentTime.Subtract(playerFlurry[11]);
-            playerFlurrySpan[12] = currentTime.Subtract(playerFlurry[12]);
-            playerFlurrySpan[13] = currentTime.Subtract(playerFlurry[13]);
-            playerFlurrySpan[14] = currentTime.Subtract(playerFlurry[14]);
-            playerFlurrySpan[15] = currentTime.Subtract(playerFlurry[15]);
-            playerFlurrySpan[16] = currentTime.Subtract(playerFlurry[16]);
-            playerFlurrySpan[17] = currentTime.Subtract(playerFlurry[17]);
-
-            playerFlurry_IISpan[0] = currentTime.Subtract(playerFlurry_II[0]);
-            playerFlurry_IISpan[1] = currentTime.Subtract(playerFlurry_II[1]);
-            playerFlurry_IISpan[2] = currentTime.Subtract(playerFlurry_II[2]);
-            playerFlurry_IISpan[3] = currentTime.Subtract(playerFlurry_II[3]);
-            playerFlurry_IISpan[4] = currentTime.Subtract(playerFlurry_II[4]);
-            playerFlurry_IISpan[5] = currentTime.Subtract(playerFlurry_II[5]);
-            playerFlurry_IISpan[6] = currentTime.Subtract(playerFlurry_II[6]);
-            playerFlurry_IISpan[7] = currentTime.Subtract(playerFlurry_II[7]);
-            playerFlurry_IISpan[8] = currentTime.Subtract(playerFlurry_II[8]);
-            playerFlurry_IISpan[9] = currentTime.Subtract(playerFlurry_II[9]);
-            playerFlurry_IISpan[10] = currentTime.Subtract(playerFlurry_II[10]);
-            playerFlurry_IISpan[11] = currentTime.Subtract(playerFlurry_II[11]);
-            playerFlurry_IISpan[12] = currentTime.Subtract(playerFlurry_II[12]);
-            playerFlurry_IISpan[13] = currentTime.Subtract(playerFlurry_II[13]);
-            playerFlurry_IISpan[14] = currentTime.Subtract(playerFlurry_II[14]);
-            playerFlurry_IISpan[15] = currentTime.Subtract(playerFlurry_II[15]);
-            playerFlurry_IISpan[16] = currentTime.Subtract(playerFlurry_II[16]);
-            playerFlurry_IISpan[17] = currentTime.Subtract(playerFlurry_II[17]);
-
-            // Calculate time since protect was cast on particular player
-            playerProtect_Span[0] = currentTime.Subtract(playerProtect[0]);
-            playerProtect_Span[1] = currentTime.Subtract(playerProtect[1]);
-            playerProtect_Span[2] = currentTime.Subtract(playerProtect[2]);
-            playerProtect_Span[3] = currentTime.Subtract(playerProtect[3]);
-            playerProtect_Span[4] = currentTime.Subtract(playerProtect[4]);
-            playerProtect_Span[5] = currentTime.Subtract(playerProtect[5]);
-            playerProtect_Span[6] = currentTime.Subtract(playerProtect[6]);
-            playerProtect_Span[7] = currentTime.Subtract(playerProtect[7]);
-            playerProtect_Span[8] = currentTime.Subtract(playerProtect[8]);
-            playerProtect_Span[9] = currentTime.Subtract(playerProtect[9]);
-            playerProtect_Span[10] = currentTime.Subtract(playerProtect[10]);
-            playerProtect_Span[11] = currentTime.Subtract(playerProtect[11]);
-            playerProtect_Span[12] = currentTime.Subtract(playerProtect[12]);
-            playerProtect_Span[13] = currentTime.Subtract(playerProtect[13]);
-            playerProtect_Span[14] = currentTime.Subtract(playerProtect[14]);
-            playerProtect_Span[15] = currentTime.Subtract(playerProtect[15]);
-            playerProtect_Span[16] = currentTime.Subtract(playerProtect[16]);
-            playerProtect_Span[17] = currentTime.Subtract(playerProtect[17]);
-
-            // Calculate time since shell was cast on particular player
-            playerShell_Span[0] = currentTime.Subtract(playerShell[0]);
-            playerShell_Span[1] = currentTime.Subtract(playerShell[1]);
-            playerShell_Span[2] = currentTime.Subtract(playerShell[2]);
-            playerShell_Span[3] = currentTime.Subtract(playerShell[3]);
-            playerShell_Span[4] = currentTime.Subtract(playerShell[4]);
-            playerShell_Span[5] = currentTime.Subtract(playerShell[5]);
-            playerShell_Span[6] = currentTime.Subtract(playerShell[6]);
-            playerShell_Span[7] = currentTime.Subtract(playerShell[7]);
-            playerShell_Span[8] = currentTime.Subtract(playerShell[8]);
-            playerShell_Span[9] = currentTime.Subtract(playerShell[9]);
-            playerShell_Span[10] = currentTime.Subtract(playerShell[10]);
-            playerShell_Span[11] = currentTime.Subtract(playerShell[11]);
-            playerShell_Span[12] = currentTime.Subtract(playerShell[12]);
-            playerShell_Span[13] = currentTime.Subtract(playerShell[13]);
-            playerShell_Span[14] = currentTime.Subtract(playerShell[14]);
-            playerShell_Span[15] = currentTime.Subtract(playerShell[15]);
-            playerShell_Span[16] = currentTime.Subtract(playerShell[16]);
-            playerShell_Span[17] = currentTime.Subtract(playerShell[17]);
-
-            // Calculate time since phalanx II was cast on particular player
-            playerPhalanx_IISpan[0] = currentTime.Subtract(playerPhalanx_II[0]);
-            playerPhalanx_IISpan[1] = currentTime.Subtract(playerPhalanx_II[1]);
-            playerPhalanx_IISpan[2] = currentTime.Subtract(playerPhalanx_II[2]);
-            playerPhalanx_IISpan[3] = currentTime.Subtract(playerPhalanx_II[3]);
-            playerPhalanx_IISpan[4] = currentTime.Subtract(playerPhalanx_II[4]);
-            playerPhalanx_IISpan[5] = currentTime.Subtract(playerPhalanx_II[5]);
-
-            // Calculate time since regen was cast on particular player
-            playerRegen_Span[0] = currentTime.Subtract(playerRegen[0]);
-            playerRegen_Span[1] = currentTime.Subtract(playerRegen[1]);
-            playerRegen_Span[2] = currentTime.Subtract(playerRegen[2]);
-            playerRegen_Span[3] = currentTime.Subtract(playerRegen[3]);
-            playerRegen_Span[4] = currentTime.Subtract(playerRegen[4]);
-            playerRegen_Span[5] = currentTime.Subtract(playerRegen[5]);
-
-            // Calculate time since Refresh was cast on particular player
-            playerRefresh_Span[0] = currentTime.Subtract(playerRefresh[0]);
-            playerRefresh_Span[1] = currentTime.Subtract(playerRefresh[1]);
-            playerRefresh_Span[2] = currentTime.Subtract(playerRefresh[2]);
-            playerRefresh_Span[3] = currentTime.Subtract(playerRefresh[3]);
-            playerRefresh_Span[4] = currentTime.Subtract(playerRefresh[4]);
-            playerRefresh_Span[5] = currentTime.Subtract(playerRefresh[5]);
-
-            // Calculate time since Songs were cast on particular player
-            playerSong1_Span[0] = currentTime.Subtract(playerSong1[0]);
-            playerSong2_Span[0] = currentTime.Subtract(playerSong2[0]);
-            playerSong3_Span[0] = currentTime.Subtract(playerSong3[0]);
-            playerSong4_Span[0] = currentTime.Subtract(playerSong4[0]);
-
-            Last_SongCast_Timer_Span[0] = currentTime.Subtract(Last_SongCast_Timer[0]);
-
-            // Calculate time since Piannisimo Songs were cast on particular player
-            pianissimo1_1_Span[0] = currentTime.Subtract(playerPianissimo1_1[0]);
-            pianissimo2_1_Span[0] = currentTime.Subtract(playerPianissimo2_1[0]);
-            pianissimo1_2_Span[0] = currentTime.Subtract(playerPianissimo1_2[0]);
-            pianissimo2_2_Span[0] = currentTime.Subtract(playerPianissimo2_2[0]);
-
-
-            // Set array values for GUI "Enabled" checkboxes
-            var enabledBoxes = new CheckBox[18];
-            enabledBoxes[0] = player0enabled;
-            enabledBoxes[1] = player1enabled;
-            enabledBoxes[2] = player2enabled;
-            enabledBoxes[3] = player3enabled;
-            enabledBoxes[4] = player4enabled;
-            enabledBoxes[5] = player5enabled;
-            enabledBoxes[6] = player6enabled;
-            enabledBoxes[7] = player7enabled;
-            enabledBoxes[8] = player8enabled;
-            enabledBoxes[9] = player9enabled;
-            enabledBoxes[10] = player10enabled;
-            enabledBoxes[11] = player11enabled;
-            enabledBoxes[12] = player12enabled;
-            enabledBoxes[13] = player13enabled;
-            enabledBoxes[14] = player14enabled;
-            enabledBoxes[15] = player15enabled;
-            enabledBoxes[16] = player16enabled;
-            enabledBoxes[17] = player17enabled;
-
-            // Set array values for GUI "High Priority" checkboxes
-            var highPriorityBoxes = new CheckBox[18];
-            highPriorityBoxes[0] = player0priority;
-            highPriorityBoxes[1] = player1priority;
-            highPriorityBoxes[2] = player2priority;
-            highPriorityBoxes[3] = player3priority;
-            highPriorityBoxes[4] = player4priority;
-            highPriorityBoxes[5] = player5priority;
-            highPriorityBoxes[6] = player6priority;
-            highPriorityBoxes[7] = player7priority;
-            highPriorityBoxes[8] = player8priority;
-            highPriorityBoxes[9] = player9priority;
-            highPriorityBoxes[10] = player10priority;
-            highPriorityBoxes[11] = player11priority;
-            highPriorityBoxes[12] = player12priority;
-            highPriorityBoxes[13] = player13priority;
-            highPriorityBoxes[14] = player14priority;
-            highPriorityBoxes[15] = player15priority;
-            highPriorityBoxes[16] = player16priority;
-            highPriorityBoxes[17] = player17priority;
-
-
-            int songs_currently_up1 = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 197 || b == 198 || b == 195 || b == 199 || b == 200 || b == 215 || b == 196 || b == 214 || b == 216 || b == 218 || b == 222).Count();
-
-            if (Form2.config.DivineSeal && _ELITEAPIPL.Player.MPP <= 11 && (GetAbilityRecast("Divine Seal") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+            if (castingLock == false)
             {
-                _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Seal\" <me>");
-                JobAbility_Wait("Divine Seal");
-            }
-            else if (Form2.config.Convert && (_ELITEAPIPL.Player.MP <= Form2.config.convertMP) && (GetAbilityRecast("Convert") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
-            {
-                _ELITEAPIPL.ThirdParty.SendString("/ja \"Convert\" <me>");
-                return;
-                //ActionLockMethod();
-            }
-            else if (Form2.config.RadialArcana && (_ELITEAPIPL.Player.MP <= Form2.config.RadialArcanaMP) && (GetAbilityRecast("Radial Arcana") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness) && (!castingLock))
-            {
-                // Check if a pet is already active
-                if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1 && _ELITEAPIPL.Player.Pet.Distance <= 9)
-                {
-                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Radial Arcana\" <me>");
-                    JobAbility_Wait("Radial Arcana");
-                }
-                else if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1 && _ELITEAPIPL.Player.Pet.Distance >= 9 && (GetAbilityRecast("Full Circle") == 0))
-                {
-                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
-                    await Task.Delay(2000);
-                    string SpellCheckedResult = ReturnGeoSpell(Form2.config.RadialArcana_Spell, 2);
-                    castSpell("<me>", SpellCheckedResult);
-                }
-                else
-                {
-                    string SpellCheckedResult = ReturnGeoSpell(Form2.config.RadialArcana_Spell, 2);
-                    castSpell("<me>", SpellCheckedResult);
-                }
-            }
-            else if (Form2.config.FullCircle && !castingLock)
-            {
-                // When out of range Distance is 59 Yalms regardless, Must be within 15 yalms to gain
-                // the effect
 
-                //Check if "pet" is active and out of range of the monitored player
-                if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1)
-                {
-                    ushort PetsIndex = _ELITEAPIPL.Player.PetIndex;
-                    var PetsEntity = _ELITEAPIMonitored.Entity.GetEntity((int)PetsIndex);
 
-                    if (_ELITEAPIMonitored.Player.Status == 1 && PetsEntity.Distance >= 10)
+                // Grab current time for calculations below
+
+                currentTime = DateTime.Now;
+                // Calculate time since haste was cast on particular player
+                playerHasteSpan[0] = currentTime.Subtract(playerHaste[0]);
+                playerHasteSpan[1] = currentTime.Subtract(playerHaste[1]);
+                playerHasteSpan[2] = currentTime.Subtract(playerHaste[2]);
+                playerHasteSpan[3] = currentTime.Subtract(playerHaste[3]);
+                playerHasteSpan[4] = currentTime.Subtract(playerHaste[4]);
+                playerHasteSpan[5] = currentTime.Subtract(playerHaste[5]);
+                playerHasteSpan[6] = currentTime.Subtract(playerHaste[6]);
+                playerHasteSpan[7] = currentTime.Subtract(playerHaste[7]);
+                playerHasteSpan[8] = currentTime.Subtract(playerHaste[8]);
+                playerHasteSpan[9] = currentTime.Subtract(playerHaste[9]);
+                playerHasteSpan[10] = currentTime.Subtract(playerHaste[10]);
+                playerHasteSpan[11] = currentTime.Subtract(playerHaste[11]);
+                playerHasteSpan[12] = currentTime.Subtract(playerHaste[12]);
+                playerHasteSpan[13] = currentTime.Subtract(playerHaste[13]);
+                playerHasteSpan[14] = currentTime.Subtract(playerHaste[14]);
+                playerHasteSpan[15] = currentTime.Subtract(playerHaste[15]);
+                playerHasteSpan[16] = currentTime.Subtract(playerHaste[16]);
+                playerHasteSpan[17] = currentTime.Subtract(playerHaste[17]);
+
+                playerHaste_IISpan[0] = currentTime.Subtract(playerHaste_II[0]);
+                playerHaste_IISpan[1] = currentTime.Subtract(playerHaste_II[1]);
+                playerHaste_IISpan[2] = currentTime.Subtract(playerHaste_II[2]);
+                playerHaste_IISpan[3] = currentTime.Subtract(playerHaste_II[3]);
+                playerHaste_IISpan[4] = currentTime.Subtract(playerHaste_II[4]);
+                playerHaste_IISpan[5] = currentTime.Subtract(playerHaste_II[5]);
+                playerHaste_IISpan[6] = currentTime.Subtract(playerHaste_II[6]);
+                playerHaste_IISpan[7] = currentTime.Subtract(playerHaste_II[7]);
+                playerHaste_IISpan[8] = currentTime.Subtract(playerHaste_II[8]);
+                playerHaste_IISpan[9] = currentTime.Subtract(playerHaste_II[9]);
+                playerHaste_IISpan[10] = currentTime.Subtract(playerHaste_II[10]);
+                playerHaste_IISpan[11] = currentTime.Subtract(playerHaste_II[11]);
+                playerHaste_IISpan[12] = currentTime.Subtract(playerHaste_II[12]);
+                playerHaste_IISpan[13] = currentTime.Subtract(playerHaste_II[13]);
+                playerHaste_IISpan[14] = currentTime.Subtract(playerHaste_II[14]);
+                playerHaste_IISpan[15] = currentTime.Subtract(playerHaste_II[15]);
+                playerHaste_IISpan[16] = currentTime.Subtract(playerHaste_II[16]);
+                playerHaste_IISpan[17] = currentTime.Subtract(playerHaste_II[17]);
+
+                playerFlurrySpan[0] = currentTime.Subtract(playerFlurry[0]);
+                playerFlurrySpan[1] = currentTime.Subtract(playerFlurry[1]);
+                playerFlurrySpan[2] = currentTime.Subtract(playerFlurry[2]);
+                playerFlurrySpan[3] = currentTime.Subtract(playerFlurry[3]);
+                playerFlurrySpan[4] = currentTime.Subtract(playerFlurry[4]);
+                playerFlurrySpan[5] = currentTime.Subtract(playerFlurry[5]);
+                playerFlurrySpan[6] = currentTime.Subtract(playerFlurry[6]);
+                playerFlurrySpan[7] = currentTime.Subtract(playerFlurry[7]);
+                playerFlurrySpan[8] = currentTime.Subtract(playerFlurry[8]);
+                playerFlurrySpan[9] = currentTime.Subtract(playerFlurry[9]);
+                playerFlurrySpan[10] = currentTime.Subtract(playerFlurry[10]);
+                playerFlurrySpan[11] = currentTime.Subtract(playerFlurry[11]);
+                playerFlurrySpan[12] = currentTime.Subtract(playerFlurry[12]);
+                playerFlurrySpan[13] = currentTime.Subtract(playerFlurry[13]);
+                playerFlurrySpan[14] = currentTime.Subtract(playerFlurry[14]);
+                playerFlurrySpan[15] = currentTime.Subtract(playerFlurry[15]);
+                playerFlurrySpan[16] = currentTime.Subtract(playerFlurry[16]);
+                playerFlurrySpan[17] = currentTime.Subtract(playerFlurry[17]);
+
+                playerFlurry_IISpan[0] = currentTime.Subtract(playerFlurry_II[0]);
+                playerFlurry_IISpan[1] = currentTime.Subtract(playerFlurry_II[1]);
+                playerFlurry_IISpan[2] = currentTime.Subtract(playerFlurry_II[2]);
+                playerFlurry_IISpan[3] = currentTime.Subtract(playerFlurry_II[3]);
+                playerFlurry_IISpan[4] = currentTime.Subtract(playerFlurry_II[4]);
+                playerFlurry_IISpan[5] = currentTime.Subtract(playerFlurry_II[5]);
+                playerFlurry_IISpan[6] = currentTime.Subtract(playerFlurry_II[6]);
+                playerFlurry_IISpan[7] = currentTime.Subtract(playerFlurry_II[7]);
+                playerFlurry_IISpan[8] = currentTime.Subtract(playerFlurry_II[8]);
+                playerFlurry_IISpan[9] = currentTime.Subtract(playerFlurry_II[9]);
+                playerFlurry_IISpan[10] = currentTime.Subtract(playerFlurry_II[10]);
+                playerFlurry_IISpan[11] = currentTime.Subtract(playerFlurry_II[11]);
+                playerFlurry_IISpan[12] = currentTime.Subtract(playerFlurry_II[12]);
+                playerFlurry_IISpan[13] = currentTime.Subtract(playerFlurry_II[13]);
+                playerFlurry_IISpan[14] = currentTime.Subtract(playerFlurry_II[14]);
+                playerFlurry_IISpan[15] = currentTime.Subtract(playerFlurry_II[15]);
+                playerFlurry_IISpan[16] = currentTime.Subtract(playerFlurry_II[16]);
+                playerFlurry_IISpan[17] = currentTime.Subtract(playerFlurry_II[17]);
+
+                // Calculate time since protect was cast on particular player
+                playerProtect_Span[0] = currentTime.Subtract(playerProtect[0]);
+                playerProtect_Span[1] = currentTime.Subtract(playerProtect[1]);
+                playerProtect_Span[2] = currentTime.Subtract(playerProtect[2]);
+                playerProtect_Span[3] = currentTime.Subtract(playerProtect[3]);
+                playerProtect_Span[4] = currentTime.Subtract(playerProtect[4]);
+                playerProtect_Span[5] = currentTime.Subtract(playerProtect[5]);
+                playerProtect_Span[6] = currentTime.Subtract(playerProtect[6]);
+                playerProtect_Span[7] = currentTime.Subtract(playerProtect[7]);
+                playerProtect_Span[8] = currentTime.Subtract(playerProtect[8]);
+                playerProtect_Span[9] = currentTime.Subtract(playerProtect[9]);
+                playerProtect_Span[10] = currentTime.Subtract(playerProtect[10]);
+                playerProtect_Span[11] = currentTime.Subtract(playerProtect[11]);
+                playerProtect_Span[12] = currentTime.Subtract(playerProtect[12]);
+                playerProtect_Span[13] = currentTime.Subtract(playerProtect[13]);
+                playerProtect_Span[14] = currentTime.Subtract(playerProtect[14]);
+                playerProtect_Span[15] = currentTime.Subtract(playerProtect[15]);
+                playerProtect_Span[16] = currentTime.Subtract(playerProtect[16]);
+                playerProtect_Span[17] = currentTime.Subtract(playerProtect[17]);
+
+                // Calculate time since Stormspell was cast on particular player
+                playerStormspellSpan[0] = currentTime.Subtract(playerStormspell[0]);
+                playerStormspellSpan[1] = currentTime.Subtract(playerStormspell[1]);
+                playerStormspellSpan[2] = currentTime.Subtract(playerStormspell[2]);
+                playerStormspellSpan[3] = currentTime.Subtract(playerStormspell[3]);
+                playerStormspellSpan[4] = currentTime.Subtract(playerStormspell[4]);
+                playerStormspellSpan[5] = currentTime.Subtract(playerStormspell[5]);
+                playerStormspellSpan[6] = currentTime.Subtract(playerStormspell[6]);
+                playerStormspellSpan[7] = currentTime.Subtract(playerStormspell[7]);
+                playerStormspellSpan[8] = currentTime.Subtract(playerStormspell[8]);
+                playerStormspellSpan[9] = currentTime.Subtract(playerStormspell[9]);
+                playerStormspellSpan[10] = currentTime.Subtract(playerStormspell[10]);
+                playerStormspellSpan[11] = currentTime.Subtract(playerStormspell[11]);
+                playerStormspellSpan[12] = currentTime.Subtract(playerStormspell[12]);
+                playerStormspellSpan[13] = currentTime.Subtract(playerStormspell[13]);
+                playerStormspellSpan[14] = currentTime.Subtract(playerStormspell[14]);
+                playerStormspellSpan[15] = currentTime.Subtract(playerStormspell[15]);
+                playerStormspellSpan[16] = currentTime.Subtract(playerStormspell[16]);
+                playerStormspellSpan[17] = currentTime.Subtract(playerStormspell[17]);
+
+                // Calculate time since shell was cast on particular player
+                playerShell_Span[0] = currentTime.Subtract(playerShell[0]);
+                playerShell_Span[1] = currentTime.Subtract(playerShell[1]);
+                playerShell_Span[2] = currentTime.Subtract(playerShell[2]);
+                playerShell_Span[3] = currentTime.Subtract(playerShell[3]);
+                playerShell_Span[4] = currentTime.Subtract(playerShell[4]);
+                playerShell_Span[5] = currentTime.Subtract(playerShell[5]);
+                playerShell_Span[6] = currentTime.Subtract(playerShell[6]);
+                playerShell_Span[7] = currentTime.Subtract(playerShell[7]);
+                playerShell_Span[8] = currentTime.Subtract(playerShell[8]);
+                playerShell_Span[9] = currentTime.Subtract(playerShell[9]);
+                playerShell_Span[10] = currentTime.Subtract(playerShell[10]);
+                playerShell_Span[11] = currentTime.Subtract(playerShell[11]);
+                playerShell_Span[12] = currentTime.Subtract(playerShell[12]);
+                playerShell_Span[13] = currentTime.Subtract(playerShell[13]);
+                playerShell_Span[14] = currentTime.Subtract(playerShell[14]);
+                playerShell_Span[15] = currentTime.Subtract(playerShell[15]);
+                playerShell_Span[16] = currentTime.Subtract(playerShell[16]);
+                playerShell_Span[17] = currentTime.Subtract(playerShell[17]);
+
+                // Calculate time since phalanx II was cast on particular player
+                playerPhalanx_IISpan[0] = currentTime.Subtract(playerPhalanx_II[0]);
+                playerPhalanx_IISpan[1] = currentTime.Subtract(playerPhalanx_II[1]);
+                playerPhalanx_IISpan[2] = currentTime.Subtract(playerPhalanx_II[2]);
+                playerPhalanx_IISpan[3] = currentTime.Subtract(playerPhalanx_II[3]);
+                playerPhalanx_IISpan[4] = currentTime.Subtract(playerPhalanx_II[4]);
+                playerPhalanx_IISpan[5] = currentTime.Subtract(playerPhalanx_II[5]);
+
+                // Calculate time since regen was cast on particular player
+                playerRegen_Span[0] = currentTime.Subtract(playerRegen[0]);
+                playerRegen_Span[1] = currentTime.Subtract(playerRegen[1]);
+                playerRegen_Span[2] = currentTime.Subtract(playerRegen[2]);
+                playerRegen_Span[3] = currentTime.Subtract(playerRegen[3]);
+                playerRegen_Span[4] = currentTime.Subtract(playerRegen[4]);
+                playerRegen_Span[5] = currentTime.Subtract(playerRegen[5]);
+
+                // Calculate time since Refresh was cast on particular player
+                playerRefresh_Span[0] = currentTime.Subtract(playerRefresh[0]);
+                playerRefresh_Span[1] = currentTime.Subtract(playerRefresh[1]);
+                playerRefresh_Span[2] = currentTime.Subtract(playerRefresh[2]);
+                playerRefresh_Span[3] = currentTime.Subtract(playerRefresh[3]);
+                playerRefresh_Span[4] = currentTime.Subtract(playerRefresh[4]);
+                playerRefresh_Span[5] = currentTime.Subtract(playerRefresh[5]);
+
+                // Calculate time since Songs were cast on particular player
+                playerSong1_Span[0] = currentTime.Subtract(playerSong1[0]);
+                playerSong2_Span[0] = currentTime.Subtract(playerSong2[0]);
+                playerSong3_Span[0] = currentTime.Subtract(playerSong3[0]);
+                playerSong4_Span[0] = currentTime.Subtract(playerSong4[0]);
+
+                Last_SongCast_Timer_Span[0] = currentTime.Subtract(Last_SongCast_Timer[0]);
+
+                // Calculate time since Piannisimo Songs were cast on particular player
+                pianissimo1_1_Span[0] = currentTime.Subtract(playerPianissimo1_1[0]);
+                pianissimo2_1_Span[0] = currentTime.Subtract(playerPianissimo2_1[0]);
+                pianissimo1_2_Span[0] = currentTime.Subtract(playerPianissimo1_2[0]);
+                pianissimo2_2_Span[0] = currentTime.Subtract(playerPianissimo2_2[0]);
+
+                // Set array values for GUI "Enabled" checkboxes
+                var enabledBoxes = new CheckBox[18];
+                enabledBoxes[0] = player0enabled;
+                enabledBoxes[1] = player1enabled;
+                enabledBoxes[2] = player2enabled;
+                enabledBoxes[3] = player3enabled;
+                enabledBoxes[4] = player4enabled;
+                enabledBoxes[5] = player5enabled;
+                enabledBoxes[6] = player6enabled;
+                enabledBoxes[7] = player7enabled;
+                enabledBoxes[8] = player8enabled;
+                enabledBoxes[9] = player9enabled;
+                enabledBoxes[10] = player10enabled;
+                enabledBoxes[11] = player11enabled;
+                enabledBoxes[12] = player12enabled;
+                enabledBoxes[13] = player13enabled;
+                enabledBoxes[14] = player14enabled;
+                enabledBoxes[15] = player15enabled;
+                enabledBoxes[16] = player16enabled;
+                enabledBoxes[17] = player17enabled;
+
+                // Set array values for GUI "High Priority" checkboxes
+                var highPriorityBoxes = new CheckBox[18];
+                highPriorityBoxes[0] = player0priority;
+                highPriorityBoxes[1] = player1priority;
+                highPriorityBoxes[2] = player2priority;
+                highPriorityBoxes[3] = player3priority;
+                highPriorityBoxes[4] = player4priority;
+                highPriorityBoxes[5] = player5priority;
+                highPriorityBoxes[6] = player6priority;
+                highPriorityBoxes[7] = player7priority;
+                highPriorityBoxes[8] = player8priority;
+                highPriorityBoxes[9] = player9priority;
+                highPriorityBoxes[10] = player10priority;
+                highPriorityBoxes[11] = player11priority;
+                highPriorityBoxes[12] = player12priority;
+                highPriorityBoxes[13] = player13priority;
+                highPriorityBoxes[14] = player14priority;
+                highPriorityBoxes[15] = player15priority;
+                highPriorityBoxes[16] = player16priority;
+                highPriorityBoxes[17] = player17priority;
+
+
+                int songs_currently_up1 = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 197 || b == 198 || b == 195 || b == 199 || b == 200 || b == 215 || b == 196 || b == 214 || b == 216 || b == 218 || b == 222).Count();
+
+                // IF YOU ARE DEAD BUT RERAISE IS AVAILABLE THEN ACCEPT RAISE
+
+                if (Form2.config.AcceptRaise == true && (_ELITEAPIPL.Player.Status == 2 || _ELITEAPIPL.Player.Status == 3))
+                {
+                    if (_ELITEAPIPL.Menu.IsMenuOpen && _ELITEAPIPL.Menu.HelpName == "Revival" && _ELITEAPIPL.Menu.MenuIndex == 1 && ((Form2.config.AcceptRaiseOnlyWhenNotInCombat == true && _ELITEAPIMonitored.Player.Status != 1) || Form2.config.AcceptRaiseOnlyWhenNotInCombat == false))
                     {
-                        // Wait two seconds, if still the same Full Circle the pet away
                         await Task.Delay(2000);
-                        if (PetsEntity.Distance >= 10 && GetAbilityRecast("Full Circle") == 0)
+                        this.currentAction.Text = "Accepting Raise or Reraise.";
+                        _ELITEAPIPL.ThirdParty.KeyPress(EliteMMO.API.Keys.NUMPADENTER);
+                        await Task.Delay(5000);
+                        this.currentAction.Text = String.Empty;
+                    }
+                }
+
+                if (Form2.config.DivineSeal && _ELITEAPIPL.Player.MPP <= 11 && (GetAbilityRecast("Divine Seal") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Seal\" <me>");
+                    JobAbility_Wait("Divine Seal");
+                }
+                else if (Form2.config.Convert && (_ELITEAPIPL.Player.MP <= Form2.config.convertMP) && (GetAbilityRecast("Convert") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness))
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Convert\" <me>");
+                    return;
+                    //ActionLockMethod();
+                }
+                else if (Form2.config.RadialArcana && (_ELITEAPIPL.Player.MP <= Form2.config.RadialArcanaMP) && (GetAbilityRecast("Radial Arcana") == 0) && !_ELITEAPIPL.Player.Buffs.Contains((short)StatusEffect.Weakness) && (!castingLock))
+                {
+                    // Check if a pet is already active
+                    if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1 && _ELITEAPIPL.Player.Pet.Distance <= 9)
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Radial Arcana\" <me>");
+                        JobAbility_Wait("Radial Arcana");
+                    }
+                    else if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1 && _ELITEAPIPL.Player.Pet.Distance >= 9 && (GetAbilityRecast("Full Circle") == 0))
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
+                        await Task.Delay(2000);
+                        string SpellCheckedResult = ReturnGeoSpell(Form2.config.RadialArcana_Spell, 2);
+                        castSpell("<me>", SpellCheckedResult);
+                    }
+                    else
+                    {
+                        string SpellCheckedResult = ReturnGeoSpell(Form2.config.RadialArcana_Spell, 2);
+                        castSpell("<me>", SpellCheckedResult);
+                    }
+                }
+                else if (Form2.config.FullCircle && !castingLock)
+                {
+                    // When out of range Distance is 59 Yalms regardless, Must be within 15 yalms to gain
+                    // the effect
+
+                    //Check if "pet" is active and out of range of the monitored player
+                    if (_ELITEAPIPL.Player.Pet.HealthPercent >= 1)
+                    {
+                        ushort PetsIndex = _ELITEAPIPL.Player.PetIndex;
+                        var PetsEntity = _ELITEAPIMonitored.Entity.GetEntity((int)PetsIndex);
+
+                        if (_ELITEAPIMonitored.Player.Status == 1 && PetsEntity.Distance >= 10)
                         {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
+                            // Wait two seconds, if still the same Full Circle the pet away
+                            await Task.Delay(2000);
+                            if (PetsEntity.Distance >= 10 && PetsEntity.Distance != 0 && GetAbilityRecast("Full Circle") == 0)
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Full Circle\" <me>");
+                            }
                         }
                     }
                 }
-            }
-            else if ((Form2.config.Troubadour) && (GetAbilityRecast("Troubadour") == 0) && (HasAbility("Troubadour")) && songs_currently_up1 == 0 && (!castingLock))
-            {
-                _ELITEAPIPL.ThirdParty.SendString("/ja \"Troubadour\" <me>");
-                JobAbility_Wait("Troubadour");
-            }
-            else if ((Form2.config.Nightingale) && (GetAbilityRecast("Nightingale") == 0) && (HasAbility("Nightingale")) && songs_currently_up1 == 0 && (!castingLock))
-            {
-                _ELITEAPIPL.ThirdParty.SendString("/ja \"Nightingale\" <me>");
-                JobAbility_Wait("Nightingale");
-            }
-
-            if (_ELITEAPIPL.Player.MP <= (int)Form2.config.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
-            {
-                if (Form2.config.lowMPcheckBox && !islowmp && !Form2.config.healLowMP)
+                else if ((Form2.config.Troubadour) && (GetAbilityRecast("Troubadour") == 0) && (HasAbility("Troubadour")) && songs_currently_up1 == 0 && (!castingLock))
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP is low!");
+                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Troubadour\" <me>");
+                    JobAbility_Wait("Troubadour");
+                }
+                else if ((Form2.config.Nightingale) && (GetAbilityRecast("Nightingale") == 0) && (HasAbility("Nightingale")) && songs_currently_up1 == 0 && (!castingLock))
+                {
+                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Nightingale\" <me>");
+                    JobAbility_Wait("Nightingale");
+                }
+
+                if (_ELITEAPIPL.Player.MP <= (int)Form2.config.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
+                {
+                    if (Form2.config.lowMPcheckBox && !islowmp && !Form2.config.healLowMP)
+                    {
+                        _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP is low!");
+                        islowmp = true;
+                        return;
+                    }
                     islowmp = true;
                     return;
                 }
-                islowmp = true;
-                return;
-            }
-            if (_ELITEAPIPL.Player.MP > (int)Form2.config.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
-            {
-                if (Form2.config.lowMPcheckBox && islowmp && !Form2.config.healLowMP)
+                if (_ELITEAPIPL.Player.MP > (int)Form2.config.mpMinCastValue && _ELITEAPIPL.Player.MP != 0)
                 {
-                    _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP OK!");
-                    islowmp = false;
-                }
-            }
-
-
-            if (!castingLock && Form2.config.healLowMP == true && _ELITEAPIPL.Player.MP <= Form2.config.healWhenMPBelow && _ELITEAPIPL.Player.Status == 0)
-            {
-                if (Form2.config.lowMPcheckBox && !islowmp)
-                {
-                    _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP is seriously low, /healing.");
-                    islowmp = true;
-                }
-                _ELITEAPIPL.ThirdParty.SendString("/heal");
-                CastLockMethod();
-            }
-            else if (!castingLock && Form2.config.standAtMP == true && _ELITEAPIPL.Player.MPP >= Form2.config.standAtMP_Percentage && _ELITEAPIPL.Player.Status == 33)
-            {
-                if (Form2.config.lowMPcheckBox && !islowmp)
-                {
-                    _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP has recovered.");
-                    islowmp = false;
-                }
-                _ELITEAPIPL.ThirdParty.SendString("/heal");
-                CastLockMethod();
-            }
-
-            // Only perform actions if PL is stationary PAUSE GOES HERE
-            if ((_ELITEAPIPL.Player.X == plX) && (_ELITEAPIPL.Player.Y == plY) && (_ELITEAPIPL.Player.Z == plZ) && (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn) && curePlease_autofollow == false && ((_ELITEAPIPL.Player.Status == (uint)Status.Standing) || (_ELITEAPIPL.Player.Status == (uint)Status.Fighting)))
-            {
-
-                // IF SILENCED THIS NEEDS TO BE REMOVED BEFORE ANY MAGIC IS ATTEMPTED
-                if (Form2.config.plSilenceItem == 0)
-                {
-                    plSilenceitemName = "Catholicon";
-                }
-                else if (Form2.config.plSilenceItem == 1)
-                {
-                    plSilenceitemName = "Echo Drops";
-                }
-                else if (Form2.config.plSilenceItem == 2)
-                {
-                    plSilenceitemName = "Remedy";
-                }
-                else if (Form2.config.plSilenceItem == 3)
-                {
-                    plSilenceitemName = "Remedy Ointment";
-                }
-                else if (Form2.config.plSilenceItem == 4)
-                {
-                    plSilenceitemName = "Vicar's Drink";
-                }
-
-                foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
-                {
-                    if (plEffect == StatusEffect.Silence && Form2.config.plSilenceItemEnabled)
+                    if (Form2.config.lowMPcheckBox && islowmp && !Form2.config.healLowMP)
                     {
-                        // Check to make sure we have echo drops
-                        if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(plSilenceitemName)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(plSilenceitemName)) > 0)
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", plSilenceitemName));
-                            await Task.Delay(4000);
-                            break;
-                        }
+                        _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP OK!");
+                        islowmp = false;
                     }
                 }
 
-                var cures_required = new List<byte>();
-
-                int MemberOf_curaga = GeneratePT_structure();
-
-                /////////////////////////// CURAGA //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                var cParty_curaga = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId).OrderBy(p => p.CurrentHPP);
-
-                int memberOF_curaga = GeneratePT_structure();
-
-                if (memberOF_curaga != 0 && memberOF_curaga != 4)
+                if (!castingLock && Form2.config.healLowMP == true && _ELITEAPIPL.Player.MP <= Form2.config.healWhenMPBelow && _ELITEAPIPL.Player.Status == 0)
                 {
-                    foreach (var pData in cParty_curaga)
+                    if (Form2.config.lowMPcheckBox && !islowmp)
                     {
-                        if (memberOF_curaga == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
-                        {
-                            if (castingPossible(pData.MemberNumber) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!castingLock))
-                            {
-                                if ((_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Form2.config.curagaCurePercentage) && (castingPossible(pData.MemberNumber)))
-                                {
-                                    cures_required.Add(pData.MemberNumber);
-                                }
-                            }
-                        }
-                        else if (memberOF_curaga == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
-                        {
-                            if (castingPossible(pData.MemberNumber) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!castingLock))
-                            {
-                                if ((_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Form2.config.curagaCurePercentage) && (castingPossible(pData.MemberNumber)))
-                                {
-                                    cures_required.Add(pData.MemberNumber);
-                                }
-                            }
-                        }
-                        else if (memberOF_curaga == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
-                        {
-                            if (castingPossible(pData.MemberNumber) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!castingLock))
-                            {
-                                if ((_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Form2.config.curagaCurePercentage) && (castingPossible(pData.MemberNumber)))
-                                {
-                                    cures_required.Add(pData.MemberNumber);
-                                }
-                            }
-                        }
+                        _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP is seriously low, /healing.");
+                        islowmp = true;
                     }
-
-                    if (cures_required.Count >= Form2.config.curagaRequiredMembers)
+                    _ELITEAPIPL.ThirdParty.SendString("/heal");
+                }
+                else if (!castingLock && Form2.config.standAtMP == true && _ELITEAPIPL.Player.MPP >= Form2.config.standAtMP_Percentage && _ELITEAPIPL.Player.Status == 33)
+                {
+                    if (Form2.config.lowMPcheckBox && !islowmp)
                     {
-                        int lowestHP_id = cures_required.First();
-                        CuragaCalculatorAsync(lowestHP_id);
+                        _ELITEAPIPL.ThirdParty.SendString("/tell " + _ELITEAPIMonitored.Player.Name + " MP has recovered.");
+                        islowmp = false;
                     }
+                    _ELITEAPIPL.ThirdParty.SendString("/heal");
                 }
 
-                /////////////////////////// CURE //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                //var playerHpOrder = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
-                var playerHpOrder = _ELITEAPIMonitored.Party.GetPartyMembers().OrderBy(p => p.CurrentHPP).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber);
-
-                // First run a check on the monitored target
-                var playerMonitoredHp = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIMonitored.Player.Name).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber).FirstOrDefault();
-
-                if (Form2.config.enableMonitoredPriority && _ELITEAPIMonitored.Party.GetPartyMembers()[playerMonitoredHp].Name == _ELITEAPIMonitored.Player.Name && _ELITEAPIMonitored.Party.GetPartyMembers()[playerMonitoredHp].CurrentHP > 0 && (_ELITEAPIMonitored.Party.GetPartyMembers()[playerMonitoredHp].CurrentHPP <= Form2.config.monitoredCurePercentage) && (!castingLock))
+                // Only perform actions if PL is stationary PAUSE GOES HERE
+                if ((_ELITEAPIPL.Player.X == plX) && (_ELITEAPIPL.Player.Y == plY) && (_ELITEAPIPL.Player.Z == plZ) && (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn) && curePlease_autofollow == false && ((_ELITEAPIPL.Player.Status == (uint)Status.Standing) || (_ELITEAPIPL.Player.Status == (uint)Status.Fighting)))
                 {
-                    CureCalculator(playerMonitoredHp, false);
-                }
-                else
-                {
-                    // Now run a scan to check all targets in the High Priority Threshold
-                    foreach (byte id in playerHpOrder)
-                    {
-                        if ((highPriorityBoxes[id].Checked) && _ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0 && (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Form2.config.priorityCurePercentage) && (!castingLock))
-                        {
-                            CureCalculator(id, true);
-                            break;
-                        }
-                    }
-
-                    // Now run everyone else
-                    foreach (byte id in playerHpOrder)
-                    {
-                        // Cures First, is casting possible, and enabled?
-                        if (castingPossible(id) && (_ELITEAPIMonitored.Party.GetPartyMembers()[id].Active >= 1) && (enabledBoxes[id].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (!castingLock))
-                        {
-                            if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Form2.config.curePercentage) && (castingPossible(id)))
-                            {
-                                CureCalculator(id, false);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-
-                // PL and Monitored Player Debuff Removal Starting with PL
-                if (_ELITEAPIPL.Player.Status != 33 && !castingLock)
-                {
+                    // IF SILENCED THIS NEEDS TO BE REMOVED BEFORE ANY MAGIC IS ATTEMPTED
                     if (Form2.config.plSilenceItem == 0)
                     {
                         plSilenceitemName = "Catholicon";
@@ -4169,1474 +5394,956 @@
                         plSilenceitemName = "Vicar's Drink";
                     }
 
-                    if (Form2.config.plDoomitem == 0)
-                    {
-                        plDoomItemName = "Holy Water";
-                    }
-                    else if (Form2.config.plDoomitem == 1)
-                    {
-                        plDoomItemName = "Hallowed Water";
-                    }
-
-                    if (Form2.config.wakeSleepSpell == 0)
-                    {
-                        wakeSleepSpellName = "Cure";
-                    }
-                    else if (Form2.config.wakeSleepSpell == 1)
-                    {
-                        wakeSleepSpellName = "Cura";
-                    }
-                    else if (Form2.config.wakeSleepSpell == 2)
-                    {
-                        wakeSleepSpellName = "Curaga";
-                    }
-
                     foreach (StatusEffect plEffect in _ELITEAPIPL.Player.Buffs)
                     {
-                        if ((plEffect == StatusEffect.Silence) && (Form2.config.plSilenceItemEnabled))
+                        if (plEffect == StatusEffect.Silence && Form2.config.plSilenceItemEnabled)
                         {
                             // Check to make sure we have echo drops
                             if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(plSilenceitemName)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(plSilenceitemName)) > 0)
                             {
                                 _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", plSilenceitemName));
                                 await Task.Delay(4000);
-                            }
-                        }
-                        if ((plEffect == StatusEffect.Doom && Form2.config.plDoomEnabled) /* Add more options from UI HERE*/)
-                        {
-                            // Check to make sure we have holy water
-                            if (GetInventoryItemCount(_ELITEAPIPL, GetItemId(plDoomItemName)) > 0 || GetTempItemCount(_ELITEAPIPL, GetItemId(plDoomItemName)) > 0)
-                            {
-                                _ELITEAPIPL.ThirdParty.SendString(string.Format("/item \"{0}\" <me>", plDoomItemName));
-                                await Task.Delay(2000);
-                            }
-                        }
-                        else if ((plEffect == StatusEffect.Doom) && (Form2.config.plDoom) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                        }
-                        else if ((plEffect == StatusEffect.Paralysis) && (Form2.config.plParalysis) && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")) && JobChecker("Paralyna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Paralyna");
-                        }
-                        else if ((plEffect == StatusEffect.Poison) && (Form2.config.plPoison) && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")) && JobChecker("Poisona") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Poisona");
-                        }
-                        else if ((plEffect == StatusEffect.Attack_Down) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Blindness) && (Form2.config.plBlindness) && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")) && JobChecker("Blindna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Blindna");
-                        }
-                        else if ((plEffect == StatusEffect.Bind) && (Form2.config.plBind) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Weight) && (Form2.config.plWeight) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Slow) && (Form2.config.plSlow) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Curse) && (Form2.config.plCurse) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                        }
-                        else if ((plEffect == StatusEffect.Curse2) && (Form2.config.plCurse2) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                        }
-                        else if ((plEffect == StatusEffect.Addle) && (Form2.config.plAddle) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Bane) && (Form2.config.plBane) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Cursna");
-                        }
-                        else if ((plEffect == StatusEffect.Plague) && (Form2.config.plPlague) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Viruna");
-                        }
-                        else if ((plEffect == StatusEffect.Disease) && (Form2.config.plDisease) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Viruna");
-                        }
-                        else if ((plEffect == StatusEffect.Burn) && (Form2.config.plBurn) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Frost) && (Form2.config.plFrost) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Choke) && (Form2.config.plChoke) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Rasp) && (Form2.config.plRasp) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Shock) && (Form2.config.plShock) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Drown) && (Form2.config.plDrown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Dia) && (Form2.config.plDia) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Bio) && (Form2.config.plBio) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.STR_Down) && (Form2.config.plStrDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.DEX_Down) && (Form2.config.plDexDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.VIT_Down) && (Form2.config.plVitDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.AGI_Down) && (Form2.config.plAgiDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.INT_Down) && (Form2.config.plIntDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.MND_Down) && (Form2.config.plMndDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.CHR_Down) && (Form2.config.plChrDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Max_HP_Down) && (Form2.config.plMaxHpDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Max_MP_Down) && (Form2.config.plMaxMpDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Accuracy_Down) && (Form2.config.plAccuracyDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Evasion_Down) && (Form2.config.plEvasionDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Defense_Down) && (Form2.config.plDefenseDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Flash) && (Form2.config.plFlash) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Magic_Acc_Down) && (Form2.config.plMagicAccDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Magic_Atk_Down) && (Form2.config.plMagicAtkDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Helix) && (Form2.config.plHelix) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Max_TP_Down) && (Form2.config.plMaxTpDown) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Requiem) && (Form2.config.plRequiem) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Elegy) && (Form2.config.plElegy) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                        else if ((plEffect == StatusEffect.Threnody) && (Form2.config.plThrenody) && (Form2.config.plAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIPL.Player.Name, "Erase");
-                        }
-                    }
-                }
-
-                // Next, we check monitored player
-                if ((_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance < 21) && (_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Party.GetPartyMember(0).TargetIndex).Distance > 0) && (_ELITEAPIMonitored.Player.HP > 0) && _ELITEAPIPL.Player.Status != 33 && !castingLock)
-                {
-                    foreach (StatusEffect monitoredEffect in _ELITEAPIMonitored.Player.Buffs)
-                    {
-                        if ((monitoredEffect == StatusEffect.Doom) && (Form2.config.monitoredDoom) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Sleep) && (Form2.config.monitoredSleep) && (Form2.config.wakeSleepEnabled))
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, wakeSleepSpellName);
-                        }
-                        else if ((monitoredEffect == StatusEffect.Sleep2) && (Form2.config.monitoredSleep2) && (Form2.config.wakeSleepEnabled))
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, wakeSleepSpellName);
-                        }
-                        else if ((monitoredEffect == StatusEffect.Silence) && (Form2.config.monitoredSilence) && (CheckSpellRecast("Silena") == 0) && (HasSpell("Silena")) && JobChecker("Silena") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Silena");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Petrification) && (Form2.config.monitoredPetrification) && (CheckSpellRecast("Stona") == 0) && (HasSpell("Stona")) && JobChecker("Stona") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Stona");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Paralysis) && (Form2.config.monitoredParalysis) && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")) && JobChecker("Paralyna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Paralyna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Poison) && (Form2.config.monitoredPoison) && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")) && JobChecker("Erase") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Poisona");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Attack_Down) && (Form2.config.monitoredAttackDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Blindness) && (Form2.config.monitoredBlindness) && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")) && JobChecker("Blindna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Blindna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Bind) && (Form2.config.monitoredBind) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Weight) && (Form2.config.monitoredWeight) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Slow) && (Form2.config.monitoredSlow) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Curse) && (Form2.config.monitoredCurse) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Curse2) && (Form2.config.monitoredCurse2) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Addle) && (Form2.config.monitoredAddle) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Bane) && (Form2.config.monitoredBane) && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Cursna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Plague) && (Form2.config.monitoredPlague) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Viruna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Disease) && (Form2.config.monitoredDisease) && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Viruna");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Burn) && (Form2.config.monitoredBurn) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Frost) && (Form2.config.monitoredFrost) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Choke) && (Form2.config.monitoredChoke) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Rasp) && (Form2.config.monitoredRasp) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Shock) && (Form2.config.monitoredShock) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Drown) && (Form2.config.monitoredDrown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Dia) && (Form2.config.monitoredDia) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Bio) && (Form2.config.monitoredBio) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.STR_Down) && (Form2.config.monitoredStrDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.DEX_Down) && (Form2.config.monitoredDexDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.VIT_Down) && (Form2.config.monitoredVitDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.AGI_Down) && (Form2.config.monitoredAgiDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.INT_Down) && (Form2.config.monitoredIntDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.MND_Down) && (Form2.config.monitoredMndDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.CHR_Down) && (Form2.config.monitoredChrDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Max_HP_Down) && (Form2.config.monitoredMaxHpDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Max_MP_Down) && (Form2.config.monitoredMaxMpDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Accuracy_Down) && (Form2.config.monitoredAccuracyDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Evasion_Down) && (Form2.config.monitoredEvasionDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Defense_Down) && (Form2.config.monitoredDefenseDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Flash) && (Form2.config.monitoredFlash) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Magic_Acc_Down) && (Form2.config.monitoredMagicAccDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Magic_Atk_Down) && (Form2.config.monitoredMagicAtkDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Helix) && (Form2.config.monitoredHelix) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Max_TP_Down) && (Form2.config.monitoredMaxTpDown) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Requiem) && (Form2.config.monitoredRequiem) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Elegy) && (Form2.config.monitoredElegy) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                        else if ((monitoredEffect == StatusEffect.Threnody) && (Form2.config.monitoredThrenody) && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true && plMonitoredSameParty() == true)
-                        {
-                            castSpell(_ELITEAPIMonitored.Player.Name, "Erase");
-                        }
-                    }
-                }
-                // End Debuff Removal
-
-                /* DEBUFF ORDER: DOOM, Sleep, Petrification, Silence, Paralysis, Disease, Curse, Blindness, Poison, Slow, Bio, Bind, Gravity, Accuracy Down, Defense Down, Magic Def. Down, Attack Down, HP Down */
-
-                if (Form2.config.EnableAddOn && !castingLock)
-                {
-                    int BreakOut = 0;
-                    var partyMembers = _ELITEAPIPL.Party.GetPartyMembers();
-
-                    foreach (BuffStorage ailment in ActiveBuffs.ToList())
-                    {
-                        foreach (var ptMember in partyMembers)
-                        {
-                            if (ailment.CharacterName.ToLower() == ptMember.Name.ToLower())
-                            {
-                                List<string> named_Debuffs = ailment.CharacterBuffs.Split(',').ToList();
-
-                                // IF SLOW IS NOT ACTIVE, YET NEITHER IS HASTE DESPITE BEING ENABLED
-                                // RESET THE TIMER TO FORCE IT TO BE CAST
-                                if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("33") && !named_Debuffs.Contains("265"))
-                                {
-                                    if (autoHasteEnabled[ptMember.MemberNumber])
-                                    {
-                                        playerHaste[ptMember.MemberNumber] = DateTime.MinValue;
-                                        playerHaste_II[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-                                // IF SLOW IS NOT ACTIVE, YET NEITHER IS FLURRY DESPITE BEING ENABLED
-                                // RESET THE TIMER TO FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("13") && !named_Debuffs.Contains("265") && !named_Debuffs.Contains("33"))
-                                {
-                                    if (autoFlurryEnabled[ptMember.MemberNumber])
-                                    {
-                                        playerFlurry[ptMember.MemberNumber] = DateTime.MinValue;
-                                        playerFlurry_II[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-                                // IF SUBLIMATION IS NOT ACTIVE, YET NEITHER IS REFRESH DESPITE BEING
-                                // ENABLED RESET THE TIMER TO FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("187") && !named_Debuffs.Contains("188") && !named_Debuffs.Contains("43"))
-                                {
-                                    if (autoRefreshEnabled[ptMember.MemberNumber])
-                                    {
-                                        playerRefresh[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-                                // IF REGEN IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO
-                                // FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("42"))
-                                {
-                                    if (autoRegen_Enabled[ptMember.MemberNumber])
-                                    {
-                                        playerRegen[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-                                // IF PROTECT IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO
-                                // FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("40"))
-                                {
-                                    if (autoProtect_Enabled[ptMember.MemberNumber])
-                                    {
-                                        playerProtect[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-                                // IF SHELL IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER TO
-                                // FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("41"))
-                                {
-                                    if (autoShell_Enabled[ptMember.MemberNumber])
-                                    {
-                                        playerShell[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-                                // IF PHALANX II IS NOT ACTIVE DESPITE BEING ENABLED RESET THE TIMER
-                                // TO FORCE IT TO BE CAST
-                                else if (!named_Debuffs.Contains("116"))
-                                {
-                                    if (autoPhalanx_IIEnabled[ptMember.MemberNumber])
-                                    {
-                                        playerPhalanx_II[ptMember.MemberNumber] = DateTime.MinValue;
-                                    }
-                                }
-
-                                if (Form2.config.enablePartyDebuffRemoval && (characterNames_naRemoval.Contains(ailment.CharacterName.ToLower()) || Form2.config.SpecifiednaSpellsenable == false))
-                                {
-                                    //DOOM
-                                    if (Form2.config.naCurse && named_Debuffs.Contains("15") && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Cursna");
-                                        BreakOut = 1;
-                                    }
-                                    //SLEEP
-                                    else if (named_Debuffs.Contains("2") && (CheckSpellRecast(wakeSleepSpellName) == 0) && (HasSpell(wakeSleepSpellName)))
-                                    {
-                                        castSpell(ptMember.Name, wakeSleepSpellName);
-                                        removeDebuff(ptMember.Name, 2);
-                                        BreakOut = 1;
-                                    }
-                                    //SLEEP 2
-                                    else if (named_Debuffs.Contains("19") && (CheckSpellRecast(wakeSleepSpellName) == 0) && (HasSpell(wakeSleepSpellName)))
-                                    {
-                                        castSpell(ptMember.Name, wakeSleepSpellName);
-                                        removeDebuff(ptMember.Name, 19);
-                                        BreakOut = 1;
-                                    }
-                                    //PETRIFICATION
-                                    else if (Form2.config.naPetrification && named_Debuffs.Contains("7") && (CheckSpellRecast("Stona") == 0) && (HasSpell("Stona")) && JobChecker("Stona") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Stona");
-                                        removeDebuff(ptMember.Name, 7);
-                                        BreakOut = 1;
-                                    }
-                                    //SILENCE
-                                    else if (Form2.config.naSilence && named_Debuffs.Contains("6") && (CheckSpellRecast("Silena") == 0) && (HasSpell("Silena")) && JobChecker("Silena") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Silena");
-                                        removeDebuff(ptMember.Name, 6);
-                                        BreakOut = 1;
-                                    }
-                                    //PARALYSIS
-                                    else if (Form2.config.naParalysis && named_Debuffs.Contains("4") && (CheckSpellRecast("Paralyna") == 0) && (HasSpell("Paralyna")) && JobChecker("Paralyna") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Paralyna");
-                                        removeDebuff(ptMember.Name, 4);
-                                        BreakOut = 1;
-                                    }
-                                    // PLAGUE
-                                    else if (Form2.config.naDisease && named_Debuffs.Contains("31") && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Viruna");
-                                        removeDebuff(ptMember.Name, 31);
-                                        BreakOut = 1;
-                                    }
-                                    //DISEASE
-                                    else if (Form2.config.naDisease && named_Debuffs.Contains("8") && (CheckSpellRecast("Viruna") == 0) && (HasSpell("Viruna")) && JobChecker("Viruna") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Viruna");
-                                        removeDebuff(ptMember.Name, 8);
-                                        BreakOut = 1;
-                                    }
-                                    //CURSE
-                                    else if (Form2.config.naCurse && named_Debuffs.Contains("9") && (CheckSpellRecast("Cursna") == 0) && (HasSpell("Cursna")) && JobChecker("Cursna") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Cursna");
-                                        removeDebuff(ptMember.Name, 9);
-                                        BreakOut = 1;
-                                    }
-                                    //BLINDNESS
-                                    else if (Form2.config.naBlindness && named_Debuffs.Contains("5") && (CheckSpellRecast("Blindna") == 0) && (HasSpell("Blindna")) && JobChecker("Blindna") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Blindna");
-                                        removeDebuff(ptMember.Name, 5);
-                                        BreakOut = 1;
-                                    }
-                                    //POISON
-                                    else if (Form2.config.naPoison && named_Debuffs.Contains("3") && (CheckSpellRecast("Poisona") == 0) && (HasSpell("Poisona")) && JobChecker("Poisona") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Poisona");
-                                        removeDebuff(ptMember.Name, 3);
-                                        BreakOut = 1;
-                                    }
-                                    // SLOW
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("13") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 13);
-                                        BreakOut = 1;
-                                    }
-                                    // BIO
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("135") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 135);
-                                        BreakOut = 1;
-                                    }
-                                    // BIND
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("11") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 11);
-                                        BreakOut = 1;
-                                    }
-                                    // GRAVITY
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("12") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 12);
-                                        BreakOut = 1;
-                                    }
-                                    // ACCURACY DOWN
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("146") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 146);
-                                        BreakOut = 1;
-                                    }
-                                    // DEFENSE DOWN
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("149") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 149);
-                                        BreakOut = 1;
-                                    }
-                                    // MAGIC DER DOWN DOWN
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("167") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 167);
-                                        BreakOut = 1;
-                                    }
-                                    // ATTACK DOWN
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("147") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 147);
-                                        BreakOut = 1;
-                                    }
-                                    // HP DOWN
-                                    else if (Form2.config.naErase == true && named_Debuffs.Contains("144") && (CheckSpellRecast("Erase") == 0) && (HasSpell("Erase")) && JobChecker("Erase") == true)
-                                    {
-                                        castSpell(ptMember.Name, "Erase");
-                                        removeDebuff(ptMember.Name, 144);
-                                        BreakOut = 1;
-                                    }
-                                }
-                            }
-
-                            if (BreakOut == 1)
-                            {
                                 break;
                             }
                         }
                     }
-                }
 
-                // PL Auto Buffs
+                    var cures_required = new List<byte>();
 
-                string BarspellName = "";
-                int BarspellBuffID = 0;
-                bool BarSpell_AOE = false;
+                    int MemberOf_curaga = GeneratePT_structure();
 
-                if (Form2.config.AOE_Barelemental == false)
-                {
-                    var barspell = barspells.Where(c => c.spell_position == Form2.config.plBarElement_Spell && c.type == 1 && c.aoe_version != true).SingleOrDefault();
+                    /////////////////////////// CURAGA //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    BarspellName = barspell.Spell_Name;
-                    BarspellBuffID = barspell.buffID;
-                    BarSpell_AOE = false;
-                }
-                else
-                {
-                    var barspell = barspells.Where(c => c.spell_position == Form2.config.plBarElement_Spell && c.type == 1 && c.aoe_version == true).SingleOrDefault();
+                    var cParty_curaga = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId).OrderBy(p => p.CurrentHPP);
 
+                    int memberOF_curaga = GeneratePT_structure();
 
-                    BarspellName = barspell.Spell_Name;
-                    BarspellBuffID = barspell.buffID;
-                    BarSpell_AOE = true;
-                }
-
-                string BarstatusName = "";
-                int BarstatusBuffID = 0;
-                bool BarStatus_AOE = false;
-
-                if (Form2.config.AOE_Barstatus == false)
-                {
-                    var barstatus = barspells.Where(c => c.spell_position == Form2.config.plBarStatus_Spell && c.type == 2 && c.aoe_version != true).SingleOrDefault();
-
-                    BarstatusName = barstatus.Spell_Name;
-                    BarstatusBuffID = barstatus.buffID;
-                    BarStatus_AOE = false;
-                }
-                else
-                {
-                    var barstatus = barspells.Where(c => c.spell_position == Form2.config.plBarStatus_Spell && c.type == 2 && c.aoe_version == true).SingleOrDefault();
-
-
-                    BarstatusName = barstatus.Spell_Name;
-                    BarstatusBuffID = barstatus.buffID;
-                    BarStatus_AOE = true;
-                }
-
-                var enspell = enspells.Where(c => c.spell_position == Form2.config.plEnspell_Spell && c.type == 1).SingleOrDefault();
-                var stormspell = stormspells.Where(c => c.spell_position == Form2.config.plStormSpell_Spell).SingleOrDefault();
-
-                if ((!castingLock) && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
-                {
-
-                    if ((Form2.config.Composure) && (!plStatusCheck(StatusEffect.Composure)) && (GetAbilityRecast("Composure") == 0) && (HasAbility("Composure")))
+                    if (memberOF_curaga != 0 && memberOF_curaga != 4)
                     {
-                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
-                        JobAbility_Wait("Composure");
-                    }
-                    else if ((Form2.config.LightArts) && (!plStatusCheck(StatusEffect.Light_Arts)) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Light Arts") == 0) && (HasAbility("Light Arts")))
-                    {
-                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Light Arts\" <me>");
-                        JobAbility_Wait("Light Arts");
-                    }
-                    else if ((Form2.config.AddendumWhite) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Stratagems") == 0) && (HasAbility("Stratagems")))
-                    {
-                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
-                        JobAbility_Wait("Addendum: White");
-                    }
-
-                    else if ((Form2.config.plProtect) && (!plStatusCheck(StatusEffect.Protect)) && (!castingLock))
-                    {
-                        string protectSpell = "";
-                        if (Form2.config.autoProtect_Spell == 0)
-                            protectSpell = "Protect";
-                        else if (Form2.config.autoProtect_Spell == 1)
-                            protectSpell = "Protect II";
-                        else if (Form2.config.autoProtect_Spell == 2)
-                            protectSpell = "Protect III";
-                        else if (Form2.config.autoProtect_Spell == 3)
-                            protectSpell = "Protect IV";
-                        else if (Form2.config.autoProtect_Spell == 4)
-                            protectSpell = "Protect V";
-
-                        if (protectSpell != "" && CheckSpellRecast(protectSpell) == 0 && HasSpell(protectSpell) && JobChecker(protectSpell) == true && !castingLock)
+                        foreach (var pData in cParty_curaga)
                         {
-                            if ((Form2.config.Accession && Form2.config.accessionProShell && _ELITEAPIPL.Party.GetPartyMembers().Count() > 2) && ((_ELITEAPIPL.Player.MainJob == 5 && _ELITEAPIPL.Player.SubJob == 20) || _ELITEAPIPL.Player.MainJob == 20) && currentSCHCharges >= 1 && (HasAbility("Accession") && (!castingLock)))
+                            if (memberOF_curaga == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
                             {
-                                if (!plStatusCheck(StatusEffect.Accession))
+                                if (castingPossible(pData.MemberNumber) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!castingLock))
                                 {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                                    JobAbility_Wait("Protect, Accession");
-                                    return;
+                                    if ((_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Form2.config.curagaCurePercentage) && (castingPossible(pData.MemberNumber)))
+                                    {
+                                        cures_required.Add(pData.MemberNumber);
+                                    }
                                 }
                             }
-
-                            castSpell("<me>", protectSpell);
-                        }
-                    }
-
-                    else if ((Form2.config.plShell) && (!plStatusCheck(StatusEffect.Shell)) && (!castingLock))
-                    {
-                        string shellSpell = "";
-                        if (Form2.config.autoShell_Spell == 0)
-                            shellSpell = "Shell";
-                        else if (Form2.config.autoShell_Spell == 1)
-                            shellSpell = "Shell II";
-                        else if (Form2.config.autoShell_Spell == 2)
-                            shellSpell = "Shell III";
-                        else if (Form2.config.autoShell_Spell == 3)
-                            shellSpell = "Shell IV";
-                        else if (Form2.config.autoShell_Spell == 4)
-                            shellSpell = "Shell V";
-
-                        if (shellSpell != "" && CheckSpellRecast(shellSpell) == 0 && HasSpell(shellSpell) && JobChecker(shellSpell) == true && !castingLock)
-                        {
-                            if ((Form2.config.Accession && Form2.config.accessionProShell && _ELITEAPIPL.Party.GetPartyMembers().Count() > 2) && ((_ELITEAPIPL.Player.MainJob == 5 && _ELITEAPIPL.Player.SubJob == 20) || _ELITEAPIPL.Player.MainJob == 20) && currentSCHCharges >= 1 && (HasAbility("Accession") && (!castingLock)))
+                            else if (memberOF_curaga == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
                             {
-                                if (!plStatusCheck(StatusEffect.Accession))
+                                if (castingPossible(pData.MemberNumber) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!castingLock))
                                 {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                                    JobAbility_Wait("Shell, Accession");
-                                    return;
+                                    if ((_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Form2.config.curagaCurePercentage) && (castingPossible(pData.MemberNumber)))
+                                    {
+                                        cures_required.Add(pData.MemberNumber);
+                                    }
                                 }
                             }
-
-                            castSpell("<me>", shellSpell);
-                        }
-                    }
-
-                    else if ((Form2.config.plBlink) && (!plStatusCheck(StatusEffect.Blink)) && (CheckSpellRecast("Blink") == 0) && (HasSpell("Blink")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Blink");
-                    }
-
-                    else if ((Form2.config.plPhalanx) && (!plStatusCheck(StatusEffect.Phalanx)) && (CheckSpellRecast("Phalanx") == 0) && (HasSpell("Phalanx")) && JobChecker("Phalanx") == true && (!castingLock))
-                    {
-                        if (Form2.config.Accession && Form2.config.phalanxAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>"); JobAbility_Wait("Phalanx, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.phalanxPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>"); JobAbility_Wait("Phalanx, Accession");
-                            return;
-                        }
-
-                        castSpell("<me>", "Phalanx");
-                    }
-
-                    else if ((Form2.config.plReraise) && (!plStatusCheck(StatusEffect.Reraise)) && CheckReraiseLevelPossession() && (!castingLock))
-                    {
-                        if ((Form2.config.plReraise_Level == 1) && (CheckSpellRecast("Reraise") == 0) && (HasSpell("Reraise")) && JobChecker("Reraise") == true && _ELITEAPIPL.Player.MP > 150)
-                        {
-                            castSpell("<me>", "Reraise");
-                        }
-                        else if ((Form2.config.plReraise_Level == 2) && (CheckSpellRecast("Reraise II") == 0) && (HasSpell("Reraise II")) && JobChecker("Reraise II") == true && _ELITEAPIPL.Player.MP > 150)
-                        {
-                            castSpell("<me>", "Reraise II");
-                        }
-                        else if ((Form2.config.plReraise_Level == 3) && (CheckSpellRecast("Reraise III") == 0) && (HasSpell("Reraise III")) && JobChecker("Reraise III") == true && _ELITEAPIPL.Player.MP > 150)
-                        {
-                            castSpell("<me>", "Reraise III");
-                        }
-                        else if ((Form2.config.plReraise_Level == 4) && (CheckSpellRecast("Reraise IV") == 0) && (HasSpell("Reraise IV")) && JobChecker("Reraise IV") == true && _ELITEAPIPL.Player.MP > 150)
-                        {
-                            castSpell("<me>", "Reraise IV");
-                        }
-                    }
-
-                    else if ((Form2.config.plRefresh) && (!plStatusCheck(StatusEffect.Refresh)) && CheckRefreshLevelPossession() && (!castingLock))
-                    {
-                        if ((Form2.config.plRefresh_Level == 1) && (CheckSpellRecast("Refresh") == 0) && (HasSpell("Refresh")) && JobChecker("Refresh") == true)
-                        {
-                            if (Form2.config.Accession && Form2.config.refreshAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                            else if (memberOF_curaga == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
                             {
-                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                                JobAbility_Wait("Refresh, Accession");
-                                return;
+                                if (castingPossible(pData.MemberNumber) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].Active >= 1) && (enabledBoxes[pData.MemberNumber].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHP > 0) && (!castingLock))
+                                {
+                                    if ((_ELITEAPIMonitored.Party.GetPartyMembers()[pData.MemberNumber].CurrentHPP <= Form2.config.curagaCurePercentage) && (castingPossible(pData.MemberNumber)))
+                                    {
+                                        cures_required.Add(pData.MemberNumber);
+                                    }
+                                }
                             }
-
-                            if (Form2.config.Perpetuance && Form2.config.refreshPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
-                            {
-                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                                JobAbility_Wait("Refresh, Perpetuance");
-                                return;
-                            }
-
-                            castSpell("<me>", "Refresh");
                         }
-                        else if ((Form2.config.plRefresh_Level == 2) && (CheckSpellRecast("Refresh II") == 0) && (HasSpell("Refresh II")) && JobChecker("Refresh II") == true)
+
+                        if (cures_required.Count >= Form2.config.curagaRequiredMembers)
                         {
-                            castSpell("<me>", "Refresh II");
-                        }
-                        else if ((Form2.config.plRefresh_Level == 3) && (CheckSpellRecast("Refresh III") == 0) && (HasSpell("Refresh III")) && JobChecker("Refresh III") == true)
-                        {
-                            castSpell("<me>", "Refresh III");
+                            int lowestHP_id = cures_required.First();
+                            CuragaCalculatorAsync(lowestHP_id);
                         }
                     }
 
-                    else if ((Form2.config.plStoneskin) && (!plStatusCheck(StatusEffect.Stoneskin)) && (CheckSpellRecast("Stoneskin") == 0) && (HasSpell("Stoneskin")) && JobChecker("Stoneskin") == true && (!castingLock))
+                    /////////////////////////// CURE //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    //var playerHpOrder = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active >= 1).OrderBy(p => p.CurrentHPP).Select(p => p.Index);
+                    var playerHpOrder = _ELITEAPIMonitored.Party.GetPartyMembers().OrderBy(p => p.CurrentHPP).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber);
+
+                    // First run a check on the monitored target
+                    var playerMonitoredHp = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Name == _ELITEAPIMonitored.Player.Name).OrderBy(p => p.Active == 0).Select(p => p.MemberNumber).FirstOrDefault();
+
+                    if (Form2.config.enableMonitoredPriority && _ELITEAPIMonitored.Party.GetPartyMembers()[playerMonitoredHp].Name == _ELITEAPIMonitored.Player.Name && _ELITEAPIMonitored.Party.GetPartyMembers()[playerMonitoredHp].CurrentHP > 0 && (_ELITEAPIMonitored.Party.GetPartyMembers()[playerMonitoredHp].CurrentHPP <= Form2.config.monitoredCurePercentage) && (!castingLock))
                     {
-                        if (Form2.config.Accession && Form2.config.stoneskinAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                            JobAbility_Wait("Stoneskin, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.stoneskinPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                            JobAbility_Wait("Stoneskin, Perpetuance");
-                            return;
-                        }
-
-                        castSpell("<me>", "Stoneskin");
-                    }
-
-                    else if ((Form2.config.plAquaveil) && (!plStatusCheck(StatusEffect.Aquaveil)) && (CheckSpellRecast("Aquaveil") == 0) && (HasSpell("Aquaveil")) && JobChecker("Aquaveil") == true && (!castingLock))
-                    {
-                        if (Form2.config.Accession && Form2.config.aquaveilAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                            JobAbility_Wait("Aquaveil, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.aquaveilPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                            JobAbility_Wait("Aquaveil, Perpetuance");
-                            return;
-                        }
-
-                        castSpell("<me>", "Aquaveil");
-                    }
-
-                    else if ((Form2.config.plShellra) && (!plStatusCheck(StatusEffect.Shell)) && (!castingLock))
-                    {
-                        if (CheckShellraLevelRecast())
-                        {
-                            castSpell("<me>", GetShellraLevel(Form2.config.plShellra_Level));
-                        }
-                    }
-                    else if ((Form2.config.plProtectra) && (!plStatusCheck(StatusEffect.Protect)) && (!castingLock))
-                    {
-                        if (CheckProtectraLevelRecast())
-                        {
-                            castSpell("<me>", GetProtectraLevel(Form2.config.plProtectra_Level));
-                        }
-                    }
-
-                    else if ((Form2.config.plBarElement) && (!BuffChecker(BarspellBuffID, 0) && (CheckSpellRecast(BarspellName) == 0) && (HasSpell(BarspellName)) && JobChecker(BarspellName) == true && (!castingLock)))
-                    {
-                        if (Form2.config.Accession && Form2.config.barspellAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && BarSpell_AOE == false && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                            JobAbility_Wait("Barspell, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.barspellPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                            JobAbility_Wait("Barspell, Perpetuance");
-                            return;
-                        }
-
-                        castSpell("<me>", BarspellName);
-                    }
-
-
-                    else if ((Form2.config.plBarStatus) && (!BuffChecker(BarstatusBuffID, 0) && (CheckSpellRecast(BarstatusName) == 0) && (HasSpell(BarstatusName)) && JobChecker(BarstatusName) == true && (!castingLock)))
-                    {
-                        if (Form2.config.Accession && Form2.config.barstatusAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && BarStatus_AOE == false && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                            JobAbility_Wait("Barstatus, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.barstatusPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                            JobAbility_Wait("Barstatus, Perpetuance");
-                            return;
-                        }
-
-                        castSpell("<me>", BarstatusName);
-                    }
-
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 0) && !plStatusCheck(StatusEffect.STR_Boost2) && (CheckSpellRecast("Gain-STR") == 0) && (HasSpell("Gain-STR")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-STR");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 1) && !plStatusCheck(StatusEffect.DEX_Boost2) && (CheckSpellRecast("Gain-DEX") == 0) && (HasSpell("Gain-DEX")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-DEX");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 2) && !plStatusCheck(StatusEffect.VIT_Boost2) && (CheckSpellRecast("Gain-VIT") == 0) && (HasSpell("Gain-VIT")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-VIT");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 3) && !plStatusCheck(StatusEffect.AGI_Boost2) && (CheckSpellRecast("Gain-AGI") == 0) && (HasSpell("Gain-AGI")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-AGI");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 4) && !plStatusCheck(StatusEffect.INT_Boost2) && (CheckSpellRecast("Gain-INT") == 0) && (HasSpell("Gain-INT")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-INT");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 5) && !plStatusCheck(StatusEffect.MND_Boost2) && (CheckSpellRecast("Gain-MND") == 0) && (HasSpell("Gain-MND")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-MND");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 6) && !plStatusCheck(StatusEffect.CHR_Boost2) && (CheckSpellRecast("Gain-CHR") == 0) && (HasSpell("Gain-CHR")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Gain-CHR");
-                    }
-
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 7) && !plStatusCheck(StatusEffect.STR_Boost2) && (CheckSpellRecast("Boost-STR") == 0) && (HasSpell("Boost-STR")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-STR");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 8) && !plStatusCheck(StatusEffect.DEX_Boost2) && (CheckSpellRecast("Boost-DEX") == 0) && (HasSpell("Boost-DEX")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-DEX");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 9) && !plStatusCheck(StatusEffect.VIT_Boost2) && (CheckSpellRecast("Boost-VIT") == 0) && (HasSpell("Boost-VIT")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-VIT");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 10) && !plStatusCheck(StatusEffect.AGI_Boost2) && (CheckSpellRecast("Boost-AGI") == 0) && (HasSpell("Boost-AGI")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-AGI");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 11) && !plStatusCheck(StatusEffect.INT_Boost2) && (CheckSpellRecast("Boost-INT") == 0) && (HasSpell("Boost-INT")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-INT");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 12) && !plStatusCheck(StatusEffect.MND_Boost2) && (CheckSpellRecast("Boost-MND") == 0) && (HasSpell("Boost-MND")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-MND");
-                    }
-                    else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 13) && !plStatusCheck(StatusEffect.CHR_Boost2) && (CheckSpellRecast("Boost-CHR") == 0) && (HasSpell("Boost-CHR")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Boost-CHR");
-                    }
-
-                    else if ((Form2.config.plStormSpell) && (!BuffChecker(stormspell.buffID, 0) && (CheckSpellRecast(stormspell.Spell_Name) == 0) && (HasSpell(stormspell.Spell_Name)) && JobChecker(stormspell.Spell_Name) == true && (!castingLock)))
-                    {
-                        if (Form2.config.Accession && Form2.config.stormspellAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                            JobAbility_Wait("Stormspell, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.stormspellPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                            JobAbility_Wait("Stormspell, Perpetuance");
-                            return;
-                        }
-
-                        castSpell("<me>", stormspell.Spell_Name);
-                    }
-
-                    else if ((Form2.config.plKlimaform) && !plStatusCheck(StatusEffect.Klimaform) && (!castingLock))
-                    {
-                        if ((CheckSpellRecast("Klimaform") == 0) && (HasSpell("Klimaform")))
-                        {
-                            castSpell("<me>", "Klimaform");
-                        }
-                    }
-
-                    else if ((Form2.config.plTemper) && (!plStatusCheck(StatusEffect.Multi_Strikes)) && (!castingLock))
-                    {
-                        if ((Form2.config.plTemper_Level == 1) && (CheckSpellRecast("Temper") == 0) && (HasSpell("Temper")))
-                        {
-                            castSpell("<me>", "Temper");
-                        }
-                        else if ((Form2.config.plTemper_Level == 2) && (CheckSpellRecast("Temper II") == 0) && (HasSpell("Temper II")))
-                        {
-                            castSpell("<me>", "Temper II");
-                        }
-                    }
-
-                    else if ((Form2.config.plEnspell) && (!BuffChecker(enspell.buffID, 0) && (CheckSpellRecast(enspell.Spell_Name) == 0) && (HasSpell(enspell.Spell_Name)) && JobChecker(enspell.Spell_Name) == true && (!castingLock)))
-                    {
-                        if (Form2.config.Accession && Form2.config.enspellAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && enspell.spell_position < 6 && !plStatusCheck(StatusEffect.Accession))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                            JobAbility_Wait("Enspell, Accession");
-                            return;
-                        }
-
-                        if (Form2.config.Perpetuance && Form2.config.enspellPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && enspell.spell_position < 6 && !plStatusCheck(StatusEffect.Perpetuance))
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                            JobAbility_Wait("Enspell, Perpetuance");
-                            return;
-                        }
-
-                        castSpell("<me>", enspell.Spell_Name);
-                    }
-
-                    else if ((Form2.config.plAuspice) && (!plStatusCheck(StatusEffect.Auspice)) && (CheckSpellRecast("Auspice") == 0) && (HasSpell("Auspice")) && (!castingLock))
-                    {
-                        castSpell("<me>", "Auspice");
-                    }
-                }
-                // End PL Auto Buffs
-
-
-                EliteAPI.TargetInfo target = _ELITEAPIMonitored.Target.GetTargetInfo();
-                uint targetIdx = target.TargetIndex;
-                var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
-
-                if (!castingLock && Form2.config.autoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Form2.config.autoTargetSpell) == 0) && (HasSpell(Form2.config.autoTargetSpell)))
-                {
-                    if (Form2.config.Hate_SpellType == 0)
-                    {
-                        if (curePlease_autofollow == false)
-                        {
-                            _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-                            await Task.Delay(2000);
-                            castSpell("<t>", Form2.config.autoTargetSpell);
-                            await Task.Delay(500);
-                            lastTargetID = entity.TargetID;
-                        }
+                        CureCalculator(playerMonitoredHp, false);
                     }
                     else
                     {
-                        if (Form2.config.autoTarget_Target != "")
+                        // Now run a scan to check all targets in the High Priority Threshold
+                        foreach (byte id in playerHpOrder)
                         {
-                            await Task.Delay(1000);
-                            castSpell(Form2.config.autoTarget_Target, Form2.config.autoTargetSpell);
-                            lastTargetID = entity.TargetID;
+                            if ((highPriorityBoxes[id].Checked) && _ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0 && (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Form2.config.priorityCurePercentage) && (!castingLock))
+                            {
+                                CureCalculator(id, true);
+                                break;
+                            }
+                        }
+
+                        // Now run everyone else
+                        foreach (byte id in playerHpOrder)
+                        {
+                            // Cures First, is casting possible, and enabled?
+                            if (castingPossible(id) && (_ELITEAPIMonitored.Party.GetPartyMembers()[id].Active >= 1) && (enabledBoxes[id].Checked) && (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (!castingLock))
+                            {
+                                if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHPP <= Form2.config.curePercentage) && (castingPossible(id)))
+                                {
+                                    CureCalculator(id, false);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // RUN DEBUFF REMOVAL - CONVERTED TO FUNCTION SO CAN BE RUN IN MULTIPLE AREAS
+                    runDebuffCheckerAsync();
+
+                    // PL Auto Buffs
+
+                    string BarspellName = String.Empty;
+                    int BarspellBuffID = 0;
+                    bool BarSpell_AOE = false;
+
+                    if (Form2.config.AOE_Barelemental == false)
+                    {
+                        var barspell = barspells.Where(c => c.spell_position == Form2.config.plBarElement_Spell && c.type == 1 && c.aoe_version != true).SingleOrDefault();
+
+                        BarspellName = barspell.Spell_Name;
+                        BarspellBuffID = barspell.buffID;
+                        BarSpell_AOE = false;
+                    }
+                    else
+                    {
+                        var barspell = barspells.Where(c => c.spell_position == Form2.config.plBarElement_Spell && c.type == 1 && c.aoe_version == true).SingleOrDefault();
+
+                        BarspellName = barspell.Spell_Name;
+                        BarspellBuffID = barspell.buffID;
+                        BarSpell_AOE = true;
+                    }
+
+                    string BarstatusName = String.Empty;
+                    int BarstatusBuffID = 0;
+                    bool BarStatus_AOE = false;
+
+                    if (Form2.config.AOE_Barstatus == false)
+                    {
+                        var barstatus = barspells.Where(c => c.spell_position == Form2.config.plBarStatus_Spell && c.type == 2 && c.aoe_version != true).SingleOrDefault();
+
+                        BarstatusName = barstatus.Spell_Name;
+                        BarstatusBuffID = barstatus.buffID;
+                        BarStatus_AOE = false;
+                    }
+                    else
+                    {
+                        var barstatus = barspells.Where(c => c.spell_position == Form2.config.plBarStatus_Spell && c.type == 2 && c.aoe_version == true).SingleOrDefault();
+
+                        BarstatusName = barstatus.Spell_Name;
+                        BarstatusBuffID = barstatus.buffID;
+                        BarStatus_AOE = true;
+                    }
+
+                    var enspell = enspells.Where(c => c.spell_position == Form2.config.plEnspell_Spell && c.type == 1).SingleOrDefault();
+                    var stormspell = stormspells.Where(c => c.spell_position == Form2.config.plStormSpell_Spell).SingleOrDefault();
+
+                    if ((!castingLock) && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.LoggedIn)
+                    {
+                        if ((Form2.config.Composure) && (!plStatusCheck(StatusEffect.Composure)) && (GetAbilityRecast("Composure") == 0) && (HasAbility("Composure")))
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
+                            JobAbility_Wait("Composure");
+                        }
+                        else if ((Form2.config.LightArts) && (!plStatusCheck(StatusEffect.Light_Arts)) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Light Arts") == 0) && (HasAbility("Light Arts")))
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Light Arts\" <me>");
+                            JobAbility_Wait("Light Arts");
+                        }
+                        else if ((Form2.config.AddendumWhite) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Stratagems") == 0) && (HasAbility("Stratagems")))
+                        {
+                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
+                            JobAbility_Wait("Addendum: White");
+                        }
+                        else if ((Form2.config.plUtsusemi) && (BuffChecker(444, 0) != true && BuffChecker(445, 0) != true && BuffChecker(446, 0) != true) && (!castingLock))
+                        {
+                            if (CheckSpellRecast("Utsusemi: Ni") == 0 && HasSpell("Utsusemi: Ni") && JobChecker("Utsusemi: Ni") == true && GetInventoryItemCount(_ELITEAPIPL, GetItemId("Shihei")) > 0)
+                            {
+                                castSpell("<me>", "Utsusemi: Ni");
+                            }
+                            else if (CheckSpellRecast("Utsusemi: Ichi") == 0 && HasSpell("Utsusemi: Ichi") && JobChecker("Utsusemi: Ichi") == true && (BuffChecker(62, 0) != true && BuffChecker(444, 0) != true && BuffChecker(445, 0) != true && BuffChecker(446, 0) != true) && GetInventoryItemCount(_ELITEAPIPL, GetItemId("Shihei")) > 0)
+                            {
+                                castSpell("<me>", "Utsusemi: Ichi");
+                            }
+                        }
+                        else if ((Form2.config.plProtect) && (!plStatusCheck(StatusEffect.Protect)) && (!castingLock))
+                        {
+                            string protectSpell = String.Empty;
+                            if (Form2.config.autoProtect_Spell == 0)
+                                protectSpell = "Protect";
+                            else if (Form2.config.autoProtect_Spell == 1)
+                                protectSpell = "Protect II";
+                            else if (Form2.config.autoProtect_Spell == 2)
+                                protectSpell = "Protect III";
+                            else if (Form2.config.autoProtect_Spell == 3)
+                                protectSpell = "Protect IV";
+                            else if (Form2.config.autoProtect_Spell == 4)
+                                protectSpell = "Protect V";
+
+                            if (protectSpell != String.Empty && CheckSpellRecast(protectSpell) == 0 && HasSpell(protectSpell) && JobChecker(protectSpell) == true && !castingLock)
+                            {
+                                if ((Form2.config.Accession && Form2.config.accessionProShell && _ELITEAPIPL.Party.GetPartyMembers().Count() > 2) && ((_ELITEAPIPL.Player.MainJob == 5 && _ELITEAPIPL.Player.SubJob == 20) || _ELITEAPIPL.Player.MainJob == 20) && currentSCHCharges >= 1 && (HasAbility("Accession") && (!castingLock)))
+                                {
+                                    if (!plStatusCheck(StatusEffect.Accession))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                        JobAbility_Wait("Protect, Accession");
+                                        return;
+                                    }
+                                }
+
+                                castSpell("<me>", protectSpell);
+                            }
+                        }
+                        else if ((Form2.config.plShell) && (!plStatusCheck(StatusEffect.Shell)) && (!castingLock))
+                        {
+                            string shellSpell = String.Empty;
+                            if (Form2.config.autoShell_Spell == 0)
+                                shellSpell = "Shell";
+                            else if (Form2.config.autoShell_Spell == 1)
+                                shellSpell = "Shell II";
+                            else if (Form2.config.autoShell_Spell == 2)
+                                shellSpell = "Shell III";
+                            else if (Form2.config.autoShell_Spell == 3)
+                                shellSpell = "Shell IV";
+                            else if (Form2.config.autoShell_Spell == 4)
+                                shellSpell = "Shell V";
+
+                            if (shellSpell != String.Empty && CheckSpellRecast(shellSpell) == 0 && HasSpell(shellSpell) && JobChecker(shellSpell) == true && !castingLock)
+                            {
+                                if ((Form2.config.Accession && Form2.config.accessionProShell && _ELITEAPIPL.Party.GetPartyMembers().Count() > 2) && ((_ELITEAPIPL.Player.MainJob == 5 && _ELITEAPIPL.Player.SubJob == 20) || _ELITEAPIPL.Player.MainJob == 20) && currentSCHCharges >= 1 && (HasAbility("Accession") && (!castingLock)))
+                                {
+                                    if (!plStatusCheck(StatusEffect.Accession))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                        JobAbility_Wait("Shell, Accession");
+                                        return;
+                                    }
+                                }
+
+                                castSpell("<me>", shellSpell);
+                            }
+                        }
+                        else if ((Form2.config.plBlink) && (!plStatusCheck(StatusEffect.Blink)) && (CheckSpellRecast("Blink") == 0) && (HasSpell("Blink")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Blink");
+                        }
+                        else if ((Form2.config.plPhalanx) && (!plStatusCheck(StatusEffect.Phalanx)) && (CheckSpellRecast("Phalanx") == 0) && (HasSpell("Phalanx")) && JobChecker("Phalanx") == true && (!castingLock))
+                        {
+                            if (Form2.config.Accession && Form2.config.phalanxAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>"); JobAbility_Wait("Phalanx, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.phalanxPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>"); JobAbility_Wait("Phalanx, Accession");
+                                return;
+                            }
+
+                            castSpell("<me>", "Phalanx");
+                        }
+                        else if ((Form2.config.plReraise) && (!plStatusCheck(StatusEffect.Reraise)) && CheckReraiseLevelPossession() == true && (!castingLock))
+                        {
+                            if ((Form2.config.plReraise_Level == 1) && _ELITEAPIPL.Player.MP > 150)
+                            {
+                                castSpell("<me>", "Reraise");
+                            }
+                            else if ((Form2.config.plReraise_Level == 2) && _ELITEAPIPL.Player.MP > 150)
+                            {
+                                castSpell("<me>", "Reraise II");
+                            }
+                            else if ((Form2.config.plReraise_Level == 3) && _ELITEAPIPL.Player.MP > 150)
+                            {
+                                castSpell("<me>", "Reraise III");
+                            }
+                            else if ((Form2.config.plReraise_Level == 4) && _ELITEAPIPL.Player.MP > 150)
+                            {
+                                castSpell("<me>", "Reraise IV");
+                            }
+                        }
+                        else if ((Form2.config.plRefresh) && (!plStatusCheck(StatusEffect.Refresh)) && CheckRefreshLevelPossession() && (!castingLock))
+                        {
+                            if ((Form2.config.plRefresh_Level == 1) && (CheckSpellRecast("Refresh") == 0) && (HasSpell("Refresh")) && JobChecker("Refresh") == true)
+                            {
+                                if (Form2.config.Accession && Form2.config.refreshAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                                {
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                    JobAbility_Wait("Refresh, Accession");
+                                    return;
+                                }
+
+                                if (Form2.config.Perpetuance && Form2.config.refreshPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                                {
+                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                    JobAbility_Wait("Refresh, Perpetuance");
+                                    return;
+                                }
+
+                                castSpell("<me>", "Refresh");
+                            }
+                            else if ((Form2.config.plRefresh_Level == 2) && (CheckSpellRecast("Refresh II") == 0) && (HasSpell("Refresh II")) && JobChecker("Refresh II") == true)
+                            {
+                                castSpell("<me>", "Refresh II");
+                            }
+                            else if ((Form2.config.plRefresh_Level == 3) && (CheckSpellRecast("Refresh III") == 0) && (HasSpell("Refresh III")) && JobChecker("Refresh III") == true)
+                            {
+                                castSpell("<me>", "Refresh III");
+                            }
+                        }
+                        else if ((Form2.config.plAdloquium) && (!plStatusCheck(StatusEffect.Regain)) && (CheckSpellRecast("Adloquium") == 0) && (HasSpell("Adloquium")) && JobChecker("Adloquium") == true && (!castingLock))
+                        {
+                            if (Form2.config.Accession && Form2.config.adloquiumAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Adloquium, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.adloquiumPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Adloquium, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", "Adloquium");
+                        }
+                        else if ((Form2.config.plStoneskin) && (!plStatusCheck(StatusEffect.Stoneskin)) && (CheckSpellRecast("Stoneskin") == 0) && (HasSpell("Stoneskin")) && JobChecker("Stoneskin") == true && (!castingLock))
+                        {
+                            if (Form2.config.Accession && Form2.config.stoneskinAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Stoneskin, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.stoneskinPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Stoneskin, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", "Stoneskin");
+                        }
+                        else if ((Form2.config.plAquaveil) && (!plStatusCheck(StatusEffect.Aquaveil)) && (CheckSpellRecast("Aquaveil") == 0) && (HasSpell("Aquaveil")) && JobChecker("Aquaveil") == true && (!castingLock))
+                        {
+                            if (Form2.config.Accession && Form2.config.aquaveilAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Aquaveil, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.aquaveilPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Aquaveil, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", "Aquaveil");
+                        }
+                        else if ((Form2.config.plShellra) && (!plStatusCheck(StatusEffect.Shell)) && CheckShellraLevelPossession() == true && (!castingLock))
+                        {
+                            castSpell("<me>", GetShellraLevel(Form2.config.plShellra_Level));
+                        }
+                        else if ((Form2.config.plProtectra) && (!plStatusCheck(StatusEffect.Protect)) && CheckProtectraLevelPossession() == true && (!castingLock))
+                        {
+                            castSpell("<me>", GetProtectraLevel(Form2.config.plProtectra_Level));
+                        }
+                        else if ((Form2.config.plBarElement) && (!BuffChecker(BarspellBuffID, 0) && (CheckSpellRecast(BarspellName) == 0) && (HasSpell(BarspellName)) && JobChecker(BarspellName) == true && (!castingLock)))
+                        {
+                            if (Form2.config.Accession && Form2.config.barspellAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && BarSpell_AOE == false && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Barspell, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.barspellPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Barspell, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", BarspellName);
+                        }
+                        else if ((Form2.config.plBarStatus) && (!BuffChecker(BarstatusBuffID, 0) && (CheckSpellRecast(BarstatusName) == 0) && (HasSpell(BarstatusName)) && JobChecker(BarstatusName) == true && (!castingLock)))
+                        {
+                            if (Form2.config.Accession && Form2.config.barstatusAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && BarStatus_AOE == false && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Barstatus, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.barstatusPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Barstatus, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", BarstatusName);
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 0) && !plStatusCheck(StatusEffect.STR_Boost2) && (CheckSpellRecast("Gain-STR") == 0) && (HasSpell("Gain-STR")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-STR");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 1) && !plStatusCheck(StatusEffect.DEX_Boost2) && (CheckSpellRecast("Gain-DEX") == 0) && (HasSpell("Gain-DEX")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-DEX");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 2) && !plStatusCheck(StatusEffect.VIT_Boost2) && (CheckSpellRecast("Gain-VIT") == 0) && (HasSpell("Gain-VIT")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-VIT");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 3) && !plStatusCheck(StatusEffect.AGI_Boost2) && (CheckSpellRecast("Gain-AGI") == 0) && (HasSpell("Gain-AGI")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-AGI");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 4) && !plStatusCheck(StatusEffect.INT_Boost2) && (CheckSpellRecast("Gain-INT") == 0) && (HasSpell("Gain-INT")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-INT");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 5) && !plStatusCheck(StatusEffect.MND_Boost2) && (CheckSpellRecast("Gain-MND") == 0) && (HasSpell("Gain-MND")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-MND");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 6) && !plStatusCheck(StatusEffect.CHR_Boost2) && (CheckSpellRecast("Gain-CHR") == 0) && (HasSpell("Gain-CHR")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Gain-CHR");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 7) && !plStatusCheck(StatusEffect.STR_Boost2) && (CheckSpellRecast("Boost-STR") == 0) && (HasSpell("Boost-STR")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-STR");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 8) && !plStatusCheck(StatusEffect.DEX_Boost2) && (CheckSpellRecast("Boost-DEX") == 0) && (HasSpell("Boost-DEX")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-DEX");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 9) && !plStatusCheck(StatusEffect.VIT_Boost2) && (CheckSpellRecast("Boost-VIT") == 0) && (HasSpell("Boost-VIT")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-VIT");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 10) && !plStatusCheck(StatusEffect.AGI_Boost2) && (CheckSpellRecast("Boost-AGI") == 0) && (HasSpell("Boost-AGI")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-AGI");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 11) && !plStatusCheck(StatusEffect.INT_Boost2) && (CheckSpellRecast("Boost-INT") == 0) && (HasSpell("Boost-INT")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-INT");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 12) && !plStatusCheck(StatusEffect.MND_Boost2) && (CheckSpellRecast("Boost-MND") == 0) && (HasSpell("Boost-MND")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-MND");
+                        }
+                        else if (Form2.config.plGainBoost && (Form2.config.plGainBoost_Spell == 13) && !plStatusCheck(StatusEffect.CHR_Boost2) && (CheckSpellRecast("Boost-CHR") == 0) && (HasSpell("Boost-CHR")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Boost-CHR");
+                        }
+                        else if ((Form2.config.plStormSpell) && (!BuffChecker(stormspell.buffID, 0) && (CheckSpellRecast(stormspell.Spell_Name) == 0) && (HasSpell(stormspell.Spell_Name)) && JobChecker(stormspell.Spell_Name) == true && (!castingLock)))
+                        {
+                            if (Form2.config.Accession && Form2.config.stormspellAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Stormspell, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.stormspellPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Stormspell, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", stormspell.Spell_Name);
+                        }
+                        else if ((Form2.config.plKlimaform) && !plStatusCheck(StatusEffect.Klimaform) && (!castingLock))
+                        {
+                            if ((CheckSpellRecast("Klimaform") == 0) && (HasSpell("Klimaform")))
+                            {
+                                castSpell("<me>", "Klimaform");
+                            }
+                        }
+                        else if ((Form2.config.plTemper) && (!plStatusCheck(StatusEffect.Multi_Strikes)) && (!castingLock))
+                        {
+                            if ((Form2.config.plTemper_Level == 1) && (CheckSpellRecast("Temper") == 0) && (HasSpell("Temper")))
+                            {
+                                castSpell("<me>", "Temper");
+                            }
+                            else if ((Form2.config.plTemper_Level == 2) && (CheckSpellRecast("Temper II") == 0) && (HasSpell("Temper II")))
+                            {
+                                castSpell("<me>", "Temper II");
+                            }
+                        }
+                        else if ((Form2.config.plEnspell) && (!BuffChecker(enspell.buffID, 0) && (CheckSpellRecast(enspell.Spell_Name) == 0) && (HasSpell(enspell.Spell_Name)) && JobChecker(enspell.Spell_Name) == true && (!castingLock)))
+                        {
+                            if (Form2.config.Accession && Form2.config.enspellAccession && currentSCHCharges > 0 && HasAbility("Accession") && (!castingLock) && enspell.spell_position < 6 && !plStatusCheck(StatusEffect.Accession))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                JobAbility_Wait("Enspell, Accession");
+                                return;
+                            }
+
+                            if (Form2.config.Perpetuance && Form2.config.enspellPerpetuance && currentSCHCharges > 0 && HasAbility("Perpetuance") && (!castingLock) && enspell.spell_position < 6 && !plStatusCheck(StatusEffect.Perpetuance))
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                JobAbility_Wait("Enspell, Perpetuance");
+                                return;
+                            }
+
+                            castSpell("<me>", enspell.Spell_Name);
+                        }
+                        else if ((Form2.config.plAuspice) && (!plStatusCheck(StatusEffect.Auspice)) && (CheckSpellRecast("Auspice") == 0) && (HasSpell("Auspice")) && (!castingLock))
+                        {
+                            castSpell("<me>", "Auspice");
+                        }
+                    }
+                    // End PL Auto Buffs
+
+                    EliteAPI.TargetInfo target = _ELITEAPIMonitored.Target.GetTargetInfo();
+                    uint targetIdx = target.TargetIndex;
+                    var entity = _ELITEAPIMonitored.Entity.GetEntity(Convert.ToInt32(targetIdx));
+
+                    if (!castingLock && Form2.config.autoTarget && entity.TargetID != lastTargetID && _ELITEAPIMonitored.Player.Status == 1 && (CheckSpellRecast(Form2.config.autoTargetSpell) == 0) && (HasSpell(Form2.config.autoTargetSpell)))
+                    {
+                        if (Form2.config.Hate_SpellType == 0)
+                        {
+                            if (curePlease_autofollow == false)
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+                                await Task.Delay(2000);
+                                castSpell("<t>", Form2.config.autoTargetSpell);
+                                await Task.Delay(500);
+                                lastTargetID = entity.TargetID;
+                            }
                         }
                         else
                         {
-                            await Task.Delay(1000);
-                            castSpell(_ELITEAPIMonitored.Player.Name, Form2.config.autoTargetSpell);
-                            lastTargetID = entity.TargetID;
-                        }
-                    }
-                }
-
-
-                // Auto Casting
-                foreach (byte id in playerHpOrder)
-                {
-                    if ((autoHasteEnabled[id]) && (CheckSpellRecast("Haste") == 0) && (HasSpell("Haste")) && JobChecker("Haste") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
-                    {
-                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
-                        {
-                            if (!plStatusCheck(StatusEffect.Haste))
+                            if (Form2.config.autoTarget_Target != String.Empty)
                             {
-                                hastePlayer(id);
+                                await Task.Delay(1000);
+                                castSpell(Form2.config.autoTarget_Target, Form2.config.autoTargetSpell);
+                                lastTargetID = entity.TargetID;
                             }
-                        }
-                        else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
-                        {
-                            if (!monitoredStatusCheck(StatusEffect.Haste))
+                            else
                             {
-                                hastePlayer(id);
+                                await Task.Delay(1000);
+                                castSpell(_ELITEAPIMonitored.Player.Name, Form2.config.autoTargetSpell);
+                                lastTargetID = entity.TargetID;
                             }
-                        }
-                        else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerHasteSpan[id].Minutes >= Form2.config.autoHasteMinutes) && (_ELITEAPIPL.Recast.GetSpellRecast(_ELITEAPIPL.Resources.GetSpell("Haste", 0).Index) == 0))
-                        {
-                            hastePlayer(id);
                         }
                     }
 
-
+                    // Auto Casting
+                    foreach (byte id in playerHpOrder)
                     {
-                        if ((autoHaste_IIEnabled[id]) && (CheckSpellRecast("Haste II") == 0) && (HasSpell("Haste II")) && JobChecker("Haste II") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
+                        if ((autoHasteEnabled[id]) && (CheckSpellRecast("Haste") == 0) && (HasSpell("Haste")) && JobChecker("Haste") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                         {
                             if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                             {
                                 if (!plStatusCheck(StatusEffect.Haste))
                                 {
-                                    haste_IIPlayer(id);
+                                    hastePlayer(id);
                                 }
                             }
                             else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                             {
                                 if (!monitoredStatusCheck(StatusEffect.Haste))
                                 {
-                                    haste_IIPlayer(id);
+                                    hastePlayer(id);
                                 }
                             }
-                            else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerHaste_IISpan[id].Minutes >= Form2.config.autoHasteMinutes))
+                            else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerHasteSpan[id].Minutes >= Form2.config.autoHasteMinutes) && (_ELITEAPIPL.Recast.GetSpellRecast(_ELITEAPIPL.Resources.GetSpell("Haste", 0).Index) == 0))
                             {
-                                haste_IIPlayer(id);
+                                hastePlayer(id);
                             }
                         }
 
-
                         {
-                            if ((autoFlurryEnabled[id]) && (CheckSpellRecast("Flurry") == 0) && (HasSpell("Flurry")) && JobChecker("Flurry") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
+                            if ((autoHaste_IIEnabled[id]) && (CheckSpellRecast("Haste II") == 0) && (HasSpell("Haste II")) && JobChecker("Haste II") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                             {
                                 if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                 {
-                                    if (!plStatusCheck((StatusEffect)581))
+                                    if (!plStatusCheck(StatusEffect.Haste))
                                     {
-                                        FlurryPlayer(id);
+                                        haste_IIPlayer(id);
                                     }
                                 }
                                 else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                 {
-                                    if (!monitoredStatusCheck((StatusEffect)581))
+                                    if (!monitoredStatusCheck(StatusEffect.Haste))
                                     {
-                                        FlurryPlayer(id);
+                                        haste_IIPlayer(id);
                                     }
                                 }
-                                else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerFlurrySpan[id].Minutes >= Form2.config.autoHasteMinutes))
+                                else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerHaste_IISpan[id].Minutes >= Form2.config.autoHasteMinutes))
                                 {
-                                    FlurryPlayer(id);
+                                    haste_IIPlayer(id);
                                 }
                             }
 
-
                             {
-                                if ((autoFlurry_IIEnabled[id]) && (CheckSpellRecast("Flurry II") == 0) && (HasSpell("Flurry II")) && JobChecker("Flurry II") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
+                                if ((autoFlurryEnabled[id]) && (CheckSpellRecast("Flurry") == 0) && (HasSpell("Flurry")) && JobChecker("Flurry") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                 {
                                     if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                     {
                                         if (!plStatusCheck((StatusEffect)581))
                                         {
-                                            Flurry_IIPlayer(id);
+                                            FlurryPlayer(id);
                                         }
                                     }
                                     else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
                                     {
                                         if (!monitoredStatusCheck((StatusEffect)581))
                                         {
+                                            FlurryPlayer(id);
+                                        }
+                                    }
+                                    else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerFlurrySpan[id].Minutes >= Form2.config.autoHasteMinutes))
+                                    {
+                                        FlurryPlayer(id);
+                                    }
+                                }
+
+                                {
+                                    if ((autoFlurry_IIEnabled[id]) && (CheckSpellRecast("Flurry II") == 0) && (HasSpell("Flurry II")) && JobChecker("Flurry II") == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
+                                    {
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                        {
+                                            if (!plStatusCheck((StatusEffect)581))
+                                            {
+                                                Flurry_IIPlayer(id);
+                                            }
+                                        }
+                                        else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+                                        {
+                                            if (!monitoredStatusCheck((StatusEffect)581))
+                                            {
+                                                Flurry_IIPlayer(id);
+                                            }
+                                        }
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerFlurry_IISpan[id].Minutes >= Form2.config.autoHasteMinutes))
+                                        {
                                             Flurry_IIPlayer(id);
                                         }
                                     }
-                                    else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerFlurry_IISpan[id].Minutes >= Form2.config.autoHasteMinutes))
-                                    {
-                                        Flurry_IIPlayer(id);
-                                    }
-                                }
 
-                                string[] shell_spells = { "Shell", "Shell II", "Shell III", "Shell IV", "Shell V" };
+                                    string[] shell_spells = { "Shell", "Shell II", "Shell III", "Shell IV", "Shell V" };
 
-                                if ((autoShell_Enabled[id]) && (CheckSpellRecast(shell_spells[Form2.config.autoShell_Spell]) == 0) && (HasSpell(shell_spells[Form2.config.autoShell_Spell])) && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                    if ((autoShell_Enabled[id]) && (CheckSpellRecast(shell_spells[Form2.config.autoShell_Spell]) == 0) && (HasSpell(shell_spells[Form2.config.autoShell_Spell])) && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                     {
-                                        if (!plStatusCheck(StatusEffect.Shell))
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                        {
+                                            if (!plStatusCheck(StatusEffect.Shell))
+                                            {
+                                                shellPlayer(id);
+                                            }
+                                        }
+                                        else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+                                        {
+                                            if (!monitoredStatusCheck(StatusEffect.Shell))
+                                            {
+                                                shellPlayer(id);
+                                            }
+                                        }
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerShell_Span[id].Minutes >= Form2.config.autoShellMinutes))
                                         {
                                             shellPlayer(id);
                                         }
                                     }
-                                    else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+
+                                    string[] protect_spells = { "Protect", "Protect II", "Protect III", "Protect IV", "Protect V" };
+
+                                    if ((autoProtect_Enabled[id]) && (CheckSpellRecast(protect_spells[Form2.config.autoProtect_Spell]) == 0) && (HasSpell(protect_spells[Form2.config.autoProtect_Spell])) && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Shell))
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                         {
-                                            shellPlayer(id);
+                                            if (!plStatusCheck(StatusEffect.Protect))
+                                            {
+                                                protectPlayer(id);
+                                            }
                                         }
-                                    }
-                                    else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerShell_Span[id].Minutes >= Form2.config.autoShellMinutes))
-                                    {
-                                        shellPlayer(id);
-                                    }
-                                }
-
-
-
-                                string[] protect_spells = { "Protect", "Protect II", "Protect III", "Protect IV", "Protect V" };
-
-                                if ((autoProtect_Enabled[id]) && (CheckSpellRecast(protect_spells[Form2.config.autoProtect_Spell]) == 0) && (HasSpell(protect_spells[Form2.config.autoProtect_Spell])) && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Protect))
+                                        else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+                                        {
+                                            if (!monitoredStatusCheck(StatusEffect.Protect))
+                                            {
+                                                protectPlayer(id);
+                                            }
+                                        }
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerProtect_Span[id].Minutes >= Form2.config.autoProtect_Minutes))
                                         {
                                             protectPlayer(id);
                                         }
                                     }
-                                    else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+
+                                    if ((autoPhalanx_IIEnabled[id]) && (CheckSpellRecast("Phalanx II") == 0) && (HasSpell("Phalanx II")) && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Protect))
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                         {
-                                            protectPlayer(id);
+                                            if (!plStatusCheck(StatusEffect.Phalanx))
+                                            {
+                                                Phalanx_IIPlayer(id);
+                                            }
                                         }
-                                    }
-                                    else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerProtect_Span[id].Minutes >= Form2.config.autoProtect_Minutes))
-                                    {
-                                        protectPlayer(id);
-                                    }
-                                }
-
-
-                                if ((autoPhalanx_IIEnabled[id]) && (CheckSpellRecast("Phalanx II") == 0) && (HasSpell("Phalanx II")) && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Phalanx))
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                        {
+                                            if (!monitoredStatusCheck(StatusEffect.Phalanx))
+                                            {
+                                                Phalanx_IIPlayer(id);
+                                            }
+                                        }
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerPhalanx_IISpan[id].Minutes >= Form2.config.autoPhalanxIIMinutes))
                                         {
                                             Phalanx_IIPlayer(id);
                                         }
                                     }
-                                    else if ((_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+
+                                    if (CheckStormspell(id) != "false" && playerStormspellSpan[id].Minutes >= Form2.config.autoStormspellMinutes && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
                                     {
-                                        if (!monitoredStatusCheck(StatusEffect.Phalanx))
+                                        // Grab the Storm Spells name to perform checks.
+                                        string StormSpell_Enabled = CheckStormspell(id);
+
+                                        // Grab storm spell Data for Buff ID etc...
+                                        var PTstormspell = stormspells.Where(c => c.Spell_Name == StormSpell_Enabled).SingleOrDefault();
+
+                                        // Check if the target is the PL as it's easy to check them with the EliteAPI
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                         {
-                                            Phalanx_IIPlayer(id);
-                                        }
-                                    }
-                                    else if ((_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0) && (playerPhalanx_IISpan[id].Minutes >= Form2.config.autoPhalanxIIMinutes))
-                                    {
-                                        Phalanx_IIPlayer(id);
-                                    }
-                                }
-
-
-                                string[] regen_spells = { "Regen", "Regen II", "Regen III", "Regen IV", "Regen V" };
-
-                                if ((autoRegen_Enabled[id]) && (CheckSpellRecast(regen_spells[Form2.config.autoRegen_Spell]) == 0) && (HasSpell(regen_spells[Form2.config.autoRegen_Spell])) && JobChecker(regen_spells[Form2.config.autoRegen_Spell]) == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Regen))
-                                        {
-                                            if (Form2.config.Accession && Form2.config.Perpetuance && Form2.config.accessionPerpRegen && currentSCHCharges >= 2 && HasAbility("Accession") && (!castingLock) && HasAbility("Perpetuance") && _ELITEAPIPL.Party.GetPartyMembers().Count() > 1)
+                                            // If it's not the PL then just function as normal on a timer basis.
+                                            if (!BuffChecker(PTstormspell.buffID, 0) && CheckSpellRecast(PTstormspell.Spell_Name) == 0 && HasSpell(PTstormspell.Spell_Name) && JobChecker(PTstormspell.Spell_Name) == true && !castingLock)
                                             {
-                                                if (!plStatusCheck(StatusEffect.Accession))
-                                                {
-                                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
-                                                    JobAbility_Wait("Regen, Accession");
-                                                    return;
-                                                }
-                                                if (!plStatusCheck(StatusEffect.Perpetuance))
-                                                {
-                                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
-                                                    JobAbility_Wait("Regen, Perpetuance");
-                                                    return;
-                                                }
-
-                                                if (plStatusCheck(StatusEffect.Perpetuance) && plStatusCheck(StatusEffect.Accession))
-                                                {
-                                                    Regen_Player(id);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                Regen_Player(id);
+                                                StormSpellPlayer(id, PTstormspell.Spell_Name);
                                             }
                                         }
-                                    }
-                                    else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
-                                    {
-                                        if (!monitoredStatusCheck(StatusEffect.Regen))
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
                                         {
-                                            if (Form2.config.specifiedEngageTarget)
+                                            // If it's not the PL then just function as normal on a timer basis.
+                                            if (!BuffChecker(PTstormspell.buffID, 1) && CheckSpellRecast(PTstormspell.Spell_Name) == 0 && HasSpell(PTstormspell.Spell_Name) && JobChecker(PTstormspell.Spell_Name) == true && !castingLock)
                                             {
-                                                if (_ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
-                                                {
-                                                    Regen_Player(id);
-                                                }
+                                                StormSpellPlayer(id, PTstormspell.Spell_Name);
                                             }
-                                            else
-                                            {
-                                                Regen_Player(id);
-                                            }
-                                        }
-                                    }
-                                    else if (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
-                                                    && (playerRegen_Span[id].Equals(TimeSpan.FromMinutes((double)Form2.config.autoRegen_Minutes))
-                                                    || (playerRegen_Span[id].CompareTo(TimeSpan.FromMinutes((double)Form2.config.autoRegen_Minutes)) == 1)))
-                                    {
-                                        Regen_Player(id);
-                                    }
-                                }
-
-
-                                string[] refresh_spells = { "Refresh", "Refresh II", "Refresh III" };
-
-                                if ((autoRefreshEnabled[id]) && (CheckSpellRecast(refresh_spells[Form2.config.autoRefresh_Spell]) == 0) && (HasSpell(refresh_spells[Form2.config.autoRefresh_Spell])) && JobChecker(refresh_spells[Form2.config.autoRefresh_Spell]) == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
-                                    {
-                                        if (!plStatusCheck(StatusEffect.Refresh))
-                                        {
-                                            Refresh_Player(id);
-                                        }
-                                    }
-                                    else if ((_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
-                                    {
-                                        if (!monitoredStatusCheck(StatusEffect.Refresh))
-                                        {
-                                            Refresh_Player(id);
-                                        }
-                                    }
-                                    else if (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
-                                             && (playerRefresh_Span[id].Equals(TimeSpan.FromMinutes((double)Form2.config.autoRefresh_Minutes))
-                                                 || (playerRefresh_Span[id].CompareTo(TimeSpan.FromMinutes((double)Form2.config.autoRefresh_Minutes)) == 1)))
-                                    {
-                                        Refresh_Player(id);
-                                    }
-                                }
-                            }
-
-                            // ENTRUSTED INDI SPELL CASTING, WILL BE CAST SO LONG AS ENTRUST IS ACTIVE
-                            if ((Form2.config.EnableGeoSpells) && (plStatusCheck((StatusEffect)584)) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
-                            {
-                                string SpellCheckedResult = ReturnGeoSpell(Form2.config.EntrustedSpell_Spell, 1);
-                                if (SpellCheckedResult == "SpellError_Cancel")
-                                {
-                                    Form2.config.EnableGeoSpells = false;
-                                    MessageBox.Show("An error has occurred with Entrusted INDI spell casting, please report what spell was active at the time.");
-                                }
-                                else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
-                                {
-                                }
-                                else
-                                {
-                                    if (Form2.config.EntrustedSpell_Target == "")
-                                    {
-                                        castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
-                                    }
-                                    else
-                                    {
-                                        castSpell(Form2.config.EntrustedSpell_Target, SpellCheckedResult);
-                                    }
-                                }
-                            }
-
-                            // CAST NON ENTRUSTED INDI SPELL
-                            if (GEOCheckEngaged() == true || !Form2.config.IndiWhenEngaged)
-                            {
-
-                                if ((Form2.config.EnableGeoSpells) && (!BuffChecker(612, 0)) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
-                                {
-                                    string SpellCheckedResult = ReturnGeoSpell(Form2.config.IndiSpell_Spell, 1);
-
-                                    if (SpellCheckedResult == "SpellError_Cancel")
-                                    {
-                                        Form2.config.EnableGeoSpells = false;
-                                        MessageBox.Show("An error has occurred with INDI spell casting, please report what spell was active at the time.");
-                                    }
-                                    else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
-                                    {
-
-                                    }
-                                    else
-                                    {
-                                        castSpell("<me>", SpellCheckedResult);
-                                    }
-
-                                }
-
-                            }
-
-
-                            // GEO SPELL CASTING
-                            if ((Form2.config.EnableLuopanSpells) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock) && (GEOCheckEngaged() == true || !Form2.config.GeoWhenEngaged))
-                            {
-                                // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF
-                                // ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
-                                if (Form2.config.BlazeOfGlory && GetAbilityRecast("Blaze of Glory") == 0 && HasAbility("Blaze of Glory") && GEOCheckEngaged() == true)
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Blaze of Glory\" <me>");
-                                    JobAbility_Wait("Blaze of Glory");
-                                }
-                                else
-                                {
-                                    if (Form2.config.specifiedEngageTarget == true && !String.IsNullOrEmpty(Form2.config.LuopanSpell_Target) && GEOCheckEngaged() == true)
-                                    {
-
-                                        string SpellCheckedResult = ReturnGeoSpell(Form2.config.GeoSpell_Spell, 2);
-                                        if (SpellCheckedResult == "SpellError_Cancel")
-                                        {
-                                            Form2.config.EnableGeoSpells = false;
-                                            MessageBox.Show("An error has occurred with GEO spell casting, please report what spell was active at the time.");
-                                        }
-                                        else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
-                                        {
                                         }
                                         else
                                         {
-                                            if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                            // If it's not the PL then just function as normal on a timer basis.
+                                            if (CheckSpellRecast(PTstormspell.Spell_Name) == 0 && HasSpell(PTstormspell.Spell_Name) && JobChecker(PTstormspell.Spell_Name) == true && !castingLock)
                                             {
-                                                if (Form2.config.LuopanSpell_Target == "")
+                                                StormSpellPlayer(id, PTstormspell.Spell_Name);
+                                            }
+                                        }
+                                    }
+
+                                    string[] regen_spells = { "Regen", "Regen II", "Regen III", "Regen IV", "Regen V" };
+
+                                    if ((autoRegen_Enabled[id]) && (CheckSpellRecast(regen_spells[Form2.config.autoRegen_Spell]) == 0) && (HasSpell(regen_spells[Form2.config.autoRegen_Spell])) && JobChecker(regen_spells[Form2.config.autoRegen_Spell]) == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
+                                    {
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                        {
+                                            if (!plStatusCheck(StatusEffect.Regen))
+                                            {
+                                                if (Form2.config.Accession && Form2.config.Perpetuance && Form2.config.PerpetuanceRegen && Form2.config.AccessionRegen && currentSCHCharges >= 2 && HasAbility("Accession") && (!castingLock) && HasAbility("Perpetuance") && _ELITEAPIPL.Party.GetPartyMembers().Count() > 1)
                                                 {
-                                                    castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                    if (!plStatusCheck(StatusEffect.Accession))
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                                        JobAbility_Wait("Regen, Accession");
+                                                        return;
+                                                    }
+
+                                                    if (!plStatusCheck(StatusEffect.Perpetuance))
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                                        JobAbility_Wait("Regen, Perpetuance");
+                                                        return;
+                                                    }
+
+                                                    if (plStatusCheck(StatusEffect.Perpetuance) && plStatusCheck(StatusEffect.Accession))
+                                                    {
+                                                        JobAbility_Wait("Regen, Accession & Perpetuance");
+                                                        Regen_Player(id);
+                                                    }
+                                                }
+                                                else if (Form2.config.Accession && Form2.config.AccessionRegen && !Form2.config.PerpetuanceRegen && currentSCHCharges >= 1 && HasAbility("Accession") && (!castingLock) && _ELITEAPIPL.Party.GetPartyMembers().Count() > 1)
+                                                {
+                                                    if (!plStatusCheck(StatusEffect.Accession))
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Accession\" <me>");
+                                                        JobAbility_Wait("Regen, Accession");
+                                                        return;
+                                                    }
+
+                                                    if (plStatusCheck(StatusEffect.Accession))
+                                                    {
+                                                        Regen_Player(id);
+                                                    }
+                                                }
+                                                else if (Form2.config.Perpetuance && Form2.config.PerpetuanceRegen && !Form2.config.AccessionRegen && currentSCHCharges >= 1 && HasAbility("Perpetuance") && (!castingLock) && _ELITEAPIPL.Party.GetPartyMembers().Count() > 1)
+                                                {
+                                                    if (!plStatusCheck(StatusEffect.Perpetuance))
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Perpetuance\" <me>");
+                                                        JobAbility_Wait("Regen, Perpetuance");
+                                                        return;
+                                                    }
+
+                                                    if (plStatusCheck(StatusEffect.Perpetuance))
+                                                    {
+                                                        Regen_Player(id);
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    castSpell(Form2.config.LuopanSpell_Target, SpellCheckedResult);
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                if (curePlease_autofollow == false)
-                                                {
-                                                    _ELITEAPIPL.ThirdParty.SendString("/assist " + Form2.config.LuopanSpell_Target);
-                                                    await Task.Delay(2000);
-                                                    castSpell("<t>", SpellCheckedResult);
+                                                    Regen_Player(id);
                                                 }
                                             }
                                         }
+                                        else if (_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID)
+                                        {
+                                            if (!monitoredStatusCheck(StatusEffect.Regen))
+                                            {
+                                                if (Form2.config.specifiedEngageTarget)
+                                                {
+                                                    if (_ELITEAPIMonitored.Player.Status == (uint)Status.Fighting)
+                                                    {
+                                                        Regen_Player(id);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Regen_Player(id);
+                                                }
+                                            }
+                                        }
+                                        else if (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
+                                                        && (playerRegen_Span[id].Equals(TimeSpan.FromMinutes((double)Form2.config.autoRegen_Minutes))
+                                                        || (playerRegen_Span[id].CompareTo(TimeSpan.FromMinutes((double)Form2.config.autoRegen_Minutes)) == 1)))
+                                        {
+                                            Regen_Player(id);
+                                        }
+                                    }
 
+                                    string[] refresh_spells = { "Refresh", "Refresh II", "Refresh III" };
+
+                                    if ((autoRefreshEnabled[id]) && (CheckSpellRecast(refresh_spells[Form2.config.autoRefresh_Spell]) == 0) && (HasSpell(refresh_spells[Form2.config.autoRefresh_Spell])) && JobChecker(refresh_spells[Form2.config.autoRefresh_Spell]) == true && (_ELITEAPIPL.Player.MP > Form2.config.mpMinCastValue) && (!castingLock) && (castingPossible(id)) && _ELITEAPIPL.Player.Status != 33)
+                                    {
+                                        if ((_ELITEAPIPL.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                        {
+                                            if (!plStatusCheck(StatusEffect.Refresh))
+                                            {
+                                                Refresh_Player(id);
+                                            }
+                                        }
+                                        else if ((_ELITEAPIMonitored.Party.GetPartyMember(0).ID == _ELITEAPIMonitored.Party.GetPartyMembers()[id].ID))
+                                        {
+                                            if (!monitoredStatusCheck(StatusEffect.Refresh))
+                                            {
+                                                Refresh_Player(id);
+                                            }
+                                        }
+                                        else if (_ELITEAPIMonitored.Party.GetPartyMembers()[id].CurrentHP > 0
+                                                 && (playerRefresh_Span[id].Equals(TimeSpan.FromMinutes((double)Form2.config.autoRefresh_Minutes))
+                                                     || (playerRefresh_Span[id].CompareTo(TimeSpan.FromMinutes((double)Form2.config.autoRefresh_Minutes)) == 1)))
+                                        {
+                                            Refresh_Player(id);
+                                        }
+                                    }
+                                }
+
+                                // ENTRUSTED INDI SPELL CASTING, WILL BE CAST SO LONG AS ENTRUST IS ACTIVE
+                                if ((Form2.config.EnableGeoSpells) && (plStatusCheck((StatusEffect)584)) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                {
+                                    string SpellCheckedResult = ReturnGeoSpell(Form2.config.EntrustedSpell_Spell, 1);
+                                    if (SpellCheckedResult == "SpellError_Cancel")
+                                    {
+                                        Form2.config.EnableGeoSpells = false;
+                                        MessageBox.Show("An error has occurred with Entrusted INDI spell casting, please report what spell was active at the time.");
+                                    }
+                                    else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
+                                    {
                                     }
                                     else
                                     {
-                                        string SpellCheckedResult = ReturnGeoSpell(Form2.config.GeoSpell_Spell, 2);
+                                        if (Form2.config.EntrustedSpell_Target == String.Empty)
+                                        {
+                                            castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                        }
+                                        else
+                                        {
+                                            castSpell(Form2.config.EntrustedSpell_Target, SpellCheckedResult);
+                                        }
+                                    }
+                                }
+
+                                // CAST NON ENTRUSTED INDI SPELL
+                                if (GEOCheckEngaged() == true || !Form2.config.IndiWhenEngaged)
+                                {
+                                    if ((Form2.config.EnableGeoSpells) && (!BuffChecker(612, 0)) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                    {
+                                        string SpellCheckedResult = ReturnGeoSpell(Form2.config.IndiSpell_Spell, 1);
+
                                         if (SpellCheckedResult == "SpellError_Cancel")
                                         {
                                             Form2.config.EnableGeoSpells = false;
-                                            MessageBox.Show("An error has occurred with GEO spell casting, please report what spell was active at the time.");
+                                            MessageBox.Show("An error has occurred with INDI spell casting, please report what spell was active at the time.");
                                         }
                                         else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
                                         {
                                         }
                                         else
                                         {
-                                            if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                            castSpell("<me>", SpellCheckedResult);
+                                        }
+                                    }
+                                }
+
+                                // GEO SPELL CASTING
+                                if ((Form2.config.EnableLuopanSpells) && (_ELITEAPIPL.Player.Pet.HealthPercent < 1) && (!castingLock) && (GEOCheckEngaged() == true || !Form2.config.GeoWhenEngaged))
+                                {
+                                    // BEFORE CASTING GEO- SPELL CHECK BLAZE OF GLORY AVAILABILITY AND IF
+                                    // ACTIVATED TO USE, BLAZE OF GLORY WILL ONLY BE CAST WHEN ENGAGED
+                                    if (Form2.config.BlazeOfGlory && GetAbilityRecast("Blaze of Glory") == 0 && HasAbility("Blaze of Glory") && GEOCheckEngaged() == true)
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Blaze of Glory\" <me>");
+                                        JobAbility_Wait("Blaze of Glory");
+                                    }
+                                    else
+                                    {
+                                        if (Form2.config.specifiedEngageTarget == true && !String.IsNullOrEmpty(Form2.config.LuopanSpell_Target) && GEOCheckEngaged() == true)
+                                        {
+                                            string SpellCheckedResult = ReturnGeoSpell(Form2.config.GeoSpell_Spell, 2);
+
+                                            if (SpellCheckedResult == "SpellError_Cancel")
                                             {
-                                                if ((_ELITEAPIMonitored.Player.Status == 1) || !Form2.config.GeoWhenEngaged)
+                                                Form2.config.EnableGeoSpells = false;
+                                                MessageBox.Show("An error has occurred with GEO spell casting, please report what spell was active at the time.");
+                                            }
+                                            else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
+                                            {
+                                            }
+                                            else
+                                            {
+                                                if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
                                                 {
-                                                    if (Form2.config.LuopanSpell_Target == "")
+                                                    if (Form2.config.LuopanSpell_Target == String.Empty)
                                                     {
                                                         castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
                                                     }
@@ -5645,88 +6352,120 @@
                                                         castSpell(Form2.config.LuopanSpell_Target, SpellCheckedResult);
                                                     }
                                                 }
-                                            }
-                                            else if (_ELITEAPIMonitored.Player.Status == 1)
-                                            {
-                                                // Pause AutoMovement
-                                                if (curePlease_autofollow == false)
+                                                else
                                                 {
-
-                                                    _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
-
-                                                    var targetInfo = _ELITEAPIPL.Target.GetTargetInfo();
-                                                    var targetInfoMon = _ELITEAPIMonitored.Target.GetTargetInfo();
-
-                                                    if (targetInfo.TargetIndex == targetInfoMon.TargetIndex)
+                                                    if (curePlease_autofollow == false)
                                                     {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/assist " + Form2.config.LuopanSpell_Target);
+                                                        await Task.Delay(2000);
                                                         castSpell("<t>", SpellCheckedResult);
                                                     }
                                                 }
                                             }
                                         }
+                                        else
+                                        {
+                                            string SpellCheckedResult = ReturnGeoSpell(Form2.config.GeoSpell_Spell, 2);
+                                            if (SpellCheckedResult == "SpellError_Cancel")
+                                            {
+                                                Form2.config.EnableGeoSpells = false;
+                                                MessageBox.Show("An error has occurred with GEO spell casting, please report what spell was active at the time.");
+                                            }
+                                            else if (SpellCheckedResult == "SpellRecast" || SpellCheckedResult == "SpellUnknown")
+                                            {
+                                            }
+                                            else
+                                            {
+                                                if ((_ELITEAPIPL.Resources.GetSpell(SpellCheckedResult, 0).ValidTargets == 5))
+                                                {
+                                                    if ((_ELITEAPIMonitored.Player.Status == 1) || !Form2.config.GeoWhenEngaged)
+                                                    {
+                                                        if (Form2.config.LuopanSpell_Target == String.Empty)
+                                                        {
+                                                            castSpell(_ELITEAPIMonitored.Player.Name, SpellCheckedResult);
+                                                        }
+                                                        else
+                                                        {
+                                                            castSpell(Form2.config.LuopanSpell_Target, SpellCheckedResult);
+                                                        }
+                                                    }
+                                                }
+                                                else if (_ELITEAPIMonitored.Player.Status == 1)
+                                                {
+                                                    // Pause AutoMovement
+                                                    if (curePlease_autofollow == false)
+                                                    {
+                                                        _ELITEAPIPL.ThirdParty.SendString("/assist " + _ELITEAPIMonitored.Player.Name);
+
+                                                        var targetInfo = _ELITEAPIPL.Target.GetTargetInfo();
+                                                        var targetInfoMon = _ELITEAPIMonitored.Target.GetTargetInfo();
+
+                                                        if (targetInfo.TargetIndex == targetInfoMon.TargetIndex)
+                                                        {
+                                                            castSpell("<t>", SpellCheckedResult);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-
-                                }
-                            }
-
-                            // BARD SONGS
-
-                            if ((Form2.config.enableSinging) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
-                            {
-
-                                if (Last_SongCast_Timer[0] != DefaultTime && Last_SongCast_Timer_Span[0].Minutes >= 2)
-                                {
-                                    Last_Song_Cast = "";
                                 }
 
-                                if (_ELITEAPIPL.Player.MainJob == 10 || _ELITEAPIPL.Player.SubJob == 10)
-                                {
-                                    PL_BRDCount = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == 195 || b == 196 || b == 197 || b == 198 || b == 199 || b == 200 || b == 201 || b == 214 || b == 215 || b == 216 || b == 218 || b == 219 || b == 222).Count();
+                                // BARD SONGS
 
-                                    if (_ELITEAPIPL.Player.Name != _ELITEAPIMonitored.Player.Name)
+                                if ((Form2.config.enableSinging) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
+                                {
+                                    if (Last_SongCast_Timer[0] != DefaultTime && Last_SongCast_Timer_Span[0].Minutes >= 2)
                                     {
-                                        Monitored_BRDCount = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 195 || b == 196 || b == 197 || b == 198 || b == 199 || b == 200 || b == 201 || b == 214 || b == 215 || b == 216 || b == 218 || b == 219 || b == 222).Count();
+                                        Last_Song_Cast = String.Empty;
                                     }
-                                }
 
-                                // Grab the Song's Information
-                                var song_1 = SongInfo.Where(c => c.song_position == Form2.config.song1).FirstOrDefault();
-                                var song_2 = SongInfo.Where(c => c.song_position == Form2.config.song2).FirstOrDefault();
-                                var song_3 = SongInfo.Where(c => c.song_position == Form2.config.song3).FirstOrDefault();
-                                var song_4 = SongInfo.Where(c => c.song_position == Form2.config.song4).FirstOrDefault();
+                                    if (_ELITEAPIPL.Player.MainJob == 10 || _ELITEAPIPL.Player.SubJob == 10)
+                                    {
+                                        PL_BRDCount = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == 195 || b == 196 || b == 197 || b == 198 || b == 199 || b == 200 || b == 201 || b == 214 || b == 215 || b == 216 || b == 218 || b == 219 || b == 222).Count();
 
-                                var dummy1_song = SongInfo.Where(c => c.song_position == Form2.config.dummy1).FirstOrDefault();
-                                var dummy2_song = SongInfo.Where(c => c.song_position == Form2.config.dummy2).FirstOrDefault();
+                                        if (_ELITEAPIPL.Player.Name != _ELITEAPIMonitored.Player.Name)
+                                        {
+                                            Monitored_BRDCount = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 195 || b == 196 || b == 197 || b == 198 || b == 199 || b == 200 || b == 201 || b == 214 || b == 215 || b == 216 || b == 218 || b == 219 || b == 222).Count();
+                                        }
+                                    }
 
-                                // Check the distance of the Monitored player
-                                int Monitoreddistance = 50;
+                                    // Grab the Song's Information
+                                    var song_1 = SongInfo.Where(c => c.song_position == Form2.config.song1).FirstOrDefault();
+                                    var song_2 = SongInfo.Where(c => c.song_position == Form2.config.song2).FirstOrDefault();
+                                    var song_3 = SongInfo.Where(c => c.song_position == Form2.config.song3).FirstOrDefault();
+                                    var song_4 = SongInfo.Where(c => c.song_position == Form2.config.song4).FirstOrDefault();
 
-                                var monitoredTarget = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Player.TargetID);
-                                Monitoreddistance = (int)monitoredTarget.Distance;
+                                    var dummy1_song = SongInfo.Where(c => c.song_position == Form2.config.dummy1).FirstOrDefault();
+                                    var dummy2_song = SongInfo.Where(c => c.song_position == Form2.config.dummy2).FirstOrDefault();
 
-                                int Songs_Possible = 0;
+                                    // Check the distance of the Monitored player
+                                    int Monitoreddistance = 50;
 
-                                if (song_1.song_name.ToLower() != "blank")
-                                {
-                                    Songs_Possible++;
-                                }
-                                if (song_2.song_name.ToLower() != "blank")
-                                {
-                                    Songs_Possible++;
-                                }
-                                if (dummy1_song != null && dummy1_song.song_name.ToLower() != "blank")
-                                {
-                                    Songs_Possible++;
-                                }
-                                if (dummy2_song != null && dummy2_song.song_name.ToLower() != "blank")
-                                {
-                                    Songs_Possible++;
-                                }
+                                    var monitoredTarget = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Player.TargetID);
+                                    Monitoreddistance = (int)monitoredTarget.Distance;
 
-                                debug_MSG_show = "CURRENT SONG CAST: " + song_casting + "\n" + "SONGS THAT CAN BE CAST: " + Songs_Possible;
+                                    int Songs_Possible = 0;
 
-                                // List to make it easy to check how many of each buff is needed.
-                                List<int> SongDataMax = new List<int>
+                                    if (song_1.song_name.ToLower() != "blank")
+                                    {
+                                        Songs_Possible++;
+                                    }
+                                    if (song_2.song_name.ToLower() != "blank")
+                                    {
+                                        Songs_Possible++;
+                                    }
+                                    if (dummy1_song != null && dummy1_song.song_name.ToLower() != "blank")
+                                    {
+                                        Songs_Possible++;
+                                    }
+                                    if (dummy2_song != null && dummy2_song.song_name.ToLower() != "blank")
+                                    {
+                                        Songs_Possible++;
+                                    }
+
+                                    // List to make it easy to check how many of each buff is needed.
+                                    List<int> SongDataMax = new List<int>
                                     {
                                         song_1.buff_id,
                                         song_2.buff_id,
@@ -5734,168 +6473,26 @@
                                         song_4.buff_id
                                     };
 
-                                // Check Whether e have the songs Currently Up
-                                int count1_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
-                                int count2_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
-                                int count3_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
-                                int count4_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
-                                int count5_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
-                                int count6_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+                                    // Check Whether e have the songs Currently Up
+                                    int count1_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                                    int count2_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                                    int count3_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
+                                    int count4_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                                    int count5_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
+                                    int count6_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
 
-                                int MON_count1_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
-                                int MON_count2_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
-                                int MON_count3_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
-                                int MON_count4_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
-                                int MON_count5_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
-                                int MON_count6_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+                                    int MON_count1_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                                    int MON_count2_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                                    int MON_count3_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
+                                    int MON_count4_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                                    int MON_count5_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
+                                    int MON_count6_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
 
-                                // RECAST SONGS IF NEARBY THEMONITORED PLAYER
-                                if (Form2.config.recastSongs_Monitored && Monitoreddistance <= 9 && _ELITEAPIMonitored.Player.Name != _ELITEAPIPL.Player.Name)
-                                {
-
-                                    // SONG NUMBER #1
-                                    if (song_casting == 0 && (song_1.song_name.ToLower() != "blank" && MON_count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count() && Last_Song_Cast != song_1.song_name || ForceSongRecast == true))
-                                    {
-                                        if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
-                                        {
-                                            castSpell("<me>", song_1.song_name);
-                                            Last_Song_Cast = song_1.song_name;
-                                            Last_SongCast_Timer[0] = DateTime.Now;
-                                            playerSong1[0] = DateTime.Now;
-                                            song_casting = 1;
-                                        }
-
-                                        if (Songs_Possible == 1)
-                                            ForceSongRecast = false;
-                                    }
-                                    // SONG NUMBER #2
-                                    else if (song_casting == 1 && (song_2.song_name.ToLower() != "blank" && MON_count2_type < SongDataMax.Where(c => c == song_2.buff_id).Count() && Last_Song_Cast != song_2.song_name || ForceSongRecast == true))
-                                    {
-                                        if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
-                                        {
-                                            castSpell("<me>", song_2.song_name);
-                                            Last_Song_Cast = song_2.song_name;
-                                            Last_SongCast_Timer[0] = DateTime.Now;
-                                            playerSong2[0] = DateTime.Now;
-                                            song_casting = 2;
-                                        }
-
-                                        if (Songs_Possible == 2)
-                                            ForceSongRecast = false;
-                                    }
-                                    // DUMMY SONG NUMBER #1 AND SONG NUMBER #3
-                                    else if (song_casting == 2 && Monitored_BRDCount >= 2 && (song_3.song_name.ToLower() != "blank" && MON_count4_type < SongDataMax.Where(c => c == song_3.buff_id).Count() && Last_Song_Cast != song_3.song_name || ForceSongRecast == true))
-                                    {
-                                        if (Monitored_BRDCount <= 2)
-                                        {
-                                            if (CheckSpellRecast(dummy1_song.song_name) == 0 && (HasSpell(dummy1_song.song_name)) && JobChecker(dummy1_song.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", dummy1_song.song_name);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", song_3.song_name);
-                                                Last_Song_Cast = song_3.song_name;
-                                                Last_SongCast_Timer[0] = DateTime.Now;
-                                                playerSong3[0] = DateTime.Now;
-                                                song_casting = 3;
-                                            }
-                                        }
-
-                                        if (Songs_Possible == 3)
-                                            ForceSongRecast = false;
-                                    }
-                                    // DUMMY SONG NUMBER #2 AND SONG NUMBER #4
-                                    else if (song_casting == 3 && Monitored_BRDCount >= 3 && (song_4.song_name.ToLower() != "blank" && MON_count6_type < SongDataMax.Where(c => c == song_4.buff_id).Count() && Last_Song_Cast != song_4.song_name || ForceSongRecast == true))
-                                    {
-                                        if (Monitored_BRDCount < 4)
-                                        {
-                                            if (CheckSpellRecast(dummy2_song.song_name) == 0 && (HasSpell(dummy2_song.song_name)) && JobChecker(dummy2_song.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", dummy2_song.song_name);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", song_4.song_name);
-                                                Last_Song_Cast = song_4.song_name;
-                                                Last_SongCast_Timer[0] = DateTime.Now;
-                                                playerSong4[0] = DateTime.Now;
-                                                song_casting = 0;
-                                            }
-                                        }
-
-                                        if (Songs_Possible == 3)
-                                            ForceSongRecast = false;
-                                    }
-                                    else if (Monitored_BRDCount <= 2 && Songs_Possible > 2)
-                                        song_casting = 0;
-                                    else if (Monitored_BRDCount <= 3 && Songs_Possible > 3)
-                                        song_casting = 0;
-
-
-                                    // ONCE ALL SONGS HAVE BEEN CAST ONLY RECAST THEM WHEN THEY MEET THE THRESHOLD SET ON SONG RECAST AND BLOCK IF IT'S SET AT LAUNCH DEFAULTS
-                                    if (playerSong1[0] != DefaultTime && playerSong1_Span[0].Minutes >= Form2.config.recastSongTime)
-                                    {
-                                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
-                                        {
-                                            if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", song_1.song_name);
-                                                playerSong1[0] = DateTime.Now;
-                                                song_casting = 0;
-                                            }
-                                        }
-                                    }
-                                    else if (playerSong2[0] != DefaultTime && playerSong2_Span[0].Minutes >= Form2.config.recastSongTime)
-                                    {
-                                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
-                                        {
-                                            if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", song_2.song_name);
-                                                playerSong2[0] = DateTime.Now;
-                                                song_casting = 0;
-                                            }
-                                        }
-                                    }
-                                    else if (playerSong3[0] != DefaultTime && playerSong3_Span[0].Minutes >= Form2.config.recastSongTime)
-                                    {
-                                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
-                                        {
-                                            if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", song_3.song_name);
-                                                playerSong3[0] = DateTime.Now;
-                                                song_casting = 0;
-                                            }
-                                        }
-                                    }
-                                    else if (playerSong4[0] != DefaultTime && playerSong4_Span[0].Minutes >= Form2.config.recastSongTime)
-                                    {
-                                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
-                                        {
-                                            if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
-                                            {
-                                                castSpell("<me>", song_4.song_name);
-                                                playerSong4[0] = DateTime.Now;
-                                                song_casting = 0;
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    // Check if you need the monitored player nearby and if they are, or if the only requirement is songs being enabled
-                                    if ((Form2.config.SongsOnlyWhenNear == true && Monitoreddistance < 10) || (Form2.config.SongsOnlyWhenNear == false || _ELITEAPIPL.Player.Name == _ELITEAPIMonitored.Player.Name))
+                                    // RECAST SONGS IF NEARBY THEMONITORED PLAYER
+                                    if (Form2.config.recastSongs_Monitored && Monitoreddistance <= 9 && _ELITEAPIMonitored.Player.Name != _ELITEAPIPL.Player.Name)
                                     {
                                         // SONG NUMBER #1
-                                        if (song_casting == 0 && (song_1.song_name.ToLower() != "blank" && count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count() && Last_Song_Cast != song_1.song_name || ForceSongRecast == true))
+                                        if (song_casting == 0 && (song_1.song_name.ToLower() != "blank" && MON_count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count() && Last_Song_Cast != song_1.song_name || ForceSongRecast == true))
                                         {
                                             if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
                                             {
@@ -5910,7 +6507,7 @@
                                                 ForceSongRecast = false;
                                         }
                                         // SONG NUMBER #2
-                                        else if (song_casting == 1 && (song_2.song_name.ToLower() != "blank" && count2_type < SongDataMax.Where(c => c == song_2.buff_id).Count() && Last_Song_Cast != song_2.song_name || ForceSongRecast == true))
+                                        else if (song_casting == 1 && (song_2.song_name.ToLower() != "blank" && MON_count2_type < SongDataMax.Where(c => c == song_2.buff_id).Count() && Last_Song_Cast != song_2.song_name || ForceSongRecast == true))
                                         {
                                             if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
                                             {
@@ -5925,9 +6522,9 @@
                                                 ForceSongRecast = false;
                                         }
                                         // DUMMY SONG NUMBER #1 AND SONG NUMBER #3
-                                        else if (song_casting == 2 && PL_BRDCount >= 2 && (song_3.song_name.ToLower() != "blank" && count4_type < SongDataMax.Where(c => c == song_3.buff_id).Count() && Last_Song_Cast != song_3.song_name || ForceSongRecast == true))
+                                        else if (song_casting == 2 && Monitored_BRDCount >= 2 && (song_3.song_name.ToLower() != "blank" && MON_count4_type < SongDataMax.Where(c => c == song_3.buff_id).Count() && Last_Song_Cast != song_3.song_name || ForceSongRecast == true))
                                         {
-                                            if (PL_BRDCount <= 2)
+                                            if (Monitored_BRDCount <= 2)
                                             {
                                                 if (CheckSpellRecast(dummy1_song.song_name) == 0 && (HasSpell(dummy1_song.song_name)) && JobChecker(dummy1_song.song_name) == true && (!castingLock))
                                                 {
@@ -5950,9 +6547,9 @@
                                                 ForceSongRecast = false;
                                         }
                                         // DUMMY SONG NUMBER #2 AND SONG NUMBER #4
-                                        else if (song_casting == 3 && PL_BRDCount >= 3 && (song_4.song_name.ToLower() != "blank" && count6_type < SongDataMax.Where(c => c == song_4.buff_id).Count() && Last_Song_Cast != song_4.song_name || ForceSongRecast == true))
+                                        else if (song_casting == 3 && Monitored_BRDCount >= 3 && (song_4.song_name.ToLower() != "blank" && MON_count6_type < SongDataMax.Where(c => c == song_4.buff_id).Count() && Last_Song_Cast != song_4.song_name || ForceSongRecast == true))
                                         {
-                                            if (PL_BRDCount < 4)
+                                            if (Monitored_BRDCount < 4)
                                             {
                                                 if (CheckSpellRecast(dummy2_song.song_name) == 0 && (HasSpell(dummy2_song.song_name)) && JobChecker(dummy2_song.song_name) == true && (!castingLock))
                                                 {
@@ -5973,14 +6570,11 @@
 
                                             if (Songs_Possible == 3)
                                                 ForceSongRecast = false;
-
                                         }
-
-                                        else if (PL_BRDCount <= 2 && Songs_Possible > 2)
+                                        else if (Monitored_BRDCount <= 2 && Songs_Possible > 2)
                                             song_casting = 0;
-                                        else if (PL_BRDCount <= 3 && Songs_Possible > 3)
+                                        else if (Monitored_BRDCount <= 3 && Songs_Possible > 3)
                                             song_casting = 0;
-
 
                                         // ONCE ALL SONGS HAVE BEEN CAST ONLY RECAST THEM WHEN THEY MEET THE THRESHOLD SET ON SONG RECAST AND BLOCK IF IT'S SET AT LAUNCH DEFAULTS
                                         if (playerSong1[0] != DefaultTime && playerSong1_Span[0].Minutes >= Form2.config.recastSongTime)
@@ -6032,196 +6626,321 @@
                                             }
                                         }
                                     }
-
-
                                     else
-                                        ShowStatus("WARNING: Monitored player (" + monitoredTarget.Name + ") is out of range. (Distance: " + monitoredTarget.Distance + ")");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    if ((Songs_Possible == 1 && song_casting >= 0) || (Songs_Possible == 2 && song_casting >= 2) || (Songs_Possible == 3 && song_casting >= 3) || (Songs_Possible == 4 && song_casting >= 4))
                                     {
-                                        song_casting = 0;
+                                        // Check if you need the monitored player nearby and if they are, or if the only requirement is songs being enabled
+                                        if ((Form2.config.SongsOnlyWhenNear == true && Monitoreddistance < 10) || (Form2.config.SongsOnlyWhenNear == false || _ELITEAPIPL.Player.Name == _ELITEAPIMonitored.Player.Name))
+                                        {
+                                            // SONG NUMBER #1
+                                            if (song_casting == 0 && (song_1.song_name.ToLower() != "blank" && count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count() && Last_Song_Cast != song_1.song_name || ForceSongRecast == true))
+                                            {
+                                                if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                                                {
+                                                    castSpell("<me>", song_1.song_name);
+                                                    Last_Song_Cast = song_1.song_name;
+                                                    Last_SongCast_Timer[0] = DateTime.Now;
+                                                    playerSong1[0] = DateTime.Now;
+                                                    song_casting = 1;
+                                                }
+
+                                                if (Songs_Possible == 1)
+                                                    ForceSongRecast = false;
+                                            }
+                                            // SONG NUMBER #2
+                                            else if (song_casting == 1 && (song_2.song_name.ToLower() != "blank" && count2_type < SongDataMax.Where(c => c == song_2.buff_id).Count() && Last_Song_Cast != song_2.song_name || ForceSongRecast == true))
+                                            {
+                                                if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
+                                                {
+                                                    castSpell("<me>", song_2.song_name);
+                                                    Last_Song_Cast = song_2.song_name;
+                                                    Last_SongCast_Timer[0] = DateTime.Now;
+                                                    playerSong2[0] = DateTime.Now;
+                                                    song_casting = 2;
+                                                }
+
+                                                if (Songs_Possible == 2)
+                                                    ForceSongRecast = false;
+                                            }
+                                            // DUMMY SONG NUMBER #1 AND SONG NUMBER #3
+                                            else if (song_casting == 2 && PL_BRDCount >= 2 && (song_3.song_name.ToLower() != "blank" && count4_type < SongDataMax.Where(c => c == song_3.buff_id).Count() && Last_Song_Cast != song_3.song_name || ForceSongRecast == true))
+                                            {
+                                                if (PL_BRDCount <= 2)
+                                                {
+                                                    if (CheckSpellRecast(dummy1_song.song_name) == 0 && (HasSpell(dummy1_song.song_name)) && JobChecker(dummy1_song.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", dummy1_song.song_name);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", song_3.song_name);
+                                                        Last_Song_Cast = song_3.song_name;
+                                                        Last_SongCast_Timer[0] = DateTime.Now;
+                                                        playerSong3[0] = DateTime.Now;
+                                                        song_casting = 3;
+                                                    }
+                                                }
+
+                                                if (Songs_Possible == 3)
+                                                    ForceSongRecast = false;
+                                            }
+                                            // DUMMY SONG NUMBER #2 AND SONG NUMBER #4
+                                            else if (song_casting == 3 && PL_BRDCount >= 3 && (song_4.song_name.ToLower() != "blank" && count6_type < SongDataMax.Where(c => c == song_4.buff_id).Count() && Last_Song_Cast != song_4.song_name || ForceSongRecast == true))
+                                            {
+                                                if (PL_BRDCount < 4)
+                                                {
+                                                    if (CheckSpellRecast(dummy2_song.song_name) == 0 && (HasSpell(dummy2_song.song_name)) && JobChecker(dummy2_song.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", dummy2_song.song_name);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", song_4.song_name);
+                                                        Last_Song_Cast = song_4.song_name;
+                                                        Last_SongCast_Timer[0] = DateTime.Now;
+                                                        playerSong4[0] = DateTime.Now;
+                                                        song_casting = 0;
+                                                    }
+                                                }
+
+                                                if (Songs_Possible == 3)
+                                                    ForceSongRecast = false;
+                                            }
+                                            else if (PL_BRDCount <= 2 && Songs_Possible > 2)
+                                                song_casting = 0;
+                                            else if (PL_BRDCount <= 3 && Songs_Possible > 3)
+                                                song_casting = 0;
+
+                                            // ONCE ALL SONGS HAVE BEEN CAST ONLY RECAST THEM WHEN THEY MEET THE THRESHOLD SET ON SONG RECAST AND BLOCK IF IT'S SET AT LAUNCH DEFAULTS
+                                            if (playerSong1[0] != DefaultTime && playerSong1_Span[0].Minutes >= Form2.config.recastSongTime)
+                                            {
+                                                if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                                                {
+                                                    if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", song_1.song_name);
+                                                        playerSong1[0] = DateTime.Now;
+                                                        song_casting = 0;
+                                                    }
+                                                }
+                                            }
+                                            else if (playerSong2[0] != DefaultTime && playerSong2_Span[0].Minutes >= Form2.config.recastSongTime)
+                                            {
+                                                if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                                                {
+                                                    if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", song_2.song_name);
+                                                        playerSong2[0] = DateTime.Now;
+                                                        song_casting = 0;
+                                                    }
+                                                }
+                                            }
+                                            else if (playerSong3[0] != DefaultTime && playerSong3_Span[0].Minutes >= Form2.config.recastSongTime)
+                                            {
+                                                if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                                                {
+                                                    if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", song_3.song_name);
+                                                        playerSong3[0] = DateTime.Now;
+                                                        song_casting = 0;
+                                                    }
+                                                }
+                                            }
+                                            else if (playerSong4[0] != DefaultTime && playerSong4_Span[0].Minutes >= Form2.config.recastSongTime)
+                                            {
+                                                if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                                                {
+                                                    if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
+                                                    {
+                                                        castSpell("<me>", song_4.song_name);
+                                                        playerSong4[0] = DateTime.Now;
+                                                        song_casting = 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                            ShowStatus("WARNING: Monitored player (" + monitoredTarget.Name + ") is out of range. (Distance: " + monitoredTarget.Distance + ")");
+
+                                        if ((Songs_Possible == 1 && song_casting >= 0) || (Songs_Possible == 2 && song_casting >= 2) || (Songs_Possible == 3 && song_casting >= 3) || (Songs_Possible == 4 && song_casting >= 4))
+                                        {
+                                            song_casting = 0;
+                                        }
                                     }
                                 }
-                            }
 
-
-                            // so PL job abilities are in order
-                            if (!castingLock && !plStatusCheck(StatusEffect.Amnesia) && _ELITEAPIPL.Player.Status != 33)
-                            {
-                                if ((Form2.config.AfflatusSolace) && (!plStatusCheck(StatusEffect.Afflatus_Solace)) && (GetAbilityRecast("Afflatus Solace") == 0) && (HasAbility("Afflatus Solace")))
+                                // so PL job abilities are in order
+                                if (!castingLock && !plStatusCheck(StatusEffect.Amnesia) && _ELITEAPIPL.Player.Status != 33)
                                 {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Afflatus Solace\" <me>");
-                                    JobAbility_Wait("Afflatus: Solace");
-                                }
-                                else if ((Form2.config.AfflatusMisery) && (!plStatusCheck(StatusEffect.Afflatus_Misery)) && (GetAbilityRecast("Afflatus Misery") == 0) && (HasAbility("Afflatus Misery")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Afflatus Misery\" <me>");
-                                    JobAbility_Wait("Afflatus: Misery");
-                                }
-                                else if ((Form2.config.Composure) && (!plStatusCheck(StatusEffect.Composure)) && (GetAbilityRecast("Composure") == 0) && (HasAbility("Composure")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
-                                    JobAbility_Wait("Composite #2");
-                                }
-                                else if ((Form2.config.LightArts) && (!plStatusCheck(StatusEffect.Light_Arts)) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Light Arts") == 0) && (HasAbility("Light Arts")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Light Arts\" <me>");
-                                    JobAbility_Wait("Light Arts #2");
-                                }
-                                else if ((Form2.config.AddendumWhite) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Stratagems") == 0) && (HasAbility("Stratagems")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
-                                    JobAbility_Wait("Addendum: White");
-                                }
-                                else if ((Form2.config.Sublimation) && (!plStatusCheck(StatusEffect.Sublimation_Activated)) && (!plStatusCheck(StatusEffect.Sublimation_Complete)) && (GetAbilityRecast("Sublimation") == 0) && (HasAbility("Sublimation")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
-                                    JobAbility_Wait("Sublimation, Charging");
-                                }
-                                else if ((Form2.config.Sublimation) && ((_ELITEAPIPL.Player.MPMax - _ELITEAPIPL.Player.MP) > Form2.config.sublimationMP) && (plStatusCheck(StatusEffect.Sublimation_Complete)) && (GetAbilityRecast("Sublimation") == 0) && (HasAbility("Sublimation")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
-                                    JobAbility_Wait("Sublimation, Recovery");
-                                }
-                                else if ((Form2.config.DivineCaress) && (Form2.config.plDebuffEnabled || Form2.config.monitoredDebuffEnabled || Form2.config.enablePartyDebuffRemoval) && (GetAbilityRecast("Divine Caress") == 0) && (HasAbility("Divine Caress")))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Caress\" <me>");
-                                    JobAbility_Wait("Divine Caress");
-                                }
-                                else if (Form2.config.Entrust && !plStatusCheck((StatusEffect)584) && GEOCheckEngaged() == true && GetAbilityRecast("Entrust") == 0 && HasAbility("Entrust"))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Entrust\" <me>");
-                                    JobAbility_Wait("Entrust");
-                                }
-                                else if (Form2.config.Dematerialize && GEOCheckEngaged() == true && _ELITEAPIPL.Player.Pet.HealthPercent >= 90 && GetAbilityRecast("Dematerialize") == 0 && HasAbility("Dematerialize"))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Dematerialize\" <me>");
-                                    JobAbility_Wait("Dematerialize");
-                                }
-                                else if (Form2.config.EclipticAttrition && GEOCheckEngaged() == true && _ELITEAPIPL.Player.Pet.HealthPercent >= 90 && GetAbilityRecast("Ecliptic Attrition") == 0 && HasAbility("Ecliptic Attrition"))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Ecliptic Attrition\" <me>");
-                                    JobAbility_Wait("Ecliptic Attrition");
-                                }
-                                else if (Form2.config.LifeCycle && GEOCheckEngaged() == true && _ELITEAPIPL.Player.Pet.HealthPercent <= 30 && _ELITEAPIPL.Player.HPP >= 90 && GetAbilityRecast("Life Cycle") == 0 && HasAbility("Life Cycle"))
-                                {
-                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Life Cycle\" <me>");
-                                    JobAbility_Wait("Life Cycle");
-                                }
-                                else if ((Form2.config.Devotion) && (GetAbilityRecast("Devotion") == 0) && (HasAbility("Devotion")) && _ELITEAPIPL.Player.HPP > 80 && (!Form2.config.DevotionWhenEngaged || (_ELITEAPIMonitored.Player.Status == 1)))
-                                {
-                                    // First Generate the current party number, this will be used
-                                    // regardless of the type
-                                    int memberOF = GeneratePT_structure();
-
-                                    // Now generate the party
-                                    var cParty = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
-
-                                    // Make sure member number is not 0 (null) or 4 (void)
-                                    if (memberOF != 0 && memberOF != 4)
+                                    if ((Form2.config.AfflatusSolace) && (!plStatusCheck(StatusEffect.Afflatus_Solace)) && (GetAbilityRecast("Afflatus Solace") == 0) && (HasAbility("Afflatus Solace")))
                                     {
-                                        // Run through Each party member as we're looking for either
-                                        // a specifc name or if set otherwise anyone with the MP
-                                        // criteria in the current party.
-                                        foreach (var pData in cParty)
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Afflatus Solace\" <me>");
+                                        JobAbility_Wait("Afflatus: Solace");
+                                    }
+                                    else if ((Form2.config.AfflatusMisery) && (!plStatusCheck(StatusEffect.Afflatus_Misery)) && (GetAbilityRecast("Afflatus Misery") == 0) && (HasAbility("Afflatus Misery")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Afflatus Misery\" <me>");
+                                        JobAbility_Wait("Afflatus: Misery");
+                                    }
+                                    else if ((Form2.config.Composure) && (!plStatusCheck(StatusEffect.Composure)) && (GetAbilityRecast("Composure") == 0) && (HasAbility("Composure")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Composure\" <me>");
+                                        JobAbility_Wait("Composite #2");
+                                    }
+                                    else if ((Form2.config.LightArts) && (!plStatusCheck(StatusEffect.Light_Arts)) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Light Arts") == 0) && (HasAbility("Light Arts")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Light Arts\" <me>");
+                                        JobAbility_Wait("Light Arts #2");
+                                    }
+                                    else if ((Form2.config.AddendumWhite) && (!plStatusCheck(StatusEffect.Addendum_White)) && (GetAbilityRecast("Stratagems") == 0) && (HasAbility("Stratagems")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Addendum: White\" <me>");
+                                        JobAbility_Wait("Addendum: White");
+                                    }
+                                    else if ((Form2.config.Sublimation) && (!plStatusCheck(StatusEffect.Sublimation_Activated)) && (!plStatusCheck(StatusEffect.Sublimation_Complete)) && (!plStatusCheck(StatusEffect.Refresh)) && (GetAbilityRecast("Sublimation") == 0) && (HasAbility("Sublimation")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
+                                        JobAbility_Wait("Sublimation, Charging");
+                                    }
+                                    else if ((Form2.config.Sublimation) && ((_ELITEAPIPL.Player.MPMax - _ELITEAPIPL.Player.MP) > Form2.config.sublimationMP) && (plStatusCheck(StatusEffect.Sublimation_Complete)) && (GetAbilityRecast("Sublimation") == 0) && (HasAbility("Sublimation")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Sublimation\" <me>");
+                                        JobAbility_Wait("Sublimation, Recovery");
+                                    }
+                                    else if ((Form2.config.DivineCaress) && (Form2.config.plDebuffEnabled || Form2.config.monitoredDebuffEnabled || Form2.config.enablePartyDebuffRemoval) && (GetAbilityRecast("Divine Caress") == 0) && (HasAbility("Divine Caress")))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Divine Caress\" <me>");
+                                        JobAbility_Wait("Divine Caress");
+                                    }
+                                    else if (Form2.config.Entrust && !plStatusCheck((StatusEffect)584) && GEOCheckEngaged() == true && GetAbilityRecast("Entrust") == 0 && HasAbility("Entrust"))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Entrust\" <me>");
+                                        JobAbility_Wait("Entrust");
+                                    }
+                                    else if (Form2.config.Dematerialize && GEOCheckEngaged() == true && _ELITEAPIPL.Player.Pet.HealthPercent >= 90 && GetAbilityRecast("Dematerialize") == 0 && HasAbility("Dematerialize"))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Dematerialize\" <me>");
+                                        JobAbility_Wait("Dematerialize");
+                                    }
+                                    else if (Form2.config.EclipticAttrition && GEOCheckEngaged() == true && _ELITEAPIPL.Player.Pet.HealthPercent >= 90 && GetAbilityRecast("Ecliptic Attrition") == 0 && HasAbility("Ecliptic Attrition"))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Ecliptic Attrition\" <me>");
+                                        JobAbility_Wait("Ecliptic Attrition");
+                                    }
+                                    else if (Form2.config.LifeCycle && GEOCheckEngaged() == true && _ELITEAPIPL.Player.Pet.HealthPercent <= 30 && _ELITEAPIPL.Player.HPP >= 90 && GetAbilityRecast("Life Cycle") == 0 && HasAbility("Life Cycle"))
+                                    {
+                                        _ELITEAPIPL.ThirdParty.SendString("/ja \"Life Cycle\" <me>");
+                                        JobAbility_Wait("Life Cycle");
+                                    }
+                                    else if ((Form2.config.Devotion) && (GetAbilityRecast("Devotion") == 0) && (HasAbility("Devotion")) && _ELITEAPIPL.Player.HPP > 80 && (!Form2.config.DevotionWhenEngaged || (_ELITEAPIMonitored.Player.Status == 1)))
+                                    {
+                                        // First Generate the current party number, this will be used
+                                        // regardless of the type
+                                        int memberOF = GeneratePT_structure();
+
+                                        // Now generate the party
+                                        var cParty = _ELITEAPIMonitored.Party.GetPartyMembers().Where(p => p.Active != 0 && p.Zone == _ELITEAPIPL.Player.ZoneId);
+
+                                        // Make sure member number is not 0 (null) or 4 (void)
+                                        if (memberOF != 0 && memberOF != 4)
                                         {
-                                            // If party of party v1
-                                            if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
+                                            // Run through Each party member as we're looking for either
+                                            // a specifc name or if set otherwise anyone with the MP
+                                            // criteria in the current party.
+                                            foreach (var pData in cParty)
                                             {
-                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                // If party of party v1
+                                                if (memberOF == 1 && pData.MemberNumber >= 0 && pData.MemberNumber <= 5)
                                                 {
-                                                    if ((Form2.config.DevotionTargetType == 0))
+                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                     {
-                                                        if (pData.Name == Form2.config.DevotionTargetName)
+                                                        if ((Form2.config.DevotionTargetType == 0))
+                                                        {
+                                                            if (pData.Name == Form2.config.DevotionTargetName)
+                                                            {
+                                                                var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+                                                                if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Form2.config.DevotionMP)
+                                                                {
+                                                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Form2.config.DevotionTargetName);
+                                                                    JobAbility_Wait("Devotion");
+                                                                }
+                                                            }
+                                                        }
+                                                        else
                                                         {
                                                             var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-                                                            if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Form2.config.DevotionMP)
+
+                                                            if ((pData.CurrentMP <= Form2.config.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
                                                             {
-                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Form2.config.DevotionTargetName);
-                                                                JobAbility_Wait("Devotion");
+                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                                JobAbility_Wait("Devotion #2");
+                                                                break;
                                                             }
                                                         }
                                                     }
-                                                    else
-                                                    {
-                                                        var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-
-                                                        if ((pData.CurrentMP <= Form2.config.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
-                                                        {
-                                                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
-                                                            JobAbility_Wait("Devotion #2");
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            } // If part of party 2
-                                            else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
-                                            {
-                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                } // If part of party 2
+                                                else if (memberOF == 2 && pData.MemberNumber >= 6 && pData.MemberNumber <= 11)
                                                 {
-                                                    if ((Form2.config.DevotionTargetType == 0))
+                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                     {
-                                                        if (pData.Name == Form2.config.DevotionTargetName)
+                                                        if ((Form2.config.DevotionTargetType == 0))
+                                                        {
+                                                            if (pData.Name == Form2.config.DevotionTargetName)
+                                                            {
+                                                                var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+                                                                if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Form2.config.DevotionMP)
+                                                                {
+                                                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Form2.config.DevotionTargetName);
+                                                                    JobAbility_Wait("Devotion #3");
+                                                                }
+                                                            }
+                                                        }
+                                                        else
                                                         {
                                                             var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-                                                            if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Form2.config.DevotionMP)
+
+                                                            if ((pData.CurrentMP <= Form2.config.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
                                                             {
-                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Form2.config.DevotionTargetName);
-                                                                JobAbility_Wait("Devotion #3");
+                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                                JobAbility_Wait("Devotion #4");
+                                                                break;
                                                             }
                                                         }
                                                     }
-                                                    else
-                                                    {
-                                                        var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-
-                                                        if ((pData.CurrentMP <= Form2.config.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
-                                                        {
-                                                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
-                                                            JobAbility_Wait("Devotion #4");
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            } // If part of party 3
-                                            else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
-                                            {
-                                                if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
+                                                } // If part of party 3
+                                                else if (memberOF == 3 && pData.MemberNumber >= 12 && pData.MemberNumber <= 17)
                                                 {
-                                                    if ((Form2.config.DevotionTargetType == 0))
+                                                    if (!String.IsNullOrEmpty(pData.Name) && pData.Name != _ELITEAPIPL.Player.Name)
                                                     {
-                                                        if (pData.Name == Form2.config.DevotionTargetName)
+                                                        if ((Form2.config.DevotionTargetType == 0))
                                                         {
-                                                            var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-                                                            if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Form2.config.DevotionMP)
+                                                            if (pData.Name == Form2.config.DevotionTargetName)
                                                             {
-                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Form2.config.DevotionTargetName);
-                                                                JobAbility_Wait("Devotion #5");
+                                                                var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+                                                                if (playerInfo.Distance < 10 && playerInfo.Distance > 0 && pData.CurrentMP <= Form2.config.DevotionMP)
+                                                                {
+                                                                    _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + Form2.config.DevotionTargetName);
+                                                                    JobAbility_Wait("Devotion #5");
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                    else
-                                                    {
-                                                        var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
-
-                                                        if ((pData.CurrentMP <= Form2.config.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                        else
                                                         {
-                                                            _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
-                                                            JobAbility_Wait("Devotion #6");
-                                                            break;
+                                                            var playerInfo = _ELITEAPIPL.Entity.GetEntity((int)pData.TargetIndex);
+
+                                                            if ((pData.CurrentMP <= Form2.config.DevotionMP) && (playerInfo.Distance < 10) && pData.CurrentMPP <= 50)
+                                                            {
+                                                                _ELITEAPIPL.ThirdParty.SendString("/ja \"Devotion\" " + pData.Name);
+                                                                JobAbility_Wait("Devotion #6");
+                                                                break;
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -6230,12 +6949,87 @@
                                     }
                                 }
                             }
-
-
-
                         }
                     }
                 }
+
+
+
+
+            }
+
+
+        }
+
+        private string CheckStormspell(byte id)
+        {
+            if (this.autoSandstormEnabled[id])
+            {
+                return "Sandstorm";
+            }
+            else if (this.autoSandstorm2Enabled[id])
+            {
+                return "Sandstorm II";
+            }
+            else if (this.autoWindstormEnabled[id])
+            {
+                return "Windstorm";
+            }
+            else if (this.autoWindstorm2Enabled[id])
+            {
+                return "Windstorm II";
+            }
+            else if (this.autoFirestormEnabled[id])
+            {
+                return "Firestorm";
+            }
+            else if (this.autoFirestorm2Enabled[id])
+            {
+                return "Firestorm II";
+            }
+            else if (this.autoRainstormEnabled[id])
+            {
+                return "Rainstorm";
+            }
+            else if (this.autoRainstorm2Enabled[id])
+            {
+                return "Rainstorm II";
+            }
+            else if (this.autoHailstormEnabled[id])
+            {
+                return "Hailstorm";
+            }
+            else if (this.autoHailstorm2Enabled[id])
+            {
+                return "Hailstorm II";
+            }
+            else if (this.autoThunderstormEnabled[id])
+            {
+                return "Thunderstorm";
+            }
+            else if (this.autoThunderstorm2Enabled[id])
+            {
+                return "Thunderstorm II";
+            }
+            else if (this.autoVoidstormEnabled[id])
+            {
+                return "Voidstorm";
+            }
+            else if (this.autoVoidstorm2Enabled[id])
+            {
+                return "Voidstorm II";
+            }
+            else if (this.autoAurorastormEnabled[id])
+            {
+                return "Aurorastorm";
+            }
+            else if (this.autoAurorastorm2Enabled[id])
+            {
+                return "Aurorastorm II";
+            }
+            else
+            {
+                return "false";
             }
         }
 
@@ -6354,6 +7148,22 @@
             autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[0];
             autoProtectToolStripMenuItem.Checked = autoProtect_Enabled[0];
             autoShellToolStripMenuItem.Checked = autoShell_Enabled[0];
+            SandstormToolStripMenuItem.Checked = autoSandstormEnabled[0];
+            Sandstorm2ToolStripMenuItem.Checked = autoSandstorm2Enabled[0];
+            RainstormToolStripMenuItem.Checked = autoRainstormEnabled[0];
+            Rainstorm2ToolStripMenuItem.Checked = autoRainstorm2Enabled[0];
+            WindstormToolStripMenuItem.Checked = autoWindstormEnabled[0];
+            Windstorm2ToolStripMenuItem.Checked = autoWindstorm2Enabled[0];
+            FirestormToolStripMenuItem.Checked = autoFirestormEnabled[0];
+            Firestorm2ToolStripMenuItem.Checked = autoFirestorm2Enabled[0];
+            HailstormToolStripMenuItem.Checked = autoHailstormEnabled[0];
+            Hailstorm2ToolStripMenuItem.Checked = autoHailstorm2Enabled[0];
+            ThunderstormToolStripMenuItem.Checked = autoThunderstormEnabled[0];
+            Thunderstorm2ToolStripMenuItem.Checked = autoThunderstorm2Enabled[0];
+            VoidstormToolStripMenuItem.Checked = autoVoidstormEnabled[0];
+            Voidstorm2ToolStripMenuItem.Checked = autoVoidstorm2Enabled[0];
+            AurorastormToolStripMenuItem.Checked = autoAurorastormEnabled[0];
+            Aurorastorm2ToolStripMenuItem.Checked = autoAurorastorm2Enabled[0];
             playerOptions.Show(party0, new Point(0, 0));
         }
 
@@ -6366,6 +7176,22 @@
             autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[1];
             autoProtectToolStripMenuItem.Checked = autoProtect_Enabled[1];
             autoShellToolStripMenuItem.Checked = autoShell_Enabled[1];
+            SandstormToolStripMenuItem.Checked = autoSandstormEnabled[1];
+            Sandstorm2ToolStripMenuItem.Checked = autoSandstorm2Enabled[1];
+            RainstormToolStripMenuItem.Checked = autoRainstormEnabled[1];
+            Rainstorm2ToolStripMenuItem.Checked = autoRainstorm2Enabled[1];
+            WindstormToolStripMenuItem.Checked = autoWindstormEnabled[1];
+            Windstorm2ToolStripMenuItem.Checked = autoWindstorm2Enabled[1];
+            FirestormToolStripMenuItem.Checked = autoFirestormEnabled[1];
+            Firestorm2ToolStripMenuItem.Checked = autoFirestorm2Enabled[1];
+            HailstormToolStripMenuItem.Checked = autoHailstormEnabled[1];
+            Hailstorm2ToolStripMenuItem.Checked = autoHailstorm2Enabled[1];
+            ThunderstormToolStripMenuItem.Checked = autoThunderstormEnabled[1];
+            Thunderstorm2ToolStripMenuItem.Checked = autoThunderstorm2Enabled[1];
+            VoidstormToolStripMenuItem.Checked = autoVoidstormEnabled[1];
+            Voidstorm2ToolStripMenuItem.Checked = autoVoidstorm2Enabled[1];
+            AurorastormToolStripMenuItem.Checked = autoAurorastormEnabled[1];
+            Aurorastorm2ToolStripMenuItem.Checked = autoAurorastorm2Enabled[1];
             playerOptions.Show(party0, new Point(0, 0));
         }
 
@@ -6378,6 +7204,22 @@
             autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[2];
             autoProtectToolStripMenuItem.Checked = autoProtect_Enabled[2];
             autoShellToolStripMenuItem.Checked = autoShell_Enabled[2];
+            SandstormToolStripMenuItem.Checked = autoSandstormEnabled[2];
+            Sandstorm2ToolStripMenuItem.Checked = autoSandstorm2Enabled[2];
+            RainstormToolStripMenuItem.Checked = autoRainstormEnabled[2];
+            Rainstorm2ToolStripMenuItem.Checked = autoRainstorm2Enabled[2];
+            WindstormToolStripMenuItem.Checked = autoWindstormEnabled[2];
+            Windstorm2ToolStripMenuItem.Checked = autoWindstorm2Enabled[2];
+            FirestormToolStripMenuItem.Checked = autoFirestormEnabled[2];
+            Firestorm2ToolStripMenuItem.Checked = autoFirestorm2Enabled[2];
+            HailstormToolStripMenuItem.Checked = autoHailstormEnabled[2];
+            Hailstorm2ToolStripMenuItem.Checked = autoHailstorm2Enabled[2];
+            ThunderstormToolStripMenuItem.Checked = autoThunderstormEnabled[2];
+            Thunderstorm2ToolStripMenuItem.Checked = autoThunderstorm2Enabled[2];
+            VoidstormToolStripMenuItem.Checked = autoVoidstormEnabled[2];
+            Voidstorm2ToolStripMenuItem.Checked = autoVoidstorm2Enabled[2];
+            AurorastormToolStripMenuItem.Checked = autoAurorastormEnabled[2];
+            Aurorastorm2ToolStripMenuItem.Checked = autoAurorastorm2Enabled[2];
             playerOptions.Show(party0, new Point(0, 0));
         }
 
@@ -6390,6 +7232,22 @@
             autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[3];
             autoProtectToolStripMenuItem.Checked = autoProtect_Enabled[3];
             autoShellToolStripMenuItem.Checked = autoShell_Enabled[3];
+            SandstormToolStripMenuItem.Checked = autoSandstormEnabled[3];
+            Sandstorm2ToolStripMenuItem.Checked = autoSandstorm2Enabled[3];
+            RainstormToolStripMenuItem.Checked = autoRainstormEnabled[3];
+            Rainstorm2ToolStripMenuItem.Checked = autoRainstorm2Enabled[3];
+            WindstormToolStripMenuItem.Checked = autoWindstormEnabled[3];
+            Windstorm2ToolStripMenuItem.Checked = autoWindstorm2Enabled[3];
+            FirestormToolStripMenuItem.Checked = autoFirestormEnabled[3];
+            Firestorm2ToolStripMenuItem.Checked = autoFirestorm2Enabled[3];
+            HailstormToolStripMenuItem.Checked = autoHailstormEnabled[3];
+            Hailstorm2ToolStripMenuItem.Checked = autoHailstorm2Enabled[3];
+            ThunderstormToolStripMenuItem.Checked = autoThunderstormEnabled[3];
+            Thunderstorm2ToolStripMenuItem.Checked = autoThunderstorm2Enabled[3];
+            VoidstormToolStripMenuItem.Checked = autoVoidstormEnabled[3];
+            Voidstorm2ToolStripMenuItem.Checked = autoVoidstorm2Enabled[3];
+            AurorastormToolStripMenuItem.Checked = autoAurorastormEnabled[3];
+            Aurorastorm2ToolStripMenuItem.Checked = autoAurorastorm2Enabled[3];
             playerOptions.Show(party0, new Point(0, 0));
         }
 
@@ -6402,6 +7260,22 @@
             autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[4];
             autoProtectToolStripMenuItem.Checked = autoProtect_Enabled[4];
             autoShellToolStripMenuItem.Checked = autoShell_Enabled[4];
+            SandstormToolStripMenuItem.Checked = autoSandstormEnabled[4];
+            Sandstorm2ToolStripMenuItem.Checked = autoSandstorm2Enabled[4];
+            RainstormToolStripMenuItem.Checked = autoRainstormEnabled[4];
+            Rainstorm2ToolStripMenuItem.Checked = autoRainstorm2Enabled[4];
+            WindstormToolStripMenuItem.Checked = autoWindstormEnabled[4];
+            Windstorm2ToolStripMenuItem.Checked = autoWindstorm2Enabled[4];
+            FirestormToolStripMenuItem.Checked = autoFirestormEnabled[4];
+            Firestorm2ToolStripMenuItem.Checked = autoFirestorm2Enabled[4];
+            HailstormToolStripMenuItem.Checked = autoHailstormEnabled[4];
+            Hailstorm2ToolStripMenuItem.Checked = autoHailstorm2Enabled[4];
+            ThunderstormToolStripMenuItem.Checked = autoThunderstormEnabled[4];
+            Thunderstorm2ToolStripMenuItem.Checked = autoThunderstorm2Enabled[4];
+            VoidstormToolStripMenuItem.Checked = autoVoidstormEnabled[4];
+            Voidstorm2ToolStripMenuItem.Checked = autoVoidstorm2Enabled[4];
+            AurorastormToolStripMenuItem.Checked = autoAurorastormEnabled[4];
+            Aurorastorm2ToolStripMenuItem.Checked = autoAurorastorm2Enabled[4];
             playerOptions.Show(party0, new Point(0, 0));
         }
 
@@ -6414,6 +7288,22 @@
             autoFlurryIIToolStripMenuItem.Checked = autoFlurry_IIEnabled[5];
             autoProtectToolStripMenuItem.Checked = autoProtect_Enabled[5];
             autoShellToolStripMenuItem.Checked = autoShell_Enabled[5];
+            SandstormToolStripMenuItem.Checked = autoSandstormEnabled[5];
+            Sandstorm2ToolStripMenuItem.Checked = autoSandstorm2Enabled[5];
+            RainstormToolStripMenuItem.Checked = autoRainstormEnabled[5];
+            Rainstorm2ToolStripMenuItem.Checked = autoRainstorm2Enabled[5];
+            WindstormToolStripMenuItem.Checked = autoWindstormEnabled[5];
+            Windstorm2ToolStripMenuItem.Checked = autoWindstorm2Enabled[5];
+            FirestormToolStripMenuItem.Checked = autoFirestormEnabled[5];
+            Firestorm2ToolStripMenuItem.Checked = autoFirestorm2Enabled[5];
+            HailstormToolStripMenuItem.Checked = autoHailstormEnabled[5];
+            Hailstorm2ToolStripMenuItem.Checked = autoHailstorm2Enabled[5];
+            ThunderstormToolStripMenuItem.Checked = autoThunderstormEnabled[5];
+            Thunderstorm2ToolStripMenuItem.Checked = autoThunderstorm2Enabled[5];
+            VoidstormToolStripMenuItem.Checked = autoVoidstormEnabled[5];
+            Voidstorm2ToolStripMenuItem.Checked = autoVoidstorm2Enabled[5];
+            AurorastormToolStripMenuItem.Checked = autoAurorastormEnabled[5];
+            Aurorastorm2ToolStripMenuItem.Checked = autoAurorastorm2Enabled[5];
             playerOptions.Show(party0, new Point(0, 0));
         }
 
@@ -6651,7 +7541,6 @@
             autoOptions.Show(party1, new Point(0, 0));
         }
 
-
         private void player12buffsButton_Click(object sender, EventArgs e)
         {
             autoOptionsSelected = 12;
@@ -6688,190 +7577,119 @@
             autoOptions.Show(party2, new Point(0, 0));
         }
 
-        private void castingLockTimer_Tick(object sender, EventArgs e)
+        private async void castingStatus_Checker()
         {
-            if (_ELITEAPIPL == null || _ELITEAPIMonitored == null)
-            {
-                return;
-            }
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
 
-            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || _ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
-            {
-                return;
-            }
-
-            castingLockTimer.Enabled = false;
-            castingStatusCheck.Enabled = true;
-        }
-
-        private async void castingStatusCheck_TickAsync(object sender, EventArgs e)
-        {
-            if (_ELITEAPIPL == null || _ELITEAPIMonitored == null)
-            {
-                return;
-            }
-
-            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || _ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
-            {
-                return;
-            }
-
-            var count = 0;
+            spell_delay_count = 0;
             float lastPercent = 0;
 
-            // Grab spell being cast and get it's recast Time
-            if (castingSpell != "")
-            {
-                var magic = _ELITEAPIPL.Resources.GetSpell(castingSpell, 0);
+            var castPercent = _ELITEAPIPL.CastBar.Percent;
 
-                if (Form2.config.enableFastCast_Mode == true && magic != null)
-                {
-                    max_count = magic.CastTime / 60;
-                    max_count = max_count * 60 / 100;
-                    max_count = max_count + 1;
-                    last_percent = 0.50;
-                }
-                else if (Form2.config.enableFastCast_Mode != true && magic != null)
-                {
-                    max_count = magic.CastTime / 60;
-                    max_count = max_count + 1;
-                    last_percent = 1;
-                }
-                else
-                {
-                    max_count = 10;
-                    last_percent = 1;
-                }
-            }
-            else
+            while (castPercent < 1)
             {
-                if (Form2.config.enableFastCast_Mode)
-                {
-                    max_count = 5;
-                    last_percent = 0.50;
-                }
-                else
-                {
-                    max_count = 8;
-                    last_percent = 1;
-                }
-            }
+                castingLock = true;
 
-            while (_ELITEAPIPL.CastBar.Percent <= last_percent)
-            {
-                await Task.Delay(250);
+                await Task.Delay(TimeSpan.FromSeconds(0.1));
 
-                // if (_ELITEAPIPL.CastBar.Percent != 1 ) { MessageBox.Show("Cast Bar @ " +
-                // _ELITEAPIPL.CastBar.Percent + " MAX @ " + max_count + " LAST @ " + last_percent); }
-                if (lastPercent != _ELITEAPIPL.CastBar.Percent)
+                castPercent = _ELITEAPIPL.CastBar.Percent;
+
+                if (lastPercent != castPercent)
                 {
-                    count = 0;
-                    lastPercent = _ELITEAPIPL.CastBar.Percent;
+                    spell_delay_count = 0;
+                    lastPercent = castPercent;
                 }
-                else if (count == max_count)
+                else if (spell_delay_count == 10)
                 {
-                    castingLockLabel.Text = "Casting was INTERRUPTED!";
-                    castingStatusCheck.Enabled = false;
-                    castingUnlockTimer.Enabled = true;
+                    castingLockLabel.Text = "Casting was INTERRUPTED, Resetting.";
                     break;
                 }
                 else
                 {
-                    count++;
-                    lastPercent = _ELITEAPIPL.CastBar.Percent;
+                    spell_delay_count++;
+                    lastPercent = castPercent;
                 }
             }
 
-            castingLockLabel.Text = "Casting is soon to be AVAILABLE!";
-            await Task.Delay(250);
-            castingStatusCheck.Enabled = false;
-            castingUnlockTimer.Enabled = true;
+            if (castingLockLabel.Text != "Casting was INTERRUPTED, Resetting.")
+            {
+                castingLockLabel.Text = "Casting is soon to be AVAILABLE!";
+            }
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
+            castingUnlock();
+            castingSpell = String.Empty;
 
-            castingSpell = "";
         }
 
-        private void castingUnlockTimer_Tick(object sender, EventArgs e)
+        private async void castingUnlock()
         {
-            if (_ELITEAPIPL == null || _ELITEAPIMonitored == null)
+            MethodInvoker methodInvokerDelegate = delegate ()
             {
-                return;
-            }
+                this.castingLockLabel.Text = "Casting is UNLOCKED";
+                this.currentAction.Text = String.Empty;
+                castingSpell = String.Empty;
+                protectCountTimer.Enabled = false;
+            };
 
-            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || _ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
+            await Task.Run(async () =>
             {
-                return;
-            }
-
-            if (!pauseActions)
-            {
-                castingLockLabel.Text = "Casting is UNLOCKED!";
+                await Task.Delay(TimeSpan.FromSeconds(2.5));
+                this.Invoke(methodInvokerDelegate);
                 castingLock = false;
-                castingUnlockTimer.Enabled = false;
-                this.currentAction.Text = "";
-            }
-        }
+            });
 
-        private void actionUnlockTimer_Tick(object sender, EventArgs e)
-        {
-            if (_ELITEAPIPL == null || _ELITEAPIMonitored == null)
-            {
-                return;
-            }
-
-            if (_ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.LoggedIn || _ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.LoggedIn)
-            {
-                return;
-            }
-
-            if (!pauseActions)
-            {
-                castingLockLabel.Text = "Casting is UNLOCKED! ";
-                castingLock = false;
-                actionUnlockTimer.Enabled = false;
-                this.currentAction.Text = "";
-            }
         }
 
         private void JobAbility_Wait(string JobabilityDATA)
         {
-            this.actionTimer.Enabled = false;
-            castingLockLabel.Text = "Casting is LOCKED for a JA. ";
-            this.currentAction.Text = "Using a Job Ability: " + JobabilityDATA;
 
+            castingLockLabel.Text = "Casting is LOCKED for a JA.";
+            this.currentAction.Text = "Using a Job Ability: " + JobabilityDATA;
 
             var t = Task.Run(async delegate
             {
-                await Task.Delay(1700);
+                await Task.Delay(TimeSpan.FromSeconds(2.0));
                 return 1;
             });
             t.Wait();
 
             if (t.Result == 1)
             {
-                this.actionTimer.Enabled = true;
-                castingLockLabel.Text = "Casting is UNLOCKED! ";
-                this.currentAction.Text = "";
+                castingLockLabel.Text = "Casting is UNLOCKED!";
+                this.currentAction.Text = String.Empty;
             }
         }
 
         private void autoHasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             autoHasteEnabled[playerOptionsSelected] = !autoHasteEnabled[playerOptionsSelected];
+            autoHaste_IIEnabled[playerOptionsSelected] = false;
+            autoFlurryEnabled[playerOptionsSelected] = false;
+            autoFlurry_IIEnabled[playerOptionsSelected] = false;
         }
 
         private void autoHasteIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             autoHaste_IIEnabled[playerOptionsSelected] = !autoHaste_IIEnabled[playerOptionsSelected];
+            autoHasteEnabled[playerOptionsSelected] = false;
+            autoFlurryEnabled[playerOptionsSelected] = false;
+            autoFlurry_IIEnabled[playerOptionsSelected] = false;
         }
 
         private void autoFlurryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             autoFlurryEnabled[playerOptionsSelected] = !autoFlurryEnabled[playerOptionsSelected];
+            autoHasteEnabled[playerOptionsSelected] = false;
+            autoHaste_IIEnabled[playerOptionsSelected] = false;
+            autoFlurry_IIEnabled[playerOptionsSelected] = false;
         }
 
         private void autoFlurryIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             autoFlurry_IIEnabled[playerOptionsSelected] = !autoFlurry_IIEnabled[playerOptionsSelected];
+            autoHasteEnabled[playerOptionsSelected] = false;
+            autoFlurryEnabled[playerOptionsSelected] = false;
+            autoHaste_IIEnabled[playerOptionsSelected] = false;
         }
 
         private void autoProtectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -6892,6 +7710,9 @@
         private void autoHasteToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             autoHasteEnabled[autoOptionsSelected] = !autoHasteEnabled[autoOptionsSelected];
+            autoHaste_IIEnabled[playerOptionsSelected] = false;
+            autoFlurryEnabled[playerOptionsSelected] = false;
+            autoFlurry_IIEnabled[playerOptionsSelected] = false;
         }
 
         private void autoPhalanxIIToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -6917,12 +7738,11 @@
         private void followToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2.config.autoFollowName = _ELITEAPIMonitored.Party.GetPartyMembers()[playerOptionsSelected].Name;
-            CastLockMethod();
         }
 
         private void stopfollowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2.config.autoFollowName = "";
+            Form2.config.autoFollowName = String.Empty;
         }
 
         private void EntrustTargetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -7035,6 +7855,154 @@
             castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[playerOptionsSelected].Name, "Viruna");
         }
 
+        private void setAllStormsFalse(string activeStorm)
+        {
+            if (activeStorm != "Sandstorm")
+                autoSandstormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Rainstorm")
+                autoRainstormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Firetorm")
+                autoFirestormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Windstorm")
+                autoWindstormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Hailstorm")
+                autoHailstormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Thunderstorm")
+                autoThunderstormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Voidstorm")
+                autoVoidstormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Auroroastorm")
+                autoAurorastormEnabled[playerOptionsSelected] = false;
+            if (activeStorm != "Sandstorm2")
+                autoSandstorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Rainstorm2")
+                autoRainstorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Firestorm2")
+                autoFirestorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Windstorm2")
+                autoWindstorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Hailstorm2")
+                autoHailstorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Thunderstorm2")
+                autoThunderstorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Voidstorm2")
+                autoVoidstorm2Enabled[playerOptionsSelected] = false;
+            if (activeStorm != "Aurorastorm2")
+                autoAurorastorm2Enabled[playerOptionsSelected] = false;
+        }
+
+        private void SandstormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Sandstorm");
+
+            autoSandstormEnabled[playerOptionsSelected] = !autoSandstormEnabled[playerOptionsSelected];
+        }
+
+        private void RainstormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Rainstorm");
+
+            autoRainstormEnabled[playerOptionsSelected] = !autoRainstormEnabled[playerOptionsSelected];
+        }
+
+        private void WindstormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Windstorm");
+
+            autoWindstormEnabled[playerOptionsSelected] = !autoWindstormEnabled[playerOptionsSelected];
+        }
+
+        private void FirestormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Firestorm");
+
+            autoFirestormEnabled[playerOptionsSelected] = !autoFirestormEnabled[playerOptionsSelected];
+        }
+
+        private void HailstormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Hailstorm");
+
+            autoHailstormEnabled[playerOptionsSelected] = !autoHailstormEnabled[playerOptionsSelected];
+        }
+
+        private void ThunderstormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Thunderstorm");
+
+            autoThunderstormEnabled[playerOptionsSelected] = !autoThunderstormEnabled[playerOptionsSelected];
+        }
+
+        private void VoidstormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Voidstorm");
+
+            autoVoidstormEnabled[playerOptionsSelected] = !autoVoidstormEnabled[playerOptionsSelected];
+        }
+
+        private void AurorastormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Aurorastorm");
+
+            autoAurorastormEnabled[playerOptionsSelected] = !autoAurorastormEnabled[playerOptionsSelected];
+        }
+
+        private void Sandstorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Sandstorm2");
+
+            autoSandstorm2Enabled[playerOptionsSelected] = !autoSandstorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Rainstorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Rainstorm2");
+
+            autoRainstorm2Enabled[playerOptionsSelected] = !autoRainstorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Windstorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Windstorm2");
+
+            autoWindstorm2Enabled[playerOptionsSelected] = !autoWindstorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Firestorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Firestorm2");
+
+            autoFirestorm2Enabled[playerOptionsSelected] = !autoFirestorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Hailstorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Hailstorm2");
+
+            autoHailstorm2Enabled[playerOptionsSelected] = !autoHailstorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Thunderstorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Thunderstorm2");
+
+            autoThunderstorm2Enabled[playerOptionsSelected] = !autoThunderstorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Voidstorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Voidstorm2");
+
+            autoVoidstorm2Enabled[playerOptionsSelected] = !autoVoidstorm2Enabled[playerOptionsSelected];
+        }
+
+        private void Aurorastorm2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setAllStormsFalse("Aurorastorm2");
+
+            autoAurorastorm2Enabled[playerOptionsSelected] = !autoAurorastorm2Enabled[playerOptionsSelected];
+        }
+
         private void protectIVToolStripMenuItem_Click(object sender, EventArgs e)
         {
             castSpell(_ELITEAPIMonitored.Party.GetPartyMembers()[playerOptionsSelected].Name, "Protect IV");
@@ -7064,16 +8032,13 @@
                 pauseButton.Text = "Paused!";
                 pauseButton.ForeColor = Color.Red;
                 actionTimer.Enabled = false;
-                blockBuffs = 1;
                 ActiveBuffs.Clear();
-                blockBuffs = 0;
                 pauseActions = true;
                 song_casting = 0;
                 ForceSongRecast = true;
             }
             else
             {
-
                 pauseButton.Text = "Pause";
                 pauseButton.ForeColor = Color.Black;
                 actionTimer.Enabled = true;
@@ -7081,6 +8046,10 @@
                 song_casting = 0;
                 ForceSongRecast = true;
 
+                if (Form2.config.MinimiseonStart == true && this.WindowState != FormWindowState.Minimized)
+                {
+                    this.WindowState = FormWindowState.Minimized;
+                }
 
                 if (Form2.config.EnableAddOn && LUA_Plugin_Loaded == 0)
                 {
@@ -7088,14 +8057,14 @@
                     {
                         _ELITEAPIPL.ThirdParty.SendString("//lua load CurePlease_addon");
                         Thread.Sleep(200);
-                        _ELITEAPIPL.ThirdParty.SendString("//cp settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
+                        _ELITEAPIPL.ThirdParty.SendString("//cpaddon settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
                     }
                     else if (WindowerMode == "Ashita")
                     {
                         _ELITEAPIPL.ThirdParty.SendString("/addon load CurePlease_addon");
 
                         Thread.Sleep(200);
-                        _ELITEAPIPL.ThirdParty.SendString("/cp settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
+                        _ELITEAPIPL.ThirdParty.SendString("/cpaddon settings " + Form2.config.ipAddress + " " + Form2.config.listeningPort);
                     }
                     LUA_Plugin_Loaded = 1;
                 }
@@ -7111,16 +8080,14 @@
             }
 
 
+            var DecPrice = Math.Round(_ELITEAPIPL.CastBar.Percent, 2);
 
 
-            int TargetID = (int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex;
-            var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(TargetID);
 
-            //debug_MSG_show = "CURRENT SPAWN DATA: " + targetEntityH2.Name + " : " + targetEntityH2.SpawnFlags + " = " + targetEntityH2.Type;
-
+            var magic = _ELITEAPIPL.Resources.GetSpell("Blink", 0);
+            debug_MSG_show = "Casting Time: " + DecPrice + " " + _ELITEAPIPL.CastBar.Percent;
 
             MessageBox.Show(debug_MSG_show);
-
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -7151,58 +8118,93 @@
             }
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new Form3().Show();
-        }
-
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             Opacity = trackBar1.Value * 0.01;
         }
 
-        private bool CheckShellraLevelRecast()
+        private bool CheckShellraLevelPossession()
         {
             switch ((int)Form2.config.plShellra_Level)
             {
                 case 1:
-                    return CheckSpellRecast("Shellra") == 0;
+                    if (JobChecker("Shellra") == true && CheckSpellRecast("Shellra") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 2:
-                    return CheckSpellRecast("Shellra II") == 0;
+                    if (JobChecker("Shellra II") == true && CheckSpellRecast("Shellra II") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 3:
-                    return CheckSpellRecast("Shellra III") == 0;
+                    if (JobChecker("Shellra III") == true && CheckSpellRecast("Shellra III") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 4:
-                    return CheckSpellRecast("Shellra IV") == 0;
+                    if (JobChecker("Shellra IV") == true && CheckSpellRecast("Shellra IV") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 5:
-                    return CheckSpellRecast("Shellra V") == 0;
+                    if (JobChecker("Shellra V") == true && CheckSpellRecast("Shellra V") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 default:
                     return false;
             }
         }
 
-        private bool CheckProtectraLevelRecast()
+        private bool CheckProtectraLevelPossession()
         {
             switch ((int)Form2.config.plProtectra_Level)
             {
                 case 1:
-                    return CheckSpellRecast("Protectra") == 0;
+                    if (JobChecker("Protectra") == true && CheckSpellRecast("Protectra") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 2:
-                    return CheckSpellRecast("Protectra II") == 0;
+                    if (JobChecker("Protectra II") == true && CheckSpellRecast("Protectra II") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 3:
-                    return CheckSpellRecast("Protectra III") == 0;
+                    if (JobChecker("Protectra III") == true && CheckSpellRecast("Protectra III") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 4:
-                    return CheckSpellRecast("Protectra IV") == 0;
+                    if (JobChecker("Protectra IV") == true && CheckSpellRecast("Protectra IV") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 case 5:
-                    return CheckSpellRecast("Protectra V") == 0;
+                    if (JobChecker("Protectra V") == true && CheckSpellRecast("Protectra V") == 0)
+
+                        return true;
+                    else
+                        return false;
 
                 default:
                     return false;
@@ -7214,16 +8216,75 @@
             switch ((int)Form2.config.plReraise_Level)
             {
                 case 1:
-                    return HasSpell("Reraise");
+                    if (JobChecker("Reraise") == true && CheckSpellRecast("Reraise") == 0)
+                    {
+                        // Check SCH possiblity
+                        if (_ELITEAPIPL.Player.MainJob == 20 && _ELITEAPIPL.Player.SubJob != 3 && !BuffChecker(401, 0))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
                 case 2:
-                    return HasSpell("Reraise II");
+
+                    if (JobChecker("Reraise II") == true && CheckSpellRecast("Reraise II") == 0)
+                    {
+                        if (_ELITEAPIPL.Player.MainJob == 20 && !BuffChecker(401, 0))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
                 case 3:
-                    return HasSpell("Reraise III");
+
+                    if (JobChecker("Reraise III") == true && CheckSpellRecast("Reraise III") == 0)
+                    {
+                        if (_ELITEAPIPL.Player.MainJob == 20 && !BuffChecker(401, 0))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
                 case 4:
-                    return HasSpell("Reraise IV");
+                    if (JobChecker("Reraise IV") == true && CheckSpellRecast("Reraise IV") == 0)
+                    {
+                        if (_ELITEAPIPL.Player.MainJob == 20 && !BuffChecker(401, 0))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
                 default:
                     return false;
@@ -7267,33 +8328,39 @@
 
         private void refreshCharactersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var pol = Process.GetProcessesByName("pol");
+            var pol = Process.GetProcessesByName("pol").Union(Process.GetProcessesByName("xiloader"));
 
-            if (pol.Length < 1)
+            if (_ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.Loading || _ELITEAPIMonitored.Player.LoginStatus == (int)LoginStatus.Loading)
             {
-                MessageBox.Show("FFXI not found");
             }
             else
             {
-                POLID.Items.Clear();
-                POLID2.Items.Clear();
-                processids.Items.Clear();
-
-                for (var i = 0; i < pol.Length; i++)
+                if (pol.Count() < 1)
                 {
-                    POLID.Items.Add(pol[i].MainWindowTitle);
-                    POLID2.Items.Add(pol[i].MainWindowTitle);
-                    processids.Items.Add(pol[i].Id);
+                    MessageBox.Show("FFXI not found");
                 }
+                else
+                {
+                    POLID.Items.Clear();
+                    POLID2.Items.Clear();
+                    processids.Items.Clear();
 
-                POLID.SelectedIndex = 0;
-                POLID2.SelectedIndex = 0;
+                    for (var i = 0; i < pol.Count(); i++)
+                    {
+                        POLID.Items.Add(pol.ElementAt(i).MainWindowTitle);
+                        POLID2.Items.Add(pol.ElementAt(i).MainWindowTitle);
+                        processids.Items.Add(pol.ElementAt(i).Id);
+                    }
+
+                    POLID.SelectedIndex = 0;
+                    POLID2.SelectedIndex = 0;
+                }
             }
         }
 
-        private void buff_checker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private async void buff_checker_DoWorkAsync(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            if (Form2.config.EnableAddOn == true && blockBuffs == 0)
+            if (Form2.config.EnableAddOn == true && pauseActions == false)
             {
                 bool done = false;
 
@@ -7314,15 +8381,60 @@
 
                         received_data = Encoding.ASCII.GetString(receive_byte_array, 0, receive_byte_array.Length);
 
+                        //MessageBox.Show("FOUND " + received_data);
+
                         string[] name = received_data.Split('-');
 
-                        ActiveBuffs.RemoveAll(buf => buf.CharacterName == name[0]);
-
-                        ActiveBuffs.Add(new BuffStorage
+                        if (name[0] == "buffs")
                         {
-                            CharacterName = name[0],
-                            CharacterBuffs = name[1]
-                        });
+                            ActiveBuffs.RemoveAll(buf => buf.CharacterName == name[1]);
+
+                            ActiveBuffs.Add(new BuffStorage
+                            {
+                                CharacterName = name[1],
+                                CharacterBuffs = name[2]
+                            });
+                        }
+                        else if (name[0] == "casting" && Form2.config.trackCastingPackets == true)
+                        {
+                            if (name[1] == "finished")
+                            {
+                                MethodInvoker methodInvokerDelegate = delegate ()
+                                {
+                                    castingLockLabel.Text = "Casting is soon to be AVAILABLE!";
+                                };
+
+                                this.Invoke(methodInvokerDelegate);
+
+                                castingUnlock();
+                            }
+                            else if (name[1] == "blocked")
+                            {
+                                MethodInvoker methodInvokerDelegate = delegate ()
+                                {
+                                    if (castingLock != true)
+                                        castingLock = true;
+
+                                    castingLockLabel.Text = "Casting is LOCKED";
+                                    if (protectCountTimer.Enabled == false)
+                                    {
+                                        protectCountTimer.Enabled = true;
+                                    }
+                                };
+                                this.Invoke(methodInvokerDelegate);
+                            }
+                            else if (name[1] == "interrupted")
+                            {
+                                MethodInvoker methodInvokerDelegate = delegate ()
+                                {
+                                    castingLockLabel.Text = "Casting was INTERRUPTED!";
+                                };
+
+                                this.Invoke(methodInvokerDelegate);
+
+                                castingUnlock();
+                            }
+                        }
                     }
                 }
                 catch (Exception)
@@ -7333,17 +8445,18 @@
                     listener.Close();
                 }
             }
+
+            await Task.Delay(500);
         }
 
-        private async void buff_checker_RunWorkerCompletedAsync(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void buff_checker_RunWorkerCompletedAsync(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            await Task.Delay(5000);
+
             buff_checker.RunWorkerAsync();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
             notifyIcon1.Dispose();
 
             if (_ELITEAPIPL != null)
@@ -7357,86 +8470,6 @@
                     _ELITEAPIPL.ThirdParty.SendString("//lua unload CurePlease_addon");
                 }
             }
-        }
-
-        private async void followTimer_TickAsync(object sender, EventArgs e)
-        {
-            if (_ELITEAPIPL != null && _ELITEAPIMonitored != null && !String.IsNullOrEmpty(Form2.config.autoFollowName) && !pauseActions)
-            {
-                int followersTargetID = followID();
-
-                if (followersTargetID != -1)
-                {
-                    var followTarget = _ELITEAPIPL.Entity.GetEntity(followersTargetID);
-
-                    if (Form2.config.FFXIDefaultAutoFollow == true && _ELITEAPIPL.AutoFollow.IsAutoFollowing != true)
-                    {
-                        if (_ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIPL.Target.GetTargetInfo().TargetIndex).TargetID != followersTargetID)
-                        {
-                            _ELITEAPIPL.Target.SetTarget(Convert.ToInt32(0));
-                            Thread.Sleep(TimeSpan.FromSeconds(0.5));
-                            _ELITEAPIPL.Target.SetTarget(Convert.ToInt32(followersTargetID));
-                            Thread.Sleep(TimeSpan.FromSeconds(0.5));
-
-                            if (!_ELITEAPIPL.Target.GetTargetInfo().LockedOn)
-                                _ELITEAPIPL.ThirdParty.SendString("/lockon <t>");
-                        }
-
-                        Thread.Sleep(TimeSpan.FromSeconds(0.5));
-                        _ELITEAPIPL.ThirdParty.SendString("/follow");
-
-                    }
-                    else if (!String.IsNullOrEmpty(Form2.config.autoFollowName) && Form2.config.FFXIDefaultAutoFollow != true)
-                    {
-                        if (Form2.config.autoFollow_Warning == true && Math.Truncate(followTarget.Distance) >= 40 && _ELITEAPIMonitored.Player.Name != _ELITEAPIPL.Player.Name && followWarning == 0)
-                        {
-                            string createdTell = "/tell " + _ELITEAPIMonitored.Player.Name + " You're too far to follow.";
-                            _ELITEAPIPL.ThirdParty.SendString(createdTell);
-                            followWarning = 1;
-                            await Task.Delay(300);
-                        }
-                        else if (Math.Truncate(followTarget.Distance) <= 40)
-                        {
-                            // ONLY TARGET AND BEGIN FOLLOW IF TARGET IS AT THE DEFINED DISTANCE
-                            if (Math.Truncate(followTarget.Distance) >= (int)Form2.config.autoFollowDistance && Math.Truncate(followTarget.Distance) <= 48)
-                            {
-                                followWarning = 0;
-
-                                // Cancel current target this is to make sure the character is not locked
-                                // on and therefore unable to move freely. Wait 5ms just to allow it to work
-
-                                _ELITEAPIPL.Target.SetTarget(0);
-                                await Task.Delay(500);
-
-                                while (Math.Truncate(followTarget.Distance) >= (int)Form2.config.autoFollowDistance)
-                                {
-                                    float Target_X = _ELITEAPIPL.Entity.GetEntity(followersTargetID).X;
-                                    float Target_Y = _ELITEAPIPL.Entity.GetEntity(followersTargetID).Y;
-                                    float Target_Z = _ELITEAPIPL.Entity.GetEntity(followersTargetID).Z;
-                                    float Player_X = _ELITEAPIPL.Entity.GetLocalPlayer().X;
-                                    float Player_Y = _ELITEAPIPL.Entity.GetLocalPlayer().Y;
-                                    float Player_Z = _ELITEAPIPL.Entity.GetLocalPlayer().Z;
-                                    _ELITEAPIPL.AutoFollow.SetAutoFollowCoords(Target_X - Player_X, Target_Y - Player_Y, Target_Z - Player_Z);
-
-                                    _ELITEAPIPL.AutoFollow.IsAutoFollowing = true;
-                                    curePlease_autofollow = true;
-
-                                    await Task.Delay(100);
-                                }
-                                _ELITEAPIPL.AutoFollow.IsAutoFollowing = false;
-                                curePlease_autofollow = false;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (pauseActions == true && !String.IsNullOrEmpty(Form2.config.autoFollowName) && Form2.config.FFXIDefaultAutoFollow != true)
-            {
-                // _ELITEAPIPL.AutoFollow.IsAutoFollowing = false;
-                return;
-            }
-            else
-                return;
         }
 
         private int followID()
@@ -7560,27 +8593,13 @@
 
         private bool GEOCheckEngaged()
         {
-            if (Form2.config.IndiWhenEngaged && !String.IsNullOrEmpty(Form2.config.LuopanSpell_Target))
+            if (_ELITEAPIMonitored.Player.Status == 1 || targetEngaged == true)
             {
-                if (_ELITEAPIMonitored.Player.Status == 1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
             else
             {
-                if (targetEngaged == true)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -7591,7 +8610,6 @@
 
         private void checkSCHCharges_Tick(object sender, EventArgs e)
         {
-
             if (_ELITEAPIPL != null && _ELITEAPIMonitored != null)
             {
                 int MainJob = _ELITEAPIPL.Player.MainJob;
@@ -7670,8 +8688,6 @@
         {
             if (_ELITEAPIPL != null && _ELITEAPIMonitored != null)
             {
-
-
                 // FIGURE OUT WHO'S ENGAGED STATUS WE'RE CHECKING
                 int foundID_hateEstablisher = 0;
 
@@ -7683,7 +8699,7 @@
                     for (var x = 0; x < 2048; x++)
                     {
                         var entityH2 = _ELITEAPIPL.Entity.GetEntity(x);
-                        if (entityH2.Name != "" && entityH2.Name != null)
+                        if (entityH2.Name != String.Empty && entityH2.Name != null)
                         {
                             name1_lower = entityH2.Name.ToLower();
 
@@ -7700,26 +8716,55 @@
                 {
                     var targetEntityH2 = _ELITEAPIPL.Entity.GetEntity(foundID_hateEstablisher);
 
-                    if (!Form2.config.IndiWhenEngaged || targetEntityH2.Status == 1)
+                    if (targetEntityH2.Status == 1)
                     {
                         targetEngaged = true;
                     }
-                    targetEngaged = false;
+                    else
+                    {
+                        targetEngaged = false;
+                    }
                 }
-                else { targetEngaged = true; }
+                else { targetEngaged = false; }
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private int GrabDistance_GEO()
         {
+            string checkedName = String.Empty;
+            string name1 = String.Empty;
 
+            if (Form2.config.specifiedEngageTarget == true && !String.IsNullOrEmpty(Form2.config.LuopanSpell_Target))
+            {
+                checkedName = Form2.config.LuopanSpell_Target;
+            }
+            else
+            {
+                checkedName = _ELITEAPIMonitored.Player.Name;
+            }
+
+            for (var x = 0; x < 2048; x++)
+            {
+                var entityGEO = _ELITEAPIPL.Entity.GetEntity(x);
+
+                if (!String.IsNullOrEmpty(checkedName) && !String.IsNullOrEmpty(entityGEO.Name))
+                {
+                    name1 = entityGEO.Name;
+
+                    if (name1 == checkedName)
+                    {
+                        return (int)entityGEO.Distance;
+                    }
+                }
+            }
+
+            return 0;
         }
 
         private void chatLog_reader_Tick(object sender, EventArgs e)
         {
             if (_ELITEAPIPL != null && _ELITEAPIMonitored != null)
             {
-
                 EliteAPI.ChatEntry cl = new EliteAPI.ChatEntry();
 
                 while ((cl = _ELITEAPIPL.Chat.GetNextChatLine()) != null)
@@ -7733,9 +8778,7 @@
 
                         string buff = substrings[1];
                         string name = string.Concat(substrings[0].Reverse().Skip(2).Reverse());
-
                     }
-
 
                     // CHECK FOR ENFEEBLEMENT LOSS
                     if (cl.Text.Contains("is no longer"))
@@ -7746,23 +8789,22 @@
                         int lastString = substrings.Count() - 1;
 
                         string buff = string.Concat(substrings[lastString].Reverse().Skip(1).Reverse());
-
                     }
-
                 }
-
             }
         }
 
         private void updateInstances_Tick(object sender, EventArgs e)
         {
-            // Text = notifyIcon1.Text = _ELITEAPIPL.Player.Name + " - " + "Cure Please v" + Application.ProductVersion;
-
-            var pol = Process.GetProcessesByName("pol");
-
-            if (pol.Length < 1)
+            if ((_ELITEAPIPL != null && _ELITEAPIPL.Player.LoginStatus == (int)LoginStatus.Loading) || (_ELITEAPIMonitored != null && _ELITEAPIMonitored.Player.LoginStatus == (int)LoginStatus.Loading))
             {
+                return;
+            }
 
+            var pol = Process.GetProcessesByName("pol").Union(Process.GetProcessesByName("xiloader"));
+
+            if (pol.Count() < 1)
+            {
             }
             else
             {
@@ -7773,56 +8815,35 @@
                 int selectedPOLID = 0;
                 int selectedPOLID2 = 0;
 
-                for (var i = 0; i < pol.Length; i++)
+                for (var i = 0; i < pol.Count(); i++)
                 {
-                    POLID.Items.Add(pol[i].MainWindowTitle);
-                    POLID2.Items.Add(pol[i].MainWindowTitle);
-                    processids.Items.Add(pol[i].Id);
+                    POLID.Items.Add(pol.ElementAt(i).MainWindowTitle);
+                    POLID2.Items.Add(pol.ElementAt(i).MainWindowTitle);
+                    processids.Items.Add(pol.ElementAt(i).Id);
 
-                    if (_ELITEAPIPL != null && _ELITEAPIPL.Player.LoginStatus != (int)LoginStatus.Loading)
+                    if (_ELITEAPIPL != null && _ELITEAPIPL.Player.Name != null)
                     {
-                        if (_ELITEAPIPL.Player.Name != "" || _ELITEAPIPL.Player.Name != " ")
+                        if (pol.ElementAt(i).MainWindowTitle.ToLower() == _ELITEAPIPL.Player.Name.ToLower())
                         {
-                            if (pol[i].MainWindowTitle.ToLower() == _ELITEAPIPL.Player.Name.ToLower())
-                            {
-
-                                selectedPOLID = i;
-                            }
+                            selectedPOLID = i;
+                            plLabel.Text = "Selected PL: " + _ELITEAPIPL.Player.Name;
+                            Text = notifyIcon1.Text = _ELITEAPIPL.Player.Name + " - " + "Cure Please v" + Application.ProductVersion;
                         }
                     }
 
-                    if (_ELITEAPIMonitored != null && _ELITEAPIMonitored.Player.LoginStatus != (int)LoginStatus.Loading)
+                    if (_ELITEAPIMonitored != null && _ELITEAPIMonitored.Player.Name != null)
                     {
-                        if (_ELITEAPIMonitored.Player.Name != "" || _ELITEAPIMonitored.Player.Name != " ")
+                        if (pol.ElementAt(i).MainWindowTitle == _ELITEAPIMonitored.Player.Name)
                         {
-                            if (pol[i].MainWindowTitle == _ELITEAPIMonitored.Player.Name)
-                            {
-                                selectedPOLID2 = i;
-                            }
+                            selectedPOLID2 = i;
+                            monitoredLabel.Text = "Monitored Player: " + _ELITEAPIMonitored.Player.Name;
                         }
                     }
-
                 }
                 POLID.SelectedIndex = selectedPOLID;
                 POLID2.SelectedIndex = selectedPOLID2;
             }
-
-            if (_ELITEAPIPL != null)
-            {
-                if (_ELITEAPIPL.Player.Name != "" || _ELITEAPIPL.Player.Name != " ")
-                {
-                    plLabel.Text = "Selected PL: " + _ELITEAPIPL.Player.Name;
-                }
-            }
-            if (_ELITEAPIMonitored != null)
-            {
-                if (_ELITEAPIMonitored.Player.Name != "" || _ELITEAPIMonitored.Player.Name != " ")
-                {
-                    monitoredLabel.Text = "Monitored Player: " + _ELITEAPIMonitored.Player.Name;
-                }
-            }
         }
-
 
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -7834,11 +8855,8 @@
             }
             else if (FormWindowState.Normal == this.WindowState)
             {
-
             }
         }
-
-
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -7846,10 +8864,294 @@
             this.WindowState = FormWindowState.Normal;
         }
 
+        private void PartyBuffsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var PartyBuffs = new PartyBuffs(this);
+            if (_ELITEAPIPL != null)
+            {
+                PartyBuffs.Show();
+            }
+        }
+
+        private void ChatLogToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var form4 = new Form4(this);
+            if (_ELITEAPIPL != null)
+            {
+                form4.Show();
+            }
+        }
+
+        private Form settings;
+
+        private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((settings == null) || (settings.IsDisposed))
+            {
+                settings = new Form2();
+            }
+            settings.Show();
+        }
+
+        private void CheckCustomActions_TickAsync(object sender, EventArgs e)
+        {
+            if (_ELITEAPIPL != null && _ELITEAPIMonitored != null)
+            {
+
+                int cmdTime = _ELITEAPIMonitored.ThirdParty.ConsoleIsNewCommand();
+
+                if (lastCommand != cmdTime)
+                {
+                    lastCommand = cmdTime;
+
+                    int spellCastID = 0;
+
+                    if (castingSpell != String.Empty)
+                    {
+                        spellCastID = _ELITEAPIPL.Resources.GetSpell(castingSpell, 0).Index;
+                    }
 
 
+                    if (_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(0) == "cureplease" || _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(0) == "cp")
+                    {
+                        int argCount = _ELITEAPIMonitored.ThirdParty.ConsoleGetArgCount();
 
+                        // 0 = cureplease or cp so ignore
+                        // 1 = command to run
+                        // 2 = (if set) PL's name
 
+                        if (argCount >= 3)
+                        {
+                            if ((_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "stop" || _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "pause") && _ELITEAPIPL.Player.Name == _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(2))
+                            {
+                                pauseButton.Text = "Paused!";
+                                pauseButton.ForeColor = Color.Red;
+                                actionTimer.Enabled = false;
+                                ActiveBuffs.Clear();
+                                pauseActions = true;
+                                song_casting = 0;
+                                ForceSongRecast = true;
+                            }
+                            else if ((_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "unpause" || _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "start") && _ELITEAPIPL.Player.Name.ToLower() == _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(2).ToLower())
+                            {
+                                pauseButton.Text = "Pause";
+                                pauseButton.ForeColor = Color.Black;
+                                actionTimer.Enabled = true;
+                                pauseActions = false;
+                                song_casting = 0;
+                                ForceSongRecast = true;
+                            }
+                            else if ((_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "toggle") && _ELITEAPIPL.Player.Name.ToLower() == _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(2).ToLower())
+                            {
+                                pauseButton.PerformClick();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else if (argCount < 3)
+                        {
+                            if (_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "stop" || _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "pause")
+                            {
+                                pauseButton.Text = "Paused!";
+                                pauseButton.ForeColor = Color.Red;
+                                actionTimer.Enabled = false;
+                                ActiveBuffs.Clear();
+                                pauseActions = true;
+                                song_casting = 0;
+                                ForceSongRecast = true;
+                            }
+                            else if (_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "unpause" || _ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "start")
+                            {
+                                pauseButton.Text = "Pause";
+                                pauseButton.ForeColor = Color.Black;
+                                actionTimer.Enabled = true;
+                                pauseActions = false;
+                                song_casting = 0;
+                                ForceSongRecast = true;
+                            }
+                            else if (_ELITEAPIMonitored.ThirdParty.ConsoleGetArg(1) == "toggle")
+                            {
+                                pauseButton.PerformClick();
+                            }
+                            else
+                            {
+                            }
+                        }
+                        else
+                        {
+                            // DO NOTHING
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FollowBGWorker_RunWorkerCompletedAsync(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            // MAKE SURE BOTH ELITEAPI INSTANCES ARE ACTIVE, THE BOT ISN'T PAUSED, AND THERE IS AN AUTOFOLLOWTARGET NAMED
+            if (_ELITEAPIPL != null && _ELITEAPIMonitored != null && !String.IsNullOrEmpty(Form2.config.autoFollowName) && !pauseActions)
+            {
+                // RUN THE FUNCTION TO GRAB THE ID OF THE FOLLOW TARGET THIS ALSO MAKES SURE THEY ARE IN RANGE TO FOLLOW
+                int followersTargetID = followID();
+
+                // If the FOLLOWER'S ID is NOT -1 THEN THEY WERE LOCATED SO CONTINUE THE CHECKS
+                if (followersTargetID != -1)
+                {
+                    // GRAB THE FOLLOW TARGETS ENTITY TABLE TO CHECK DISTANCE ETC
+                    var followTarget = _ELITEAPIPL.Entity.GetEntity(followersTargetID);
+
+                    if (Math.Truncate(followTarget.Distance) >= (int)Form2.config.autoFollowDistance && curePlease_autofollow == false)
+                    {
+                        // THE DISTANCE IS GREATER THAN REQUIRED SO IF AUTOFOLLOW IS NOT ACTIVE THEN DEPENDING ON THE TYPE, FOLLOW
+
+                        // SQUARE ENIX FINAL FANTASY XI DEFAULT AUTO FOLLOW
+                        if (Form2.config.FFXIDefaultAutoFollow == true && _ELITEAPIPL.AutoFollow.IsAutoFollowing != true)
+                        {
+                            // IF THE CURRENT TARGET IS NOT THE FOLLOWERS TARGET ID THEN CHANGE THAT NOW
+                            if (_ELITEAPIPL.Target.GetTargetInfo().TargetIndex != followersTargetID)
+                            {
+                                // FIRST REMOVE THE CURRENT TARGET
+                                _ELITEAPIPL.Target.SetTarget(0);
+                                // NOW SET THE NEXT TARGET AFTER A WAIT
+                                Thread.Sleep(TimeSpan.FromSeconds(0.1));
+                                _ELITEAPIPL.Target.SetTarget(followersTargetID);
+                            }
+                            // IF THE TARGET IS CORRECT BUT YOU'RE NOT LOCKED ON THEN DO SO NOW
+                            else if (_ELITEAPIPL.Target.GetTargetInfo().TargetIndex == followersTargetID && !_ELITEAPIPL.Target.GetTargetInfo().LockedOn)
+                            {
+                                _ELITEAPIPL.ThirdParty.SendString("/lockon <t>");
+                            }
+                            // EVERYTHING SHOULD BE FIND SO FOLLOW THEM
+                            else
+                            {
+                                Thread.Sleep(TimeSpan.FromSeconds(0.1));
+                                _ELITEAPIPL.ThirdParty.SendString("/follow");
+                            }
+                        }
+                        // ELITEAPI'S IMPROVED AUTO FOLLOW
+                        else if (Form2.config.FFXIDefaultAutoFollow != true && _ELITEAPIPL.AutoFollow.IsAutoFollowing != true)
+                        {
+                            // IF YOU ARE TOO FAR TO FOLLOW THEN STOP AND IF ENABLED WARN THE MONITORED PLAYER
+                            if (Form2.config.autoFollow_Warning == true && Math.Truncate(followTarget.Distance) >= 40 && _ELITEAPIMonitored.Player.Name != _ELITEAPIPL.Player.Name && followWarning == 0)
+                            {
+                                string createdTell = "/tell " + _ELITEAPIMonitored.Player.Name + " " + "You're too far to follow.";
+                                _ELITEAPIPL.ThirdParty.SendString(createdTell);
+                                followWarning = 1;
+                                Thread.Sleep(TimeSpan.FromSeconds(0.3));
+                            }
+                            else if (Math.Truncate(followTarget.Distance) <= 40)
+                            {
+                                // ONLY TARGET AND BEGIN FOLLOW IF TARGET IS AT THE DEFINED DISTANCE
+                                if (Math.Truncate(followTarget.Distance) >= (int)Form2.config.autoFollowDistance && Math.Truncate(followTarget.Distance) <= 48)
+                                {
+                                    followWarning = 0;
+
+                                    // Cancel current target this is to make sure the character is not locked
+                                    // on and therefore unable to move freely. Wait 5ms just to allow it to work
+
+                                    _ELITEAPIPL.Target.SetTarget(0);
+                                    Thread.Sleep(TimeSpan.FromSeconds(0.1));
+
+                                    float Target_X;
+                                    float Target_Y;
+                                    float Target_Z;
+
+                                    var FollowerTargetEntity = _ELITEAPIPL.Entity.GetEntity(followersTargetID);
+
+                                    if (!String.IsNullOrEmpty(FollowerTargetEntity.Name))
+                                    {
+                                        while (Math.Truncate(followTarget.Distance) >= (int)Form2.config.autoFollowDistance)
+                                        {
+                                            if (FollowerTargetEntity.Name == _ELITEAPIMonitored.Player.Name)
+                                            {
+                                                Target_X = _ELITEAPIMonitored.Player.X;
+                                                Target_Y = _ELITEAPIMonitored.Player.Y;
+                                                Target_Z = _ELITEAPIMonitored.Player.Z;
+                                            }
+                                            else
+                                            {
+                                                Target_X = FollowerTargetEntity.X;
+                                                Target_Y = FollowerTargetEntity.Y;
+                                                Target_Z = FollowerTargetEntity.Z;
+                                            }
+                                            float Player_X = _ELITEAPIPL.Player.X;
+                                            float Player_Y = _ELITEAPIPL.Player.Y;
+                                            float Player_Z = _ELITEAPIPL.Player.Z;
+
+                                            _ELITEAPIPL.AutoFollow.SetAutoFollowCoords(Target_X - Player_X,
+                                                                                       Target_Y - Player_Y,
+                                                                                       Target_Z - Player_Z);
+
+                                            _ELITEAPIPL.AutoFollow.IsAutoFollowing = true;
+                                            curePlease_autofollow = true;
+
+                                            lastX = _ELITEAPIPL.Player.X;
+                                            lastY = _ELITEAPIPL.Player.Y;
+                                            lastZ = _ELITEAPIPL.Player.Z;
+
+                                            Thread.Sleep(TimeSpan.FromSeconds(0.1));
+
+                                            // STUCK CHECKER
+                                            float genX = lastX - _ELITEAPIPL.Player.X;
+                                            float genY = lastY - _ELITEAPIPL.Player.Y;
+                                            float genZ = lastZ - _ELITEAPIPL.Player.Z;
+                                            double distance = Math.Sqrt(genX * genX + genY * genY + genZ * genZ);
+
+                                            if (distance < .1)
+                                            {
+                                                stuckCount = stuckCount + 1;
+                                                if (Form2.config.autoFollow_Warning == true && stuckWarning != true && FollowerTargetEntity.Name == _ELITEAPIMonitored.Player.Name && stuckCount == 10)
+                                                {
+                                                    string createdTell = "/tell " + _ELITEAPIMonitored.Player.Name + " " + "I appear to be stuck.";
+                                                    _ELITEAPIPL.ThirdParty.SendString(createdTell);
+                                                    stuckWarning = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    _ELITEAPIPL.AutoFollow.IsAutoFollowing = false;
+                                    curePlease_autofollow = false;
+                                    stuckWarning = false;
+                                    stuckCount = 0;
+                                }
+                            }
+                            else
+                            {
+                                // YOU ARE NOT AT NOR FURTHER THAN THE DISTANCE REQUIRED SO CANCEL ELITEAPI AUTOFOLLOW
+                                curePlease_autofollow = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private async void FollowBGWorker_DoWorkAsync(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            await Task.Delay(1000);
+            followBGWorker.RunWorkerAsync();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Form3().Show();
+        }
+
+        private void protectCountTimer_Tick(object sender, EventArgs e)
+        {
+            castingLockLabel.Text = "Error, something interrupted. Resetting!";
+            castingUnlock();
+            protectCountTimer.Enabled = false;
+            castingLock = false;
+
+        }
+
+        private void AilmentChecker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+
+        }
 
     }
 

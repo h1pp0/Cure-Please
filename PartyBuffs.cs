@@ -39,8 +39,7 @@
             }
             else
             {
-                MessageBox.Show("No character was selected as the power leveler, close this window and select one.");
-
+                MessageBox.Show("No character was selected as the power leveler, this can not be opened yet.");
             }
         }
 

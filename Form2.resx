@@ -176,16 +176,30 @@ Make sure Dummy songs are different to the ones you want to cast and
 are set in your Ashita or Gearswap file to activate the item needed to 
 activate the additional song, Ex. Daurdabla.</value>
   </data>
-  <data name="label24.Text" xml:space="preserve">
-    <value>THIS IS AN EXPERIMENTAL FEATURE
+  <data name="label61.Text" xml:space="preserve">
+    <value>Enabling this will tell the bot to track casting packets.
 
-Enabling this reduces the time that the bot will wait 
+This REQUIRES that the addon be enabled in OTHER OPTIONS
+this is the best way to get the correct casting time and reduce
+delay before the next action to only what is required.</value>
+  </data>
+  <data name="label24.Text" xml:space="preserve">
+    <value>Enabling this reduces the time that the bot will wait 
 before running the next function by 50%, this requires 
 that you're running a way to enable Fast Cast gear such
 as GearSwap or AshitaCast and you MUST have at least 50%
 Fact Cast in gear/traits/gifts.
 </value>
   </data>
+  <data name="label56.Text" xml:space="preserve">
+    <value>Please note: Selecting a character other than the
+Monitored player can cause stuttering due to the 
+server lag. As such it's suggested, if possible, to 
+use the monitored player or FFXI Default autoFollow.</value>
+  </data>
+  <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>114, 17</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>51</value>
   </metadata>

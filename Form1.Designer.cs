@@ -1796,7 +1796,7 @@ namespace CurePlease
             // 
             // actionTimer
             // 
-            this.actionTimer.Interval = 250;
+            this.actionTimer.Interval = 500;
             this.actionTimer.Tick += new System.EventHandler(this.actionTimer_TickAsync);
             // 
             // player6
@@ -2465,10 +2465,6 @@ namespace CurePlease
             this.debugging_MSGBOX.Size = new System.Drawing.Size(0, 13);
             this.debugging_MSGBOX.TabIndex = 22;
             // 
-            // AilmentChecker
-            // 
-            this.AilmentChecker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AilmentChecker_DoWork);
-            // 
             // buff_checker
             // 
             this.buff_checker.WorkerReportsProgress = true;
@@ -2558,7 +2554,6 @@ namespace CurePlease
             // 
             // protectCountTimer
             // 
-            this.protectCountTimer.Interval = 15000;
             this.protectCountTimer.Tick += new System.EventHandler(this.protectCountTimer_Tick);
             // 
             // Form1

@@ -116,7 +116,6 @@ C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Debug\CurePlease.csp
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\bin\Debug\Cure Please.exe
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\bin\Debug\Cure Please.pdb
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\bin\Debug\EliteMMO.API.dll
-C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csprojResolveAssemblyReference.cache
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form1.resources
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form2.resources
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form3.resources
@@ -128,3 +127,19 @@ C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\Cure
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csproj.CopyComplete
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\Cure Please.exe
 C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\Cure Please.pdb
+C:\Users\Daniel\Desktop\exclusions\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csprojAssemblyReference.cache
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\bin\Debug\Cure Please.exe
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\bin\Debug\Cure Please.pdb
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\bin\Debug\EliteMMO.API.dll
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form1.resources
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form2.resources
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form3.resources
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Form4.resources
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.PartyBuffs.resources
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.Properties.Resources.resources
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csproj.GenerateResource.cache
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csproj.CoreCompileInputs.cache
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csproj.CopyComplete
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\Cure Please.exe
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\Cure Please.pdb
+C:\Users\Main\Desktop\VirusScanExcusion\GITHUB DESKTOP\Cure-Please\obj\x86\Debug\CurePlease.csprojAssemblyReference.cache

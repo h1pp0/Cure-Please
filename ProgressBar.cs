@@ -33,7 +33,7 @@
 
                     if (rect.Width != 0)
                     {
-                        LinearGradientBrush brush = new LinearGradientBrush(rect, ForeColor, BackColor, LinearGradientMode.Vertical);
+                        LinearGradientBrush brush = new LinearGradientBrush(rect, ForeColor, ForeColor, LinearGradientMode.Vertical);
                         offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
                         e.Graphics.DrawImage(offscreenImage, 0, 0);
                         offscreenImage.Dispose();

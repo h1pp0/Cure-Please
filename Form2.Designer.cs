@@ -105,10 +105,14 @@
             this.Undercure = new System.Windows.Forms.CheckBox();
             this.enableMonitoredPriority = new System.Windows.Forms.CheckBox();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.AssistSpecifiedTarget = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.autoTarget_target = new System.Windows.Forms.TextBox();
             this.FFXIDefaultAutoFollow = new System.Windows.Forms.CheckBox();
             this.perpetuanceRegen = new System.Windows.Forms.CheckBox();
+            this.label64 = new System.Windows.Forms.Label();
+            this.label65 = new System.Windows.Forms.Label();
+            this.EnlightenmentReraise = new System.Windows.Forms.CheckBox();
             this.penury = new System.Windows.Forms.CheckBox();
             this.celerity = new System.Windows.Forms.CheckBox();
             this.accession = new System.Windows.Forms.CheckBox();
@@ -133,11 +137,6 @@
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.label26 = new System.Windows.Forms.Label();
             this.ConvertMP = new System.Windows.Forms.NumericUpDown();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.RadialArcanaSpell = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.RadialArcanaMP = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lowMPcheckBox = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -306,6 +305,8 @@
             this.rdmJAgroup = new System.Windows.Forms.GroupBox();
             this.composure = new System.Windows.Forms.CheckBox();
             this.schJAgroup = new System.Windows.Forms.GroupBox();
+            this.addBlack = new System.Windows.Forms.CheckBox();
+            this.darkArts = new System.Windows.Forms.CheckBox();
             this.sublimation = new System.Windows.Forms.CheckBox();
             this.addWhite = new System.Windows.Forms.CheckBox();
             this.lightArts = new System.Windows.Forms.CheckBox();
@@ -347,9 +348,9 @@
             this.plProtectra = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label58 = new System.Windows.Forms.Label();
+            this.label63 = new System.Windows.Forms.Label();
+            this.autoStorm = new System.Windows.Forms.ComboBox();
             this.autoStormspellMinutes = new System.Windows.Forms.NumericUpDown();
-            this.label59 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.autoRegen = new System.Windows.Forms.ComboBox();
             this.autoRegen_Minutes = new System.Windows.Forms.NumericUpDown();
@@ -369,6 +370,13 @@
             this.autoPhalanxIILabel = new System.Windows.Forms.Label();
             this.autoHasteLabel = new System.Windows.Forms.Label();
             this.plBuffGroup = new System.Windows.Forms.GroupBox();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.plRegenLevel5 = new System.Windows.Forms.RadioButton();
+            this.plRegen = new System.Windows.Forms.CheckBox();
+            this.plRegenLevel1 = new System.Windows.Forms.RadioButton();
+            this.plRegenLevel4 = new System.Windows.Forms.RadioButton();
+            this.plRegenLevel2 = new System.Windows.Forms.RadioButton();
+            this.plRegenLevel3 = new System.Windows.Forms.RadioButton();
             this.plAdloquium = new System.Windows.Forms.CheckBox();
             this.plShell = new System.Windows.Forms.CheckBox();
             this.plProtect = new System.Windows.Forms.CheckBox();
@@ -398,6 +406,8 @@
             this.plStoneskin = new System.Windows.Forms.CheckBox();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.groupBox27 = new System.Windows.Forms.GroupBox();
+            this.regenPerpetuance = new System.Windows.Forms.CheckBox();
+            this.regenAccession = new System.Windows.Forms.CheckBox();
             this.adloquiumPerpetuance = new System.Windows.Forms.CheckBox();
             this.adloquiumAccession = new System.Windows.Forms.CheckBox();
             this.barstatusPerpetuance = new System.Windows.Forms.CheckBox();
@@ -503,6 +513,7 @@
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.pauseOnKO = new System.Windows.Forms.CheckBox();
             this.MinimiseonStart = new System.Windows.Forms.CheckBox();
             this.pauseOnStartBox = new System.Windows.Forms.CheckBox();
             this.pauseOnZoneBox = new System.Windows.Forms.CheckBox();
@@ -510,6 +521,14 @@
             this.loadButton = new System.Windows.Forms.Button();
             this.loadJobSettings = new System.Windows.Forms.CheckBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox36 = new System.Windows.Forms.GroupBox();
+            this.Fullcircle_DisableEnemy = new System.Windows.Forms.CheckBox();
+            this.Fullcircle_GEOTarget = new System.Windows.Forms.CheckBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.RadialArcanaSpell = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.RadialArcanaMP = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.mpMintempitemusage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure1amount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cure2amount)).BeginInit();
@@ -540,8 +559,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.DevotionMP)).BeginInit();
             this.groupBox11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConvertMP)).BeginInit();
-            this.groupBox10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RadialArcanaMP)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).BeginInit();
             this.tabPage4.SuspendLayout();
@@ -579,11 +596,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.autoPhalanxIIMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoHasteMinutes)).BeginInit();
             this.plBuffGroup.SuspendLayout();
+            this.panel12.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.tabPage10.SuspendLayout();
             this.groupBox27.SuspendLayout();
+            this.groupBox26.SuspendLayout();
             this.groupBox25.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -611,11 +630,13 @@
             this.panel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).BeginInit();
             this.groupBox13.SuspendLayout();
+            this.groupBox36.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RadialArcanaMP)).BeginInit();
             this.SuspendLayout();
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(635, 581);
+            this.button4.Location = new System.Drawing.Point(662, 579);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 23);
             this.button4.TabIndex = 2;
@@ -652,7 +673,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(259, 19);
+            this.label3.Location = new System.Drawing.Point(289, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 8;
@@ -691,7 +712,7 @@
             // divineSealBox
             // 
             this.divineSealBox.AutoSize = true;
-            this.divineSealBox.Location = new System.Drawing.Point(6, 65);
+            this.divineSealBox.Location = new System.Drawing.Point(6, 69);
             this.divineSealBox.Name = "divineSealBox";
             this.divineSealBox.Size = new System.Drawing.Size(88, 19);
             this.divineSealBox.TabIndex = 2;
@@ -703,7 +724,7 @@
             // 
             this.convert.AutoSize = true;
             this.convert.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.convert.Location = new System.Drawing.Point(6, 42);
+            this.convert.Location = new System.Drawing.Point(6, 44);
             this.convert.Name = "convert";
             this.convert.Size = new System.Drawing.Size(63, 17);
             this.convert.TabIndex = 0;
@@ -750,7 +771,7 @@
             this.GEOSpell_target.Enabled = false;
             this.GEOSpell_target.Location = new System.Drawing.Point(144, 449);
             this.GEOSpell_target.Name = "GEOSpell_target";
-            this.GEOSpell_target.Size = new System.Drawing.Size(105, 21);
+            this.GEOSpell_target.Size = new System.Drawing.Size(117, 21);
             this.GEOSpell_target.TabIndex = 3;
             this.toolTip1.SetToolTip(this.GEOSpell_target, "Input the name of the character you want GEO buffs to target");
             // 
@@ -759,7 +780,7 @@
             this.entrustSpell_target.Enabled = false;
             this.entrustSpell_target.Location = new System.Drawing.Point(91, 449);
             this.entrustSpell_target.Name = "entrustSpell_target";
-            this.entrustSpell_target.Size = new System.Drawing.Size(161, 21);
+            this.entrustSpell_target.Size = new System.Drawing.Size(174, 21);
             this.entrustSpell_target.TabIndex = 3;
             this.toolTip1.SetToolTip(this.entrustSpell_target, "Input the name of the character you want the buff to be cast on, will only be use" +
         "d in combat.");
@@ -1160,7 +1181,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Location = new System.Drawing.Point(220, 118);
+            this.label9.Location = new System.Drawing.Point(225, 118);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(18, 15);
             this.label9.TabIndex = 42;
@@ -1169,7 +1190,7 @@
             // 
             // standAtMP_Percentage
             // 
-            this.standAtMP_Percentage.Location = new System.Drawing.Point(170, 116);
+            this.standAtMP_Percentage.Location = new System.Drawing.Point(175, 116);
             this.standAtMP_Percentage.Minimum = new decimal(new int[] {
             50,
             0,
@@ -1190,9 +1211,9 @@
             this.standAtMP.AutoSize = true;
             this.standAtMP.Location = new System.Drawing.Point(6, 119);
             this.standAtMP.Name = "standAtMP";
-            this.standAtMP.Size = new System.Drawing.Size(161, 19);
+            this.standAtMP.Size = new System.Drawing.Size(169, 19);
             this.standAtMP.TabIndex = 13;
-            this.standAtMP.Text = "Stand when MP is above";
+            this.standAtMP.Text = "Stand when MPP is above";
             this.toolTip1.SetToolTip(this.standAtMP, "Will be used as a last resort when no other method is available.");
             this.standAtMP.UseVisualStyleBackColor = true;
             // 
@@ -1214,7 +1235,7 @@
             0,
             0,
             0});
-            this.healWhenMPBelow.Location = new System.Drawing.Point(170, 90);
+            this.healWhenMPBelow.Location = new System.Drawing.Point(175, 90);
             this.healWhenMPBelow.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -1246,7 +1267,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(254, 169);
+            this.label22.Location = new System.Drawing.Point(252, 143);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(35, 15);
             this.label22.TabIndex = 44;
@@ -1256,7 +1277,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 170);
+            this.label23.Location = new System.Drawing.Point(4, 144);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(61, 15);
             this.label23.TabIndex = 43;
@@ -1266,7 +1287,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(254, 194);
+            this.label19.Location = new System.Drawing.Point(252, 168);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(35, 15);
             this.label19.TabIndex = 39;
@@ -1276,7 +1297,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 195);
+            this.label20.Location = new System.Drawing.Point(4, 169);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(61, 15);
             this.label20.TabIndex = 38;
@@ -1286,7 +1307,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(254, 221);
+            this.label16.Location = new System.Drawing.Point(252, 195);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(35, 15);
             this.label16.TabIndex = 34;
@@ -1296,7 +1317,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 222);
+            this.label17.Location = new System.Drawing.Point(4, 196);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(61, 15);
             this.label17.TabIndex = 33;
@@ -1306,7 +1327,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(254, 142);
+            this.label10.Location = new System.Drawing.Point(252, 116);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(35, 15);
             this.label10.TabIndex = 27;
@@ -1316,7 +1337,7 @@
             // autoRefreshLabel
             // 
             this.autoRefreshLabel.AutoSize = true;
-            this.autoRefreshLabel.Location = new System.Drawing.Point(6, 143);
+            this.autoRefreshLabel.Location = new System.Drawing.Point(4, 117);
             this.autoRefreshLabel.Name = "autoRefreshLabel";
             this.autoRefreshLabel.Size = new System.Drawing.Size(61, 15);
             this.autoRefreshLabel.TabIndex = 14;
@@ -1326,7 +1347,7 @@
             // marcato
             // 
             this.marcato.AutoSize = true;
-            this.marcato.Location = new System.Drawing.Point(7, 87);
+            this.marcato.Location = new System.Drawing.Point(7, 94);
             this.marcato.Name = "marcato";
             this.marcato.Size = new System.Drawing.Size(71, 19);
             this.marcato.TabIndex = 3;
@@ -1356,6 +1377,7 @@
             this.accessionRegen.Text = "Accesion \"Regen\"  on surrounding PT members";
             this.toolTip1.SetToolTip(this.accessionRegen, "This will disable time based Regen recast on all characters.");
             this.accessionRegen.UseVisualStyleBackColor = true;
+            this.accessionRegen.Visible = false;
             // 
             // listeningPort
             // 
@@ -1396,6 +1418,7 @@
             // recastSongs_monitored
             // 
             this.recastSongs_monitored.AutoSize = true;
+            this.recastSongs_monitored.Enabled = false;
             this.recastSongs_monitored.Location = new System.Drawing.Point(20, 408);
             this.recastSongs_monitored.Name = "recastSongs_monitored";
             this.recastSongs_monitored.Size = new System.Drawing.Size(177, 19);
@@ -1404,6 +1427,7 @@
             this.toolTip1.SetToolTip(this.recastSongs_monitored, "Recast all the songs including the dummy songs if the monitored player is missing" +
         " them and is close.\r\n\r\nUseful for monsters with Full Dispel.");
             this.recastSongs_monitored.UseVisualStyleBackColor = true;
+            this.recastSongs_monitored.Visible = false;
             // 
             // monitoredCurePercentage
             // 
@@ -1478,6 +1502,7 @@
             // 
             // groupBox16
             // 
+            this.groupBox16.Controls.Add(this.AssistSpecifiedTarget);
             this.groupBox16.Controls.Add(this.label8);
             this.groupBox16.Controls.Add(this.autoTarget_target);
             this.groupBox16.Controls.Add(this.label37);
@@ -1485,14 +1510,25 @@
             this.groupBox16.Controls.Add(this.Hate_SpellType);
             this.groupBox16.Controls.Add(this.autoTarget);
             this.groupBox16.Controls.Add(this.autoTargetSpell);
-            this.groupBox16.Location = new System.Drawing.Point(353, 343);
+            this.groupBox16.Location = new System.Drawing.Point(368, 351);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(409, 106);
+            this.groupBox16.Size = new System.Drawing.Size(427, 137);
             this.groupBox16.TabIndex = 39;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Auto Casting Spells";
             this.toolTip1.SetToolTip(this.groupBox16, "PLEASE NOTE:\r\n\r\nThis will only work when the MONITORED PLAYER is engaged in comba" +
         "t. ");
+            // 
+            // AssistSpecifiedTarget
+            // 
+            this.AssistSpecifiedTarget.AutoSize = true;
+            this.AssistSpecifiedTarget.Location = new System.Drawing.Point(6, 101);
+            this.AssistSpecifiedTarget.Name = "AssistSpecifiedTarget";
+            this.AssistSpecifiedTarget.Size = new System.Drawing.Size(143, 19);
+            this.AssistSpecifiedTarget.TabIndex = 17;
+            this.AssistSpecifiedTarget.Text = "Assist specified target";
+            this.toolTip1.SetToolTip(this.AssistSpecifiedTarget, "Enter the name of the player to check in the SPELL TARGET textbox.");
+            this.AssistSpecifiedTarget.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -1505,9 +1541,9 @@
             // 
             // autoTarget_target
             // 
-            this.autoTarget_target.Location = new System.Drawing.Point(260, 74);
+            this.autoTarget_target.Location = new System.Drawing.Point(258, 74);
             this.autoTarget_target.Name = "autoTarget_target";
-            this.autoTarget_target.Size = new System.Drawing.Size(124, 21);
+            this.autoTarget_target.Size = new System.Drawing.Size(135, 21);
             this.autoTarget_target.TabIndex = 15;
             // 
             // FFXIDefaultAutoFollow
@@ -1532,13 +1568,46 @@
             this.perpetuanceRegen.Text = "Perpetuance \"Regen\"  on surrounding PT members";
             this.toolTip1.SetToolTip(this.perpetuanceRegen, "This will disable time based Regen recast on all characters.");
             this.perpetuanceRegen.UseVisualStyleBackColor = true;
+            this.perpetuanceRegen.Visible = false;
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Location = new System.Drawing.Point(252, 221);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(35, 15);
+            this.label64.TabIndex = 52;
+            this.label64.Text = "every";
+            this.toolTip1.SetToolTip(this.label64, "Refresh Default Duration 2:30");
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.Location = new System.Drawing.Point(4, 222);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(61, 15);
+            this.label65.TabIndex = 51;
+            this.label65.Text = "Cast Auto ";
+            this.toolTip1.SetToolTip(this.label65, "Refresh Default Duration 2:30");
+            // 
+            // EnlightenmentReraise
+            // 
+            this.EnlightenmentReraise.AutoSize = true;
+            this.EnlightenmentReraise.Location = new System.Drawing.Point(6, 20);
+            this.EnlightenmentReraise.Name = "EnlightenmentReraise";
+            this.EnlightenmentReraise.Size = new System.Drawing.Size(179, 19);
+            this.EnlightenmentReraise.TabIndex = 4;
+            this.EnlightenmentReraise.Text = "ENLIGHTENMENT: Reraise";
+            this.toolTip1.SetToolTip(this.EnlightenmentReraise, "Useful if you want DARK ARTS active instead of LIGHT ARTS and still cast Reraise." +
+        "");
+            this.EnlightenmentReraise.UseVisualStyleBackColor = true;
             // 
             // penury
             // 
             this.penury.AutoSize = true;
             this.penury.Enabled = false;
             this.penury.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.penury.Location = new System.Drawing.Point(22, 157);
+            this.penury.Location = new System.Drawing.Point(37, 165);
             this.penury.Name = "penury";
             this.penury.Size = new System.Drawing.Size(131, 17);
             this.penury.TabIndex = 0;
@@ -1550,7 +1619,7 @@
             this.celerity.AutoSize = true;
             this.celerity.Enabled = false;
             this.celerity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.celerity.Location = new System.Drawing.Point(22, 88);
+            this.celerity.Location = new System.Drawing.Point(37, 96);
             this.celerity.Name = "celerity";
             this.celerity.Size = new System.Drawing.Size(148, 17);
             this.celerity.TabIndex = 0;
@@ -1561,7 +1630,7 @@
             // 
             this.accession.AutoSize = true;
             this.accession.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accession.Location = new System.Drawing.Point(22, 111);
+            this.accession.Location = new System.Drawing.Point(37, 119);
             this.accession.Name = "accession";
             this.accession.Size = new System.Drawing.Size(106, 17);
             this.accession.TabIndex = 0;
@@ -1573,7 +1642,7 @@
             this.rapture.AutoSize = true;
             this.rapture.Enabled = false;
             this.rapture.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rapture.Location = new System.Drawing.Point(22, 180);
+            this.rapture.Location = new System.Drawing.Point(37, 188);
             this.rapture.Name = "rapture";
             this.rapture.Size = new System.Drawing.Size(146, 17);
             this.rapture.TabIndex = 0;
@@ -1584,7 +1653,7 @@
             // 
             this.perpetuance.AutoSize = true;
             this.perpetuance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.perpetuance.Location = new System.Drawing.Point(22, 134);
+            this.perpetuance.Location = new System.Drawing.Point(37, 142);
             this.perpetuance.Name = "perpetuance";
             this.perpetuance.Size = new System.Drawing.Size(142, 17);
             this.perpetuance.TabIndex = 0;
@@ -1593,6 +1662,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.groupBox36);
             this.tabPage5.Controls.Add(this.Raise);
             this.tabPage5.Controls.Add(this.groupBox33);
             this.tabPage5.Controls.Add(this.groupBox32);
@@ -1600,12 +1670,11 @@
             this.tabPage5.Controls.Add(this.groupBox16);
             this.tabPage5.Controls.Add(this.groupBox15);
             this.tabPage5.Controls.Add(this.groupBox11);
-            this.tabPage5.Controls.Add(this.groupBox10);
             this.tabPage5.Controls.Add(this.groupBox4);
             this.tabPage5.Location = new System.Drawing.Point(4, 26);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(772, 537);
+            this.tabPage5.Size = new System.Drawing.Size(806, 537);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Other Options";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1614,9 +1683,9 @@
             // 
             this.Raise.Controls.Add(this.acceptRaiseOnlyWhenNotInCombat);
             this.Raise.Controls.Add(this.acceptRaise);
-            this.Raise.Location = new System.Drawing.Point(353, 455);
+            this.Raise.Location = new System.Drawing.Point(6, 304);
             this.Raise.Name = "Raise";
-            this.Raise.Size = new System.Drawing.Size(413, 76);
+            this.Raise.Size = new System.Drawing.Size(351, 76);
             this.Raise.TabIndex = 43;
             this.Raise.TabStop = false;
             this.Raise.Text = "Raise";
@@ -1645,9 +1714,9 @@
             // 
             this.groupBox33.Controls.Add(this.label25);
             this.groupBox33.Controls.Add(this.enableAddOn);
-            this.groupBox33.Location = new System.Drawing.Point(6, 352);
+            this.groupBox33.Location = new System.Drawing.Point(6, 387);
             this.groupBox33.Name = "groupBox33";
-            this.groupBox33.Size = new System.Drawing.Size(341, 181);
+            this.groupBox33.Size = new System.Drawing.Size(351, 144);
             this.groupBox33.TabIndex = 42;
             this.groupBox33.TabStop = false;
             this.groupBox33.Text = "Cure Please Add On";
@@ -1679,9 +1748,9 @@
             this.groupBox32.Controls.Add(this.enableMonitoredPriority);
             this.groupBox32.Controls.Add(this.Undercure);
             this.groupBox32.Controls.Add(this.Overcure);
-            this.groupBox32.Location = new System.Drawing.Point(6, 190);
+            this.groupBox32.Location = new System.Drawing.Point(6, 174);
             this.groupBox32.Name = "groupBox32";
-            this.groupBox32.Size = new System.Drawing.Size(341, 156);
+            this.groupBox32.Size = new System.Drawing.Size(351, 124);
             this.groupBox32.TabIndex = 41;
             this.groupBox32.TabStop = false;
             this.groupBox32.Text = "Cure Settings";
@@ -1700,9 +1769,9 @@
             // 
             this.groupBox29.Controls.Add(this.label51);
             this.groupBox29.Controls.Add(this.sublimationMP);
-            this.groupBox29.Location = new System.Drawing.Point(353, 69);
+            this.groupBox29.Location = new System.Drawing.Point(368, 62);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(409, 57);
+            this.groupBox29.Size = new System.Drawing.Size(432, 44);
             this.groupBox29.TabIndex = 40;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "Sublimation Settings";
@@ -1710,7 +1779,7 @@
             // label51
             // 
             this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(21, 23);
+            this.label51.Location = new System.Drawing.Point(21, 17);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(250, 15);
             this.label51.TabIndex = 17;
@@ -1723,7 +1792,7 @@
             0,
             0,
             0});
-            this.sublimationMP.Location = new System.Drawing.Point(277, 21);
+            this.sublimationMP.Location = new System.Drawing.Point(277, 15);
             this.sublimationMP.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -1741,9 +1810,9 @@
             this.groupBox15.Controls.Add(this.label34);
             this.groupBox15.Controls.Add(this.label35);
             this.groupBox15.Controls.Add(this.DevotionMP);
-            this.groupBox15.Location = new System.Drawing.Point(353, 232);
+            this.groupBox15.Location = new System.Drawing.Point(368, 241);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(409, 105);
+            this.groupBox15.Size = new System.Drawing.Size(431, 105);
             this.groupBox15.TabIndex = 38;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Devotion Settings";
@@ -1751,7 +1820,7 @@
             // DevotionWhenEngaged
             // 
             this.DevotionWhenEngaged.AutoSize = true;
-            this.DevotionWhenEngaged.Location = new System.Drawing.Point(6, 80);
+            this.DevotionWhenEngaged.Location = new System.Drawing.Point(6, 75);
             this.DevotionWhenEngaged.Name = "DevotionWhenEngaged";
             this.DevotionWhenEngaged.Size = new System.Drawing.Size(386, 19);
             this.DevotionWhenEngaged.TabIndex = 40;
@@ -1788,9 +1857,9 @@
             // 
             this.groupBox11.Controls.Add(this.label26);
             this.groupBox11.Controls.Add(this.ConvertMP);
-            this.groupBox11.Location = new System.Drawing.Point(353, 13);
+            this.groupBox11.Location = new System.Drawing.Point(368, 6);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(409, 56);
+            this.groupBox11.Size = new System.Drawing.Size(432, 50);
             this.groupBox11.TabIndex = 11;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Convert Settings";
@@ -1821,82 +1890,6 @@
             this.ConvertMP.Size = new System.Drawing.Size(84, 21);
             this.ConvertMP.TabIndex = 14;
             // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.label27);
-            this.groupBox10.Controls.Add(this.RadialArcanaSpell);
-            this.groupBox10.Controls.Add(this.label11);
-            this.groupBox10.Controls.Add(this.RadialArcanaMP);
-            this.groupBox10.Location = new System.Drawing.Point(353, 132);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(409, 95);
-            this.groupBox10.TabIndex = 10;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Radial Arcana Settings";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(3, 47);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(233, 15);
-            this.label27.TabIndex = 37;
-            this.label27.Text = "Geomancy spell to cast for Radial Arcana.";
-            // 
-            // RadialArcanaSpell
-            // 
-            this.RadialArcanaSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.RadialArcanaSpell.FormattingEnabled = true;
-            this.RadialArcanaSpell.Items.AddRange(new object[] {
-            "Geo-Voidance",
-            "Geo-Precision",
-            "Geo-Regen",
-            "Geo-Haste",
-            "Geo-Attunement",
-            "Geo-Focus",
-            "Geo-Barrier",
-            "Geo-Refresh",
-            "Geo-CHR",
-            "Geo-MND",
-            "Geo-Fury",
-            "Geo-INT",
-            "Geo-AGI",
-            "Geo-Fend",
-            "Geo-VIT",
-            "Geo-DEX",
-            "Geo-Acumen",
-            "Geo-STR"});
-            this.RadialArcanaSpell.Location = new System.Drawing.Point(258, 42);
-            this.RadialArcanaSpell.Name = "RadialArcanaSpell";
-            this.RadialArcanaSpell.Size = new System.Drawing.Size(121, 23);
-            this.RadialArcanaSpell.TabIndex = 36;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(3, 21);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(286, 15);
-            this.label11.TabIndex = 13;
-            this.label11.Text = "Begin Radial Arcana MP recovery when MP below: ";
-            // 
-            // RadialArcanaMP
-            // 
-            this.RadialArcanaMP.Increment = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            this.RadialArcanaMP.Location = new System.Drawing.Point(295, 17);
-            this.RadialArcanaMP.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.RadialArcanaMP.Name = "RadialArcanaMP";
-            this.RadialArcanaMP.Size = new System.Drawing.Size(84, 21);
-            this.RadialArcanaMP.TabIndex = 12;
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.healWhenMPBelow);
@@ -1911,7 +1904,7 @@
             this.groupBox4.Controls.Add(this.mpMinCastValue);
             this.groupBox4.Location = new System.Drawing.Point(6, 6);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(341, 178);
+            this.groupBox4.Size = new System.Drawing.Size(351, 162);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "MP Settings";
@@ -1970,7 +1963,7 @@
             this.tabPage4.Controls.Add(this.plDebuffEnabled);
             this.tabPage4.Location = new System.Drawing.Point(4, 26);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(772, 537);
+            this.tabPage4.Size = new System.Drawing.Size(806, 537);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Debuff Removal";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1979,7 +1972,7 @@
             // 
             this.label57.AutoSize = true;
             this.label57.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label57.Location = new System.Drawing.Point(259, 240);
+            this.label57.Location = new System.Drawing.Point(289, 236);
             this.label57.Name = "label57";
             this.label57.Size = new System.Drawing.Size(87, 15);
             this.label57.TabIndex = 15;
@@ -1992,7 +1985,7 @@
             this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel10.Controls.Add(this.panel11);
             this.panel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel10.Location = new System.Drawing.Point(250, 258);
+            this.panel10.Location = new System.Drawing.Point(280, 254);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(165, 277);
             this.panel10.TabIndex = 14;
@@ -2469,7 +2462,7 @@
             this.panel6.Controls.Add(this.naCurse);
             this.panel6.Controls.Add(this.naPlague);
             this.panel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel6.Location = new System.Drawing.Point(250, 37);
+            this.panel6.Location = new System.Drawing.Point(280, 33);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(165, 194);
             this.panel6.TabIndex = 11;
@@ -2628,7 +2621,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(605, 19);
+            this.label2.Location = new System.Drawing.Point(635, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(148, 15);
             this.label2.TabIndex = 3;
@@ -2638,7 +2631,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(435, 19);
+            this.label1.Location = new System.Drawing.Point(465, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 15);
             this.label1.TabIndex = 3;
@@ -2651,7 +2644,7 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(592, 37);
+            this.panel1.Location = new System.Drawing.Point(622, 33);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(177, 498);
             this.panel1.TabIndex = 2;
@@ -3279,7 +3272,7 @@
             this.plDebuffWrapperPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.plDebuffWrapperPanel.Controls.Add(this.plDebuffPanel);
             this.plDebuffWrapperPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.plDebuffWrapperPanel.Location = new System.Drawing.Point(421, 37);
+            this.plDebuffWrapperPanel.Location = new System.Drawing.Point(451, 33);
             this.plDebuffWrapperPanel.Name = "plDebuffWrapperPanel";
             this.plDebuffWrapperPanel.Size = new System.Drawing.Size(165, 498);
             this.plDebuffWrapperPanel.TabIndex = 2;
@@ -3894,7 +3887,7 @@
             this.tabPage3.Controls.Add(this.whmJAgroup);
             this.tabPage3.Location = new System.Drawing.Point(4, 26);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(772, 537);
+            this.tabPage3.Size = new System.Drawing.Size(806, 537);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Job Abilities";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -3906,9 +3899,9 @@
             this.groupBox24.Controls.Add(this.nightingale);
             this.groupBox24.Controls.Add(this.pianissimo);
             this.groupBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox24.Location = new System.Drawing.Point(561, 5);
+            this.groupBox24.Location = new System.Drawing.Point(600, 5);
             this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(201, 410);
+            this.groupBox24.Size = new System.Drawing.Size(201, 433);
             this.groupBox24.TabIndex = 3;
             this.groupBox24.TabStop = false;
             this.groupBox24.Text = "Bard";
@@ -3916,7 +3909,7 @@
             // troubadour
             // 
             this.troubadour.AutoSize = true;
-            this.troubadour.Location = new System.Drawing.Point(7, 64);
+            this.troubadour.Location = new System.Drawing.Point(7, 69);
             this.troubadour.Name = "troubadour";
             this.troubadour.Size = new System.Drawing.Size(90, 19);
             this.troubadour.TabIndex = 2;
@@ -3926,7 +3919,7 @@
             // nightingale
             // 
             this.nightingale.AutoSize = true;
-            this.nightingale.Location = new System.Drawing.Point(7, 41);
+            this.nightingale.Location = new System.Drawing.Point(7, 44);
             this.nightingale.Name = "nightingale";
             this.nightingale.Size = new System.Drawing.Size(89, 19);
             this.nightingale.TabIndex = 1;
@@ -3956,7 +3949,7 @@
             this.groupBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox8.Location = new System.Drawing.Point(240, 207);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(315, 208);
+            this.groupBox8.Size = new System.Drawing.Size(354, 231);
             this.groupBox8.TabIndex = 2;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Geomancer";
@@ -4006,9 +3999,9 @@
             this.rdmJAgroup.Controls.Add(this.composure);
             this.rdmJAgroup.Controls.Add(this.convert);
             this.rdmJAgroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rdmJAgroup.Location = new System.Drawing.Point(393, 4);
+            this.rdmJAgroup.Location = new System.Drawing.Point(410, 5);
             this.rdmJAgroup.Name = "rdmJAgroup";
-            this.rdmJAgroup.Size = new System.Drawing.Size(162, 197);
+            this.rdmJAgroup.Size = new System.Drawing.Size(184, 197);
             this.rdmJAgroup.TabIndex = 1;
             this.rdmJAgroup.TabStop = false;
             this.rdmJAgroup.Text = "Red Mage";
@@ -4016,7 +4009,7 @@
             // composure
             // 
             this.composure.AutoSize = true;
-            this.composure.Location = new System.Drawing.Point(7, 19);
+            this.composure.Location = new System.Drawing.Point(6, 19);
             this.composure.Name = "composure";
             this.composure.Size = new System.Drawing.Size(90, 19);
             this.composure.TabIndex = 0;
@@ -4025,6 +4018,8 @@
             // 
             // schJAgroup
             // 
+            this.schJAgroup.Controls.Add(this.addBlack);
+            this.schJAgroup.Controls.Add(this.darkArts);
             this.schJAgroup.Controls.Add(this.sublimation);
             this.schJAgroup.Controls.Add(this.perpetuance);
             this.schJAgroup.Controls.Add(this.rapture);
@@ -4036,15 +4031,35 @@
             this.schJAgroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.schJAgroup.Location = new System.Drawing.Point(3, 3);
             this.schJAgroup.Name = "schJAgroup";
-            this.schJAgroup.Size = new System.Drawing.Size(231, 412);
+            this.schJAgroup.Size = new System.Drawing.Size(231, 435);
             this.schJAgroup.TabIndex = 1;
             this.schJAgroup.TabStop = false;
             this.schJAgroup.Text = "Scholar";
             // 
+            // addBlack
+            // 
+            this.addBlack.AutoSize = true;
+            this.addBlack.Location = new System.Drawing.Point(21, 236);
+            this.addBlack.Name = "addBlack";
+            this.addBlack.Size = new System.Drawing.Size(122, 19);
+            this.addBlack.TabIndex = 1;
+            this.addBlack.Text = "Addendum: Black";
+            this.addBlack.UseVisualStyleBackColor = true;
+            // 
+            // darkArts
+            // 
+            this.darkArts.AutoSize = true;
+            this.darkArts.Location = new System.Drawing.Point(6, 211);
+            this.darkArts.Name = "darkArts";
+            this.darkArts.Size = new System.Drawing.Size(75, 19);
+            this.darkArts.TabIndex = 2;
+            this.darkArts.Text = "Dark Arts";
+            this.darkArts.UseVisualStyleBackColor = true;
+            // 
             // sublimation
             // 
             this.sublimation.AutoSize = true;
-            this.sublimation.Location = new System.Drawing.Point(6, 42);
+            this.sublimation.Location = new System.Drawing.Point(6, 21);
             this.sublimation.Name = "sublimation";
             this.sublimation.Size = new System.Drawing.Size(92, 19);
             this.sublimation.TabIndex = 0;
@@ -4054,7 +4069,7 @@
             // addWhite
             // 
             this.addWhite.AutoSize = true;
-            this.addWhite.Location = new System.Drawing.Point(6, 65);
+            this.addWhite.Location = new System.Drawing.Point(20, 71);
             this.addWhite.Name = "addWhite";
             this.addWhite.Size = new System.Drawing.Size(123, 19);
             this.addWhite.TabIndex = 0;
@@ -4064,7 +4079,7 @@
             // lightArts
             // 
             this.lightArts.AutoSize = true;
-            this.lightArts.Location = new System.Drawing.Point(6, 19);
+            this.lightArts.Location = new System.Drawing.Point(6, 46);
             this.lightArts.Name = "lightArts";
             this.lightArts.Size = new System.Drawing.Size(76, 19);
             this.lightArts.TabIndex = 0;
@@ -4081,7 +4096,7 @@
             this.whmJAgroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.whmJAgroup.Location = new System.Drawing.Point(240, 4);
             this.whmJAgroup.Name = "whmJAgroup";
-            this.whmJAgroup.Size = new System.Drawing.Size(147, 197);
+            this.whmJAgroup.Size = new System.Drawing.Size(164, 197);
             this.whmJAgroup.TabIndex = 0;
             this.whmJAgroup.TabStop = false;
             this.whmJAgroup.Text = "White Mage";
@@ -4089,7 +4104,7 @@
             // DivineCaressBox
             // 
             this.DivineCaressBox.AutoSize = true;
-            this.DivineCaressBox.Location = new System.Drawing.Point(6, 110);
+            this.DivineCaressBox.Location = new System.Drawing.Point(6, 119);
             this.DivineCaressBox.Name = "DivineCaressBox";
             this.DivineCaressBox.Size = new System.Drawing.Size(101, 19);
             this.DivineCaressBox.TabIndex = 4;
@@ -4099,7 +4114,7 @@
             // DevotionBox
             // 
             this.DevotionBox.AutoSize = true;
-            this.DevotionBox.Location = new System.Drawing.Point(6, 88);
+            this.DevotionBox.Location = new System.Drawing.Point(6, 94);
             this.DevotionBox.Name = "DevotionBox";
             this.DevotionBox.Size = new System.Drawing.Size(74, 19);
             this.DevotionBox.TabIndex = 3;
@@ -4109,7 +4124,7 @@
             // afflatusMisery
             // 
             this.afflatusMisery.AutoSize = true;
-            this.afflatusMisery.Location = new System.Drawing.Point(6, 42);
+            this.afflatusMisery.Location = new System.Drawing.Point(6, 44);
             this.afflatusMisery.Name = "afflatusMisery";
             this.afflatusMisery.Size = new System.Drawing.Size(104, 19);
             this.afflatusMisery.TabIndex = 1;
@@ -4139,7 +4154,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 26);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(772, 537);
+            this.tabPage6.Size = new System.Drawing.Size(806, 537);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Geomancy";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -4181,9 +4196,9 @@
             this.groupBox7.Controls.Add(this.label7);
             this.groupBox7.Controls.Add(this.entrustSpell_target);
             this.groupBox7.Controls.Add(this.entrustINDISpell);
-            this.groupBox7.Location = new System.Drawing.Point(508, 60);
+            this.groupBox7.Location = new System.Drawing.Point(527, 58);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(258, 476);
+            this.groupBox7.Size = new System.Drawing.Size(271, 476);
             this.groupBox7.TabIndex = 1;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Entrust";
@@ -4235,7 +4250,7 @@
             " Indi-Fade"});
             this.entrustINDISpell.Location = new System.Drawing.Point(6, 19);
             this.entrustINDISpell.Name = "entrustINDISpell";
-            this.entrustINDISpell.Size = new System.Drawing.Size(246, 424);
+            this.entrustINDISpell.Size = new System.Drawing.Size(259, 424);
             this.entrustINDISpell.TabIndex = 2;
             // 
             // groupBox6
@@ -4243,9 +4258,9 @@
             this.groupBox6.Controls.Add(this.label6);
             this.groupBox6.Controls.Add(this.GEOSpell_target);
             this.groupBox6.Controls.Add(this.GEOSpell);
-            this.groupBox6.Location = new System.Drawing.Point(237, 60);
+            this.groupBox6.Location = new System.Drawing.Point(254, 61);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(256, 476);
+            this.groupBox6.Size = new System.Drawing.Size(267, 476);
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "GEO Spells";
@@ -4297,7 +4312,7 @@
             "Geo-Fade"});
             this.GEOSpell.Location = new System.Drawing.Point(9, 19);
             this.GEOSpell.Name = "GEOSpell";
-            this.GEOSpell.Size = new System.Drawing.Size(240, 424);
+            this.GEOSpell.Size = new System.Drawing.Size(252, 424);
             this.GEOSpell.TabIndex = 2;
             // 
             // groupBox5
@@ -4305,7 +4320,7 @@
             this.groupBox5.Controls.Add(this.INDISpell);
             this.groupBox5.Location = new System.Drawing.Point(6, 59);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(214, 476);
+            this.groupBox5.Size = new System.Drawing.Size(236, 476);
             this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "INDI Spells";
@@ -4348,7 +4363,7 @@
             " Indi-Fade"});
             this.INDISpell.Location = new System.Drawing.Point(6, 19);
             this.INDISpell.Name = "INDISpell";
-            this.INDISpell.Size = new System.Drawing.Size(202, 454);
+            this.INDISpell.Size = new System.Drawing.Size(224, 454);
             this.INDISpell.TabIndex = 1;
             // 
             // tabPage2
@@ -4357,7 +4372,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(772, 537);
+            this.tabPage2.Size = new System.Drawing.Size(806, 537);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Enhancing";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -4371,7 +4386,7 @@
             this.tabControl2.Multiline = true;
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(776, 543);
+            this.tabControl2.Size = new System.Drawing.Size(810, 543);
             this.tabControl2.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl2.TabIndex = 13;
             // 
@@ -4385,7 +4400,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 4);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(748, 535);
+            this.tabPage9.Size = new System.Drawing.Size(782, 535);
             this.tabPage9.TabIndex = 0;
             this.tabPage9.Text = "BASIC ENHANCING";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -4395,7 +4410,7 @@
             this.groupBox34.Controls.Add(this.plUtsusemi);
             this.groupBox34.Location = new System.Drawing.Point(472, 422);
             this.groupBox34.Name = "groupBox34";
-            this.groupBox34.Size = new System.Drawing.Size(269, 105);
+            this.groupBox34.Size = new System.Drawing.Size(304, 105);
             this.groupBox34.TabIndex = 17;
             this.groupBox34.TabStop = false;
             this.groupBox34.Text = "Other Enhancing";
@@ -4607,9 +4622,11 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label58);
+            this.groupBox1.Controls.Add(this.label63);
+            this.groupBox1.Controls.Add(this.autoStorm);
+            this.groupBox1.Controls.Add(this.label64);
+            this.groupBox1.Controls.Add(this.label65);
             this.groupBox1.Controls.Add(this.autoStormspellMinutes);
-            this.groupBox1.Controls.Add(this.label59);
             this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.autoRegen);
             this.groupBox1.Controls.Add(this.label22);
@@ -4643,50 +4660,54 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Auto Casting Spells";
             // 
-            // label58
+            // label63
             // 
-            this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(295, 74);
-            this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(54, 15);
-            this.label58.TabIndex = 49;
-            this.label58.Text = "minute/s";
+            this.label63.AutoSize = true;
+            this.label63.Location = new System.Drawing.Point(364, 219);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(51, 15);
+            this.label63.TabIndex = 54;
+            this.label63.Text = "minutes";
+            // 
+            // autoStorm
+            // 
+            this.autoStorm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.autoStorm.FormattingEnabled = true;
+            this.autoStorm.Items.AddRange(new object[] {
+            "Stormspell Tier I",
+            "Stormspell Tier II"});
+            this.autoStorm.Location = new System.Drawing.Point(66, 218);
+            this.autoStorm.Name = "autoStorm";
+            this.autoStorm.Size = new System.Drawing.Size(180, 23);
+            this.autoStorm.TabIndex = 53;
             // 
             // autoStormspellMinutes
             // 
-            this.autoStormspellMinutes.Location = new System.Drawing.Point(230, 72);
+            this.autoStormspellMinutes.DecimalPlaces = 1;
+            this.autoStormspellMinutes.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.autoStormspellMinutes.Location = new System.Drawing.Point(291, 219);
             this.autoStormspellMinutes.Maximum = new decimal(new int[] {
             99,
             0,
             0,
             0});
-            this.autoStormspellMinutes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.autoStormspellMinutes.Name = "autoStormspellMinutes";
-            this.autoStormspellMinutes.Size = new System.Drawing.Size(59, 21);
-            this.autoStormspellMinutes.TabIndex = 48;
+            this.autoStormspellMinutes.Size = new System.Drawing.Size(67, 21);
+            this.autoStormspellMinutes.TabIndex = 50;
             this.autoStormspellMinutes.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
-            // 
-            // label59
-            // 
-            this.label59.AutoSize = true;
-            this.label59.Location = new System.Drawing.Point(6, 74);
-            this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(141, 15);
-            this.label59.TabIndex = 47;
-            this.label59.Text = "Recast Stormspell every ";
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(366, 167);
+            this.label21.Location = new System.Drawing.Point(364, 141);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(51, 15);
             this.label21.TabIndex = 46;
@@ -4697,12 +4718,12 @@
             this.autoRegen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoRegen.FormattingEnabled = true;
             this.autoRegen.Items.AddRange(new object[] {
-            "Regen",
-            "Regen II",
-            "Regen III",
-            "Regen IV",
-            "Regen V"});
-            this.autoRegen.Location = new System.Drawing.Point(68, 166);
+            "Regen Tier I",
+            "Regen Tier II",
+            "Regen Tier III",
+            "Regen Tier IV",
+            "Regen Tier V"});
+            this.autoRegen.Location = new System.Drawing.Point(66, 140);
             this.autoRegen.Name = "autoRegen";
             this.autoRegen.Size = new System.Drawing.Size(180, 23);
             this.autoRegen.TabIndex = 45;
@@ -4715,7 +4736,7 @@
             0,
             0,
             65536});
-            this.autoRegen_Minutes.Location = new System.Drawing.Point(293, 167);
+            this.autoRegen_Minutes.Location = new System.Drawing.Point(291, 141);
             this.autoRegen_Minutes.Maximum = new decimal(new int[] {
             99,
             0,
@@ -4733,7 +4754,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(366, 192);
+            this.label18.Location = new System.Drawing.Point(364, 166);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(51, 15);
             this.label18.TabIndex = 41;
@@ -4744,12 +4765,12 @@
             this.autoProtect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoProtect.FormattingEnabled = true;
             this.autoProtect.Items.AddRange(new object[] {
-            "Protect",
-            "Protect II",
-            "Protect III",
-            "Protect IV",
-            "Protect V"});
-            this.autoProtect.Location = new System.Drawing.Point(68, 192);
+            "Protect Tier I",
+            "Protect Tier II",
+            "Protect Tier III",
+            "Protect Tier IV",
+            "Protect Tier V"});
+            this.autoProtect.Location = new System.Drawing.Point(66, 166);
             this.autoProtect.Name = "autoProtect";
             this.autoProtect.Size = new System.Drawing.Size(180, 23);
             this.autoProtect.TabIndex = 40;
@@ -4762,7 +4783,7 @@
             0,
             0,
             65536});
-            this.autoProtect_Minutes.Location = new System.Drawing.Point(293, 192);
+            this.autoProtect_Minutes.Location = new System.Drawing.Point(291, 166);
             this.autoProtect_Minutes.Maximum = new decimal(new int[] {
             99,
             0,
@@ -4780,7 +4801,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(366, 219);
+            this.label15.Location = new System.Drawing.Point(364, 193);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(51, 15);
             this.label15.TabIndex = 36;
@@ -4791,12 +4812,12 @@
             this.autoShell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoShell.FormattingEnabled = true;
             this.autoShell.Items.AddRange(new object[] {
-            "Shell",
-            "Shell II",
-            "Shell III",
-            "Shell IV",
-            "Shell V"});
-            this.autoShell.Location = new System.Drawing.Point(68, 218);
+            "Shell Tier I",
+            "Shell Tier II",
+            "Shell Tier III",
+            "Shell Tier IV",
+            "Shell Tier V"});
+            this.autoShell.Location = new System.Drawing.Point(66, 192);
             this.autoShell.Name = "autoShell";
             this.autoShell.Size = new System.Drawing.Size(180, 23);
             this.autoShell.TabIndex = 35;
@@ -4809,7 +4830,7 @@
             0,
             0,
             65536});
-            this.autoShell_Minutes.Location = new System.Drawing.Point(293, 219);
+            this.autoShell_Minutes.Location = new System.Drawing.Point(291, 193);
             this.autoShell_Minutes.Maximum = new decimal(new int[] {
             99,
             0,
@@ -4845,7 +4866,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(366, 140);
+            this.label12.Location = new System.Drawing.Point(364, 114);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(51, 15);
             this.label12.TabIndex = 29;
@@ -4856,10 +4877,10 @@
             this.autoRefresh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.autoRefresh.FormattingEnabled = true;
             this.autoRefresh.Items.AddRange(new object[] {
-            "Refresh",
-            "Refresh II",
-            "Refresh III"});
-            this.autoRefresh.Location = new System.Drawing.Point(68, 140);
+            "Refresh Tier I",
+            "Refresh Tier II",
+            "Refresh Tier III"});
+            this.autoRefresh.Location = new System.Drawing.Point(66, 114);
             this.autoRefresh.Name = "autoRefresh";
             this.autoRefresh.Size = new System.Drawing.Size(180, 23);
             this.autoRefresh.TabIndex = 28;
@@ -4872,7 +4893,7 @@
             0,
             0,
             65536});
-            this.autoRefresh_Minutes.Location = new System.Drawing.Point(293, 140);
+            this.autoRefresh_Minutes.Location = new System.Drawing.Point(291, 114);
             this.autoRefresh_Minutes.Maximum = new decimal(new int[] {
             99,
             0,
@@ -4951,6 +4972,7 @@
             // 
             // plBuffGroup
             // 
+            this.plBuffGroup.Controls.Add(this.panel12);
             this.plBuffGroup.Controls.Add(this.plAdloquium);
             this.plBuffGroup.Controls.Add(this.plShell);
             this.plBuffGroup.Controls.Add(this.plProtect);
@@ -4968,15 +4990,94 @@
             this.plBuffGroup.Controls.Add(this.plStoneskin);
             this.plBuffGroup.Location = new System.Drawing.Point(471, 6);
             this.plBuffGroup.Name = "plBuffGroup";
-            this.plBuffGroup.Size = new System.Drawing.Size(271, 410);
+            this.plBuffGroup.Size = new System.Drawing.Size(305, 410);
             this.plBuffGroup.TabIndex = 13;
             this.plBuffGroup.TabStop = false;
             this.plBuffGroup.Text = "   PL Buffs";
+            this.plBuffGroup.Enter += new System.EventHandler(this.plBuffGroup_Enter);
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.plRegenLevel5);
+            this.panel12.Controls.Add(this.plRegen);
+            this.panel12.Controls.Add(this.plRegenLevel1);
+            this.panel12.Controls.Add(this.plRegenLevel4);
+            this.panel12.Controls.Add(this.plRegenLevel2);
+            this.panel12.Controls.Add(this.plRegenLevel3);
+            this.panel12.Location = new System.Drawing.Point(6, 20);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(293, 23);
+            this.panel12.TabIndex = 13;
+            // 
+            // plRegenLevel5
+            // 
+            this.plRegenLevel5.AutoSize = true;
+            this.plRegenLevel5.Location = new System.Drawing.Point(238, 3);
+            this.plRegenLevel5.Name = "plRegenLevel5";
+            this.plRegenLevel5.Size = new System.Drawing.Size(32, 19);
+            this.plRegenLevel5.TabIndex = 8;
+            this.plRegenLevel5.TabStop = true;
+            this.plRegenLevel5.Text = "V";
+            this.plRegenLevel5.UseVisualStyleBackColor = true;
+            // 
+            // plRegen
+            // 
+            this.plRegen.AutoSize = true;
+            this.plRegen.Location = new System.Drawing.Point(3, 3);
+            this.plRegen.Name = "plRegen";
+            this.plRegen.Size = new System.Drawing.Size(66, 19);
+            this.plRegen.TabIndex = 4;
+            this.plRegen.Text = "Regen:";
+            this.plRegen.UseVisualStyleBackColor = true;
+            // 
+            // plRegenLevel1
+            // 
+            this.plRegenLevel1.AutoSize = true;
+            this.plRegenLevel1.Location = new System.Drawing.Point(86, 3);
+            this.plRegenLevel1.Name = "plRegenLevel1";
+            this.plRegenLevel1.Size = new System.Drawing.Size(28, 19);
+            this.plRegenLevel1.TabIndex = 6;
+            this.plRegenLevel1.TabStop = true;
+            this.plRegenLevel1.Text = "I";
+            this.plRegenLevel1.UseVisualStyleBackColor = true;
+            // 
+            // plRegenLevel4
+            // 
+            this.plRegenLevel4.AutoSize = true;
+            this.plRegenLevel4.Location = new System.Drawing.Point(197, 3);
+            this.plRegenLevel4.Name = "plRegenLevel4";
+            this.plRegenLevel4.Size = new System.Drawing.Size(35, 19);
+            this.plRegenLevel4.TabIndex = 7;
+            this.plRegenLevel4.TabStop = true;
+            this.plRegenLevel4.Text = "IV";
+            this.plRegenLevel4.UseVisualStyleBackColor = true;
+            // 
+            // plRegenLevel2
+            // 
+            this.plRegenLevel2.AutoSize = true;
+            this.plRegenLevel2.Location = new System.Drawing.Point(120, 3);
+            this.plRegenLevel2.Name = "plRegenLevel2";
+            this.plRegenLevel2.Size = new System.Drawing.Size(31, 19);
+            this.plRegenLevel2.TabIndex = 6;
+            this.plRegenLevel2.TabStop = true;
+            this.plRegenLevel2.Text = "II";
+            this.plRegenLevel2.UseVisualStyleBackColor = true;
+            // 
+            // plRegenLevel3
+            // 
+            this.plRegenLevel3.AutoSize = true;
+            this.plRegenLevel3.Location = new System.Drawing.Point(157, 3);
+            this.plRegenLevel3.Name = "plRegenLevel3";
+            this.plRegenLevel3.Size = new System.Drawing.Size(34, 19);
+            this.plRegenLevel3.TabIndex = 6;
+            this.plRegenLevel3.TabStop = true;
+            this.plRegenLevel3.Text = "III";
+            this.plRegenLevel3.UseVisualStyleBackColor = true;
             // 
             // plAdloquium
             // 
             this.plAdloquium.AutoSize = true;
-            this.plAdloquium.Location = new System.Drawing.Point(13, 330);
+            this.plAdloquium.Location = new System.Drawing.Point(9, 359);
             this.plAdloquium.Name = "plAdloquium";
             this.plAdloquium.Size = new System.Drawing.Size(85, 19);
             this.plAdloquium.TabIndex = 21;
@@ -4986,7 +5087,7 @@
             // plShell
             // 
             this.plShell.AutoSize = true;
-            this.plShell.Location = new System.Drawing.Point(13, 102);
+            this.plShell.Location = new System.Drawing.Point(9, 131);
             this.plShell.Name = "plShell";
             this.plShell.Size = new System.Drawing.Size(54, 19);
             this.plShell.TabIndex = 20;
@@ -4996,7 +5097,7 @@
             // plProtect
             // 
             this.plProtect.AutoSize = true;
-            this.plProtect.Location = new System.Drawing.Point(13, 77);
+            this.plProtect.Location = new System.Drawing.Point(9, 106);
             this.plProtect.Name = "plProtect";
             this.plProtect.Size = new System.Drawing.Size(64, 19);
             this.plProtect.TabIndex = 19;
@@ -5006,7 +5107,7 @@
             // plAquaveil
             // 
             this.plAquaveil.AutoSize = true;
-            this.plAquaveil.Location = new System.Drawing.Point(13, 227);
+            this.plAquaveil.Location = new System.Drawing.Point(9, 256);
             this.plAquaveil.Name = "plAquaveil";
             this.plAquaveil.Size = new System.Drawing.Size(72, 19);
             this.plAquaveil.TabIndex = 18;
@@ -5034,7 +5135,7 @@
             "Thunderstorm II",
             "Voidstorm II",
             "Aurorastorm II"});
-            this.plStormSpell_Spell.Location = new System.Drawing.Point(89, 301);
+            this.plStormSpell_Spell.Location = new System.Drawing.Point(85, 330);
             this.plStormSpell_Spell.Name = "plStormSpell_Spell";
             this.plStormSpell_Spell.Size = new System.Drawing.Size(174, 23);
             this.plStormSpell_Spell.TabIndex = 17;
@@ -5042,7 +5143,7 @@
             // plStormSpell
             // 
             this.plStormSpell.AutoSize = true;
-            this.plStormSpell.Location = new System.Drawing.Point(13, 305);
+            this.plStormSpell.Location = new System.Drawing.Point(9, 334);
             this.plStormSpell.Name = "plStormSpell";
             this.plStormSpell.Size = new System.Drawing.Size(62, 19);
             this.plStormSpell.TabIndex = 16;
@@ -5052,7 +5153,7 @@
             // plKlimaform
             // 
             this.plKlimaform.AutoSize = true;
-            this.plKlimaform.Location = new System.Drawing.Point(13, 202);
+            this.plKlimaform.Location = new System.Drawing.Point(9, 231);
             this.plKlimaform.Name = "plKlimaform";
             this.plKlimaform.Size = new System.Drawing.Size(83, 19);
             this.plKlimaform.TabIndex = 15;
@@ -5076,7 +5177,7 @@
             "Enaero II",
             "Enblizzard II",
             "Enthunder II"});
-            this.plEnspell_spell.Location = new System.Drawing.Point(89, 276);
+            this.plEnspell_spell.Location = new System.Drawing.Point(85, 305);
             this.plEnspell_spell.Name = "plEnspell_spell";
             this.plEnspell_spell.Size = new System.Drawing.Size(174, 23);
             this.plEnspell_spell.TabIndex = 14;
@@ -5084,7 +5185,7 @@
             // plEnspell
             // 
             this.plEnspell.AutoSize = true;
-            this.plEnspell.Location = new System.Drawing.Point(13, 280);
+            this.plEnspell.Location = new System.Drawing.Point(9, 309);
             this.plEnspell.Name = "plEnspell";
             this.plEnspell.Size = new System.Drawing.Size(70, 19);
             this.plEnspell.TabIndex = 13;
@@ -5096,9 +5197,9 @@
             this.panel5.Controls.Add(this.plTemper);
             this.panel5.Controls.Add(this.plTemperLevel1);
             this.panel5.Controls.Add(this.plTemperLevel2);
-            this.panel5.Location = new System.Drawing.Point(13, 251);
+            this.panel5.Location = new System.Drawing.Point(9, 280);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(259, 23);
+            this.panel5.Size = new System.Drawing.Size(290, 23);
             this.panel5.TabIndex = 9;
             // 
             // plTemper
@@ -5139,9 +5240,9 @@
             this.panel4.Controls.Add(this.plRefreshLevel3);
             this.panel4.Controls.Add(this.plRefreshLevel1);
             this.panel4.Controls.Add(this.plRefreshLevel2);
-            this.panel4.Location = new System.Drawing.Point(10, 49);
+            this.panel4.Location = new System.Drawing.Point(6, 78);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(260, 23);
+            this.panel4.Size = new System.Drawing.Size(293, 23);
             this.panel4.TabIndex = 8;
             // 
             // plRefresh
@@ -5157,7 +5258,7 @@
             // plRefreshLevel3
             // 
             this.plRefreshLevel3.AutoSize = true;
-            this.plRefreshLevel3.Location = new System.Drawing.Point(157, 4);
+            this.plRefreshLevel3.Location = new System.Drawing.Point(157, 3);
             this.plRefreshLevel3.Name = "plRefreshLevel3";
             this.plRefreshLevel3.Size = new System.Drawing.Size(34, 19);
             this.plRefreshLevel3.TabIndex = 7;
@@ -5168,7 +5269,7 @@
             // plRefreshLevel1
             // 
             this.plRefreshLevel1.AutoSize = true;
-            this.plRefreshLevel1.Location = new System.Drawing.Point(86, 4);
+            this.plRefreshLevel1.Location = new System.Drawing.Point(86, 3);
             this.plRefreshLevel1.Name = "plRefreshLevel1";
             this.plRefreshLevel1.Size = new System.Drawing.Size(28, 19);
             this.plRefreshLevel1.TabIndex = 6;
@@ -5179,7 +5280,7 @@
             // plRefreshLevel2
             // 
             this.plRefreshLevel2.AutoSize = true;
-            this.plRefreshLevel2.Location = new System.Drawing.Point(120, 4);
+            this.plRefreshLevel2.Location = new System.Drawing.Point(120, 3);
             this.plRefreshLevel2.Name = "plRefreshLevel2";
             this.plRefreshLevel2.Size = new System.Drawing.Size(31, 19);
             this.plRefreshLevel2.TabIndex = 6;
@@ -5190,7 +5291,7 @@
             // plPhalanx
             // 
             this.plPhalanx.AutoSize = true;
-            this.plPhalanx.Location = new System.Drawing.Point(13, 152);
+            this.plPhalanx.Location = new System.Drawing.Point(9, 181);
             this.plPhalanx.Name = "plPhalanx";
             this.plPhalanx.Size = new System.Drawing.Size(71, 19);
             this.plPhalanx.TabIndex = 11;
@@ -5204,9 +5305,9 @@
             this.panel3.Controls.Add(this.plReraiseLevel4);
             this.panel3.Controls.Add(this.plReraiseLevel2);
             this.panel3.Controls.Add(this.plReraiseLevel3);
-            this.panel3.Location = new System.Drawing.Point(10, 20);
+            this.panel3.Location = new System.Drawing.Point(6, 49);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(260, 23);
+            this.panel3.Size = new System.Drawing.Size(293, 23);
             this.panel3.TabIndex = 12;
             // 
             // plReraise
@@ -5266,7 +5367,7 @@
             // plBlink
             // 
             this.plBlink.AutoSize = true;
-            this.plBlink.Location = new System.Drawing.Point(13, 127);
+            this.plBlink.Location = new System.Drawing.Point(9, 156);
             this.plBlink.Name = "plBlink";
             this.plBlink.Size = new System.Drawing.Size(53, 19);
             this.plBlink.TabIndex = 4;
@@ -5276,7 +5377,7 @@
             // plStoneskin
             // 
             this.plStoneskin.AutoSize = true;
-            this.plStoneskin.Location = new System.Drawing.Point(13, 177);
+            this.plStoneskin.Location = new System.Drawing.Point(9, 206);
             this.plStoneskin.Name = "plStoneskin";
             this.plStoneskin.Size = new System.Drawing.Size(80, 19);
             this.plStoneskin.TabIndex = 4;
@@ -5291,13 +5392,15 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 4);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(748, 535);
+            this.tabPage10.Size = new System.Drawing.Size(782, 535);
             this.tabPage10.TabIndex = 1;
             this.tabPage10.Text = "SCHOLAR ABILITY ENHANCING";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
             // groupBox27
             // 
+            this.groupBox27.Controls.Add(this.regenPerpetuance);
+            this.groupBox27.Controls.Add(this.regenAccession);
             this.groupBox27.Controls.Add(this.adloquiumPerpetuance);
             this.groupBox27.Controls.Add(this.adloquiumAccession);
             this.groupBox27.Controls.Add(this.barstatusPerpetuance);
@@ -5323,12 +5426,31 @@
             this.groupBox27.Size = new System.Drawing.Size(301, 522);
             this.groupBox27.TabIndex = 2;
             this.groupBox27.TabStop = false;
-            this.groupBox27.Text = "Perpetuance / Accession PL spells";
+            this.groupBox27.Text = " Perpetuance / Accession PL spells ";
+            // 
+            // regenPerpetuance
+            // 
+            this.regenPerpetuance.AutoSize = true;
+            this.regenPerpetuance.Location = new System.Drawing.Point(45, 37);
+            this.regenPerpetuance.Name = "regenPerpetuance";
+            this.regenPerpetuance.Size = new System.Drawing.Size(15, 14);
+            this.regenPerpetuance.TabIndex = 46;
+            this.regenPerpetuance.UseVisualStyleBackColor = true;
+            // 
+            // regenAccession
+            // 
+            this.regenAccession.AutoSize = true;
+            this.regenAccession.Location = new System.Drawing.Point(94, 35);
+            this.regenAccession.Name = "regenAccession";
+            this.regenAccession.Size = new System.Drawing.Size(63, 19);
+            this.regenAccession.TabIndex = 45;
+            this.regenAccession.Text = "Regen";
+            this.regenAccession.UseVisualStyleBackColor = true;
             // 
             // adloquiumPerpetuance
             // 
             this.adloquiumPerpetuance.AutoSize = true;
-            this.adloquiumPerpetuance.Location = new System.Drawing.Point(40, 259);
+            this.adloquiumPerpetuance.Location = new System.Drawing.Point(45, 287);
             this.adloquiumPerpetuance.Name = "adloquiumPerpetuance";
             this.adloquiumPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.adloquiumPerpetuance.TabIndex = 44;
@@ -5337,7 +5459,7 @@
             // adloquiumAccession
             // 
             this.adloquiumAccession.AutoSize = true;
-            this.adloquiumAccession.Location = new System.Drawing.Point(89, 257);
+            this.adloquiumAccession.Location = new System.Drawing.Point(94, 285);
             this.adloquiumAccession.Name = "adloquiumAccession";
             this.adloquiumAccession.Size = new System.Drawing.Size(85, 19);
             this.adloquiumAccession.TabIndex = 43;
@@ -5347,7 +5469,7 @@
             // barstatusPerpetuance
             // 
             this.barstatusPerpetuance.AutoSize = true;
-            this.barstatusPerpetuance.Location = new System.Drawing.Point(40, 234);
+            this.barstatusPerpetuance.Location = new System.Drawing.Point(45, 262);
             this.barstatusPerpetuance.Name = "barstatusPerpetuance";
             this.barstatusPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.barstatusPerpetuance.TabIndex = 42;
@@ -5356,7 +5478,7 @@
             // barspellPerpetuance
             // 
             this.barspellPerpetuance.AutoSize = true;
-            this.barspellPerpetuance.Location = new System.Drawing.Point(40, 209);
+            this.barspellPerpetuance.Location = new System.Drawing.Point(45, 237);
             this.barspellPerpetuance.Name = "barspellPerpetuance";
             this.barspellPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.barspellPerpetuance.TabIndex = 41;
@@ -5365,7 +5487,7 @@
             // aquaveilPerpetuance
             // 
             this.aquaveilPerpetuance.AutoSize = true;
-            this.aquaveilPerpetuance.Location = new System.Drawing.Point(40, 184);
+            this.aquaveilPerpetuance.Location = new System.Drawing.Point(45, 212);
             this.aquaveilPerpetuance.Name = "aquaveilPerpetuance";
             this.aquaveilPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.aquaveilPerpetuance.TabIndex = 40;
@@ -5374,7 +5496,7 @@
             // stormspellPerpetuance
             // 
             this.stormspellPerpetuance.AutoSize = true;
-            this.stormspellPerpetuance.Location = new System.Drawing.Point(40, 159);
+            this.stormspellPerpetuance.Location = new System.Drawing.Point(45, 187);
             this.stormspellPerpetuance.Name = "stormspellPerpetuance";
             this.stormspellPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.stormspellPerpetuance.TabIndex = 38;
@@ -5383,7 +5505,7 @@
             // enspellPerpetuance
             // 
             this.enspellPerpetuance.AutoSize = true;
-            this.enspellPerpetuance.Location = new System.Drawing.Point(40, 134);
+            this.enspellPerpetuance.Location = new System.Drawing.Point(45, 162);
             this.enspellPerpetuance.Name = "enspellPerpetuance";
             this.enspellPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.enspellPerpetuance.TabIndex = 37;
@@ -5392,7 +5514,7 @@
             // stoneskinPerpetuance
             // 
             this.stoneskinPerpetuance.AutoSize = true;
-            this.stoneskinPerpetuance.Location = new System.Drawing.Point(40, 109);
+            this.stoneskinPerpetuance.Location = new System.Drawing.Point(45, 137);
             this.stoneskinPerpetuance.Name = "stoneskinPerpetuance";
             this.stoneskinPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.stoneskinPerpetuance.TabIndex = 35;
@@ -5401,7 +5523,7 @@
             // phalanxPerpetuance
             // 
             this.phalanxPerpetuance.AutoSize = true;
-            this.phalanxPerpetuance.Location = new System.Drawing.Point(40, 84);
+            this.phalanxPerpetuance.Location = new System.Drawing.Point(45, 112);
             this.phalanxPerpetuance.Name = "phalanxPerpetuance";
             this.phalanxPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.phalanxPerpetuance.TabIndex = 34;
@@ -5410,7 +5532,7 @@
             // blinkPerpetuance
             // 
             this.blinkPerpetuance.AutoSize = true;
-            this.blinkPerpetuance.Location = new System.Drawing.Point(40, 59);
+            this.blinkPerpetuance.Location = new System.Drawing.Point(45, 87);
             this.blinkPerpetuance.Name = "blinkPerpetuance";
             this.blinkPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.blinkPerpetuance.TabIndex = 33;
@@ -5419,7 +5541,7 @@
             // refreshPerpetuance
             // 
             this.refreshPerpetuance.AutoSize = true;
-            this.refreshPerpetuance.Location = new System.Drawing.Point(40, 34);
+            this.refreshPerpetuance.Location = new System.Drawing.Point(45, 62);
             this.refreshPerpetuance.Name = "refreshPerpetuance";
             this.refreshPerpetuance.Size = new System.Drawing.Size(15, 14);
             this.refreshPerpetuance.TabIndex = 32;
@@ -5428,7 +5550,7 @@
             // barstatusAccession
             // 
             this.barstatusAccession.AutoSize = true;
-            this.barstatusAccession.Location = new System.Drawing.Point(89, 232);
+            this.barstatusAccession.Location = new System.Drawing.Point(94, 260);
             this.barstatusAccession.Name = "barstatusAccession";
             this.barstatusAccession.Size = new System.Drawing.Size(77, 19);
             this.barstatusAccession.TabIndex = 30;
@@ -5438,7 +5560,7 @@
             // barspellAccession
             // 
             this.barspellAccession.AutoSize = true;
-            this.barspellAccession.Location = new System.Drawing.Point(89, 207);
+            this.barspellAccession.Location = new System.Drawing.Point(94, 235);
             this.barspellAccession.Name = "barspellAccession";
             this.barspellAccession.Size = new System.Drawing.Size(71, 19);
             this.barspellAccession.TabIndex = 29;
@@ -5448,7 +5570,7 @@
             // refreshAccession
             // 
             this.refreshAccession.AutoSize = true;
-            this.refreshAccession.Location = new System.Drawing.Point(89, 32);
+            this.refreshAccession.Location = new System.Drawing.Point(94, 60);
             this.refreshAccession.Name = "refreshAccession";
             this.refreshAccession.Size = new System.Drawing.Size(69, 19);
             this.refreshAccession.TabIndex = 4;
@@ -5458,7 +5580,7 @@
             // aquaveilAccession
             // 
             this.aquaveilAccession.AutoSize = true;
-            this.aquaveilAccession.Location = new System.Drawing.Point(89, 182);
+            this.aquaveilAccession.Location = new System.Drawing.Point(94, 210);
             this.aquaveilAccession.Name = "aquaveilAccession";
             this.aquaveilAccession.Size = new System.Drawing.Size(72, 19);
             this.aquaveilAccession.TabIndex = 28;
@@ -5468,7 +5590,7 @@
             // stormspellAccession
             // 
             this.stormspellAccession.AutoSize = true;
-            this.stormspellAccession.Location = new System.Drawing.Point(89, 157);
+            this.stormspellAccession.Location = new System.Drawing.Point(94, 185);
             this.stormspellAccession.Name = "stormspellAccession";
             this.stormspellAccession.Size = new System.Drawing.Size(90, 19);
             this.stormspellAccession.TabIndex = 27;
@@ -5478,7 +5600,7 @@
             // enspellAccession
             // 
             this.enspellAccession.AutoSize = true;
-            this.enspellAccession.Location = new System.Drawing.Point(89, 132);
+            this.enspellAccession.Location = new System.Drawing.Point(94, 160);
             this.enspellAccession.Name = "enspellAccession";
             this.enspellAccession.Size = new System.Drawing.Size(67, 19);
             this.enspellAccession.TabIndex = 25;
@@ -5488,7 +5610,7 @@
             // phalanxAccession
             // 
             this.phalanxAccession.AutoSize = true;
-            this.phalanxAccession.Location = new System.Drawing.Point(89, 82);
+            this.phalanxAccession.Location = new System.Drawing.Point(94, 110);
             this.phalanxAccession.Name = "phalanxAccession";
             this.phalanxAccession.Size = new System.Drawing.Size(71, 19);
             this.phalanxAccession.TabIndex = 23;
@@ -5498,7 +5620,7 @@
             // blinkAccession
             // 
             this.blinkAccession.AutoSize = true;
-            this.blinkAccession.Location = new System.Drawing.Point(89, 57);
+            this.blinkAccession.Location = new System.Drawing.Point(94, 85);
             this.blinkAccession.Name = "blinkAccession";
             this.blinkAccession.Size = new System.Drawing.Size(53, 19);
             this.blinkAccession.TabIndex = 19;
@@ -5508,7 +5630,7 @@
             // stoneskinAccession
             // 
             this.stoneskinAccession.AutoSize = true;
-            this.stoneskinAccession.Location = new System.Drawing.Point(89, 107);
+            this.stoneskinAccession.Location = new System.Drawing.Point(94, 135);
             this.stoneskinAccession.Name = "stoneskinAccession";
             this.stoneskinAccession.Size = new System.Drawing.Size(80, 19);
             this.stoneskinAccession.TabIndex = 20;
@@ -5517,11 +5639,13 @@
             // 
             // groupBox26
             // 
+            this.groupBox26.Controls.Add(this.EnlightenmentReraise);
             this.groupBox26.Location = new System.Drawing.Point(7, 230);
             this.groupBox26.Name = "groupBox26";
             this.groupBox26.Size = new System.Drawing.Size(427, 299);
             this.groupBox26.TabIndex = 1;
             this.groupBox26.TabStop = false;
+            this.groupBox26.Text = " Further SCHOLAR adjustments ";
             // 
             // groupBox25
             // 
@@ -5534,7 +5658,7 @@
             this.groupBox25.Size = new System.Drawing.Size(427, 216);
             this.groupBox25.TabIndex = 0;
             this.groupBox25.TabStop = false;
-            this.groupBox25.Text = "Pre Defined Strategems";
+            this.groupBox25.Text = " Pre-Defined Strategems ";
             // 
             // accessionCure
             // 
@@ -5553,7 +5677,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(772, 537);
+            this.tabPage1.Size = new System.Drawing.Size(806, 537);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = " Healing";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -5583,7 +5707,7 @@
             this.groupBox12.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox12.Name = "groupBox12";
             this.groupBox12.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox12.Size = new System.Drawing.Size(761, 228);
+            this.groupBox12.Size = new System.Drawing.Size(799, 228);
             this.groupBox12.TabIndex = 8;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = " AoE Healing (beta) ";
@@ -5739,7 +5863,7 @@
             this.groupBox2.Controls.Add(this.cure1amount);
             this.groupBox2.Location = new System.Drawing.Point(6, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(760, 298);
+            this.groupBox2.Size = new System.Drawing.Size(797, 298);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Healing Options";
@@ -5864,12 +5988,12 @@
             this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.HotTrack = true;
-            this.tabControl1.Location = new System.Drawing.Point(6, 4);
+            this.tabControl1.Location = new System.Drawing.Point(4, 4);
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(9, 4);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(780, 567);
+            this.tabControl1.Size = new System.Drawing.Size(814, 567);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage8
@@ -5890,7 +6014,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 26);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(772, 537);
+            this.tabPage8.Size = new System.Drawing.Size(806, 537);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Singing";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -5898,6 +6022,7 @@
             // SongsOnlyWhenNearEngaged
             // 
             this.SongsOnlyWhenNearEngaged.AutoSize = true;
+            this.SongsOnlyWhenNearEngaged.Enabled = false;
             this.SongsOnlyWhenNearEngaged.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SongsOnlyWhenNearEngaged.Location = new System.Drawing.Point(6, 31);
             this.SongsOnlyWhenNearEngaged.Name = "SongsOnlyWhenNearEngaged";
@@ -5911,7 +6036,7 @@
             this.groupBox28.Controls.Add(this.label50);
             this.groupBox28.Location = new System.Drawing.Point(347, 292);
             this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Size = new System.Drawing.Size(419, 241);
+            this.groupBox28.Size = new System.Drawing.Size(453, 241);
             this.groupBox28.TabIndex = 9;
             this.groupBox28.TabStop = false;
             this.groupBox28.Text = "Notes";
@@ -5919,7 +6044,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(8, 17);
+            this.label50.Location = new System.Drawing.Point(27, 26);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(391, 195);
             this.label50.TabIndex = 0;
@@ -6322,7 +6447,7 @@
             this.panel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel7.Location = new System.Drawing.Point(347, 6);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(420, 275);
+            this.panel7.Size = new System.Drawing.Size(453, 275);
             this.panel7.TabIndex = 3;
             // 
             // panel8
@@ -6331,7 +6456,7 @@
             this.panel8.Controls.Add(this.groupBox31);
             this.panel8.Location = new System.Drawing.Point(-1, -1);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(399, 420);
+            this.panel8.Size = new System.Drawing.Size(432, 420);
             this.panel8.TabIndex = 0;
             // 
             // groupBox30
@@ -6343,7 +6468,7 @@
             this.groupBox30.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox30.Location = new System.Drawing.Point(3, 91);
             this.groupBox30.Name = "groupBox30";
-            this.groupBox30.Size = new System.Drawing.Size(393, 81);
+            this.groupBox30.Size = new System.Drawing.Size(426, 81);
             this.groupBox30.TabIndex = 9;
             this.groupBox30.TabStop = false;
             this.groupBox30.Text = "Pianissimo set #2";
@@ -6561,7 +6686,7 @@
             this.groupBox31.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox31.Location = new System.Drawing.Point(4, 4);
             this.groupBox31.Name = "groupBox31";
-            this.groupBox31.Size = new System.Drawing.Size(392, 81);
+            this.groupBox31.Size = new System.Drawing.Size(425, 81);
             this.groupBox31.TabIndex = 8;
             this.groupBox31.TabStop = false;
             this.groupBox31.Text = "Pianissimo set #1";
@@ -7225,7 +7350,7 @@
             this.tabPage7.Location = new System.Drawing.Point(4, 26);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(772, 537);
+            this.tabPage7.Size = new System.Drawing.Size(806, 537);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Program Options";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -7239,7 +7364,7 @@
             this.groupBox18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox18.Location = new System.Drawing.Point(405, 6);
             this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(361, 80);
+            this.groupBox18.Size = new System.Drawing.Size(393, 80);
             this.groupBox18.TabIndex = 18;
             this.groupBox18.TabStop = false;
             this.groupBox18.Text = "CurePlease Addon Data";
@@ -7319,7 +7444,7 @@
             // panel9
             // 
             this.panel9.Controls.Add(this.label56);
-            this.panel9.Location = new System.Drawing.Point(16, 163);
+            this.panel9.Location = new System.Drawing.Point(29, 163);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(334, 75);
             this.panel9.TabIndex = 19;
@@ -7403,6 +7528,7 @@
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.pauseOnKO);
             this.groupBox13.Controls.Add(this.MinimiseonStart);
             this.groupBox13.Controls.Add(this.pauseOnStartBox);
             this.groupBox13.Controls.Add(this.pauseOnZoneBox);
@@ -7414,10 +7540,20 @@
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Program Options";
             // 
+            // pauseOnKO
+            // 
+            this.pauseOnKO.AutoSize = true;
+            this.pauseOnKO.Location = new System.Drawing.Point(6, 72);
+            this.pauseOnKO.Name = "pauseOnKO";
+            this.pauseOnKO.Size = new System.Drawing.Size(98, 19);
+            this.pauseOnKO.TabIndex = 3;
+            this.pauseOnKO.Text = "Pause on KO";
+            this.pauseOnKO.UseVisualStyleBackColor = true;
+            // 
             // MinimiseonStart
             // 
             this.MinimiseonStart.AutoSize = true;
-            this.MinimiseonStart.Location = new System.Drawing.Point(6, 72);
+            this.MinimiseonStart.Location = new System.Drawing.Point(6, 97);
             this.MinimiseonStart.Name = "MinimiseonStart";
             this.MinimiseonStart.Size = new System.Drawing.Size(187, 19);
             this.MinimiseonStart.TabIndex = 2;
@@ -7446,7 +7582,7 @@
             // 
             // saveAsButton
             // 
-            this.saveAsButton.Location = new System.Drawing.Point(554, 581);
+            this.saveAsButton.Location = new System.Drawing.Point(581, 579);
             this.saveAsButton.Name = "saveAsButton";
             this.saveAsButton.Size = new System.Drawing.Size(75, 23);
             this.saveAsButton.TabIndex = 3;
@@ -7456,7 +7592,7 @@
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(473, 581);
+            this.loadButton.Location = new System.Drawing.Point(500, 579);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(75, 23);
             this.loadButton.TabIndex = 4;
@@ -7467,7 +7603,7 @@
             // loadJobSettings
             // 
             this.loadJobSettings.AutoSize = true;
-            this.loadJobSettings.Location = new System.Drawing.Point(260, 585);
+            this.loadJobSettings.Location = new System.Drawing.Point(287, 583);
             this.loadJobSettings.Name = "loadJobSettings";
             this.loadJobSettings.Size = new System.Drawing.Size(207, 17);
             this.loadJobSettings.TabIndex = 5;
@@ -7478,12 +7614,122 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // groupBox36
+            // 
+            this.groupBox36.Controls.Add(this.label27);
+            this.groupBox36.Controls.Add(this.RadialArcanaSpell);
+            this.groupBox36.Controls.Add(this.label11);
+            this.groupBox36.Controls.Add(this.RadialArcanaMP);
+            this.groupBox36.Controls.Add(this.Fullcircle_GEOTarget);
+            this.groupBox36.Controls.Add(this.Fullcircle_DisableEnemy);
+            this.groupBox36.Location = new System.Drawing.Point(368, 112);
+            this.groupBox36.Name = "groupBox36";
+            this.groupBox36.Size = new System.Drawing.Size(431, 123);
+            this.groupBox36.TabIndex = 44;
+            this.groupBox36.TabStop = false;
+            this.groupBox36.Text = "Full Circle / Radial Arcana Settings";
+            // 
+            // Fullcircle_DisableEnemy
+            // 
+            this.Fullcircle_DisableEnemy.AutoSize = true;
+            this.Fullcircle_DisableEnemy.Location = new System.Drawing.Point(7, 21);
+            this.Fullcircle_DisableEnemy.Name = "Fullcircle_DisableEnemy";
+            this.Fullcircle_DisableEnemy.Size = new System.Drawing.Size(311, 19);
+            this.Fullcircle_DisableEnemy.TabIndex = 0;
+            this.Fullcircle_DisableEnemy.Text = "Disable FULL CIRCLE for ENEMY based GEO spells";
+            this.Fullcircle_DisableEnemy.UseVisualStyleBackColor = true;
+            // 
+            // Fullcircle_GEOTarget
+            // 
+            this.Fullcircle_GEOTarget.AutoSize = true;
+            this.Fullcircle_GEOTarget.Location = new System.Drawing.Point(7, 46);
+            this.Fullcircle_GEOTarget.Name = "Fullcircle_GEOTarget";
+            this.Fullcircle_GEOTarget.Size = new System.Drawing.Size(242, 19);
+            this.Fullcircle_GEOTarget.TabIndex = 1;
+            this.Fullcircle_GEOTarget.Text = "Use GEO-Spell target as distance target";
+            this.Fullcircle_GEOTarget.UseVisualStyleBackColor = true;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(6, 98);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(233, 15);
+            this.label27.TabIndex = 41;
+            this.label27.Text = "Geomancy spell to cast for Radial Arcana.";
+            // 
+            // RadialArcanaSpell
+            // 
+            this.RadialArcanaSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RadialArcanaSpell.FormattingEnabled = true;
+            this.RadialArcanaSpell.Items.AddRange(new object[] {
+            "Geo-Voidance",
+            "Geo-Precision",
+            "Geo-Regen",
+            "Geo-Haste",
+            "Geo-Attunement",
+            "Geo-Focus",
+            "Geo-Barrier",
+            "Geo-Refresh",
+            "Geo-CHR",
+            "Geo-MND",
+            "Geo-Fury",
+            "Geo-INT",
+            "Geo-AGI",
+            "Geo-Fend",
+            "Geo-VIT",
+            "Geo-DEX",
+            "Geo-Acumen",
+            "Geo-STR",
+            "Geo-Poison",
+            "Geo-Slow",
+            "Geo-Torpor",
+            "Geo-Slip",
+            "Geo-Languor",
+            "Geo-Paralysis",
+            "Geo-Vex",
+            "Geo-Frailty",
+            "Geo-Wilt",
+            "Geo-Malaise",
+            "Geo-Gravity",
+            "Geo-Fade"});
+            this.RadialArcanaSpell.Location = new System.Drawing.Point(261, 93);
+            this.RadialArcanaSpell.Name = "RadialArcanaSpell";
+            this.RadialArcanaSpell.Size = new System.Drawing.Size(121, 23);
+            this.RadialArcanaSpell.TabIndex = 40;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 72);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(286, 15);
+            this.label11.TabIndex = 39;
+            this.label11.Text = "Begin Radial Arcana MP recovery when MP below: ";
+            // 
+            // RadialArcanaMP
+            // 
+            this.RadialArcanaMP.Increment = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.RadialArcanaMP.Location = new System.Drawing.Point(298, 68);
+            this.RadialArcanaMP.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.RadialArcanaMP.Name = "RadialArcanaMP";
+            this.RadialArcanaMP.Size = new System.Drawing.Size(84, 21);
+            this.RadialArcanaMP.TabIndex = 38;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(789, 616);
+            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.ClientSize = new System.Drawing.Size(821, 612);
             this.Controls.Add(this.loadJobSettings);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveAsButton);
@@ -7531,9 +7777,6 @@
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConvertMP)).EndInit();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RadialArcanaMP)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpMinCastValue)).EndInit();
@@ -7590,6 +7833,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.autoHasteMinutes)).EndInit();
             this.plBuffGroup.ResumeLayout(false);
             this.plBuffGroup.PerformLayout();
+            this.panel12.ResumeLayout(false);
+            this.panel12.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -7599,6 +7844,8 @@
             this.tabPage10.ResumeLayout(false);
             this.groupBox27.ResumeLayout(false);
             this.groupBox27.PerformLayout();
+            this.groupBox26.ResumeLayout(false);
+            this.groupBox26.PerformLayout();
             this.groupBox25.ResumeLayout(false);
             this.groupBox25.PerformLayout();
             this.tabPage1.ResumeLayout(false);
@@ -7644,6 +7891,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.autoFollowDistance)).EndInit();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
+            this.groupBox36.ResumeLayout(false);
+            this.groupBox36.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RadialArcanaMP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7656,11 +7906,6 @@
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.NumericUpDown ConvertMP;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.ComboBox RadialArcanaSpell;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown RadialArcanaMP;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown mpMintempitemusage;
@@ -8072,9 +8317,6 @@
         private System.Windows.Forms.CheckBox AOE_Barelemental;
         private System.Windows.Forms.CheckBox plUtsusemi;
         private System.Windows.Forms.GroupBox groupBox34;
-        private System.Windows.Forms.Label label58;
-        private System.Windows.Forms.NumericUpDown autoStormspellMinutes;
-        private System.Windows.Forms.Label label59;
         private System.Windows.Forms.GroupBox groupBox35;
         private System.Windows.Forms.Label label60;
         private System.Windows.Forms.Button autoAdjust_Cure;
@@ -8130,5 +8372,32 @@
         private System.Windows.Forms.CheckBox adloquiumAccession;
         private System.Windows.Forms.CheckBox trackCastingPackets;
         private System.Windows.Forms.Label label61;
+        private System.Windows.Forms.CheckBox AssistSpecifiedTarget;
+        private System.Windows.Forms.CheckBox addBlack;
+        private System.Windows.Forms.CheckBox darkArts;
+        private System.Windows.Forms.Label label63;
+        private System.Windows.Forms.ComboBox autoStorm;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.Label label65;
+        private System.Windows.Forms.NumericUpDown autoStormspellMinutes;
+        private System.Windows.Forms.CheckBox EnlightenmentReraise;
+        private System.Windows.Forms.CheckBox regenPerpetuance;
+        private System.Windows.Forms.CheckBox regenAccession;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.RadioButton plRegenLevel5;
+        private System.Windows.Forms.CheckBox plRegen;
+        private System.Windows.Forms.RadioButton plRegenLevel1;
+        private System.Windows.Forms.RadioButton plRegenLevel4;
+        private System.Windows.Forms.RadioButton plRegenLevel2;
+        private System.Windows.Forms.RadioButton plRegenLevel3;
+        private System.Windows.Forms.CheckBox pauseOnKO;
+        private System.Windows.Forms.GroupBox groupBox36;
+        private System.Windows.Forms.CheckBox Fullcircle_GEOTarget;
+        private System.Windows.Forms.CheckBox Fullcircle_DisableEnemy;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.ComboBox RadialArcanaSpell;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown RadialArcanaMP;
     }
 }

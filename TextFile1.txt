@@ -1,0 +1,96 @@
+﻿
+            if ((Form2.config.enableSinging) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
+            {
+
+                var song_1 = SongInfo.Where(c => c.song_position == Form2.config.song1).FirstOrDefault();
+                var song_2 = SongInfo.Where(c => c.song_position == Form2.config.song2).FirstOrDefault();
+                var song_3 = SongInfo.Where(c => c.song_position == Form2.config.song3).FirstOrDefault();
+                var song_4 = SongInfo.Where(c => c.song_position == Form2.config.song4).FirstOrDefault();
+
+                var dummy1_song = SongInfo.Where(c => c.song_position == Form2.config.dummy1).FirstOrDefault();
+                var dummy2_song = SongInfo.Where(c => c.song_position == Form2.config.dummy2).FirstOrDefault();
+
+                // Check the distance of the Monitored player
+                int Monitoreddistance = 50;
+
+
+                var monitoredTarget = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Player.TargetID);
+                Monitoreddistance = (int)monitoredTarget.Distance;
+
+                int Songs_Possible = 0;
+
+                if (song_1.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+                if (song_2.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+                if (dummy1_song != null && dummy1_song.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+                if (dummy2_song != null && dummy2_song.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+
+                // List to make it easy to check how many of each buff is needed.
+                List<int> SongDataMax = new List<int> { song_1.buff_id, song_2.buff_id, song_3.buff_id, song_4.buff_id };
+
+                // Check Whether e have the songs Currently Up
+                int count1_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                int count2_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                int count3_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
+                int count4_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                int count5_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
+                int count6_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+
+                int MON_count1_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                int MON_count2_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                int MON_count3_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
+                int MON_count4_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                int MON_count5_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
+                int MON_count6_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+
+
+
+                // SONG NUMBER #1
+                if ((song_casting == 0) && ((song_1.song_name.ToLower() != "blank" && count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count()) || ForceSongRecast == true))
+                {
+                    if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                    {
+                        castSpell("<me>", song_1.song_name);
+                        Last_Song_Cast = song_1.song_name;
+                        Last_SongCast_Timer[0] = DateTime.Now;
+                        playerSong1[0] = DateTime.Now;
+                        song_casting = 1;
+                    }
+
+                    if (Songs_Possible == 1)
+                        ForceSongRecast = false;
+                }
+                // SONG NUMBER #2
+                else if ((song_casting == 1) && ((song_1.song_name.ToLower() != "blank" && MON_count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count()) || ForceSongRecast == true))
+                {
+
+
+                }
+                // SONG NUMBER #3
+                else if ((song_casting == 2) && ((song_1.song_name.ToLower() != "blank" && MON_count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count()) || ForceSongRecast == true))
+                {
+                    // SONG NUMBER DUMMY #1
+
+
+
+                }
+                // SONG NUMBER #4
+                else if ((song_casting == 3) && ((song_1.song_name.ToLower() != "blank" && MON_count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count()) || ForceSongRecast == true))
+                {
+                    // SONG NUMBER DUMMY #2
+
+
+                }
+
+            }

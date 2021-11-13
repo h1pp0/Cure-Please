@@ -1,0 +1,15 @@
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\bin\Release\Cure Please.exe
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\bin\Release\Cure Please.pdb
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\bin\Release\EliteMMO.API.dll
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.csprojResolveAssemblyReference.cache
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.Form1.resources
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.Form2.resources
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.Form3.resources
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.Form4.resources
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.PartyBuffs.resources
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.Properties.Resources.resources
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.csproj.GenerateResource.cache
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\CurePlease.csproj.CopyComplete
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\Cure Please.exe
+C:\Users\User\Desktop\excl\GitHub Repos\Cure-Please\obj\x86\Release\Cure Please.pdb

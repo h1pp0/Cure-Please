@@ -1,0 +1,366 @@
+﻿
+            if ((Form2.config.enableSinging) && (!castingLock) && _ELITEAPIPL.Player.Status != 33)
+            {
+                if (Last_SongCast_Timer[0] != DefaultTime && Last_SongCast_Timer_Span[0].Minutes >= 2)
+                {
+                    Last_Song_Cast = String.Empty;
+                }
+
+                if (_ELITEAPIPL.Player.MainJob == 10 || _ELITEAPIPL.Player.SubJob == 10)
+                {
+                    PL_BRDCount = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == 195 || b == 196 || b == 197 || b == 198 || b == 199 || b == 200 || b == 201 || b == 214 || b == 215 || b == 216 || b == 218 || b == 219 || b == 222).Count();
+
+                    if (_ELITEAPIPL.Player.Name != _ELITEAPIMonitored.Player.Name)
+                    {
+                        Monitored_BRDCount = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == 195 || b == 196 || b == 197 || b == 198 || b == 199 || b == 200 || b == 201 || b == 214 || b == 215 || b == 216 || b == 218 || b == 219 || b == 222).Count();
+                    }
+                }
+
+                // Grab the Song's Information
+                var song_1 = SongInfo.Where(c => c.song_position == Form2.config.song1).FirstOrDefault();
+                var song_2 = SongInfo.Where(c => c.song_position == Form2.config.song2).FirstOrDefault();
+                var song_3 = SongInfo.Where(c => c.song_position == Form2.config.song3).FirstOrDefault();
+                var song_4 = SongInfo.Where(c => c.song_position == Form2.config.song4).FirstOrDefault();
+
+                var dummy1_song = SongInfo.Where(c => c.song_position == Form2.config.dummy1).FirstOrDefault();
+                var dummy2_song = SongInfo.Where(c => c.song_position == Form2.config.dummy2).FirstOrDefault();
+
+                // Check the distance of the Monitored player
+                int Monitoreddistance = 50;
+
+                var monitoredTarget = _ELITEAPIPL.Entity.GetEntity((int)_ELITEAPIMonitored.Player.TargetID);
+                Monitoreddistance = (int)monitoredTarget.Distance;
+
+                int Songs_Possible = 0;
+
+                if (song_1.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+                if (song_2.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+                if (dummy1_song != null && dummy1_song.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+                if (dummy2_song != null && dummy2_song.song_name.ToLower() != "blank")
+                {
+                    Songs_Possible++;
+                }
+
+                // List to make it easy to check how many of each buff is needed.
+                List<int> SongDataMax = new List<int>
+                                    {
+                                        song_1.buff_id,
+                                        song_2.buff_id,
+                                        song_3.buff_id,
+                                        song_4.buff_id
+                                    };
+
+                // Check Whether e have the songs Currently Up
+                int count1_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                int count2_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                int count3_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
+                int count4_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                int count5_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
+                int count6_type = _ELITEAPIPL.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+
+                int MON_count1_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_1.buff_id).Count();
+                int MON_count2_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_2.buff_id).Count();
+                int MON_count3_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy1_song.buff_id).Count();
+                int MON_count4_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_3.buff_id).Count();
+                int MON_count5_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == dummy2_song.buff_id).Count();
+                int MON_count6_type = _ELITEAPIMonitored.Player.GetPlayerInfo().Buffs.Where(b => b == song_4.buff_id).Count();
+
+                // RECAST SONGS IF NEARBY THEMONITORED PLAYER
+                if (Form2.config.recastSongs_Monitored && Monitoreddistance <= 9 && _ELITEAPIMonitored.Player.Name != _ELITEAPIPL.Player.Name)
+                {
+                    // SONG NUMBER #1
+                    if (song_casting == 0 && (song_1.song_name.ToLower() != "blank" && MON_count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count() && Last_Song_Cast != song_1.song_name || ForceSongRecast == true))
+                    {
+                        if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                        {
+                            castSpell("<me>", song_1.song_name);
+                            Last_Song_Cast = song_1.song_name;
+                            Last_SongCast_Timer[0] = DateTime.Now;
+                            playerSong1[0] = DateTime.Now;
+                            song_casting = 1;
+                        }
+
+                        if (Songs_Possible == 1)
+                            ForceSongRecast = false;
+                    }
+                    // SONG NUMBER #2
+                    else if (song_casting == 1 && (song_2.song_name.ToLower() != "blank" && MON_count2_type < SongDataMax.Where(c => c == song_2.buff_id).Count() && Last_Song_Cast != song_2.song_name || ForceSongRecast == true))
+                    {
+                        if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
+                        {
+                            castSpell("<me>", song_2.song_name);
+                            Last_Song_Cast = song_2.song_name;
+                            Last_SongCast_Timer[0] = DateTime.Now;
+                            playerSong2[0] = DateTime.Now;
+                            song_casting = 2;
+                        }
+
+                        if (Songs_Possible == 2)
+                            ForceSongRecast = false;
+                    }
+                    // DUMMY SONG NUMBER #1 AND SONG NUMBER #3
+                    else if (song_casting == 2 && Monitored_BRDCount >= 2 && (song_3.song_name.ToLower() != "blank" && MON_count4_type < SongDataMax.Where(c => c == song_3.buff_id).Count() && Last_Song_Cast != song_3.song_name || ForceSongRecast == true))
+                    {
+                        if (Monitored_BRDCount <= 2)
+                        {
+                            if (CheckSpellRecast(dummy1_song.song_name) == 0 && (HasSpell(dummy1_song.song_name)) && JobChecker(dummy1_song.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", dummy1_song.song_name);
+                            }
+                        }
+                        else
+                        {
+                            if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_3.song_name);
+                                Last_Song_Cast = song_3.song_name;
+                                Last_SongCast_Timer[0] = DateTime.Now;
+                                playerSong3[0] = DateTime.Now;
+                                song_casting = 3;
+                            }
+                        }
+
+                        if (Songs_Possible == 3)
+                            ForceSongRecast = false;
+                    }
+                    // DUMMY SONG NUMBER #2 AND SONG NUMBER #4
+                    else if (song_casting == 3 && Monitored_BRDCount >= 3 && (song_4.song_name.ToLower() != "blank" && MON_count6_type < SongDataMax.Where(c => c == song_4.buff_id).Count() && Last_Song_Cast != song_4.song_name || ForceSongRecast == true))
+                    {
+                        if (Monitored_BRDCount < 4)
+                        {
+                            if (CheckSpellRecast(dummy2_song.song_name) == 0 && (HasSpell(dummy2_song.song_name)) && JobChecker(dummy2_song.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", dummy2_song.song_name);
+                            }
+                        }
+                        else
+                        {
+                            if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_4.song_name);
+                                Last_Song_Cast = song_4.song_name;
+                                Last_SongCast_Timer[0] = DateTime.Now;
+                                playerSong4[0] = DateTime.Now;
+                                song_casting = 0;
+                            }
+                        }
+
+                        if (Songs_Possible == 3)
+                            ForceSongRecast = false;
+                    }
+                    else if (Monitored_BRDCount <= 2 && Songs_Possible > 2)
+                        song_casting = 0;
+                    else if (Monitored_BRDCount <= 3 && Songs_Possible > 3)
+                        song_casting = 0;
+
+                    // ONCE ALL SONGS HAVE BEEN CAST ONLY RECAST THEM WHEN THEY MEET THE THRESHOLD SET ON SONG RECAST AND BLOCK IF IT'S SET AT LAUNCH DEFAULTS
+                    if (playerSong1[0] != DefaultTime && playerSong1_Span[0].Minutes >= Form2.config.recastSongTime)
+                    {
+                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                        {
+                            if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_1.song_name);
+                                playerSong1[0] = DateTime.Now;
+                                song_casting = 0;
+                            }
+                        }
+                    }
+                    else if (playerSong2[0] != DefaultTime && playerSong2_Span[0].Minutes >= Form2.config.recastSongTime)
+                    {
+                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                        {
+                            if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_2.song_name);
+                                playerSong2[0] = DateTime.Now;
+                                song_casting = 0;
+                            }
+                        }
+                    }
+                    else if (playerSong3[0] != DefaultTime && playerSong3_Span[0].Minutes >= Form2.config.recastSongTime)
+                    {
+                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                        {
+                            if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_3.song_name);
+                                playerSong3[0] = DateTime.Now;
+                                song_casting = 0;
+                            }
+                        }
+                    }
+                    else if (playerSong4[0] != DefaultTime && playerSong4_Span[0].Minutes >= Form2.config.recastSongTime)
+                    {
+                        if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                        {
+                            if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_4.song_name);
+                                playerSong4[0] = DateTime.Now;
+                                song_casting = 0;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Check if you need the monitored player nearby and if they are, or if the only requirement is songs being enabled
+                    if ((Form2.config.SongsOnlyWhenNear == true && Monitoreddistance < 10) || (Form2.config.SongsOnlyWhenNear == false || _ELITEAPIPL.Player.Name == _ELITEAPIMonitored.Player.Name))
+                    {
+                        // SONG NUMBER #1
+                        if (song_casting == 0 && (song_1.song_name.ToLower() != "blank" && count1_type < SongDataMax.Where(c => c == song_1.buff_id).Count() && Last_Song_Cast != song_1.song_name || ForceSongRecast == true))
+                        {
+                            if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_1.song_name);
+                                Last_Song_Cast = song_1.song_name;
+                                Last_SongCast_Timer[0] = DateTime.Now;
+                                playerSong1[0] = DateTime.Now;
+                                song_casting = 1;
+                            }
+
+                            if (Songs_Possible == 1)
+                                ForceSongRecast = false;
+                        }
+                        // SONG NUMBER #2
+                        else if (song_casting == 1 && (song_2.song_name.ToLower() != "blank" && count2_type < SongDataMax.Where(c => c == song_2.buff_id).Count() && Last_Song_Cast != song_2.song_name || ForceSongRecast == true))
+                        {
+                            if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
+                            {
+                                castSpell("<me>", song_2.song_name);
+                                Last_Song_Cast = song_2.song_name;
+                                Last_SongCast_Timer[0] = DateTime.Now;
+                                playerSong2[0] = DateTime.Now;
+                                song_casting = 2;
+                            }
+
+                            if (Songs_Possible == 2)
+                                ForceSongRecast = false;
+                        }
+                        // DUMMY SONG NUMBER #1 AND SONG NUMBER #3
+                        else if (song_casting == 2 && PL_BRDCount >= 2 && (song_3.song_name.ToLower() != "blank" && count4_type < SongDataMax.Where(c => c == song_3.buff_id).Count() && Last_Song_Cast != song_3.song_name || ForceSongRecast == true))
+                        {
+                            if (PL_BRDCount <= 2)
+                            {
+                                if (CheckSpellRecast(dummy1_song.song_name) == 0 && (HasSpell(dummy1_song.song_name)) && JobChecker(dummy1_song.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", dummy1_song.song_name);
+                                }
+                            }
+                            else
+                            {
+                                if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", song_3.song_name);
+                                    Last_Song_Cast = song_3.song_name;
+                                    Last_SongCast_Timer[0] = DateTime.Now;
+                                    playerSong3[0] = DateTime.Now;
+                                    song_casting = 3;
+                                }
+                            }
+
+                            if (Songs_Possible == 3)
+                                ForceSongRecast = false;
+                        }
+                        // DUMMY SONG NUMBER #2 AND SONG NUMBER #4
+                        else if (song_casting == 3 && PL_BRDCount >= 3 && (song_4.song_name.ToLower() != "blank" && count6_type < SongDataMax.Where(c => c == song_4.buff_id).Count() && Last_Song_Cast != song_4.song_name || ForceSongRecast == true))
+                        {
+                            if (PL_BRDCount < 4)
+                            {
+                                if (CheckSpellRecast(dummy2_song.song_name) == 0 && (HasSpell(dummy2_song.song_name)) && JobChecker(dummy2_song.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", dummy2_song.song_name);
+                                }
+                            }
+                            else
+                            {
+                                if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", song_4.song_name);
+                                    Last_Song_Cast = song_4.song_name;
+                                    Last_SongCast_Timer[0] = DateTime.Now;
+                                    playerSong4[0] = DateTime.Now;
+                                    song_casting = 0;
+                                }
+                            }
+
+                            if (Songs_Possible == 3)
+                                ForceSongRecast = false;
+                        }
+                        else if (PL_BRDCount <= 2 && Songs_Possible > 2)
+                            song_casting = 0;
+                        else if (PL_BRDCount <= 3 && Songs_Possible > 3)
+                            song_casting = 0;
+
+                        // ONCE ALL SONGS HAVE BEEN CAST ONLY RECAST THEM WHEN THEY MEET THE THRESHOLD SET ON SONG RECAST AND BLOCK IF IT'S SET AT LAUNCH DEFAULTS
+                        if (playerSong1[0] != DefaultTime && playerSong1_Span[0].Minutes >= Form2.config.recastSongTime)
+                        {
+                            if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                            {
+                                if (CheckSpellRecast(song_1.song_name) == 0 && (HasSpell(song_1.song_name)) && JobChecker(song_1.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", song_1.song_name);
+                                    playerSong1[0] = DateTime.Now;
+                                    song_casting = 0;
+                                }
+                            }
+                        }
+                        else if (playerSong2[0] != DefaultTime && playerSong2_Span[0].Minutes >= Form2.config.recastSongTime)
+                        {
+                            if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                            {
+                                if (CheckSpellRecast(song_2.song_name) == 0 && (HasSpell(song_2.song_name)) && JobChecker(song_2.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", song_2.song_name);
+                                    playerSong2[0] = DateTime.Now;
+                                    song_casting = 0;
+                                }
+                            }
+                        }
+                        else if (playerSong3[0] != DefaultTime && playerSong3_Span[0].Minutes >= Form2.config.recastSongTime)
+                        {
+                            if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                            {
+                                if (CheckSpellRecast(song_3.song_name) == 0 && (HasSpell(song_3.song_name)) && JobChecker(song_3.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", song_3.song_name);
+                                    playerSong3[0] = DateTime.Now;
+                                    song_casting = 0;
+                                }
+                            }
+                        }
+                        else if (playerSong4[0] != DefaultTime && playerSong4_Span[0].Minutes >= Form2.config.recastSongTime)
+                        {
+                            if ((Form2.config.SongsOnlyWhenNear && Monitoreddistance < 10) || Form2.config.SongsOnlyWhenNear == false)
+                            {
+                                if (CheckSpellRecast(song_4.song_name) == 0 && (HasSpell(song_4.song_name)) && JobChecker(song_4.song_name) == true && (!castingLock))
+                                {
+                                    castSpell("<me>", song_4.song_name);
+                                    playerSong4[0] = DateTime.Now;
+                                    song_casting = 0;
+                                }
+                            }
+                        }
+                    }
+                    else
+                        ShowStatus("WARNING: Monitored player (" + monitoredTarget.Name + ") is out of range. (Distance: " + monitoredTarget.Distance + ")");
+
+                    if ((Songs_Possible == 1 && song_casting >= 0) || (Songs_Possible == 2 && song_casting >= 2) || (Songs_Possible == 3 && song_casting >= 3) || (Songs_Possible == 4 && song_casting >= 4))
+                    {
+                        song_casting = 0;
+                    }
+                }
+            }
+
+
+
